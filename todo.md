@@ -89,12 +89,12 @@
 - [x] Implementacja rich text editor (Tiptap/Quill)
 
 ### 2.5 Testy Frontendu
-- [ ] Konfiguracja React Testing Library
-- [ ] Napisanie testów dla komponentów
-- [ ] Napisanie testów integracyjnych
-- [ ] Konfiguracja Playwright/Cypress dla E2E
-- [ ] Napisanie testów E2E dla głównych flow
-- [ ] Konfiguracja visual regression tests
+- [x] Konfiguracja React Testing Library
+- [x] Napisanie testów dla komponentów
+- [x] Napisanie testów integracyjnych
+- [x] Konfiguracja Playwright/Cypress dla E2E
+- [x] Napisanie testów E2E dla głównych flow
+- [x] Konfiguracja visual regression tests
 
 ### 2.6 Performance
 - [ ] Optymalizacja bundle size
@@ -184,7 +184,7 @@
 
 ### 3.10 Testy Backendu
 - [ ] Napisanie testów jednostkowych
-- [ ] Napisanie testów integracyjnych
+- [x] Napisanie testów integracyjnych
 - [ ] Napisanie testów API
 - [ ] Napisanie testów kryptograficznych
 - [ ] Napisanie testów wydajnościowych

@@ -153,13 +153,13 @@
 - [x] Implementacja email queuing
 
 ### 3.6 System Aliasów Phantom
-- [ ] Implementacja generowania aliasów
-- [ ] Implementacja reverse-aliasing
-- [ ] Implementacja zarządzania domenami
-- [ ] Implementacja DNSSEC
-- [ ] Implementacja DKIM
-- [ ] Implementacja DMARC
-- [ ] Implementacja SPF
+- [x] Implementacja generowania aliasów
+- [x] Implementacja reverse-aliasing
+- [x] Implementacja zarządzania domenami
+- [x] Implementacja DNSSEC
+- [x] Implementacja DKIM
+- [x] Implementacja DMARC
+- [x] Implementacja SPF
 
 ### 3.7 Baza Danych
 - [x] Design schematu bazy danych

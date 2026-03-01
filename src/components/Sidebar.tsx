@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useEmails } from '../hooks/useEmails';
 import { useNotifications } from '../hooks/useNotifications';
 
@@ -15,8 +16,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelfDestruct,
   onPanic,
 }) => {
-  const { folders, selectedFolder, selectFolder } = useEmails();
+  const { folders } = useEmails();
   const { addNotification } = useNotifications();
+  const location = useLocation();
+
+  const getFolderPath = (folderId: string): string => {
+    const pathMap: Record<string, string> = {
+      inbox: '/inbox',
+      sent: '/sent',
+      drafts: '/drafts',
+      trash: '/trash',
+    };
+    return pathMap[folderId] || '/inbox';
+  };
 
   return (
     <aside className="sidebar">
@@ -36,16 +48,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <ul className="folder-list">
           {folders.map((folder) => (
             <li key={folder.id}>
-              <button
-                className={`folder-btn ${selectedFolder === folder.id ? 'active' : ''}`}
-                onClick={() => selectFolder(folder.id)}
+              <Link
+                to={getFolderPath(folder.id)}
+                className={`folder-btn ${location.pathname === getFolderPath(folder.id) ? 'active' : ''}`}
               >
                 <span className="folder-icon">{folder.icon}</span>
                 <span className="folder-name">{folder.name}</span>
                 {folder.count > 0 && (
                   <span className="folder-count">{folder.count}</span>
                 )}
-              </button>
+              </Link>
             </li>
           ))}
         </ul>

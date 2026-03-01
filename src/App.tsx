@@ -1,12 +1,13 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar';
-import { EmailList } from './components/EmailList';
-import { EmailPreview } from './components/EmailPreview';
 import { NotificationSystem } from './components/NotificationSystem';
 import { PerformanceMonitor } from './components/PerformanceMonitor';
-import { useEmails } from './hooks/useEmails';
 import { useNotifications } from './hooks/useNotifications';
-import { Email } from './types';
+import { Inbox } from './pages/Inbox';
+import { Sent } from './pages/Sent';
+import { Drafts } from './pages/Drafts';
+import { Trash } from './pages/Trash';
 
 // Lazy load modals for better performance
 const ComposeModal = lazy(() => import('./components/ComposeModal').then(m => ({ default: m.ComposeModal })));
@@ -22,7 +23,6 @@ const ModalLoader: React.FC = () => (
 );
 
 export const App: React.FC = () => {
-  const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [showComposeModal, setShowComposeModal] = useState(false);
   const [showPhantomModal, setShowPhantomModal] = useState(false);
   const [showSelfDestructModal, setShowSelfDestructModal] = useState(false);
@@ -91,58 +91,60 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="app">
-      <NotificationSystem />
-      <PerformanceMonitor />
+    <Router>
+      <div className="app">
+        <NotificationSystem />
+        <PerformanceMonitor />
 
-      <Sidebar
-        onCompose={handleCompose}
-        onPhantom={handlePhantom}
-        onSelfDestruct={handleSelfDestruct}
-        onPanic={handlePanic}
-      />
-
-      <main className="main-content">
-        <EmailList
-          onEmailSelect={setSelectedEmail}
-          selectedEmailId={selectedEmail?.id || null}
+        <Sidebar
+          onCompose={handleCompose}
+          onPhantom={handlePhantom}
+          onSelfDestruct={handleSelfDestruct}
+          onPanic={handlePanic}
         />
-        <EmailPreview email={selectedEmail} />
-      </main>
 
-      <Suspense fallback={<ModalLoader />}>
-        {showComposeModal && (
-          <ComposeModal
-            isOpen={showComposeModal}
-            onClose={() => setShowComposeModal(false)}
-            onSend={handleSendEmail}
-          />
-        )}
+        <Routes>
+          <Route path="/" element={<Navigate to="/inbox" replace />} />
+          <Route path="/inbox" element={<Inbox />} />
+          <Route path="/sent" element={<Sent />} />
+          <Route path="/drafts" element={<Drafts />} />
+          <Route path="/trash" element={<Trash />} />
+        </Routes>
 
-        {showPhantomModal && (
-          <PhantomModal
-            isOpen={showPhantomModal}
-            onClose={() => setShowPhantomModal(false)}
-            onSelect={handlePhantomSelect}
-          />
-        )}
+        <Suspense fallback={<ModalLoader />}>
+          {showComposeModal && (
+            <ComposeModal
+              isOpen={showComposeModal}
+              onClose={() => setShowComposeModal(false)}
+              onSend={handleSendEmail}
+            />
+          )}
 
-        {showSelfDestructModal && (
-          <SelfDestructModal
-            isOpen={showSelfDestructModal}
-            onClose={() => setShowSelfDestructModal(false)}
-            onSelect={handleSelfDestructSelect}
-          />
-        )}
+          {showPhantomModal && (
+            <PhantomModal
+              isOpen={showPhantomModal}
+              onClose={() => setShowPhantomModal(false)}
+              onSelect={handlePhantomSelect}
+            />
+          )}
 
-        {showPanicModal && (
-          <PanicModal
-            isOpen={showPanicModal}
-            onClose={() => setShowPanicModal(false)}
-            onConfirm={handlePanicConfirm}
-          />
-        )}
-      </Suspense>
-    </div>
+          {showSelfDestructModal && (
+            <SelfDestructModal
+              isOpen={showSelfDestructModal}
+              onClose={() => setShowSelfDestructModal(false)}
+              onSelect={handleSelfDestructSelect}
+            />
+          )}
+
+          {showPanicModal && (
+            <PanicModal
+              isOpen={showPanicModal}
+              onClose={() => setShowPanicModal(false)}
+              onConfirm={handlePanicConfirm}
+            />
+          )}
+        </Suspense>
+      </div>
+    </Router>
   );
 };

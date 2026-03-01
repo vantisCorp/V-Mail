@@ -70,13 +70,13 @@
 - [x] Migracja HTML do komponentów React
 - [x] Migracja CSS do CSS Modules/Tailwind
 - [x] Implementacja state management (React Hooks)
-- [ ] Implementacja routing (React Router)
+- [x] Implementacja routing (React Router)
 
 ### 2.3 System powiadomień
 - [x] Implementacja toast notifications
 - [x] Implementacja modal dialogs
 - [x] Implementacja loading states
-- [ ] Implementacja error boundaries
+- [x] Implementacja error boundaries
 - [x] Implementacja success/error messages
 
 ### 2.4 Funkcjonalności UI

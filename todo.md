@@ -83,7 +83,7 @@
 - [x] Implementacja pagination dla listy wiadomości
 - [x] Implementacja search functionality
 - [x] Implementacja filter functionality
-- [ ] Implementacja sort functionality
+- [x] Implementacja sort functionality
 - [ ] Implementacja drag & drop dla załączników
 - [ ] Implementacja preview załączników
 - [ ] Implementacja rich text editor (Tiptap/Quill)

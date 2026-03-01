@@ -5,13 +5,13 @@
   "main": "index.html",
   "scripts": {
     "dev": "python -m http.server 8000",
-    "lint": "eslint js/**/*.js",
-    "lint:fix": "eslint js/**/*.js --fix",
-    "format": "prettier --write &quot;**/*.{js,css,html,json,md}&quot;",
-    "format:check": "prettier --check &quot;**/*.{js,css,html,json,md}&quot;",
+    "lint": "eslint &quot;**/*.{js,ts,tsx,jsx,ts,tsx}&quot;",
+    "lint:fix": "eslint &quot;**/*.{js,ts,tsx,jsx,ts,tsx}&quot; --fix",
+    "format": "prettier --write &quot;**/*.{js,ts,tsx,css,html,json,md}&quot;",
+    "format:check": "prettier --check &quot;**/*.{js,ts,tsx,css,html,json,md}&quot;",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
-    "build": "npm run lint && npm run test",
+    "build": "npm run lint && npm run type-check && npm run test",
     "type-check": "tsc --noEmit",
     "prepare": "husky install"
   },

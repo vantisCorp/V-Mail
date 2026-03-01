@@ -26,6 +26,9 @@ jobs:
       
     - name: Run ESLint
       run: npm run lint
+      
+    - name: Run TypeScript type check
+      run: npm run type-check
 
   test:
     name: Run Tests
@@ -155,6 +158,9 @@ jobs:
       
     - name: Run build
       run: npm run build
+      
+    - name: Run TypeScript type check
+      run: npm run type-check
 
   notify:
     name: Notify Team

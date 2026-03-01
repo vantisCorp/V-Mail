@@ -110,35 +110,35 @@
 **Czas**: 8-12 tygodni
 
 ### 3.1 Architektura Backendu
-- [ ] Wybór technologii (Rust z Actix-web)
-- [ ] Konfiguracja projektu Rust
-- [ ] Implementacja struktury modułów
-- [ ] Konfiguracja bazy danych (PostgreSQL)
-- [ ] Konfiguracja ORM (Diesel/SeaORM)
-- [ ] Konfiguracja migracji
+- [x] Wybór technologii (Rust z Actix-web)
+- [x] Konfiguracja projektu Rust
+- [x] Implementacja struktury modułów
+- [x] Konfiguracja bazy danych (PostgreSQL)
+- [x] Konfiguracja ORM (Diesel/SeaORM)
+- [x] Konfiguracja migracji
 
 ### 3.2 API REST/GraphQL
-- [ ] Design API endpoints
-- [ ] Implementacja REST API
+- [x] Design API endpoints
+- [x] Implementacja REST API
 - [ ] Implementacja GraphQL API (opcjonalnie)
-- [ ] Implementacja authentication (JWT)
-- [ ] Implementacja authorization (RBAC)
-- [ ] Implementacja rate limiting
-- [ ] Implementacja CORS
+- [x] Implementacja authentication (JWT)
+- [x] Implementacja authorization (RBAC)
+- [x] Implementacja rate limiting
+- [x] Implementacja CORS
 - [ ] Dokumentacja API (OpenAPI/Swagger)
 
 ### 3.3 Kryptografia
-- [ ] Implementacja X25519 (ECC)
+- [x] Implementacja X25519 (ECC)
 - [ ] Implementacja Kyber-1024 (Post-Quantum)
-- [ ] Implementacja hybrydowego szyfrowania
-- [ ] Implementacja Perfect Forward Secrecy
-- [ ] Implementacja key derivation
+- [x] Implementacja hybrydowego szyfrowania
+- [x] Implementacja Perfect Forward Secrecy
+- [x] Implementacja key derivation
 - [ ] Implementacja key storage (HSM)
 - [ ] Testy kryptograficzne
 
 ### 3.4 Autentykacja i Autoryzacja
-- [ ] Implementacja rejestracji użytkowników
-- [ ] Implementacja logowania
+- [x] Implementacja rejestracji użytkowników
+- [x] Implementacja logowania
 - [ ] Implementacja 2FA/MFA
 - [ ] Implementacja reset hasła
 - [ ] Implementacja session management
@@ -162,9 +162,9 @@
 - [ ] Implementacja SPF
 
 ### 3.7 Baza Danych
-- [ ] Design schematu bazy danych
-- [ ] Implementacja migracji
-- [ ] Implementacja seed data
+- [x] Design schematu bazy danych
+- [x] Implementacja migracji
+- [x] Implementacja seed data
 - [ ] Implementacja backup/restore
 - [ ] Implementacja replikacji
 - [ ] Implementacja sharding (opcjonalnie)

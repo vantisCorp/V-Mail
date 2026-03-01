@@ -73,14 +73,14 @@
 - [ ] Implementacja routing (React Router)
 
 ### 2.3 System powiadomień
-- [ ] Implementacja toast notifications
-- [ ] Implementacja modal dialogs
-- [ ] Implementacja loading states
+- [x] Implementacja toast notifications
+- [x] Implementacja modal dialogs
+- [x] Implementacja loading states
 - [ ] Implementacja error boundaries
-- [ ] Implementacja success/error messages
+- [x] Implementacja success/error messages
 
 ### 2.4 Funkcjonalności UI
-- [ ] Implementacja pagination dla listy wiadomości
+- [x] Implementacja pagination dla listy wiadomości
 - [ ] Implementacja search functionality
 - [ ] Implementacja filter functionality
 - [ ] Implementacja sort functionality

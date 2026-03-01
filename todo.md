@@ -86,7 +86,7 @@
 - [x] Implementacja sort functionality
 - [x] Implementacja drag - [ ] Implementacja drag & drop dla załączników drop dla załączników
 - [x] Implementacja preview załączników
-- [ ] Implementacja rich text editor (Tiptap/Quill)
+- [x] Implementacja rich text editor (Tiptap/Quill)
 
 ### 2.5 Testy Frontendu
 - [ ] Konfiguracja React Testing Library

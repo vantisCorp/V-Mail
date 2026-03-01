@@ -12,11 +12,11 @@
 - [x] Stworzenie package.json z zależnościami
 - [x] Dodanie .eslintrc.json z konfiguracją
 - [x] Dodanie .prettierrc z konfiguracją
-- [ ] Naprawa workflow ci.yml
+- [x] Naprawa workflow ci.yml
 - [ ] Dodanie workflow cd.yml
-- [ ] Dodanie workflow security-scan.yml
+- [x] Dodanie workflow security-scan.yml
 - [ ] Dodanie workflow dependency-check.yml
-- [ ] Weryfikacja wszystkich workflow (wszystko na zielono)
+- [x] Weryfikacja wszystkich workflow (wszystko na zielono)
 
 ### 1.2 Poprawa jakości kodu JavaScript
 - [x] Usunięcie wszystkich alert() i prompt()
@@ -57,12 +57,12 @@
 **Czas**: 4-6 tygodni
 
 ### 2.1 Migracja do TypeScript
-- [ ] Konfiguracja tsconfig.json
-- [ ] Migracja app.js do TypeScript
-- [ ] Dodanie typów dla wszystkich funkcji
-- [ ] Dodanie interfejsów dla danych
-- [ ] Refaktoryzacja z type safety
-- [ ] Dodanie strict mode
+- [x] Konfiguracja tsconfig.json
+- [x] Migracja app.js do TypeScript
+- [x] Dodanie typów dla wszystkich funkcji
+- [x] Dodanie interfejsów dla danych
+- [x] Refaktoryzacja z type safety
+- [x] Dodanie strict mode
 
 ### 2.2 Implementacja React/Vue
 - [ ] Wybór frameworka (React z Vite)

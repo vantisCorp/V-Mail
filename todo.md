@@ -84,8 +84,8 @@
 - [x] Implementacja search functionality
 - [x] Implementacja filter functionality
 - [x] Implementacja sort functionality
-- [ ] Implementacja drag & drop dla załączników
-- [ ] Implementacja preview załączników
+- [x] Implementacja drag - [ ] Implementacja drag & drop dla załączników drop dla załączników
+- [x] Implementacja preview załączników
 - [ ] Implementacja rich text editor (Tiptap/Quill)
 
 ### 2.5 Testy Frontendu

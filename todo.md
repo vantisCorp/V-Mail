@@ -145,12 +145,12 @@
 - [ ] Implementacja OAuth2 (Google, GitHub)
 
 ### 3.5 System Email
-- [ ] Implementacja email sending (SMTP)
-- [ ] Implementacja email receiving (IMAP/POP3)
-- [ ] Implementacja email parsing
-- [ ] Implementacja email sanitization
-- [ ] Implementacja attachment handling
-- [ ] Implementacja email queuing
+- [x] Implementacja email sending (SMTP)
+- [x] Implementacja email receiving (IMAP/POP3)
+- [x] Implementacja email parsing
+- [x] Implementacja email sanitization
+- [x] Implementacja attachment handling
+- [x] Implementacja email queuing
 
 ### 3.6 System Aliasów Phantom
 - [ ] Implementacja generowania aliasów
@@ -170,17 +170,17 @@
 - [ ] Implementacja sharding (opcjonalnie)
 
 ### 3.8 System Plików
-- [ ] Implementacja storage (S3/MinIO)
-- [ ] Implementacja upload/download
-- [ ] Implementacja sanitizacji załączników
-- [ ] Implementacja weryfikacji wirusów
-- [ ] Implementacja steganografii
+- [x] Implementacja storage (S3/MinIO)
+- [x] Implementacja upload/download
+- [x] Implementacja sanitizacji załączników
+- [x] Implementacja weryfikacji wirusów
+- [x] Implementacja steganografii
 
 ### 3.9 Real-time Features
-- [ ] Implementacja WebSockets
-- [ ] Implementacja real-time notifications
-- [ ] Implementacja presence system
-- [ ] Implementacja typing indicators
+- [x] Implementacja WebSockets
+- [x] Implementacja real-time notifications
+- [x] Implementacja presence system
+- [x] Implementacja typing indicators
 
 ### 3.10 Testy Backendu
 - [ ] Napisanie testów jednostkowych

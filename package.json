@@ -4,14 +4,16 @@
   "description": "Vantis Mail - Profesjonalny, bezpieczny system pocztowy zbudowany zgodnie z normami wojskowymi i wywiadowczymi (Zero Trust)",
   "main": "index.html",
   "scripts": {
-    "dev": "python -m http.server 8000",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
     "lint": "eslint &quot;**/*.{js,ts,tsx,jsx,ts,tsx}&quot;",
     "lint:fix": "eslint &quot;**/*.{js,ts,tsx,jsx,ts,tsx}&quot; --fix",
     "format": "prettier --write &quot;**/*.{js,ts,tsx,css,html,json,md}&quot;",
     "format:check": "prettier --check &quot;**/*.{js,ts,tsx,css,html,json,md}&quot;",
-    "test": "vitest",
-    "test:coverage": "vitest --coverage",
-    "build": "npm run lint && npm run type-check && npm run test",
+    "test": "vitest --run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest --run --coverage",
     "type-check": "tsc --noEmit",
     "prepare": "husky install"
   },
@@ -32,8 +34,11 @@
   "devDependencies": {
     "@testing-library/dom": "^10.4.1",
     "@types/node": "^20.19.35",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
+    "@vitejs/plugin-react": "^5.1.4",
     "@vitest/coverage-v8": "^1.2.2",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
@@ -44,6 +49,7 @@
     "prettier": "^3.2.4",
     "ts-loader": "^9.5.4",
     "typescript": "^5.9.3",
+    "vite": "^7.3.1",
     "vitest": "^1.2.2"
   },
   "engines": {
@@ -57,5 +63,9 @@
     "*.js": [
       "eslint --fix"
     ]
+  },
+  "dependencies": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
   }
 }

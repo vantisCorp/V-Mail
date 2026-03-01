@@ -65,11 +65,11 @@
 - [x] Dodanie strict mode
 
 ### 2.2 Implementacja React/Vue
-- [ ] Wybór frameworka (React z Vite)
-- [ ] Konfiguracja Vite
-- [ ] Migracja HTML do komponentów React
-- [ ] Migracja CSS do CSS Modules/Tailwind
-- [ ] Implementacja state management (Zustand/Redux)
+- [x] Wybór frameworka (React z Vite)
+- [x] Konfiguracja Vite
+- [x] Migracja HTML do komponentów React
+- [x] Migracja CSS do CSS Modules/Tailwind
+- [x] Implementacja state management (React Hooks)
 - [ ] Implementacja routing (React Router)
 
 ### 2.3 System powiadomień

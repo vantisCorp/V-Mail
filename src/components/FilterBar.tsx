@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { FilterOptions } from '../types';
 
 interface FilterBarProps {
   activeFilterCount: number;
-  onToggleFilter: (filter: string) => void;
+  onToggleFilter: (filter: keyof FilterOptions) => void;
   onClearFilters: () => void;
 }
 
@@ -42,7 +43,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               <button
                 key={filter.key}
                 className="filter-option"
-                onClick={() => onToggleFilter(filter.key)}
+                onClick={() => onToggleFilter(filter.key as keyof FilterOptions)}
               >
                 <span className="filter-option-icon">{filter.icon}</span>
                 <span className="filter-option-label">{filter.label}</span>

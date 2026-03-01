@@ -113,7 +113,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
           isActive={editor.isActive('code')}
           title="Code"
         >
-          </>
+          <code>&lt;/&gt;</code>
         </ToolbarButton>
 
         <div className="toolbar-divider"></div>
@@ -168,7 +168,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
           isActive={editor.isActive('codeBlock')}
           title="Code Block"
         >
-          <>
+          <code>&lt;&gt;</code>
         </ToolbarButton>
 
         <div className="toolbar-divider"></div>

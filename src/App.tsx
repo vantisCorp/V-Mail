@@ -1,15 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { EmailList } from './components/EmailList';
 import { EmailPreview } from './components/EmailPreview';
-import { ComposeModal } from './components/ComposeModal';
-import { PhantomModal } from './components/PhantomModal';
-import { SelfDestructModal } from './components/SelfDestructModal';
-import { PanicModal } from './components/PanicModal';
 import { NotificationSystem } from './components/NotificationSystem';
+import { PerformanceMonitor } from './components/PerformanceMonitor';
 import { useEmails } from './hooks/useEmails';
 import { useNotifications } from './hooks/useNotifications';
 import { Email } from './types';
+
+// Lazy load modals for better performance
+const ComposeModal = lazy(() => import('./components/ComposeModal').then(m => ({ default: m.ComposeModal })));
+const PhantomModal = lazy(() => import('./components/PhantomModal').then(m => ({ default: m.PhantomModal })));
+const SelfDestructModal = lazy(() => import('./components/SelfDestructModal').then(m => ({ default: m.SelfDestructModal })));
+const PanicModal = lazy(() => import('./components/PanicModal').then(m => ({ default: m.PanicModal })));
+
+// Loading component for lazy-loaded modals
+const ModalLoader: React.FC = () => (
+  <div className="modal-loader">
+    <div className="spinner"></div>
+  </div>
+);
 
 export const App: React.FC = () => {
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
@@ -83,6 +93,7 @@ export const App: React.FC = () => {
   return (
     <div className="app">
       <NotificationSystem />
+      <PerformanceMonitor />
 
       <Sidebar
         onCompose={handleCompose}
@@ -99,37 +110,39 @@ export const App: React.FC = () => {
         <EmailPreview email={selectedEmail} />
       </main>
 
-      {showComposeModal && (
-        <ComposeModal
-          isOpen={showComposeModal}
-          onClose={() => setShowComposeModal(false)}
-          onSend={handleSendEmail}
-        />
-      )}
+      <Suspense fallback={<ModalLoader />}>
+        {showComposeModal && (
+          <ComposeModal
+            isOpen={showComposeModal}
+            onClose={() => setShowComposeModal(false)}
+            onSend={handleSendEmail}
+          />
+        )}
 
-      {showPhantomModal && (
-        <PhantomModal
-          isOpen={showPhantomModal}
-          onClose={() => setShowPhantomModal(false)}
-          onSelect={handlePhantomSelect}
-        />
-      )}
+        {showPhantomModal && (
+          <PhantomModal
+            isOpen={showPhantomModal}
+            onClose={() => setShowPhantomModal(false)}
+            onSelect={handlePhantomSelect}
+          />
+        )}
 
-      {showSelfDestructModal && (
-        <SelfDestructModal
-          isOpen={showSelfDestructModal}
-          onClose={() => setShowSelfDestructModal(false)}
-          onSelect={handleSelfDestructSelect}
-        />
-      )}
+        {showSelfDestructModal && (
+          <SelfDestructModal
+            isOpen={showSelfDestructModal}
+            onClose={() => setShowSelfDestructModal(false)}
+            onSelect={handleSelfDestructSelect}
+          />
+        )}
 
-      {showPanicModal && (
-        <PanicModal
-          isOpen={showPanicModal}
-          onClose={() => setShowPanicModal(false)}
-          onConfirm={handlePanicConfirm}
-        />
-      )}
+        {showPanicModal && (
+          <PanicModal
+            isOpen={showPanicModal}
+            onClose={() => setShowPanicModal(false)}
+            onConfirm={handlePanicConfirm}
+          />
+        )}
+      </Suspense>
     </div>
   );
 };

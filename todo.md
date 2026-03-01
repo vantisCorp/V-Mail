@@ -97,12 +97,12 @@
 - [x] Konfiguracja visual regression tests
 
 ### 2.6 Performance
-- [ ] Optymalizacja bundle size
-- [ ] Implementacja lazy loading
-- [ ] Implementacja code splitting
-- [ ] Implementacja caching
-- [ ] Optymalizacja obrazów
-- [ ] Implementacja service worker
+- [x] Optymalizacja bundle size
+- [x] Implementacja lazy loading
+- [x] Implementacja code splitting
+- [x] Implementacja caching
+- [x] Optymalizacja obrazów
+- [x] Implementacja service worker
 
 ---
 

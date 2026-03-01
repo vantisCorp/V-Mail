@@ -82,7 +82,7 @@
 ### 2.4 Funkcjonalności UI
 - [x] Implementacja pagination dla listy wiadomości
 - [x] Implementacja search functionality
-- [ ] Implementacja filter functionality
+- [x] Implementacja filter functionality
 - [ ] Implementacja sort functionality
 - [ ] Implementacja drag & drop dla załączników
 - [ ] Implementacja preview załączników

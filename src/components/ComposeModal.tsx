@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { AttachmentDropZone } from './AttachmentDropZone';
 import { PhantomModal } from './PhantomModal';
 import { SelfDestructModal } from './SelfDestructModal';
+import { RichTextEditor } from './RichTextEditor';
 import { useAliases } from '../hooks/useAliases';
 import { useNotifications } from '../hooks/useNotifications';
 
@@ -204,13 +205,11 @@ export const ComposeModal: React.FC<ComposeModalProps> = ({
 
               <div className="form-group">
                 <label htmlFor="compose-body">Message:</label>
-                <textarea
-                  id="compose-body"
-                  value={body}
-                  onChange={(e) => setBody(e.target.value)}
+                <RichTextEditor
+                  content={body}
+                  onChange={setBody}
                   placeholder="Write your message..."
-                  className="form-textarea"
-                  rows={10}
+                  minHeight="200px"
                 />
               </div>
 

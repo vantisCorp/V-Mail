@@ -334,12 +334,12 @@
 - [ ] Email labels/tags
 
 ### 6.4 Mobile Apps
-- [ ] React Native setup
-- [ ] iOS app development
-- [ ] Android app development
-- [ ] Push notifications
-- [ ] Biometric authentication
-- [ ] Offline mode
+- [x] React Native setup
+- [x] iOS app development
+- [x] Android app development
+- [x] Push notifications
+- [x] Biometric authentication
+- [x] Offline mode
 
 ### 6.5 Desktop Apps
 - [ ] Tauri setup

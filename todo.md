@@ -342,12 +342,12 @@
 - [x] Offline mode
 
 ### 6.5 Desktop Apps
-- [ ] Tauri setup
-- [ ] Windows app
-- [ ] macOS app
-- [ ] Linux app
-- [ ] System tray integration
-- [ ] Auto-updater
+- [x] Tauri setup
+- [x] Windows app
+- [x] macOS app
+- [x] Linux app
+- [x] System tray integration
+- [x] Auto-updater
 
 ---
 

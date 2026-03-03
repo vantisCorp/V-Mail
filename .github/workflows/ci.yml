@@ -102,7 +102,7 @@ jobs:
       
     - name: Check CSS Media Queries
       run: |
-        if grep -r "@media" src/styles/ --include="*.css"; then
+        if grep -r "@media" css/ src/styles/ --include="*.css" 2>/dev/null; then
           echo "✓ Responsive design detected"
         else
           echo "✗ No responsive design found"
@@ -133,13 +133,13 @@ jobs:
     - name: Check for security issues
       run: |
         # Check for common security issues in source files
-        if grep -r "alert(" src/ --include="*.tsx" --include="*.ts"; then
+        if grep -r "alert(" src/ --include="*.tsx" --include="*.ts" --include="*.js" --include="*.jsx"; then
           echo "⚠️  Warning: alert() found in code"
         fi
-        if grep -r "prompt(" src/ --include="*.tsx" --include="*.ts"; then
+        if grep -r "prompt(" src/ --include="*.tsx" --include="*.ts" --include="*.js" --include="*.jsx"; then
           echo "⚠️  Warning: prompt() found in code"
         fi
-        if grep -r "eval(" src/ --include="*.tsx" --include="*.ts"; then
+        if grep -r "eval(" src/ --include="*.tsx" --include="*.ts" --include="*.js" --include="*.jsx"; then
           echo "⚠️  Warning: eval() found in code"
         fi
 

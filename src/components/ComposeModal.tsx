@@ -15,7 +15,7 @@ interface ComposeModalProps {
 export const ComposeModal: React.FC<ComposeModalProps> = ({
   isOpen,
   onClose,
-  onSend,
+  onSend
 }) => {
   const [to, setTo] = useState('');
   const [cc, setCc] = useState('');
@@ -81,7 +81,7 @@ export const ComposeModal: React.FC<ComposeModalProps> = ({
         attachments,
         phantomAlias,
         selfDestruct,
-        encrypt,
+        encrypt
       });
 
       addNotification('success', 'Email sent successfully');
@@ -111,7 +111,9 @@ export const ComposeModal: React.FC<ComposeModalProps> = ({
     setShowSelfDestructModal(false);
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <>

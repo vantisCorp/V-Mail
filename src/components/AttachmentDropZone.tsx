@@ -16,7 +16,7 @@ export const AttachmentDropZone: React.FC<AttachmentDropZoneProps> = ({
   maxFiles = 10,
   onFilesAdded,
   onFileRemoved,
-  className = '',
+  className = ''
 }) => {
   const {
     isDragging,
@@ -29,17 +29,19 @@ export const AttachmentDropZone: React.FC<AttachmentDropZoneProps> = ({
     handleFileSelect,
     removeFile,
     clearErrors,
-    totalSize,
+    totalSize
   } = useDragDrop({
     maxSize,
     allowedTypes,
     maxFiles,
     onFilesAdded,
-    onFileRemoved,
+    onFileRemoved
   });
 
   const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) {
+      return '0 Bytes';
+    }
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -66,7 +68,7 @@ export const AttachmentDropZone: React.FC<AttachmentDropZoneProps> = ({
       mp3: '🎵',
       mp4: '🎬',
       mov: '🎬',
-      avi: '🎬',
+      avi: '🎬'
     };
     return iconMap[ext] || '📎';
   };

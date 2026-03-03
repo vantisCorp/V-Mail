@@ -5,7 +5,7 @@ import { usePagination } from '../../src/hooks/usePagination';
 describe('usePagination', () => {
   it('should initialize with correct default values', () => {
     const { result } = renderHook(() => usePagination({ totalItems: 100 }));
-    
+
     expect(result.current.currentPage).toBe(1);
     expect(result.current.totalPages).toBe(10);
     expect(result.current.itemsPerPage).toBe(10);
@@ -15,7 +15,7 @@ describe('usePagination', () => {
 
   it('should go to next page', () => {
     const { result } = renderHook(() => usePagination({ totalItems: 100 }));
-    
+
     act(() => {
       result.current.goToNextPage();
     });
@@ -26,7 +26,7 @@ describe('usePagination', () => {
 
   it('should go to previous page', () => {
     const { result } = renderHook(() => usePagination({ totalItems: 100, initialPage: 3 }));
-    
+
     act(() => {
       result.current.goToPreviousPage();
     });
@@ -36,7 +36,7 @@ describe('usePagination', () => {
 
   it('should go to specific page', () => {
     const { result } = renderHook(() => usePagination({ totalItems: 100 }));
-    
+
     act(() => {
       result.current.goToPage(5);
     });
@@ -46,7 +46,7 @@ describe('usePagination', () => {
 
   it('should not go beyond last page', () => {
     const { result } = renderHook(() => usePagination({ totalItems: 100 }));
-    
+
     act(() => {
       result.current.goToPage(20);
     });
@@ -56,7 +56,7 @@ describe('usePagination', () => {
 
   it('should not go before first page', () => {
     const { result } = renderHook(() => usePagination({ totalItems: 100 }));
-    
+
     act(() => {
       result.current.goToPage(0);
     });
@@ -66,7 +66,7 @@ describe('usePagination', () => {
 
   it('should reset to first page', () => {
     const { result } = renderHook(() => usePagination({ totalItems: 100, initialPage: 5 }));
-    
+
     act(() => {
       result.current.reset();
     });
@@ -76,7 +76,7 @@ describe('usePagination', () => {
 
   it('should calculate correct start and end indices', () => {
     const { result } = renderHook(() => usePagination({ totalItems: 100 }));
-    
+
     expect(result.current.startIndex).toBe(0);
     expect(result.current.endIndex).toBe(10);
 

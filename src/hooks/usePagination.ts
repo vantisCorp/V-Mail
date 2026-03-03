@@ -18,7 +18,7 @@ interface PaginationState {
 export const usePagination = ({
   totalItems,
   itemsPerPage = 10,
-  initialPage = 1,
+  initialPage = 1
 }: UsePaginationOptions) => {
   const [currentPage, setCurrentPage] = useState(initialPage);
 
@@ -34,7 +34,7 @@ export const usePagination = ({
       startIndex,
       endIndex,
       hasNextPage: currentPage < totalPages,
-      hasPreviousPage: currentPage > 1,
+      hasPreviousPage: currentPage > 1
     };
   }, [currentPage, totalPages, itemsPerPage, totalItems]);
 
@@ -75,6 +75,6 @@ export const usePagination = ({
     goToPreviousPage,
     goToFirstPage,
     goToLastPage,
-    reset,
+    reset
   };
 };

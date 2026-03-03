@@ -47,7 +47,7 @@ export const useFilter = (emails: Email[]) => {
   const setFilter = useCallback((key: keyof FilterOptions, value: boolean | undefined) => {
     setFilters((prev) => ({
       ...prev,
-      [key]: value,
+      [key]: value
     }));
   }, []);
 
@@ -56,12 +56,12 @@ export const useFilter = (emails: Email[]) => {
       const currentValue = prev[key];
       if (currentValue === true) {
         return { ...prev, [key]: false };
-      } else if (currentValue === false) {
+      } if (currentValue === false) {
         const { [key]: _, ...rest } = prev;
         return rest;
-      } else {
-        return { ...prev, [key]: true };
       }
+      return { ...prev, [key]: true };
+
     });
   }, []);
 
@@ -75,6 +75,6 @@ export const useFilter = (emails: Email[]) => {
     activeFilterCount,
     setFilter,
     toggleFilter,
-    clearFilters,
+    clearFilters
   };
 };

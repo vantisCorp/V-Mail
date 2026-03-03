@@ -12,7 +12,7 @@ export const PerformanceMonitor: React.FC = () => {
     fps: 0,
     memory: 0,
     loadTime: 0,
-    renderTime: 0,
+    renderTime: 0
   });
   const [isVisible, setIsVisible] = useState(false);
 
@@ -50,7 +50,7 @@ export const PerformanceMonitor: React.FC = () => {
         if (memory) {
           setMetrics((prev) => ({
             ...prev,
-            memory: Math.round(memory.usedJSHeapSize / 1048576), // Convert to MB
+            memory: Math.round(memory.usedJSHeapSize / 1048576) // Convert to MB
           }));
         }
       };
@@ -72,7 +72,7 @@ export const PerformanceMonitor: React.FC = () => {
       const end = performance.now();
       setMetrics((prev) => ({
         ...prev,
-        renderTime: Math.round(end - start),
+        renderTime: Math.round(end - start)
       }));
     };
   });
@@ -89,7 +89,9 @@ export const PerformanceMonitor: React.FC = () => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  if (!isVisible || (import.meta as any).env?.DEV) return null;
+  if (!isVisible || (import.meta as any).env?.DEV) {
+    return null;
+  }
 
   return (
     <div className="performance-monitor">

@@ -9,14 +9,14 @@ interface SortBarProps {
 export const SortBar: React.FC<SortBarProps> = ({
   sortField,
   sortOrder,
-  onSortChange,
+  onSortChange
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const sortOptions = [
     { key: 'date' as const, label: 'Date', icon: '📅' },
     { key: 'from' as const, label: 'From', icon: '👤' },
-    { key: 'subject' as const, label: 'Subject', icon: '📝' },
+    { key: 'subject' as const, label: 'Subject', icon: '📝' }
   ];
 
   const selectedOption = sortOptions.find((opt) => opt.key === sortField);

@@ -15,20 +15,20 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   content,
   onChange,
   placeholder = 'Write your message...',
-  minHeight = '200px',
+  minHeight = '200px'
 }) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
       Placeholder.configure({
-        placeholder,
+        placeholder
       }),
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: 'text-blue-400 underline',
-        },
-      }),
+          class: 'text-blue-400 underline'
+        }
+      })
     ],
     content,
     onUpdate: ({ editor }) => {
@@ -37,9 +37,9 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     editorProps: {
       attributes: {
         class: 'prose prose-invert max-w-none focus:outline-none',
-        style: `min-height: ${minHeight}`,
-      },
-    },
+        style: `min-height: ${minHeight}`
+      }
+    }
   });
 
   useEffect(() => {

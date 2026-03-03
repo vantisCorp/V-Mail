@@ -11,7 +11,7 @@ export const useNotifications = () => {
         id,
         type,
         message,
-        duration,
+        duration
       };
 
       setNotifications((prev) => [...prev, notification]);
@@ -39,6 +39,6 @@ export const useNotifications = () => {
     notifications,
     addNotification,
     removeNotification,
-    clearNotifications,
+    clearNotifications
   };
 };

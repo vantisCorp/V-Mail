@@ -10,7 +10,7 @@ interface AttachmentPreviewModalProps {
 export const AttachmentPreviewModal: React.FC<AttachmentPreviewModalProps> = ({
   attachment,
   isOpen,
-  onClose,
+  onClose
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +38,9 @@ export const AttachmentPreviewModal: React.FC<AttachmentPreviewModalProps> = ({
   };
 
   const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) {
+      return '0 Bytes';
+    }
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));

@@ -21,8 +21,8 @@ Object.defineProperty(window, 'matchMedia', {
     removeListener: () => {},
     addEventListener: () => {},
     removeEventListener: () => {},
-    dispatchEvent: () => {},
-  }),
+    dispatchEvent: () => {}
+  })
 });
 
 // Mock IntersectionObserver
@@ -53,7 +53,9 @@ global.DataTransfer = class DataTransfer {
   items: any[];
   files: File[];
   setData(format: string, data: string) {}
-  getData(format: string): string { return ''; }
+  getData(format: string): string {
+    return '';
+  }
   clearData(format?: string) {}
   setDragImage(image: any, x: number, y: number) {}
 } as any;
@@ -61,7 +63,7 @@ global.DataTransfer = class DataTransfer {
 // Mock ClipboardEvent
 global.ClipboardEvent = class ClipboardEvent extends Event {
   clipboardData: DataTransfer;
-  
+
   constructor(type: string, eventInitDict?: ClipboardEventInit) {
     super(type, eventInitDict);
     this.clipboardData = eventInitDict?.clipboardData || new DataTransfer();

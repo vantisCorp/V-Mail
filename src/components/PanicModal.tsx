@@ -9,9 +9,11 @@ interface PanicModalProps {
 export const PanicModal: React.FC<PanicModalProps> = ({
   isOpen,
   onClose,
-  onConfirm,
+  onConfirm
 }) => {
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div className="modal-overlay" onClick={onClose}>

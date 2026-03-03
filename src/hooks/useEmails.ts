@@ -26,10 +26,10 @@ export const useEmails = () => {
             size: 1024000,
             type: 'application/pdf',
             url: '#',
-            uploadedAt: new Date('2024-03-01T10:30:00'),
-          },
+            uploadedAt: new Date('2024-03-01T10:30:00')
+          }
         ],
-        folder: { id: 'inbox', name: 'Inbox', count: 5, icon: '📥' },
+        folder: { id: 'inbox', name: 'Inbox', count: 5, icon: '📥' }
       },
       {
         id: '2',
@@ -42,7 +42,7 @@ export const useEmails = () => {
         starred: false,
         encrypted: true,
         hasAttachments: false,
-        folder: { id: 'inbox', name: 'Inbox', count: 5, icon: '📥' },
+        folder: { id: 'inbox', name: 'Inbox', count: 5, icon: '📥' }
       },
       {
         id: '3',
@@ -55,7 +55,7 @@ export const useEmails = () => {
         starred: false,
         encrypted: false,
         hasAttachments: false,
-        folder: { id: 'inbox', name: 'Inbox', count: 5, icon: '📥' },
+        folder: { id: 'inbox', name: 'Inbox', count: 5, icon: '📥' }
       },
       {
         id: '4',
@@ -69,7 +69,7 @@ export const useEmails = () => {
         encrypted: true,
         hasAttachments: false,
         phantomAlias: 'phantom1@vantis-phantom.com',
-        folder: { id: 'inbox', name: 'Inbox', count: 5, icon: '📥' },
+        folder: { id: 'inbox', name: 'Inbox', count: 5, icon: '📥' }
       },
       {
         id: '5',
@@ -83,8 +83,8 @@ export const useEmails = () => {
         encrypted: true,
         hasAttachments: false,
         selfDestruct: new Date('2024-03-01T11:30:00'),
-        folder: { id: 'inbox', name: 'Inbox', count: 5, icon: '📥' },
-      },
+        folder: { id: 'inbox', name: 'Inbox', count: 5, icon: '📥' }
+      }
     ];
 
     setTimeout(() => {
@@ -98,7 +98,7 @@ export const useEmails = () => {
     { id: 'sent', name: 'Sent', count: 3, icon: '📤' },
     { id: 'drafts', name: 'Drafts', count: 2, icon: '📝' },
     { id: 'starred', name: 'Starred', count: 2, icon: '⭐' },
-    { id: 'trash', name: 'Trash', count: 1, icon: '🗑️' },
+    { id: 'trash', name: 'Trash', count: 1, icon: '🗑️' }
   ];
 
   const selectFolder = (folderId: string) => {
@@ -141,6 +141,6 @@ export const useEmails = () => {
     getFilteredEmails,
     markAsRead,
     toggleStar,
-    deleteEmail,
+    deleteEmail
   };
 };

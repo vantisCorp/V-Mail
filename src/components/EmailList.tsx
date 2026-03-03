@@ -17,7 +17,7 @@ interface EmailListProps {
 
 export const EmailList: React.FC<EmailListProps> = ({
   onEmailSelect,
-  selectedEmailId,
+  selectedEmailId
 }) => {
   const { getFilteredEmails, markAsRead, toggleStar, deleteEmail } = useEmails();
   const emails = getFilteredEmails();
@@ -27,7 +27,7 @@ export const EmailList: React.FC<EmailListProps> = ({
     filteredEmails: searchedEmails,
     resultCount,
     handleSearchChange,
-    clearSearch,
+    clearSearch
   } = useSearch(emails);
 
   const {
@@ -35,13 +35,13 @@ export const EmailList: React.FC<EmailListProps> = ({
     filteredEmails: filteredEmails,
     activeFilterCount,
     toggleFilter,
-    clearFilters,
+    clearFilters
   } = useFilter(searchedEmails);
 
   const {
     sortOptions,
     sortedEmails,
-    setSortField,
+    setSortField
   } = useSort(filteredEmails);
 
   const {
@@ -49,10 +49,10 @@ export const EmailList: React.FC<EmailListProps> = ({
     totalPages,
     startIndex,
     endIndex,
-    goToPage,
+    goToPage
   } = usePagination({
     totalItems: sortedEmails.length,
-    itemsPerPage: 10,
+    itemsPerPage: 10
   });
 
   const paginatedEmails = sortedEmails.slice(startIndex, endIndex);
@@ -83,13 +83,13 @@ export const EmailList: React.FC<EmailListProps> = ({
 
     if (days === 0) {
       return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    } else if (days === 1) {
+    } if (days === 1) {
       return 'Yesterday';
-    } else if (days < 7) {
+    } if (days < 7) {
       return date.toLocaleDateString([], { weekday: 'short' });
-    } else {
-      return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
     }
+    return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+
   };
 
   return (

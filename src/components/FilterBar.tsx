@@ -10,7 +10,7 @@ interface FilterBarProps {
 export const FilterBar: React.FC<FilterBarProps> = ({
   activeFilterCount,
   onToggleFilter,
-  onClearFilters,
+  onClearFilters
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -20,7 +20,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
     { key: 'unread', label: 'Unread', icon: '📬' },
     { key: 'starred', label: 'Starred', icon: '⭐' },
     { key: 'hasPhantomAlias', label: 'Phantom Alias', icon: '👻' },
-    { key: 'hasSelfDestruct', label: 'Self-Destruct', icon: '⏰' },
+    { key: 'hasSelfDestruct', label: 'Self-Destruct', icon: '⏰' }
   ];
 
   return (

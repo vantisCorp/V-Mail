@@ -43,10 +43,18 @@ export const App: React.FC = () => {
       }
 
       if (e.key === 'Escape') {
-        if (showComposeModal) setShowComposeModal(false);
-        if (showPhantomModal) setShowPhantomModal(false);
-        if (showSelfDestructModal) setShowSelfDestructModal(false);
-        if (showPanicModal) setShowPanicModal(false);
+        if (showComposeModal) {
+          setShowComposeModal(false);
+        }
+        if (showPhantomModal) {
+          setShowPhantomModal(false);
+        }
+        if (showSelfDestructModal) {
+          setShowSelfDestructModal(false);
+        }
+        if (showPanicModal) {
+          setShowPanicModal(false);
+        }
       }
     };
 

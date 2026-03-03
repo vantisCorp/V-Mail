@@ -18,7 +18,7 @@ describe('useNotifications', () => {
 
   it('should add a notification', () => {
     const { result } = renderHook(() => useNotifications());
-    
+
     act(() => {
       result.current.addNotification('success', 'Test message');
     });
@@ -26,13 +26,13 @@ describe('useNotifications', () => {
     expect(result.current.notifications).toHaveLength(1);
     expect(result.current.notifications[0]).toMatchObject({
       type: 'success',
-      message: 'Test message',
+      message: 'Test message'
     });
   });
 
   it('should remove a notification', () => {
     const { result } = renderHook(() => useNotifications());
-    
+
     act(() => {
       const id = result.current.addNotification('error', 'Error message');
       result.current.removeNotification(id);
@@ -43,7 +43,7 @@ describe('useNotifications', () => {
 
   it('should clear all notifications', () => {
     const { result } = renderHook(() => useNotifications());
-    
+
     act(() => {
       result.current.addNotification('success', 'Message 1');
       result.current.addNotification('error', 'Message 2');
@@ -55,7 +55,7 @@ describe('useNotifications', () => {
 
   it('should auto-remove notification after duration', () => {
     const { result } = renderHook(() => useNotifications());
-    
+
     act(() => {
       result.current.addNotification('info', 'Auto-remove message', 3000);
     });
@@ -71,7 +71,7 @@ describe('useNotifications', () => {
 
   it('should not auto-remove notification with duration 0', () => {
     const { result } = renderHook(() => useNotifications());
-    
+
     act(() => {
       result.current.addNotification('warning', 'Persistent message', 0);
     });

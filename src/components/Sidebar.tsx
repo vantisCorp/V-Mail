@@ -14,7 +14,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onCompose,
   onPhantom,
   onSelfDestruct,
-  onPanic,
+  onPanic
 }) => {
   const { folders } = useEmails();
   const { addNotification } = useNotifications();
@@ -25,7 +25,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       inbox: '/inbox',
       sent: '/sent',
       drafts: '/drafts',
-      trash: '/trash',
+      trash: '/trash'
     };
     return pathMap[folderId] || '/inbox';
   };

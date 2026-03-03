@@ -20,13 +20,13 @@ export const useDragDrop = (options: UseDragDropOptions = {}) => {
     allowedTypes = [],
     maxFiles = 10,
     onFilesAdded,
-    onFileRemoved,
+    onFileRemoved
   } = options;
 
   const [state, setState] = useState<DragDropState>({
     isDragging: false,
     files: [],
-    errors: [],
+    errors: []
   });
 
   const dragCounter = useRef(0);
@@ -40,13 +40,13 @@ export const useDragDrop = (options: UseDragDropOptions = {}) => {
       if (allowedTypes.length > 0) {
         const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
         const mimeType = file.type;
-        
+
         const isAllowed = allowedTypes.some(
-          (type) => 
-            type === fileExtension || 
+          (type) =>
+            type === fileExtension ||
             mimeType.startsWith(type.replace('.', ''))
         );
-        
+
         if (!isAllowed) {
           return `File type "${fileExtension}" is not allowed`;
         }
@@ -61,7 +61,7 @@ export const useDragDrop = (options: UseDragDropOptions = {}) => {
     e.preventDefault();
     e.stopPropagation();
     dragCounter.current++;
-    
+
     if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
       setState((prev) => ({ ...prev, isDragging: true }));
     }
@@ -71,7 +71,7 @@ export const useDragDrop = (options: UseDragDropOptions = {}) => {
     e.preventDefault();
     e.stopPropagation();
     dragCounter.current--;
-    
+
     if (dragCounter.current === 0) {
       setState((prev) => ({ ...prev, isDragging: false }));
     }
@@ -87,7 +87,7 @@ export const useDragDrop = (options: UseDragDropOptions = {}) => {
       e.preventDefault();
       e.stopPropagation();
       dragCounter.current = 0;
-      
+
       setState((prev) => ({ ...prev, isDragging: false }));
 
       const droppedFiles = Array.from(e.dataTransfer.files);
@@ -108,7 +108,7 @@ export const useDragDrop = (options: UseDragDropOptions = {}) => {
           const isDuplicate = state.files.some(
             (f) => f.name === file.name && f.size === file.size
           );
-          
+
           if (!isDuplicate) {
             validFiles.push(file);
           } else {
@@ -121,7 +121,7 @@ export const useDragDrop = (options: UseDragDropOptions = {}) => {
         setState((prev) => ({
           ...prev,
           files: [...prev.files, ...validFiles],
-          errors,
+          errors
         }));
         onFilesAdded?.(validFiles);
       } else {
@@ -151,7 +151,7 @@ export const useDragDrop = (options: UseDragDropOptions = {}) => {
           const isDuplicate = state.files.some(
             (f) => f.name === file.name && f.size === file.size
           );
-          
+
           if (!isDuplicate) {
             validFiles.push(file);
           } else {
@@ -164,7 +164,7 @@ export const useDragDrop = (options: UseDragDropOptions = {}) => {
         setState((prev) => ({
           ...prev,
           files: [...prev.files, ...validFiles],
-          errors,
+          errors
         }));
         onFilesAdded?.(validFiles);
       } else {
@@ -182,7 +182,7 @@ export const useDragDrop = (options: UseDragDropOptions = {}) => {
       setState((prev) => ({
         ...prev,
         files: prev.files.filter((_, i) => i !== index),
-        errors: [],
+        errors: []
       }));
       onFileRemoved?.(fileToRemove.name);
     },
@@ -193,7 +193,7 @@ export const useDragDrop = (options: UseDragDropOptions = {}) => {
     setState({
       isDragging: false,
       files: [],
-      errors: [],
+      errors: []
     });
   }, []);
 
@@ -211,16 +211,18 @@ export const useDragDrop = (options: UseDragDropOptions = {}) => {
     removeFile,
     clearFiles,
     clearErrors,
-    totalSize: state.files.reduce((acc, file) => acc + file.size, 0),
+    totalSize: state.files.reduce((acc, file) => acc + file.size, 0)
   };
 };
 
 function formatFileSize(bytes: number): string {
-  if (bytes === 0) return '0 Bytes';
-  
+  if (bytes === 0) {
+    return '0 Bytes';
+  }
+
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  
+
   return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
 }

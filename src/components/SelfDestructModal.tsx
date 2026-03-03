@@ -9,16 +9,18 @@ interface SelfDestructModalProps {
 export const SelfDestructModal: React.FC<SelfDestructModalProps> = ({
   isOpen,
   onClose,
-  onSelect,
+  onSelect
 }) => {
   const options = [
     { label: '15 minutes', minutes: 15 },
     { label: '1 hour', minutes: 60 },
     { label: '24 hours', minutes: 1440 },
-    { label: '7 days', minutes: 10080 },
+    { label: '7 days', minutes: 10080 }
   ];
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div className="modal-overlay" onClick={onClose}>

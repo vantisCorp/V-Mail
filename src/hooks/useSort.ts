@@ -4,7 +4,7 @@ import { Email, SortOptions } from '../types';
 export const useSort = (emails: Email[]) => {
   const [sortOptions, setSortOptions] = useState<SortOptions>({
     field: 'date',
-    order: 'desc',
+    order: 'desc'
   });
 
   const sortedEmails = useMemo(() => {
@@ -12,17 +12,17 @@ export const useSort = (emails: Email[]) => {
       let comparison = 0;
 
       switch (sortOptions.field) {
-        case 'date':
-          comparison = a.date.getTime() - b.date.getTime();
-          break;
-        case 'from':
-          comparison = a.from.localeCompare(b.from);
-          break;
-        case 'subject':
-          comparison = a.subject.localeCompare(b.subject);
-          break;
-        default:
-          comparison = 0;
+      case 'date':
+        comparison = a.date.getTime() - b.date.getTime();
+        break;
+      case 'from':
+        comparison = a.from.localeCompare(b.from);
+        break;
+      case 'subject':
+        comparison = a.subject.localeCompare(b.subject);
+        break;
+      default:
+        comparison = 0;
       }
 
       return sortOptions.order === 'asc' ? comparison : -comparison;
@@ -36,12 +36,12 @@ export const useSort = (emails: Email[]) => {
       if (prev.field === field) {
         return {
           ...prev,
-          order: prev.order === 'asc' ? 'desc' : 'asc',
+          order: prev.order === 'asc' ? 'desc' : 'asc'
         };
       }
       return {
         field,
-        order: 'desc',
+        order: 'desc'
       };
     });
   }, []);
@@ -54,6 +54,6 @@ export const useSort = (emails: Email[]) => {
     sortOptions,
     sortedEmails,
     setSortField,
-    setSortOrder,
+    setSortOrder
   };
 };

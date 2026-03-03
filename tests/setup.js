@@ -18,8 +18,8 @@ Object.defineProperty(window, 'matchMedia', {
     removeListener: vi.fn(),
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-  })),
+    dispatchEvent: vi.fn()
+  }))
 });
 
 // Mock localStorage with proper behavior
@@ -34,7 +34,7 @@ const localStorageMock = {
   }),
   clear: vi.fn(() => {
     localStorageMock.store = {};
-  }),
+  })
 };
 global.localStorage = localStorageMock;
 
@@ -50,7 +50,7 @@ const sessionStorageMock = {
   }),
   clear: vi.fn(() => {
     sessionStorageMock.store = {};
-  }),
+  })
 };
 global.sessionStorage = sessionStorageMock;
 
@@ -69,5 +69,5 @@ global.console = {
   debug: vi.fn(),
   info: vi.fn(),
   warn: vi.fn(),
-  error: vi.fn(),
+  error: vi.fn()
 };

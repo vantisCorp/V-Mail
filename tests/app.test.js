@@ -84,7 +84,7 @@ describe('Vantis Mail - Core Functionality Tests', () => {
           '<': '&lt;',
           '>': '&gt;',
           '"': '&quot;',
-          "'": '&#039;',
+          "'": '&#039;'
         };
         return str.replace(/[&<>"']/g, (m) => map[m]);
       };
@@ -108,7 +108,7 @@ describe('Vantis Mail - Core Functionality Tests', () => {
     it('should handle panic shortcut', () => {
       const event = new KeyboardEvent('keydown', {
         key: 'p',
-        ctrlKey: true,
+        ctrlKey: true
       });
       expect(event.ctrlKey).toBe(true);
       expect(event.key).toBe('p');
@@ -205,7 +205,7 @@ describe('Vantis Mail - Core Functionality Tests', () => {
     it('should detect paste events', () => {
       const pasteEvent = new ClipboardEvent('paste', {
         bubbles: true,
-        cancelable: true,
+        cancelable: true
       });
 
       expect(pasteEvent.type).toBe('paste');
@@ -215,7 +215,7 @@ describe('Vantis Mail - Core Functionality Tests', () => {
       const event = new KeyboardEvent('keyup', {
         ctrlKey: true,
         shiftKey: true,
-        key: 'S',
+        key: 'S'
       });
 
       expect(event.ctrlKey).toBe(true);

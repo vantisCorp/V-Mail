@@ -33,6 +33,6 @@ export const useSearch = (emails: Email[]) => {
     filteredEmails,
     resultCount: filteredEmails.length,
     handleSearchChange,
-    clearSearch,
+    clearSearch
   };
 };

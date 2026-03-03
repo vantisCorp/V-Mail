@@ -17,26 +17,26 @@ export const useAliases = () => {
         id: '1',
         email: 'phantom1@vantis-phantom.com',
         domain: 'vantis-phantom.com',
-        createdAt: new Date('2024-01-15'),
+        createdAt: new Date('2024-01-15')
       },
       {
         id: '2',
         email: 'phantom2@vantis-phantom.com',
         domain: 'vantis-phantom.com',
-        createdAt: new Date('2024-02-20'),
+        createdAt: new Date('2024-02-20')
       },
       {
         id: '3',
         email: 'ghost@secure-mail.io',
         domain: 'secure-mail.io',
-        createdAt: new Date('2024-03-10'),
+        createdAt: new Date('2024-03-10')
       },
       {
         id: '4',
         email: 'shadow@encrypted-mail.net',
         domain: 'encrypted-mail.net',
-        createdAt: new Date('2024-03-25'),
-      },
+        createdAt: new Date('2024-03-25')
+      }
     ];
 
     setTimeout(() => {
@@ -50,7 +50,7 @@ export const useAliases = () => {
       id: Date.now().toString(),
       email: `phantom${Date.now()}@${domain}`,
       domain,
-      createdAt: new Date(),
+      createdAt: new Date()
     };
 
     setAliases((prev) => [...prev, newAlias]);
@@ -65,6 +65,6 @@ export const useAliases = () => {
     aliases,
     isLoading,
     createAlias,
-    deleteAlias,
+    deleteAlias
   };
 };

@@ -5,7 +5,7 @@
 /**
  * Memoize function results to avoid expensive recalculations
  */
-export function memoize<T extends (...args: any[]) => any>(
+export function memoize<T extends(...args: any[]) => any>(
   fn: T,
   keyGenerator?: (...args: Parameters<T>) => string
 ): T {
@@ -27,7 +27,7 @@ export function memoize<T extends (...args: any[]) => any>(
 /**
  * Debounce function to limit execution rate
  */
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends(...args: any[]) => any>(
   fn: T,
   delay: number
 ): (...args: Parameters<T>) => void {
@@ -47,7 +47,7 @@ export function debounce<T extends (...args: any[]) => any>(
 /**
  * Throttle function to limit execution rate
  */
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends(...args: any[]) => any>(
   fn: T,
   limit: number
 ): (...args: Parameters<T>) => void {
@@ -71,7 +71,7 @@ export function throttle<T extends (...args: any[]) => any>(
 /**
  * Request animation frame throttle for smooth animations
  */
-export function rafThrottle<T extends (...args: any[]) => any>(
+export function rafThrottle<T extends(...args: any[]) => any>(
   fn: T
 ): (...args: Parameters<T>) => void {
   let rafId: number | null = null;
@@ -142,7 +142,7 @@ export function preloadResources(resources: Array<{ href: string; as: string }>)
 /**
  * Measure performance of a function
  */
-export function measurePerformance<T extends (...args: any[]) => any>(
+export function measurePerformance<T extends(...args: any[]) => any>(
   fn: T,
   label: string
 ): T {
@@ -196,13 +196,23 @@ export function optimizeImageUrl(
     format?: 'webp' | 'jpeg' | 'png';
   }
 ): string {
-  if (!url) return url;
+  if (!url) {
+    return url;
+  }
 
   const params = new URLSearchParams();
-  if (options?.width) params.append('w', options.width.toString());
-  if (options?.height) params.append('h', options.height.toString());
-  if (options?.quality) params.append('q', options.quality.toString());
-  if (options?.format) params.append('f', options.format);
+  if (options?.width) {
+    params.append('w', options.width.toString());
+  }
+  if (options?.height) {
+    params.append('h', options.height.toString());
+  }
+  if (options?.quality) {
+    params.append('q', options.quality.toString());
+  }
+  if (options?.format) {
+    params.append('f', options.format);
+  }
 
   const queryString = params.toString();
   return queryString ? `${url}?${queryString}` : url;
@@ -213,7 +223,9 @@ export function optimizeImageUrl(
  */
 export function isSlowConnection(): boolean {
   const connection = (navigator as any).connection;
-  if (!connection) return false;
+  if (!connection) {
+    return false;
+  }
 
   return (
     connection.saveData ||

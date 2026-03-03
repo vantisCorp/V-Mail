@@ -5,7 +5,7 @@ import { useNotifications } from '../../src/hooks/useNotifications';
 
 // Mock the useNotifications hook
 vi.mock('../../src/hooks/useNotifications', () => ({
-  useNotifications: vi.fn(),
+  useNotifications: vi.fn()
 }));
 
 describe('NotificationSystem', () => {
@@ -14,7 +14,7 @@ describe('NotificationSystem', () => {
       notifications: [],
       addNotification: vi.fn(),
       removeNotification: vi.fn(),
-      clearNotifications: vi.fn(),
+      clearNotifications: vi.fn()
     });
 
     const { container } = render(<NotificationSystem />);
@@ -25,15 +25,15 @@ describe('NotificationSystem', () => {
     vi.mocked(useNotifications).mockReturnValue({
       notifications: [
         { id: '1', type: 'success', message: 'Success message' },
-        { id: '2', type: 'error', message: 'Error message' },
+        { id: '2', type: 'error', message: 'Error message' }
       ],
       addNotification: vi.fn(),
       removeNotification: vi.fn(),
-      clearNotifications: vi.fn(),
+      clearNotifications: vi.fn()
     });
 
     render(<NotificationSystem />);
-    
+
     expect(screen.getByText('Success message')).toBeInTheDocument();
     expect(screen.getByText('Error message')).toBeInTheDocument();
   });
@@ -44,14 +44,14 @@ describe('NotificationSystem', () => {
       notifications: [{ id: '1', type: 'success', message: 'Test message' }],
       addNotification: vi.fn(),
       removeNotification,
-      clearNotifications: vi.fn(),
+      clearNotifications: vi.fn()
     });
 
     render(<NotificationSystem />);
-    
+
     const closeButton = screen.getByLabelText('Close notification');
     fireEvent.click(closeButton);
-    
+
     expect(removeNotification).toHaveBeenCalledWith('1');
   });
 
@@ -61,15 +61,15 @@ describe('NotificationSystem', () => {
         { id: '1', type: 'success', message: 'Success' },
         { id: '2', type: 'error', message: 'Error' },
         { id: '3', type: 'warning', message: 'Warning' },
-        { id: '4', type: 'info', message: 'Info' },
+        { id: '4', type: 'info', message: 'Info' }
       ],
       addNotification: vi.fn(),
       removeNotification: vi.fn(),
-      clearNotifications: vi.fn(),
+      clearNotifications: vi.fn()
     });
 
     render(<NotificationSystem />);
-    
+
     expect(screen.getByText('✅')).toBeInTheDocument();
     expect(screen.getByText('❌')).toBeInTheDocument();
     expect(screen.getByText('⚠️')).toBeInTheDocument();

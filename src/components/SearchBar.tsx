@@ -11,7 +11,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   searchQuery,
   onSearchChange,
   onClear,
-  resultCount,
+  resultCount
 }) => {
   return (
     <div className="search-bar">

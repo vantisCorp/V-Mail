@@ -1,3 +1,35 @@
+# Vantis Mail - CI/CD Pipeline Fix (Priority: CRITICAL)
+
+## Current Issue
+The CI/CD pipeline is failing due to ESLint and TypeScript errors in the source code. All recent workflow runs (5 consecutive) have failed.
+
+## Immediate Tasks (Today)
+
+### 1. Fix ESLint Errors
+- [ ] Run lint:fix to auto-fix what can be fixed
+- [ ] Manually fix remaining ESLint errors
+- [ ] Verify lint passes with no errors
+
+### 2. Fix TypeScript Errors
+- [ ] Run type-check to identify TypeScript errors
+- [ ] Fix TypeScript errors
+- [ ] Verify type-check passes
+
+### 3. Fix Tests
+- [ ] Run tests to identify failures
+- [ ] Fix test failures
+- [ ] Verify all tests pass
+
+### 4. Verify Build
+- [ ] Run build to ensure it compiles
+- [ ] Verify dist directory is created
+
+### 5. Push and Verify CI/CD
+- [ ] Commit and push fixes
+- [ ] Verify CI/CD pipeline passes
+
+---
+
 # Vantis Mail - Kompletny Plan Naprawy i Implementacji
 
 ## Data: 2026-03-01

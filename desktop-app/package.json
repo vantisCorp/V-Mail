@@ -1,15 +1,22 @@
 {
-  "name": "desktop-app",
+  "name": "vantis-mail-desktop",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Vantis Mail - Secure email system with military-grade encryption (Desktop Application)",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
+    "tauri:build:debug": "tauri build --debug",
+    "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint src --ext .ts,.tsx,.js,.jsx --fix",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write src/**/*.{ts,tsx,css,html,json,md}",
+    "format:check": "prettier --check src/**/*.{ts,tsx,css,html,json,md}"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "@tauri-apps/api": "^2.10.1",
     "@tauri-apps/plugin-autostart": "^2.5.1",
@@ -25,6 +32,7 @@
     "@tauri-apps/cli": "^2.10.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.2.1",
     "typescript": "^5.9.3",
     "vite": "^7.3.1"
   }

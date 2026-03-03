@@ -21,8 +21,13 @@ jobs:
         node-version: '20'
         cache: 'npm'
         
+    - name: Show Node and npm versions
+      run: |
+        node --version
+        npm --version
+        
     - name: Install dependencies
-      run: npm ci
+      run: npm ci || npm install
       
     - name: Run ESLint
       run: npm run lint
@@ -46,7 +51,7 @@ jobs:
         cache: 'npm'
         
     - name: Install dependencies
-      run: npm ci
+      run: npm ci || npm install
       
     - name: Run tests
       run: npm test
@@ -78,7 +83,7 @@ jobs:
         cache: 'npm'
         
     - name: Install dependencies
-      run: npm ci
+      run: npm ci || npm install
       
     - name: Run build
       run: npm run build
@@ -124,7 +129,7 @@ jobs:
         cache: 'npm'
         
     - name: Install dependencies
-      run: npm ci
+      run: npm ci || npm install
       
     - name: Run npm audit
       run: npm audit --audit-level=moderate
@@ -158,7 +163,7 @@ jobs:
         cache: 'npm'
         
     - name: Install dependencies
-      run: npm ci
+      run: npm ci || npm install
       
     - name: Run build
       run: npm run build

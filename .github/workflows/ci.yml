@@ -48,10 +48,11 @@ jobs:
       run: npm ci
       
     - name: Run tests
-      run: npm test -- --run
+      run: npm test
       
     - name: Generate coverage report
       run: npm run test:coverage
+      continue-on-error: true
       continue-on-error: true
       
     - name: Upload coverage to Codecov

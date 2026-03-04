@@ -1,0 +1,500 @@
+/* Delegation Settings Styles */
+
+.delegation-settings {
+  padding: 1.5rem;
+  background: #1a1a2e;
+  border-radius: 0.5rem;
+  min-height: 400px;
+}
+
+/* Stats Grid */
+.delegation-settings .grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .delegation-settings .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .delegation-settings .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Cards */
+.delegation-settings .bg-gray-800 {
+  background-color: #1f2937;
+}
+
+.delegation-settings .bg-gray-750 {
+  background-color: #2d3748;
+}
+
+/* Transitions */
+.delegation-settings .transition-colors {
+  transition-property: color, background-color, border-color;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
+}
+
+/* Buttons */
+.delegation-settings button {
+  cursor: pointer;
+}
+
+.delegation-settings button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Form Elements */
+.delegation-settings input,
+.delegation-settings select,
+.delegation-settings textarea {
+  outline: none;
+}
+
+.delegation-settings input:focus,
+.delegation-settings select:focus,
+.delegation-settings textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Permission Badges */
+.delegation-settings .bg-purple-500\/20 {
+  background-color: rgba(168, 85, 247, 0.2);
+}
+
+.delegation-settings .bg-blue-500\/20 {
+  background-color: rgba(59, 130, 246, 0.2);
+}
+
+.delegation-settings .bg-red-500\/20 {
+  background-color: rgba(239, 68, 68, 0.2);
+}
+
+.delegation-settings .bg-green-500\/20 {
+  background-color: rgba(34, 197, 94, 0.2);
+}
+
+.delegation-settings .bg-yellow-500\/20 {
+  background-color: rgba(234, 179, 8, 0.2);
+}
+
+.delegation-settings .bg-orange-500\/20 {
+  background-color: rgba(249, 115, 22, 0.2);
+}
+
+.delegation-settings .bg-gray-500\/20 {
+  background-color: rgba(107, 114, 128, 0.2);
+}
+
+/* Dialog Overlay */
+.delegation-settings .fixed {
+  position: fixed;
+}
+
+.delegation-settings .inset-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.delegation-settings .bg-black\/50 {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Z-index */
+.delegation-settings .z-50 {
+  z-index: 50;
+}
+
+/* Flex utilities */
+.delegation-settings .flex {
+  display: flex;
+}
+
+.delegation-settings .flex-wrap {
+  flex-wrap: wrap;
+}
+
+.delegation-settings .items-center {
+  align-items: center;
+}
+
+.delegation-settings .justify-center {
+  justify-content: center;
+}
+
+.delegation-settings .justify-between {
+  justify-content: space-between;
+}
+
+.delegation-settings .gap-2 {
+  gap: 0.5rem;
+}
+
+.delegation-settings .gap-3 {
+  gap: 0.75rem;
+}
+
+.delegation-settings .gap-4 {
+  gap: 1rem;
+}
+
+/* Text utilities */
+.delegation-settings .text-sm {
+  font-size: 0.875rem;
+}
+
+.delegation-settings .text-xs {
+  font-size: 0.75rem;
+}
+
+.delegation-settings .text-lg {
+  font-size: 1.125rem;
+}
+
+.delegation-settings .text-xl {
+  font-size: 1.25rem;
+}
+
+.delegation-settings .text-2xl {
+  font-size: 1.5rem;
+}
+
+.delegation-settings .text-4xl {
+  font-size: 2.25rem;
+}
+
+/* Font weight */
+.delegation-settings .font-medium {
+  font-weight: 500;
+}
+
+.delegation-settings .font-bold {
+  font-weight: 700;
+}
+
+/* Colors */
+.delegation-settings .text-gray-100 {
+  color: #f3f4f6;
+}
+
+.delegation-settings .text-gray-200 {
+  color: #e5e7eb;
+}
+
+.delegation-settings .text-gray-300 {
+  color: #d1d5db;
+}
+
+.delegation-settings .text-gray-400 {
+  color: #9ca3af;
+}
+
+.delegation-settings .text-gray-500 {
+  color: #6b7280;
+}
+
+.delegation-settings .text-blue-400 {
+  color: #60a5fa;
+}
+
+.delegation-settings .text-purple-400 {
+  color: #c084fc;
+}
+
+.delegation-settings .text-green-400 {
+  color: #4ade80;
+}
+
+.delegation-settings .text-yellow-400 {
+  color: #facc15;
+}
+
+.delegation-settings .text-orange-400 {
+  color: #fb923c;
+}
+
+.delegation-settings .text-red-400 {
+  color: #f87171;
+}
+
+/* Background colors */
+.delegation-settings .bg-blue-600 {
+  background-color: #2563eb;
+}
+
+.delegation-settings .bg-green-600 {
+  background-color: #16a34a;
+}
+
+.delegation-settings .bg-red-600 {
+  background-color: #dc2626;
+}
+
+.delegation-settings .bg-orange-600 {
+  background-color: #ea580c;
+}
+
+.delegation-settings .hover\:bg-blue-700:hover {
+  background-color: #1d4ed8;
+}
+
+.delegation-settings .hover\:bg-green-700:hover {
+  background-color: #15803d;
+}
+
+.delegation-settings .hover\:bg-red-700:hover {
+  background-color: #b91c1c;
+}
+
+.delegation-settings .hover\:bg-orange-700:hover {
+  background-color: #c2410c;
+}
+
+/* Border utilities */
+.delegation-settings .border {
+  border-width: 1px;
+}
+
+.delegation-settings .border-t {
+  border-top-width: 1px;
+}
+
+.delegation-settings .border-b {
+  border-bottom-width: 1px;
+}
+
+.delegation-settings .border-b-2 {
+  border-bottom-width: 2px;
+}
+
+.delegation-settings .border-gray-600 {
+  border-color: #4b5563;
+}
+
+.delegation-settings .border-gray-700 {
+  border-color: #374151;
+}
+
+.delegation-settings .border-blue-400 {
+  border-color: #60a5fa;
+}
+
+.delegation-settings .border-blue-500 {
+  border-color: #3b82f6;
+}
+
+/* Border radius */
+.delegation-settings .rounded {
+  border-radius: 0.25rem;
+}
+
+.delegation-settings .rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.delegation-settings .rounded-full {
+  border-radius: 9999px;
+}
+
+/* Padding */
+.delegation-settings .p-3 {
+  padding: 0.75rem;
+}
+
+.delegation-settings .p-4 {
+  padding: 1rem;
+}
+
+.delegation-settings .p-6 {
+  padding: 1.5rem;
+}
+
+.delegation-settings .px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.delegation-settings .px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.delegation-settings .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.delegation-settings .py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.delegation-settings .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.delegation-settings .py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* Margin */
+.delegation-settings .m-0 {
+  margin: 0;
+}
+
+.delegation-settings .mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.delegation-settings .mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.delegation-settings .mb-3 {
+  margin-bottom: 0.75rem;
+}
+
+.delegation-settings .mb-4 {
+  margin-bottom: 1rem;
+}
+
+.delegation-settings .mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.delegation-settings .mt-1 {
+  margin-top: 0.25rem;
+}
+
+.delegation-settings .mt-2 {
+  margin-top: 0.5rem;
+}
+
+.delegation-settings .mt-3 {
+  margin-top: 0.75rem;
+}
+
+.delegation-settings .mt-4 {
+  margin-top: 1rem;
+}
+
+.delegation-settings .mt-6 {
+  margin-top: 1.5rem;
+}
+
+.delegation-settings .ml-2 {
+  margin-left: 0.5rem;
+}
+
+/* Width */
+.delegation-settings .w-full {
+  width: 100%;
+}
+
+.delegation-settings .w-10 {
+  width: 2.5rem;
+}
+
+.delegation-settings .max-w-md {
+  max-width: 28rem;
+}
+
+/* Height */
+.delegation-settings .h-10 {
+  height: 2.5rem;
+}
+
+/* Grid */
+.delegation-settings .grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.delegation-settings .grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* Space */
+.delegation-settings .space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+/* Overflow */
+.delegation-settings .overflow-hidden {
+  overflow: hidden;
+}
+
+/* Cursor */
+.delegation-settings .cursor-pointer {
+  cursor: pointer;
+}
+
+/* Resize */
+.delegation-settings .resize-none {
+  resize: none;
+}
+
+/* Italic */
+.delegation-settings .italic {
+  font-style: italic;
+}
+
+/* Gradient backgrounds */
+.delegation-settings .bg-gradient-to-br {
+  background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}
+
+.delegation-settings .from-indigo-500 {
+  --tw-gradient-from: #6366f1;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(99, 102, 241, 0));
+}
+
+.delegation-settings .from-purple-500 {
+  --tw-gradient-from: #a855f7;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(168, 85, 247, 0));
+}
+
+.delegation-settings .from-green-500 {
+  --tw-gradient-from: #22c55e;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(34, 197, 94, 0));
+}
+
+.delegation-settings .to-purple-500 {
+  --tw-gradient-to: #a855f7;
+}
+
+.delegation-settings .to-teal-500 {
+  --tw-gradient-to: #14b8a6;
+}
+
+/* Shadow */
+.delegation-settings .shadow-xl {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Hover states */
+.delegation-settings .hover\:text-gray-200:hover {
+  color: #e5e7eb;
+}
+
+/* Placeholder */
+.delegation-settings .placeholder-gray-500::placeholder {
+  color: #6b7280;
+}
+
+/* Strong */
+.delegation-settings .strong {
+  font-weight: 600;
+}

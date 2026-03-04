@@ -6,6 +6,8 @@
 @import './advanced-search.css';
 @import './statistics.css';
 @import './keyboard.css';
+@import './shared-folders.css';
+@import './delegation.css';
 
 /* Rich Text Editor */
 .rich-text-editor {

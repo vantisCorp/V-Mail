@@ -11,6 +11,7 @@
 @import './team-accounts.css';
 @import './admin-panel.css';
 @import './rbac.css';
+@import './email-templates.css';
 
 /* Rich Text Editor */
 .rich-text-editor {

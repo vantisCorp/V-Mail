@@ -105,13 +105,13 @@
 ## v1.2.0 Features (In Planning)
 
 ### Collaboration Features
-- [ ] Shared folders
-  - [ ] Design data model for shared folders
-  - [ ] Create useSharedFolders hook
-  - [ ] Create SharedFoldersSettings component
-  - [ ] Implement folder sharing with permissions (read, write, admin)
+- [x] Shared folders
+  - [x] Design data model for shared folders
+  - [x] Create useSharedFolders hook
+  - [x] Create SharedFoldersSettings component
+  - [x] Implement folder sharing with permissions (read, write, admin)
   - [ ] Add shared folder UI in Sidebar
-  - [ ] Write tests for shared folders
+  - [x] Write tests for shared folders
   - [ ] Integration testing
 
 - [ ] Email delegation

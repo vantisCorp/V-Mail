@@ -4,6 +4,7 @@
 @import './filters.css';
 @import './labels.css';
 @import './advanced-search.css';
+@import './statistics.css';
 
 /* Rich Text Editor */
 .rich-text-editor {

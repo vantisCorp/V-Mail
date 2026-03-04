@@ -45,7 +45,7 @@
 - [x] Commit and create PR
 - [x] Merge PR #3 to develop
 
-### Advanced Search Feature (IN PROGRESS)
+### Advanced Search Feature ✅ COMPLETED
 - [x] Create search types (src/types/search.ts)
 - [x] Create useAdvancedSearch hook
 - [x] Fix hoisting issue in useAdvancedSearch
@@ -55,9 +55,20 @@
 - [x] Integrate with App.tsx
 - [x] Add advanced search button to Sidebar
 - [x] Run tests and build
+- [x] Commit and create PR
+- [x] Merge PR #4 to develop
+
+### Email Statistics Feature (IN PROGRESS)
+- [ ] Create statistics types (src/types/statistics.ts)
+- [ ] Create useEmailStatistics hook
+- [ ] Write tests for useEmailStatistics
+- [ ] Create EmailStatistics component
+- [ ] Create statistics CSS styles
+- [ ] Integrate with App.tsx
+- [ ] Add button to Sidebar
+- [ ] Run tests and build
 - [ ] Commit and create PR
 - [ ] Merge PR to develop
 
 ### Future Features (v1.1.0)
-- [ ] Email statistics
 - [ ] Keyboard shortcuts

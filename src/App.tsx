@@ -6,6 +6,7 @@ import { PerformanceMonitor } from './components/PerformanceMonitor';
 import { useNotifications } from './hooks/useNotifications';
 import { useEmails } from './hooks/useEmails';
 import { useAdvancedSearch } from './hooks/useAdvancedSearch';
+import { useEmailStatistics } from './hooks/useEmailStatistics';
 import { Inbox } from './pages/Inbox';
 import { Sent } from './pages/Sent';
 import { Drafts } from './pages/Drafts';
@@ -20,6 +21,7 @@ const AutoReplySettings = lazy(() => import('./components/AutoReplySettings').th
 const EmailFilterSettings = lazy(() => import('./components/EmailFilterSettings').then(m => ({ default: m.EmailFilterSettings })));
 const LabelSettings = lazy(() => import('./components/LabelSettings').then(m => ({ default: m.LabelSettings })));
 const AdvancedSearchPanel = lazy(() => import('./components/AdvancedSearchPanel').then(m => ({ default: m.AdvancedSearchPanel })));
+const EmailStatistics = lazy(() => import('./components/EmailStatistics').then(m => ({ default: m.EmailStatistics })));
 
 // Loading component for lazy-loaded modals
 const ModalLoader: React.FC = () => (
@@ -37,6 +39,7 @@ export const App: React.FC = () => {
   const [showFilterSettings, setShowFilterSettings] = useState(false);
   const [showLabelSettings, setShowLabelSettings] = useState(false);
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
+  const [showStatistics, setShowStatistics] = useState(false);
 
   const { addNotification } = useNotifications();
   const { emails } = useEmails();
@@ -55,6 +58,13 @@ export const App: React.FC = () => {
     loadSavedSearch,
     deleteSavedSearch,
   } = useAdvancedSearch(emails);
+
+  const {
+    statistics,
+    timeRange,
+    setTimeRange,
+    refreshStats,
+  } = useEmailStatistics(emails);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -93,12 +103,15 @@ export const App: React.FC = () => {
         if (showAdvancedSearch) {
           setShowAdvancedSearch(false);
         }
+        if (showStatistics) {
+          setShowStatistics(false);
+        }
       }
     };
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [showComposeModal, showPhantomModal, showSelfDestructModal, showPanicModal, showAutoReplySettings, showFilterSettings, showLabelSettings, showAdvancedSearch]);
+  }, [showComposeModal, showPhantomModal, showSelfDestructModal, showPanicModal, showAutoReplySettings, showFilterSettings, showLabelSettings, showAdvancedSearch, showStatistics]);
 
   const handleCompose = () => {
     setShowComposeModal(true);
@@ -130,6 +143,10 @@ export const App: React.FC = () => {
 
   const handleAdvancedSearch = () => {
     setShowAdvancedSearch(true);
+  };
+
+  const handleStatistics = () => {
+    setShowStatistics(true);
   };
 
   const handleSendEmail = async (data: any) => {
@@ -167,6 +184,7 @@ export const App: React.FC = () => {
           onFilterSettings={handleFilterSettings}
           onLabelSettings={handleLabelSettings}
           onAdvancedSearch={handleAdvancedSearch}
+          onStatistics={handleStatistics}
         />
 
         <Routes>
@@ -242,6 +260,15 @@ export const App: React.FC = () => {
               onSaveSearch={saveSearch}
               onLoadSavedSearch={loadSavedSearch}
               onDeleteSavedSearch={deleteSavedSearch}
+            />
+          )}
+          {showStatistics && (
+            <EmailStatistics
+              isOpen={showStatistics}
+              onClose={() => setShowStatistics(false)}
+              statistics={statistics}
+              timeRange={timeRange}
+              onRefresh={refreshStats}
             />
           )}
         </Suspense>

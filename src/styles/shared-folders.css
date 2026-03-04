@@ -1,0 +1,477 @@
+/* Shared Folders Settings Styles */
+
+.shared-folders-settings {
+  padding: 1.5rem;
+  background: #1a1a2e;
+  border-radius: 0.5rem;
+  min-height: 400px;
+}
+
+/* Stats Grid */
+.shared-folders-settings .grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .shared-folders-settings .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .shared-folders-settings .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Folder Cards */
+.shared-folders-settings .bg-gray-800 {
+  background-color: #1f2937;
+}
+
+.shared-folders-settings .bg-gray-700\/50 {
+  background-color: rgba(55, 65, 81, 0.5);
+}
+
+.shared-folders-settings .bg-gray-750 {
+  background-color: #2d3748;
+}
+
+/* Transitions */
+.shared-folders-settings .transition-colors {
+  transition-property: color, background-color, border-color;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
+}
+
+/* Buttons */
+.shared-folders-settings button {
+  cursor: pointer;
+}
+
+.shared-folders-settings button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Form Elements */
+.shared-folders-settings input,
+.shared-folders-settings select,
+.shared-folders-settings textarea {
+  outline: none;
+}
+
+.shared-folders-settings input:focus,
+.shared-folders-settings select:focus,
+.shared-folders-settings textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* Permission Badges */
+.shared-folders-settings .bg-blue-500\/20 {
+  background-color: rgba(59, 130, 246, 0.2);
+}
+
+.shared-folders-settings .bg-yellow-500\/20 {
+  background-color: rgba(234, 179, 8, 0.2);
+}
+
+.shared-folders-settings .bg-red-500\/20 {
+  background-color: rgba(239, 68, 68, 0.2);
+}
+
+.shared-folders-settings .bg-green-500\/20 {
+  background-color: rgba(34, 197, 94, 0.2);
+}
+
+.shared-folders-settings .bg-gray-500\/20 {
+  background-color: rgba(107, 114, 128, 0.2);
+}
+
+/* Dialog Overlay */
+.shared-folders-settings .fixed {
+  position: fixed;
+}
+
+.shared-folders-settings .inset-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.shared-folders-settings .bg-black\/50 {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Z-index */
+.shared-folders-settings .z-50 {
+  z-index: 50;
+}
+
+/* Flex utilities */
+.shared-folders-settings .flex {
+  display: flex;
+}
+
+.shared-folders-settings .items-center {
+  align-items: center;
+}
+
+.shared-folders-settings .justify-center {
+  justify-content: center;
+}
+
+.shared-folders-settings .justify-between {
+  justify-content: space-between;
+}
+
+.shared-folders-settings .gap-2 {
+  gap: 0.5rem;
+}
+
+.shared-folders-settings .gap-3 {
+  gap: 0.75rem;
+}
+
+.shared-folders-settings .gap-4 {
+  gap: 1rem;
+}
+
+/* Text utilities */
+.shared-folders-settings .text-sm {
+  font-size: 0.875rem;
+}
+
+.shared-folders-settings .text-xs {
+  font-size: 0.75rem;
+}
+
+.shared-folders-settings .text-lg {
+  font-size: 1.125rem;
+}
+
+.shared-folders-settings .text-xl {
+  font-size: 1.25rem;
+}
+
+.shared-folders-settings .text-2xl {
+  font-size: 1.5rem;
+}
+
+.shared-folders-settings .text-4xl {
+  font-size: 2.25rem;
+}
+
+/* Font weight */
+.shared-folders-settings .font-medium {
+  font-weight: 500;
+}
+
+.shared-folders-settings .font-bold {
+  font-weight: 700;
+}
+
+/* Colors */
+.shared-folders-settings .text-gray-100 {
+  color: #f3f4f6;
+}
+
+.shared-folders-settings .text-gray-200 {
+  color: #e5e7eb;
+}
+
+.shared-folders-settings .text-gray-300 {
+  color: #d1d5db;
+}
+
+.shared-folders-settings .text-gray-400 {
+  color: #9ca3af;
+}
+
+.shared-folders-settings .text-gray-500 {
+  color: #6b7280;
+}
+
+.shared-folders-settings .text-blue-400 {
+  color: #60a5fa;
+}
+
+.shared-folders-settings .text-green-400 {
+  color: #4ade80;
+}
+
+.shared-folders-settings .text-yellow-400 {
+  color: #facc15;
+}
+
+.shared-folders-settings .text-red-400 {
+  color: #f87171;
+}
+
+/* Background colors */
+.shared-folders-settings .bg-blue-600 {
+  background-color: #2563eb;
+}
+
+.shared-folders-settings .bg-green-600 {
+  background-color: #16a34a;
+}
+
+.shared-folders-settings .bg-red-600 {
+  background-color: #dc2626;
+}
+
+.shared-folders-settings .hover\:bg-blue-700:hover {
+  background-color: #1d4ed8;
+}
+
+.shared-folders-settings .hover\:bg-green-700:hover {
+  background-color: #15803d;
+}
+
+.shared-folders-settings .hover\:bg-red-700:hover {
+  background-color: #b91c1c;
+}
+
+/* Border utilities */
+.shared-folders-settings .border {
+  border-width: 1px;
+}
+
+.shared-folders-settings .border-t {
+  border-top-width: 1px;
+}
+
+.shared-folders-settings .border-b {
+  border-bottom-width: 1px;
+}
+
+.shared-folders-settings .border-b-2 {
+  border-bottom-width: 2px;
+}
+
+.shared-folders-settings .border-gray-600 {
+  border-color: #4b5563;
+}
+
+.shared-folders-settings .border-gray-700 {
+  border-color: #374151;
+}
+
+.shared-folders-settings .border-blue-400 {
+  border-color: #60a5fa;
+}
+
+.shared-folders-settings .border-blue-500 {
+  border-color: #3b82f6;
+}
+
+/* Border radius */
+.shared-folders-settings .rounded {
+  border-radius: 0.25rem;
+}
+
+.shared-folders-settings .rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.shared-folders-settings .rounded-full {
+  border-radius: 9999px;
+}
+
+/* Padding */
+.shared-folders-settings .p-3 {
+  padding: 0.75rem;
+}
+
+.shared-folders-settings .p-4 {
+  padding: 1rem;
+}
+
+.shared-folders-settings .p-6 {
+  padding: 1.5rem;
+}
+
+.shared-folders-settings .px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.shared-folders-settings .px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.shared-folders-settings .px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.shared-folders-settings .py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.shared-folders-settings .py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.shared-folders-settings .py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* Margin */
+.shared-folders-settings .m-0 {
+  margin: 0;
+}
+
+.shared-folders-settings .mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.shared-folders-settings .mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.shared-folders-settings .mb-3 {
+  margin-bottom: 0.75rem;
+}
+
+.shared-folders-settings .mb-4 {
+  margin-bottom: 1rem;
+}
+
+.shared-folders-settings .mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.shared-folders-settings .mt-1 {
+  margin-top: 0.25rem;
+}
+
+.shared-folders-settings .mt-2 {
+  margin-top: 0.5rem;
+}
+
+.shared-folders-settings .mt-4 {
+  margin-top: 1rem;
+}
+
+.shared-folders-settings .mt-6 {
+  margin-top: 1.5rem;
+}
+
+.shared-folders-settings .ml-2 {
+  margin-left: 0.5rem;
+}
+
+/* Width */
+.shared-folders-settings .w-full {
+  width: 100%;
+}
+
+.shared-folders-settings .w-8 {
+  width: 2rem;
+}
+
+.shared-folders-settings .w-10 {
+  width: 2.5rem;
+}
+
+.shared-folders-settings .max-w-md {
+  max-width: 28rem;
+}
+
+/* Height */
+.shared-folders-settings .h-8 {
+  height: 2rem;
+}
+
+.shared-folders-settings .h-10 {
+  height: 2.5rem;
+}
+
+/* Space */
+.shared-folders-settings .space-y-2 > * + * {
+  margin-top: 0.5rem;
+}
+
+.shared-folders-settings .space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+/* Overflow */
+.shared-folders-settings .overflow-hidden {
+  overflow: hidden;
+}
+
+/* Cursor */
+.shared-folders-settings .cursor-pointer {
+  cursor: pointer;
+}
+
+/* Resize */
+.shared-folders-settings .resize-none {
+  resize: none;
+}
+
+/* Italic */
+.shared-folders-settings .italic {
+  font-style: italic;
+}
+
+/* Gradient backgrounds */
+.shared-folders-settings .bg-gradient-to-br {
+  background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}
+
+.shared-folders-settings .from-purple-500 {
+  --tw-gradient-from: #a855f7;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(168, 85, 247, 0));
+}
+
+.shared-folders-settings .to-pink-500 {
+  --tw-gradient-to: #ec4899;
+}
+
+.shared-folders-settings .from-blue-500 {
+  --tw-gradient-from: #3b82f6;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(59, 130, 246, 0));
+}
+
+.shared-folders-settings .to-cyan-500 {
+  --tw-gradient-to: #06b6d4;
+}
+
+/* Shadow */
+.shared-folders-settings .shadow-xl {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Hover states */
+.shared-folders-settings .hover\:text-gray-200:hover {
+  color: #e5e7eb;
+}
+
+.shared-folders-settings .hover\:text-gray-300:hover {
+  color: #d1d5db;
+}
+
+.shared-folders-settings .hover\:text-red-300:hover {
+  color: #fca5a5;
+}
+
+.shared-folders-settings .hover\:bg-gray-700:hover {
+  background-color: #374151;
+}
+
+/* Placeholder */
+.shared-folders-settings .placeholder-gray-500::placeholder {
+  color: #6b7280;
+}

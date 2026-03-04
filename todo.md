@@ -114,13 +114,13 @@
   - [x] Write tests for shared folders
   - [ ] Integration testing
 
-- [ ] Email delegation
-  - [ ] Design delegation workflow
-  - [ ] Create useEmailDelegation hook
-  - [ ] Create DelegationSettings component
-  - [ ] Implement delegate management UI
+- [x] Email delegation
+  - [x] Design delegation workflow
+  - [x] Create useEmailDelegation hook
+  - [x] Create DelegationSettings component
+  - [x] Implement delegate management UI
   - [ ] Add delegation indicator on delegated emails
-  - [ ] Write tests for email delegation
+  - [x] Write tests for email delegation
   - [ ] Integration testing
 
 - [ ] Team accounts

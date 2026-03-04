@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar';
 import { NotificationSystem } from './components/NotificationSystem';
@@ -7,6 +7,7 @@ import { useNotifications } from './hooks/useNotifications';
 import { useEmails } from './hooks/useEmails';
 import { useAdvancedSearch } from './hooks/useAdvancedSearch';
 import { useEmailStatistics } from './hooks/useEmailStatistics';
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { Inbox } from './pages/Inbox';
 import { Sent } from './pages/Sent';
 import { Drafts } from './pages/Drafts';
@@ -22,6 +23,7 @@ const EmailFilterSettings = lazy(() => import('./components/EmailFilterSettings'
 const LabelSettings = lazy(() => import('./components/LabelSettings').then(m => ({ default: m.LabelSettings })));
 const AdvancedSearchPanel = lazy(() => import('./components/AdvancedSearchPanel').then(m => ({ default: m.AdvancedSearchPanel })));
 const EmailStatistics = lazy(() => import('./components/EmailStatistics').then(m => ({ default: m.EmailStatistics })));
+const KeyboardShortcutsHelp = lazy(() => import('./components/KeyboardShortcutsHelp').then(m => ({ default: m.KeyboardShortcutsHelp })));
 
 // Loading component for lazy-loaded modals
 const ModalLoader: React.FC = () => (
@@ -40,6 +42,7 @@ export const App: React.FC = () => {
   const [showLabelSettings, setShowLabelSettings] = useState(false);
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
   const [showStatistics, setShowStatistics] = useState(false);
+  const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
 
   const { addNotification } = useNotifications();
   const { emails } = useEmails();
@@ -65,6 +68,41 @@ export const App: React.FC = () => {
     setTimeRange,
     refreshStats,
   } = useEmailStatistics(emails);
+
+  const handleShortcutAction = useCallback((actionId: string) => {
+    switch (actionId) {
+      case 'help':
+        setShowKeyboardShortcuts(true);
+        break;
+      case 'compose':
+        setShowComposeModal(true);
+        break;
+      case 'panic':
+        setShowPanicModal(true);
+        break;
+      case 'escape':
+        setShowComposeModal(false);
+        setShowPhantomModal(false);
+        setShowSelfDestructModal(false);
+        setShowPanicModal(false);
+        setShowAutoReplySettings(false);
+        setShowFilterSettings(false);
+        setShowLabelSettings(false);
+        setShowAdvancedSearch(false);
+        setShowStatistics(false);
+        setShowKeyboardShortcuts(false);
+        break;
+    }
+  }, []);
+
+  const {
+    shortcuts,
+    shortcutGroups,
+    isEnabled: shortcutsEnabled,
+    setEnabled: setShortcutsEnabled,
+    showHelp: showShortcutsHelp,
+    setShowHelp: setShowShortcutsHelp,
+  } = useKeyboardShortcuts(handleShortcutAction);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -106,12 +144,15 @@ export const App: React.FC = () => {
         if (showStatistics) {
           setShowStatistics(false);
         }
+        if (showKeyboardShortcuts) {
+          setShowKeyboardShortcuts(false);
+        }
       }
     };
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [showComposeModal, showPhantomModal, showSelfDestructModal, showPanicModal, showAutoReplySettings, showFilterSettings, showLabelSettings, showAdvancedSearch, showStatistics]);
+  }, [showComposeModal, showPhantomModal, showSelfDestructModal, showPanicModal, showAutoReplySettings, showFilterSettings, showLabelSettings, showAdvancedSearch, showStatistics, showKeyboardShortcuts]);
 
   const handleCompose = () => {
     setShowComposeModal(true);
@@ -147,6 +188,10 @@ export const App: React.FC = () => {
 
   const handleStatistics = () => {
     setShowStatistics(true);
+  };
+
+  const handleKeyboardShortcuts = () => {
+    setShowKeyboardShortcuts(true);
   };
 
   const handleSendEmail = async (data: any) => {
@@ -185,6 +230,7 @@ export const App: React.FC = () => {
           onLabelSettings={handleLabelSettings}
           onAdvancedSearch={handleAdvancedSearch}
           onStatistics={handleStatistics}
+          onKeyboardShortcuts={handleKeyboardShortcuts}
         />
 
         <Routes>
@@ -269,6 +315,18 @@ export const App: React.FC = () => {
               statistics={statistics}
               timeRange={timeRange}
               onRefresh={refreshStats}
+            />
+          )}
+          {(showKeyboardShortcuts || showShortcutsHelp) && (
+            <KeyboardShortcutsHelp
+              isOpen={showKeyboardShortcuts || showShortcutsHelp}
+              onClose={() => {
+                setShowKeyboardShortcuts(false);
+                setShowShortcutsHelp(false);
+              }}
+              shortcutGroups={shortcutGroups}
+              isEnabled={shortcutsEnabled}
+              onToggleEnabled={() => setShortcutsEnabled(!shortcutsEnabled)}
             />
           )}
         </Suspense>

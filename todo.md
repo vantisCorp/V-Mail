@@ -58,17 +58,26 @@
 - [x] Commit and create PR
 - [x] Merge PR #4 to develop
 
-### Email Statistics Feature (IN PROGRESS)
-- [ ] Create statistics types (src/types/statistics.ts)
-- [ ] Create useEmailStatistics hook
-- [ ] Write tests for useEmailStatistics
-- [ ] Create EmailStatistics component
-- [ ] Create statistics CSS styles
+### Email Statistics Feature ✅ COMPLETED
+- [x] Create statistics types (src/types/statistics.ts)
+- [x] Create useEmailStatistics hook
+- [x] Write tests for useEmailStatistics
+- [x] Create EmailStatistics component
+- [x] Create statistics CSS styles
+- [x] Integrate with App.tsx
+- [x] Add button to Sidebar
+- [x] Run tests and build
+- [x] Commit and create PR
+- [x] Merge PR #5 to develop
+
+### Keyboard Shortcuts Feature (IN PROGRESS)
+- [ ] Create keyboard shortcuts types
+- [ ] Create useKeyboardShortcuts hook
+- [ ] Write tests for useKeyboardShortcuts
+- [ ] Create KeyboardShortcutsHelp component
+- [ ] Create keyboard shortcuts styles
 - [ ] Integrate with App.tsx
 - [ ] Add button to Sidebar
 - [ ] Run tests and build
 - [ ] Commit and create PR
 - [ ] Merge PR to develop
-
-### Future Features (v1.1.0)
-- [ ] Keyboard shortcuts

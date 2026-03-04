@@ -13,6 +13,7 @@ interface SidebarProps {
   onLabelSettings?: () => void;
   onAdvancedSearch?: () => void;
   onStatistics?: () => void;
+  onKeyboardShortcuts?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -24,7 +25,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onFilterSettings,
   onLabelSettings,
   onAdvancedSearch,
-  onStatistics
+  onStatistics,
+  onKeyboardShortcuts
 }) => {
   const { folders } = useEmails();
   const { addNotification } = useNotifications();
@@ -152,6 +154,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <span>📊</span>
               <span>Stats</span>
+            </button>
+          )}
+          {onKeyboardShortcuts && (
+            <button
+              className="action-btn"
+              onClick={onKeyboardShortcuts}
+              title="Keyboard Shortcuts"
+            >
+              <span>⌨️</span>
+              <span>Shortcuts</span>
             </button>
           )}
         </div>

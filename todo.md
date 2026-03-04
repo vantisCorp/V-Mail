@@ -105,31 +105,31 @@
 ## v1.2.0 Features (In Planning)
 
 ### Collaboration Features
-- [ ] Shared folders
-  - [ ] Design data model for shared folders
-  - [ ] Create useSharedFolders hook
-  - [ ] Create SharedFoldersSettings component
-  - [ ] Implement folder sharing with permissions (read, write, admin)
+- [x] Shared folders
+  - [x] Design data model for shared folders
+  - [x] Create useSharedFolders hook
+  - [x] Create SharedFoldersSettings component
+  - [x] Implement folder sharing with permissions (read, write, admin)
   - [ ] Add shared folder UI in Sidebar
-  - [ ] Write tests for shared folders
+  - [x] Write tests for shared folders
   - [ ] Integration testing
 
-- [ ] Email delegation
-  - [ ] Design delegation workflow
-  - [ ] Create useEmailDelegation hook
-  - [ ] Create DelegationSettings component
-  - [ ] Implement delegate management UI
+- [x] Email delegation
+  - [x] Design delegation workflow
+  - [x] Create useEmailDelegation hook
+  - [x] Create DelegationSettings component
+  - [x] Implement delegate management UI
   - [ ] Add delegation indicator on delegated emails
-  - [ ] Write tests for email delegation
+  - [x] Write tests for email delegation
   - [ ] Integration testing
 
-- [ ] Team accounts
-  - [ ] Design team account data model
-  - [ ] Create useTeamAccounts hook
-  - [ ] Create TeamAccountsManagement component
-  - [ ] Implement team member management
-  - [ ] Add team account settings
-  - [ ] Write tests for team accounts
+- [x] Team accounts
+  - [x] Design team account data model
+  - [x] Create useTeamAccounts hook
+  - [x] Create TeamAccountsManagement component
+  - [x] Implement team member management
+  - [x] Add team account settings
+  - [x] Write tests for team accounts
   - [ ] Integration testing
 
 - [ ] Admin panel

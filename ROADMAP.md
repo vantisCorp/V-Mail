@@ -4,9 +4,9 @@
 
 This roadmap outlines the current status and future development plans for Vantis Mail.
 
-**Current Version**: 1.1.0  
-**Overall Progress**: ~95% Complete  
-**Status**: Production Ready with Enhanced Features
+**Current Version**: 1.2.0  
+**Overall Progress**: ~98% Complete  
+**Status**: Production Ready with Collaboration Features
 
 ---
 
@@ -26,6 +26,49 @@ This roadmap outlines the current status and future development plans for Vantis
 ---
 
 ## Completed Features (v1.0.0)
+
+### v1.2.0 Collaboration Features ✅
+
+#### Shared Folders
+- ✅ Create and manage shared folders
+- ✅ Folder permissions (view only, can edit, can manage)
+- ✅ Share folders with team members or groups
+- ✅ Activity tracking for folder changes
+- ✅ Folder ownership management
+- **Tests:** 28 tests (all passing)
+
+#### Email Delegation
+- ✅ Grant delegate access with specific permissions
+- ✅ Permission hierarchy (send as > send on behalf > manage)
+- ✅ Temporary access with expiration dates
+- ✅ Activity logging for delegated actions
+- ✅ Revoke access functionality
+- **Tests:** 18 tests (all passing)
+
+#### Team Accounts
+- ✅ Create and manage team accounts
+- ✅ Team member management with role assignments
+- ✅ Team settings (password policies, session management)
+- ✅ Billing and subscription management
+- ✅ Activity tracking and audit logs
+- **Tests:** 32 tests (all passing)
+
+#### Admin Panel
+- ✅ Dashboard with system overview
+- ✅ User management (CRUD operations)
+- ✅ Audit logs for administrative actions
+- ✅ System alerts monitoring
+- ✅ Settings configuration
+- **Tests:** 36 tests (all passing)
+
+#### Role-Based Access Control (RBAC)
+- ✅ 6-level role hierarchy (Super Admin → Guest)
+- ✅ 35+ permissions across 8 categories
+- ✅ Custom permission sets
+- ✅ Access policies
+- ✅ Permission requests workflow
+- ✅ Comprehensive audit logging
+- **Tests:** 43 tests (all passing)
 
 ### Core Features
 - ✅ Complete email system (Inbox, Sent, Drafts, Trash)

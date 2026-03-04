@@ -8,13 +8,25 @@ interface SidebarProps {
   onPhantom: () => void;
   onSelfDestruct: () => void;
   onPanic: () => void;
+  onAutoReplySettings?: () => void;
+  onFilterSettings?: () => void;
+  onLabelSettings?: () => void;
+  onAdvancedSearch?: () => void;
+  onStatistics?: () => void;
+  onKeyboardShortcuts?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   onCompose,
   onPhantom,
   onSelfDestruct,
-  onPanic
+  onPanic,
+  onAutoReplySettings,
+  onFilterSettings,
+  onLabelSettings,
+  onAdvancedSearch,
+  onStatistics,
+  onKeyboardShortcuts
 }) => {
   const { folders } = useEmails();
   const { addNotification } = useNotifications();
@@ -94,6 +106,66 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <span>🚨</span>
             <span>Panic</span>
           </button>
+          {onAutoReplySettings && (
+            <button
+              className="action-btn"
+              onClick={onAutoReplySettings}
+              title="Auto-Reply Settings"
+            >
+              <span>↩️</span>
+              <span>Auto-Reply</span>
+            </button>
+          )}
+          {onFilterSettings && (
+            <button
+              className="action-btn"
+              onClick={onFilterSettings}
+              title="Email Filters"
+            >
+              <span>🔍</span>
+              <span>Filters</span>
+            </button>
+          )}
+          {onLabelSettings && (
+            <button
+              className="action-btn"
+              onClick={onLabelSettings}
+              title="Email Labels"
+            >
+              <span>🏷️</span>
+              <span>Labels</span>
+            </button>
+          )}
+          {onAdvancedSearch && (
+            <button
+              className="action-btn"
+              onClick={onAdvancedSearch}
+              title="Advanced Search"
+            >
+              <span>🔬</span>
+              <span>Search</span>
+            </button>
+          )}
+          {onStatistics && (
+            <button
+              className="action-btn"
+              onClick={onStatistics}
+              title="Email Statistics"
+            >
+              <span>📊</span>
+              <span>Stats</span>
+            </button>
+          )}
+          {onKeyboardShortcuts && (
+            <button
+              className="action-btn"
+              onClick={onKeyboardShortcuts}
+              title="Keyboard Shortcuts"
+            >
+              <span>⌨️</span>
+              <span>Shortcuts</span>
+            </button>
+          )}
         </div>
       </div>
     </aside>

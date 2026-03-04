@@ -1,4 +1,12 @@
 
+/* Import feature styles */
+@import './auto-reply.css';
+@import './filters.css';
+@import './labels.css';
+@import './advanced-search.css';
+@import './statistics.css';
+@import './keyboard.css';
+
 /* Rich Text Editor */
 .rich-text-editor {
   border: 1px solid var(--border-color);

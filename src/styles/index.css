@@ -13,6 +13,7 @@
 @import './rbac.css';
 @import './email-templates.css';
 @import './email-automation.css';
+@import './task-management.css';
 
 /* Rich Text Editor */
 .rich-text-editor {

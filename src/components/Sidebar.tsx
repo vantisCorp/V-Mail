@@ -11,6 +11,7 @@ interface SidebarProps {
   onAutoReplySettings?: () => void;
   onFilterSettings?: () => void;
   onLabelSettings?: () => void;
+  onAdvancedSearch?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -20,7 +21,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onPanic,
   onAutoReplySettings,
   onFilterSettings,
-  onLabelSettings
+  onLabelSettings,
+  onAdvancedSearch
 }) => {
   const { folders } = useEmails();
   const { addNotification } = useNotifications();
@@ -128,6 +130,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <span>🏷️</span>
               <span>Labels</span>
+            </button>
+          )}
+          {onAdvancedSearch && (
+            <button
+              className="action-btn"
+              onClick={onAdvancedSearch}
+              title="Advanced Search"
+            >
+              <span>🔬</span>
+              <span>Search</span>
             </button>
           )}
         </div>

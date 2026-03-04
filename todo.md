@@ -33,8 +33,31 @@
 - [x] Commit and create PR
 - [x] Merge PR #2 to develop
 
+### Email Labels/Tags Feature ✅ COMPLETED
+- [x] Create label types (src/types/labels.ts)
+- [x] Create useLabels hook
+- [x] Create LabelSettings component
+- [x] Create labels CSS styles
+- [x] Write tests for useLabels
+- [x] Integrate with App.tsx
+- [x] Add button to Sidebar
+- [x] Run tests and build
+- [x] Commit and create PR
+- [x] Merge PR #3 to develop
+
+### Advanced Search Feature (IN PROGRESS)
+- [x] Create search types (src/types/search.ts)
+- [x] Create useAdvancedSearch hook
+- [x] Fix hoisting issue in useAdvancedSearch
+- [x] Write tests for useAdvancedSearch (16 tests passing)
+- [x] Create AdvancedSearchPanel component
+- [x] Create advanced search CSS styles
+- [x] Integrate with App.tsx
+- [x] Add advanced search button to Sidebar
+- [x] Run tests and build
+- [ ] Commit and create PR
+- [ ] Merge PR to develop
+
 ### Future Features (v1.1.0)
-- [ ] Email labels/tags
-- [ ] Advanced search
 - [ ] Email statistics
 - [ ] Keyboard shortcuts

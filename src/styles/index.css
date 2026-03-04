@@ -3,6 +3,7 @@
 @import './auto-reply.css';
 @import './filters.css';
 @import './labels.css';
+@import './advanced-search.css';
 
 /* Rich Text Editor */
 .rich-text-editor {

@@ -1,0 +1,24 @@
+# Vantis Mail Code Owners
+
+# Default reviewers for the entire repository
+* @vantisCorp/core-team
+
+# Specific areas and their maintainers
+/src/ @vantisCorp/frontend-team
+/backend/ @vantisCorp/backend-team
+/desktop-app/ @vantisCorp/desktop-team
+/mobile-app/ @vantisCorp/mobile-team
+/tests/ @vantisCorp/qa-team
+
+# Documentation
+/docs/ @vantisCorp/docs-team
+*.md @vantisCorp/docs-team
+
+# CI/CD and Infrastructure
+.github/ @vantisCorp/devops-team
+.k8s/ @vantisCorp/devops-team
+docker/ @vantisCorp/devops-team
+
+# Security related files
+SECURITY.md @vantisCorp/security-team
+scripts/security-audit.sh @vantisCorp/security-team

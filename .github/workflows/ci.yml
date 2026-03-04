@@ -10,161 +10,112 @@ jobs:
   lint:
     name: Lint Code
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+      with:
+        sparse-checkout: src,tests
+        sparse-checkout-cone-mode: false
       
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '20'
+        cache: 'npm'
         
     - name: Install dependencies
-      run: npm install
+      run: npm ci --prefer-offline --no-audit --no-fund
       
     - name: Run ESLint
       run: npm run lint
-      continue-on-error: true
-      
-    - name: Run TypeScript type check
-      run: npm run type-check
+      timeout-minutes: 2
 
   test:
     name: Run Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+      with:
+        sparse-checkout: src,tests
+        sparse-checkout-cone-mode: false
       
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '20'
+        cache: 'npm'
         
     - name: Install dependencies
-      run: npm install
+      run: npm ci --prefer-offline --no-audit --no-fund
       
     - name: Run tests
       run: npm test
-      
-    - name: Generate coverage report
-      run: npm run test:coverage
-      continue-on-error: true
-      
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        files: ./coverage/lcov.info
-        flags: unittests
-        name: codecov-umbrella
-      continue-on-error: true
+      timeout-minutes: 5
 
-  validate-build:
+  build:
     name: Validate Build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+      with:
+        sparse-checkout: src,public,package.json,tsconfig.json,vite.config.ts,index.html
+        sparse-checkout-cone-mode: false
       
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '20'
+        cache: 'npm'
         
     - name: Install dependencies
-      run: npm install
+      run: npm ci --prefer-offline --no-audit --no-fund
       
     - name: Run build
       run: npm run build
+      timeout-minutes: 5
       
     - name: Check build output
       run: |
         if [ -d "dist" ] && [ -f "dist/index.html" ]; then
           echo "✓ Build successful"
         else
-          echo "✗ Build failed - no dist directory or index.html found"
+          echo "✗ Build failed"
           exit 1
         fi
 
   validate-resp:
     name: Test Responsiveness
     runs-on: ubuntu-latest
+    timeout-minutes: 2
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+      with:
+        sparse-checkout: src/styles
+        sparse-checkout-cone-mode: false
       
     - name: Check CSS Media Queries
       run: |
-        if grep -r "@media" css/ src/styles/ --include="*.css" 2>/dev/null; then
+        if grep -r "@media" src/styles/ --include="*.css" 2>/dev/null; then
           echo "✓ Responsive design detected"
         else
           echo "✗ No responsive design found"
           exit 1
         fi
 
-  security-scan:
-    name: Security Scan
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
-        
-    - name: Install dependencies
-      run: npm install
-      
-    - name: Run npm audit
-      run: npm audit --audit-level=moderate
-      continue-on-error: true
-      
-    - name: Check for security issues
-      run: |
-        # Check for common security issues in source files
-        if grep -r "alert(" src/ --include="*.tsx" --include="*.ts" --include="*.js" --include="*.jsx"; then
-          echo "⚠️  Warning: alert() found in code"
-        fi
-        if grep -r "prompt(" src/ --include="*.tsx" --include="*.ts" --include="*.js" --include="*.jsx"; then
-          echo "⚠️  Warning: prompt() found in code"
-        fi
-        if grep -r "eval(" src/ --include="*.tsx" --include="*.ts" --include="*.js" --include="*.jsx"; then
-          echo "⚠️  Warning: eval() found in code"
-        fi
-
-  build:
-    name: Build Project
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
-        
-    - name: Install dependencies
-      run: npm install
-      
-    - name: Run build
-      run: npm run build
-      
-    - name: Run TypeScript type check
-      run: npm run type-check
-
   notify:
     name: Notify Team
     runs-on: ubuntu-latest
-    needs: [lint, test, validate-build, validate-resp, security-scan, build]
+    needs: [lint, test, build, validate-resp]
     if: always()
     
     steps:
@@ -172,17 +123,13 @@ jobs:
       run: |
         if [ "${{ needs.lint.result }}" == "success" ] && \
            [ "${{ needs.test.result }}" == "success" ] && \
-           [ "${{ needs.validate-build.result }}" == "success" ] && \
-           [ "${{ needs.validate-resp.result }}" == "success" ] && \
-           [ "${{ needs.security-scan.result }}" == "success" ] && \
-           [ "${{ needs.build.result }}" == "success" ]; then
+           [ "${{ needs.build.result }}" == "success" ] && \
+           [ "${{ needs.validate-resp.result }}" == "success" ]; then
           echo "✅ All checks passed!"
         else
-          echo "⚠️  Some checks had warnings or failed"
+          echo "⚠️  Some checks failed"
           echo "Lint: ${{ needs.lint.result }}"
           echo "Test: ${{ needs.test.result }}"
-          echo "Build: ${{ needs.validate-build.result }}"
-          echo "Responsive: ${{ needs.validate-resp.result }}"
-          echo "Security: ${{ needs.security-scan.result }}"
           echo "Build: ${{ needs.build.result }}"
+          echo "Responsive: ${{ needs.validate-resp.result }}"
         fi

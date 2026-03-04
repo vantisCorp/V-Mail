@@ -16,6 +16,7 @@ const SelfDestructModal = lazy(() => import('./components/SelfDestructModal').th
 const PanicModal = lazy(() => import('./components/PanicModal').then(m => ({ default: m.PanicModal })));
 const AutoReplySettings = lazy(() => import('./components/AutoReplySettings').then(m => ({ default: m.AutoReplySettings })));
 const EmailFilterSettings = lazy(() => import('./components/EmailFilterSettings').then(m => ({ default: m.EmailFilterSettings })));
+const LabelSettings = lazy(() => import('./components/LabelSettings').then(m => ({ default: m.LabelSettings })));
 
 // Loading component for lazy-loaded modals
 const ModalLoader: React.FC = () => (
@@ -31,6 +32,7 @@ export const App: React.FC = () => {
   const [showPanicModal, setShowPanicModal] = useState(false);
   const [showAutoReplySettings, setShowAutoReplySettings] = useState(false);
   const [showFilterSettings, setShowFilterSettings] = useState(false);
+  const [showLabelSettings, setShowLabelSettings] = useState(false);
 
   const { addNotification } = useNotifications();
 
@@ -65,12 +67,15 @@ export const App: React.FC = () => {
         if (showFilterSettings) {
           setShowFilterSettings(false);
         }
+        if (showLabelSettings) {
+          setShowLabelSettings(false);
+        }
       }
     };
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [showComposeModal, showPhantomModal, showSelfDestructModal, showPanicModal, showAutoReplySettings, showFilterSettings]);
+  }, [showComposeModal, showPhantomModal, showSelfDestructModal, showPanicModal, showAutoReplySettings, showFilterSettings, showLabelSettings]);
 
   const handleCompose = () => {
     setShowComposeModal(true);
@@ -94,6 +99,10 @@ export const App: React.FC = () => {
 
   const handleFilterSettings = () => {
     setShowFilterSettings(true);
+  };
+
+  const handleLabelSettings = () => {
+    setShowLabelSettings(true);
   };
 
   const handleSendEmail = async (data: any) => {
@@ -129,6 +138,7 @@ export const App: React.FC = () => {
           onPanic={handlePanic}
           onAutoReplySettings={handleAutoReplySettings}
           onFilterSettings={handleFilterSettings}
+          onLabelSettings={handleLabelSettings}
         />
 
         <Routes>
@@ -176,9 +186,9 @@ export const App: React.FC = () => {
               onClose={() => setShowAutoReplySettings(false)}
             />
           )}
-          {showFilterSettings && (
-            <EmailFilterSettings
-              onClose={() => setShowFilterSettings(false)}
+          {showLabelSettings && (
+            <LabelSettings
+              onClose={() => setShowLabelSettings(false)}
             />
           )}
         </Suspense>

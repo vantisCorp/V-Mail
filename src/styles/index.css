@@ -2,6 +2,7 @@
 /* Import feature styles */
 @import './auto-reply.css';
 @import './filters.css';
+@import './labels.css';
 
 /* Rich Text Editor */
 .rich-text-editor {

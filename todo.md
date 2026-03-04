@@ -30,7 +30,8 @@
 - [x] Integrate with App.tsx
 - [x] Add button to Sidebar
 - [x] Run tests and build
-- [ ] Commit and create PR
+- [x] Commit and create PR
+- [x] Merge PR #2 to develop
 
 ### Future Features (v1.1.0)
 - [ ] Email labels/tags

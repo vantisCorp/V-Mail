@@ -14,6 +14,7 @@
 @import './email-templates.css';
 @import './email-automation.css';
 @import './task-management.css';
+@import './calendar.css';
 
 /* Rich Text Editor */
 .rich-text-editor {

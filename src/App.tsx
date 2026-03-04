@@ -14,6 +14,7 @@ const ComposeModal = lazy(() => import('./components/ComposeModal').then(m => ({
 const PhantomModal = lazy(() => import('./components/PhantomModal').then(m => ({ default: m.PhantomModal })));
 const SelfDestructModal = lazy(() => import('./components/SelfDestructModal').then(m => ({ default: m.SelfDestructModal })));
 const PanicModal = lazy(() => import('./components/PanicModal').then(m => ({ default: m.PanicModal })));
+const AutoReplySettings = lazy(() => import('./components/AutoReplySettings').then(m => ({ default: m.AutoReplySettings })));
 
 // Loading component for lazy-loaded modals
 const ModalLoader: React.FC = () => (
@@ -27,6 +28,7 @@ export const App: React.FC = () => {
   const [showPhantomModal, setShowPhantomModal] = useState(false);
   const [showSelfDestructModal, setShowSelfDestructModal] = useState(false);
   const [showPanicModal, setShowPanicModal] = useState(false);
+  const [showAutoReplySettings, setShowAutoReplySettings] = useState(false);
 
   const { addNotification } = useNotifications();
 
@@ -55,12 +57,15 @@ export const App: React.FC = () => {
         if (showPanicModal) {
           setShowPanicModal(false);
         }
+        if (showAutoReplySettings) {
+          setShowAutoReplySettings(false);
+        }
       }
     };
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [showComposeModal, showPhantomModal, showSelfDestructModal, showPanicModal]);
+  }, [showComposeModal, showPhantomModal, showSelfDestructModal, showPanicModal, showAutoReplySettings]);
 
   const handleCompose = () => {
     setShowComposeModal(true);
@@ -76,6 +81,10 @@ export const App: React.FC = () => {
 
   const handlePanic = () => {
     setShowPanicModal(true);
+  };
+
+  const handleAutoReplySettings = () => {
+    setShowAutoReplySettings(true);
   };
 
   const handleSendEmail = async (data: any) => {
@@ -109,6 +118,7 @@ export const App: React.FC = () => {
           onPhantom={handlePhantom}
           onSelfDestruct={handleSelfDestruct}
           onPanic={handlePanic}
+          onAutoReplySettings={handleAutoReplySettings}
         />
 
         <Routes>
@@ -149,6 +159,11 @@ export const App: React.FC = () => {
               isOpen={showPanicModal}
               onClose={() => setShowPanicModal(false)}
               onConfirm={handlePanicConfirm}
+            />
+          )}
+          {showAutoReplySettings && (
+            <AutoReplySettings
+              onClose={() => setShowAutoReplySettings(false)}
             />
           )}
         </Suspense>

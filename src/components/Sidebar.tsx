@@ -8,13 +8,15 @@ interface SidebarProps {
   onPhantom: () => void;
   onSelfDestruct: () => void;
   onPanic: () => void;
+  onAutoReplySettings?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   onCompose,
   onPhantom,
   onSelfDestruct,
-  onPanic
+  onPanic,
+  onAutoReplySettings
 }) => {
   const { folders } = useEmails();
   const { addNotification } = useNotifications();
@@ -94,6 +96,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <span>🚨</span>
             <span>Panic</span>
           </button>
+          {onAutoReplySettings && (
+            <button
+              className="action-btn"
+              onClick={onAutoReplySettings}
+              title="Auto-Reply Settings"
+            >
+              <span>↩️</span>
+              <span>Auto-Reply</span>
+            </button>
+          )}
         </div>
       </div>
     </aside>

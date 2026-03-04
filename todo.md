@@ -123,13 +123,13 @@
   - [x] Write tests for email delegation
   - [ ] Integration testing
 
-- [ ] Team accounts
-  - [ ] Design team account data model
-  - [ ] Create useTeamAccounts hook
-  - [ ] Create TeamAccountsManagement component
-  - [ ] Implement team member management
-  - [ ] Add team account settings
-  - [ ] Write tests for team accounts
+- [x] Team accounts
+  - [x] Design team account data model
+  - [x] Create useTeamAccounts hook
+  - [x] Create TeamAccountsManagement component
+  - [x] Implement team member management
+  - [x] Add team account settings
+  - [x] Write tests for team accounts
   - [ ] Integration testing
 
 - [ ] Admin panel

@@ -9,6 +9,7 @@
 @import './shared-folders.css';
 @import './delegation.css';
 @import './team-accounts.css';
+@import './admin-panel.css';
 
 /* Rich Text Editor */
 .rich-text-editor {

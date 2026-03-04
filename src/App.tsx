@@ -4,6 +4,8 @@ import { Sidebar } from './components/Sidebar';
 import { NotificationSystem } from './components/NotificationSystem';
 import { PerformanceMonitor } from './components/PerformanceMonitor';
 import { useNotifications } from './hooks/useNotifications';
+import { useEmails } from './hooks/useEmails';
+import { useAdvancedSearch } from './hooks/useAdvancedSearch';
 import { Inbox } from './pages/Inbox';
 import { Sent } from './pages/Sent';
 import { Drafts } from './pages/Drafts';
@@ -17,6 +19,7 @@ const PanicModal = lazy(() => import('./components/PanicModal').then(m => ({ def
 const AutoReplySettings = lazy(() => import('./components/AutoReplySettings').then(m => ({ default: m.AutoReplySettings })));
 const EmailFilterSettings = lazy(() => import('./components/EmailFilterSettings').then(m => ({ default: m.EmailFilterSettings })));
 const LabelSettings = lazy(() => import('./components/LabelSettings').then(m => ({ default: m.LabelSettings })));
+const AdvancedSearchPanel = lazy(() => import('./components/AdvancedSearchPanel').then(m => ({ default: m.AdvancedSearchPanel })));
 
 // Loading component for lazy-loaded modals
 const ModalLoader: React.FC = () => (
@@ -33,8 +36,25 @@ export const App: React.FC = () => {
   const [showAutoReplySettings, setShowAutoReplySettings] = useState(false);
   const [showFilterSettings, setShowFilterSettings] = useState(false);
   const [showLabelSettings, setShowLabelSettings] = useState(false);
+  const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
 
   const { addNotification } = useNotifications();
+  const { emails } = useEmails();
+  
+  const {
+    advancedSearch,
+    savedSearches,
+    recentSearches,
+    addCondition,
+    updateCondition,
+    removeCondition,
+    clearConditions,
+    setMatchMode,
+    toggleCaseSensitive,
+    saveSearch,
+    loadSavedSearch,
+    deleteSavedSearch,
+  } = useAdvancedSearch(emails);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -70,12 +90,15 @@ export const App: React.FC = () => {
         if (showLabelSettings) {
           setShowLabelSettings(false);
         }
+        if (showAdvancedSearch) {
+          setShowAdvancedSearch(false);
+        }
       }
     };
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [showComposeModal, showPhantomModal, showSelfDestructModal, showPanicModal, showAutoReplySettings, showFilterSettings, showLabelSettings]);
+  }, [showComposeModal, showPhantomModal, showSelfDestructModal, showPanicModal, showAutoReplySettings, showFilterSettings, showLabelSettings, showAdvancedSearch]);
 
   const handleCompose = () => {
     setShowComposeModal(true);
@@ -103,6 +126,10 @@ export const App: React.FC = () => {
 
   const handleLabelSettings = () => {
     setShowLabelSettings(true);
+  };
+
+  const handleAdvancedSearch = () => {
+    setShowAdvancedSearch(true);
   };
 
   const handleSendEmail = async (data: any) => {
@@ -139,6 +166,7 @@ export const App: React.FC = () => {
           onAutoReplySettings={handleAutoReplySettings}
           onFilterSettings={handleFilterSettings}
           onLabelSettings={handleLabelSettings}
+          onAdvancedSearch={handleAdvancedSearch}
         />
 
         <Routes>
@@ -186,9 +214,34 @@ export const App: React.FC = () => {
               onClose={() => setShowAutoReplySettings(false)}
             />
           )}
+          {showFilterSettings && (
+            <EmailFilterSettings
+              onClose={() => setShowFilterSettings(false)}
+            />
+          )}
           {showLabelSettings && (
             <LabelSettings
               onClose={() => setShowLabelSettings(false)}
+            />
+          )}
+          {showAdvancedSearch && (
+            <AdvancedSearchPanel
+              isOpen={showAdvancedSearch}
+              onClose={() => setShowAdvancedSearch(false)}
+              conditions={advancedSearch.conditions}
+              matchMode={advancedSearch.matchMode}
+              caseSensitive={advancedSearch.caseSensitive}
+              savedSearches={savedSearches}
+              recentSearches={recentSearches}
+              onAddCondition={addCondition}
+              onUpdateCondition={updateCondition}
+              onRemoveCondition={removeCondition}
+              onClearConditions={clearConditions}
+              onSetMatchMode={setMatchMode}
+              onToggleCaseSensitive={toggleCaseSensitive}
+              onSaveSearch={saveSearch}
+              onLoadSavedSearch={loadSavedSearch}
+              onDeleteSavedSearch={deleteSavedSearch}
             />
           )}
         </Suspense>

@@ -9,6 +9,7 @@ interface SidebarProps {
   onSelfDestruct: () => void;
   onPanic: () => void;
   onAutoReplySettings?: () => void;
+  onFilterSettings?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -16,7 +17,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onPhantom,
   onSelfDestruct,
   onPanic,
-  onAutoReplySettings
+  onAutoReplySettings,
+  onFilterSettings
 }) => {
   const { folders } = useEmails();
   const { addNotification } = useNotifications();
@@ -104,6 +106,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
             >
               <span>↩️</span>
               <span>Auto-Reply</span>
+            </button>
+          )}
+          {onFilterSettings && (
+            <button
+              className="action-btn"
+              onClick={onFilterSettings}
+              title="Email Filters"
+            >
+              <span>🔍</span>
+              <span>Filters</span>
             </button>
           )}
         </div>

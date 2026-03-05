@@ -10,6 +10,61 @@ This roadmap outlines the current status and future development plans for Vantis
 
 ---
 
+### v1.4.0 AI-Powered Intelligence (Planning)
+
+#### AI-Powered Email Categorization (P0)
+- [ ] Automatic email classification
+- [ ] Custom category creation with ML training
+- [ ] Category confidence scores
+- [ ] Batch reclassification
+- [ ] Category-based rules
+
+#### Smart Email Suggestions (P0)
+- [ ] Suggested replies based on content
+- [ ] Quick action suggestions
+- [ ] Email follow-up reminders
+- [ ] Attachment suggestions
+- [ ] CC/BCC recommendations
+
+#### Sentiment Analysis (P1)
+- [ ] Sentiment scoring (positive/neutral/negative)
+- [ ] Emotion detection
+- [ ] Tone analysis
+- [ ] Reply tone suggestions
+- [ ] Sentiment trends
+
+#### Predictive Typing (P1)
+- [ ] Context-aware text completion
+- [ ] Phrase suggestions
+- [ ] Grammar corrections
+- [ ] Template suggestions
+- [ ] Auto-complete
+
+#### Email Summarization (P2)
+- [ ] Thread summarization
+- [ ] Key points extraction
+- [ ] Action items identification
+- [ ] TL;DR generation
+
+#### Duplicate Email Detection (P2)
+- [ ] Content similarity detection
+- [ ] Automatic deduplication
+- [ ] User preferences
+- [ ] Duplicate statistics
+
+#### Smart Folders (P2)
+- [ ] Automatic folder creation
+- [ ] Smart email routing
+- [ ] Folder optimization
+- [ ] Learning from actions
+
+#### Additional Features (P3)
+- [ ] Email Translation
+- [ ] Voice Email Assistant
+- [ ] Anomaly Detection
+
+---
+
 ## Phase Status Summary
 
 | Phase | Name | Status | Progress |

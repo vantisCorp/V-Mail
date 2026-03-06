@@ -190,6 +190,14 @@
 
 ### Status
 - ✅ Planning document created (PLAN_v1.6.0.md)
-- ⏳ Feature prioritization in progress
+- ✅ GitHub issues created for all v1.6.0 features
+  - ✅ Issue #52: Calendar Integration (P0)
+  - ✅ Issue #53: Contacts Integration (P0)
+  - ✅ Issue #54: Advanced Search (P1)
+  - ✅ Issue #55: Email Templates (P1)
+  - ✅ Issue #56: Task Management (P2)
+  - ✅ Issue #57: Email Signatures (P3)
+  - ✅ Issue #58: File Attachments Preview (P3)
+- ⏳ Begin implementation of P0 features
 - ⏳ Resource allocation pending
 - ⏳ Development start date TBD

@@ -123,3 +123,73 @@
 **Total Lines of Code:** ~6,500+
 **Test Coverage:** Comprehensive
 **Components:** 4 major features with full implementations
+
+---
+
+## v1.6.0 Planning 📋
+
+### Planned Features
+
+**P0 - Critical Features:**
+1. 📅 Calendar Integration
+   - Google Calendar, Microsoft Outlook, Apple Calendar
+   - Email-to-event conversion
+   - Calendar preview in email
+   - Event reminders
+
+2. 👥 Contacts Integration
+   - Google Contacts, Microsoft Outlook, iCloud
+   - Bidirectional sync
+   - Email-to-contact linking
+   - Contact management
+
+**P1 - High Priority:**
+3. 🔄 Real-time Collaboration
+   - Shared inbox
+   - Team collaboration features
+   - Activity feed
+   - Presence detection
+
+4. 📊 Advanced Analytics Dashboard
+   - Email analytics
+   - Team performance metrics
+   - Engagement metrics
+   - Custom reports
+
+5. 🤖 AI-Powered Smart Replies
+   - Context-aware replies
+   - Draft completion
+   - Template suggestions
+   - Learning from user
+
+6. 🔒 Enhanced Security Features
+   - Additional 2FA methods (FIDO2, biometrics)
+   - Security dashboard
+   - Advanced threat protection
+   - Compliance features
+
+**P2 - Medium Priority:**
+7. 📱 Mobile App Enhancements
+   - Native push notifications
+   - Offline mode
+   - Mobile-specific features
+
+8. 🔗 Third-Party Integrations
+   - CRM (Salesforce, HubSpot)
+   - Task Management (Asana, Trello)
+   - Note Taking (Evernote, Notion)
+   - File Storage (Google Drive, Dropbox)
+
+### Timeline
+- **Phase 1:** Core Features (Weeks 1-6) - Calendar & Contacts
+- **Phase 2:** Collaboration & Analytics (Weeks 7-12)
+- **Phase 3:** AI & Security (Weeks 13-16)
+- **Phase 4:** Polish & Launch (Weeks 17-20)
+
+**Total Development Time:** ~20 weeks (5 months)
+
+### Status
+- ✅ Planning document created (PLAN_v1.6.0.md)
+- ⏳ Feature prioritization in progress
+- ⏳ Resource allocation pending
+- ⏳ Development start date TBD

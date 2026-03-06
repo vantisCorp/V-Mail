@@ -73,10 +73,14 @@
 - PR #50: Advanced Caching Strategies
 
 **Next Steps:**
-- Review and merge all PRs to develop branch
-- Create v1.5.0 release branch
-- Create v1.5.0 release notes
-- Tag and publish v1.5.0 release
+- ✅ All PRs created (PRs #47-50)
+- ✅ Release branch created (release/v1.5.0)
+- ✅ All features merged to release branch
+- ✅ Release notes prepared (RELEASE_NOTES_v1.5.0.md)
+- ✅ Release PR created (PR #51)
+- ⏳ Merge PR #51 to main
+- ⏳ Create git tag v1.5.0
+- ⏳ Create GitHub release
 
 ---
 

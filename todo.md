@@ -6,8 +6,8 @@
 | PR # | Feature | Priority | Status |
 |------|---------|----------|--------|
 | #59 | Calendar Integration | P0 | ✅ MERGED |
-| #60 | Contacts Integration | P0 | ✅ RESOLVING |
-| #62 | Email Signatures | P3 | ✅ MERGEABLE |
+| #60 | Contacts Integration | P0 | ✅ MERGED |
+| #62 | Email Signatures | P3 | ✅ RESOLVING |
 | #65 | Task Management Tests | P2 | ✅ MERGEABLE |
 
 ### Pull Requests - Targeting `develop`

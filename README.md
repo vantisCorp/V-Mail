@@ -5,7 +5,7 @@
 
   <!-- Animated Badge -->
   <a href="https://github.com/vantisCorp/V-Mail/releases/tag/v1.0.0">
-    <img src="https://img.shields.io/badge/version-v1.0.0-FF0000?style=for-the-badge&logo=github&logoColor=white&labelColor=black&color=FF0000" alt="Version 1.0.0" />
+    <img src="https://img.shields.io/badge/version-v1.5.0-FF0000?style=for-the-badge&logo=github&logoColor=white&labelColor=black&color=FF0000" alt="Version 1.5.0" />
   </a>
 
   <a href="https://github.com/vantisCorp/V-Mail/blob/main/LICENSE">

@@ -257,7 +257,7 @@ export interface UpdateEventPayload {
   attendees?: Array<{
     email: string;
     displayName?: string;
-    responseStatus?: string;
+    responseStatus?: 'needsAction' | 'declined' | 'tentative' | 'accepted';
   }>;
   reminders?: {
     useDefault: boolean;

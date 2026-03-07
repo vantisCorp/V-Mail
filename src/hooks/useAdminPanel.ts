@@ -477,20 +477,12 @@ export function useAdminPanel(): UseAdminPanelReturn {
       
       setUsers(prev => [...prev, newUser]);
       
-      addNotification({
-        type: 'success',
-        title: 'User Created',
-        message: `User "${payload.name}" has been created successfully.`,
-      });
+      addNotification('success', `User "${payload.name}" has been created successfully.`);
       
       return newUser;
     } catch (err) {
       setError('Failed to create user');
-      addNotification({
-        type: 'error',
-        title: 'Creation Failed',
-        message: 'Failed to create user. Please try again.',
-      });
+      addNotification('error', 'Failed to create user. Please try again.');
       return null;
     } finally {
       setIsLoading(false);
@@ -500,41 +492,32 @@ export function useAdminPanel(): UseAdminPanelReturn {
   const updateUser = useCallback(async (userId: string, payload: UpdateUserPayload): Promise<AdminUser | null> => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
-      let updatedUser: AdminUser | null = null;
-      
-      setUsers(prev => prev.map(u => {
-        if (u.id === userId) {
-          updatedUser = { ...u, ...payload, updatedAt: new Date() };
-          return updatedUser;
-        }
-        return u;
-      }));
-      
-      if (updatedUser) {
-        addNotification({
-          type: 'success',
-          title: 'User Updated',
-          message: `User "${updatedUser.name}" has been updated successfully.`,
-        });
+
+      // Find user first
+      const userToUpdate = users.find(u => u.id === userId);
+      if (!userToUpdate) {
+        addNotification('error', 'User not found');
+        return null;
       }
-      
+
+      const updatedUser: AdminUser = { ...userToUpdate, ...payload, updatedAt: new Date() };
+
+      setUsers(prev => prev.map(u => u.id === userId ? updatedUser : u));
+
+      addNotification('success', `User "${updatedUser.name}" has been updated successfully.`);
+
       return updatedUser;
     } catch (err) {
       setError('Failed to update user');
-      addNotification({
-        type: 'error',
-        title: 'Update Failed',
-        message: 'Failed to update user. Please try again.',
-      });
+      addNotification('error', 'Failed to update user. Please try again.');
       return null;
     } finally {
       setIsLoading(false);
     }
-  }, [addNotification]);
+  }, [addNotification, users]);
 
   const deleteUser = useCallback(async (userId: string): Promise<boolean> => {
     try {
@@ -542,19 +525,11 @@ export function useAdminPanel(): UseAdminPanelReturn {
       
       setUsers(prev => prev.filter(u => u.id !== userId));
       
-      addNotification({
-        type: 'success',
-        title: 'User Deleted',
-        message: 'User has been deleted successfully.',
-      });
+      addNotification('success', 'User has been deleted successfully.');
       
       return true;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Deletion Failed',
-        message: 'Failed to delete user. Please try again.',
-      });
+      addNotification('error', 'Failed to delete user. Please try again.');
       return false;
     }
   }, [addNotification]);
@@ -567,19 +542,11 @@ export function useAdminPanel(): UseAdminPanelReturn {
         u.id === userId ? { ...u, status: 'suspended' as UserStatus, updatedAt: new Date() } : u
       ));
       
-      addNotification({
-        type: 'warning',
-        title: 'User Suspended',
-        message: 'User has been suspended successfully.',
-      });
+      addNotification('warning', 'User has been suspended successfully.');
       
       return true;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Suspension Failed',
-        message: 'Failed to suspend user. Please try again.',
-      });
+      addNotification('error', 'Failed to suspend user. Please try again.');
       return false;
     }
   }, [addNotification]);
@@ -592,19 +559,11 @@ export function useAdminPanel(): UseAdminPanelReturn {
         u.id === userId ? { ...u, status: 'active' as UserStatus, updatedAt: new Date() } : u
       ));
       
-      addNotification({
-        type: 'success',
-        title: 'User Reactivated',
-        message: 'User has been reactivated successfully.',
-      });
+      addNotification('success', 'User has been reactivated successfully.');
       
       return true;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Reactivation Failed',
-        message: 'Failed to reactivate user. Please try again.',
-      });
+      addNotification('error', 'Failed to reactivate user. Please try again.');
       return false;
     }
   }, [addNotification]);
@@ -628,11 +587,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
       }
     }
     
-    addNotification({
-      type: 'success',
-      title: 'Bulk Update Complete',
-      message: `${result.successful.length} users updated successfully.`,
-    });
+    addNotification('success', `${result.successful.length} users updated successfully.`);
     
     return result;
   }, [addNotification]);
@@ -654,11 +609,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
       }
     }
     
-    addNotification({
-      type: 'success',
-      title: 'Bulk Delete Complete',
-      message: `${result.successful.length} users deleted successfully.`,
-    });
+    addNotification('success', `${result.successful.length} users deleted successfully.`);
     
     return result;
   }, [addNotification]);
@@ -742,19 +693,11 @@ export function useAdminPanel(): UseAdminPanelReturn {
         a.id === alertId ? { ...a, isResolved: true, resolvedAt: new Date(), resolvedBy: 'current-user' } : a
       ));
       
-      addNotification({
-        type: 'success',
-        title: 'Alert Resolved',
-        message: 'The alert has been resolved successfully.',
-      });
+      addNotification('success', 'The alert has been resolved successfully.');
       
       return true;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Resolution Failed',
-        message: 'Failed to resolve alert. Please try again.',
-      });
+      addNotification('error', 'Failed to resolve alert. Please try again.');
       return false;
     }
   }, [addNotification]);
@@ -791,19 +734,11 @@ export function useAdminPanel(): UseAdminPanelReturn {
         return updatedSettings;
       });
       
-      addNotification({
-        type: 'success',
-        title: 'Settings Updated',
-        message: 'Admin settings have been updated successfully.',
-      });
+      addNotification('success', 'Admin settings have been updated successfully.');
       
       return updatedSettings;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Update Failed',
-        message: 'Failed to update settings. Please try again.',
-      });
+      addNotification('error', 'Failed to update settings. Please try again.');
       return null;
     }
   }, [addNotification]);
@@ -826,19 +761,11 @@ export function useAdminPanel(): UseAdminPanelReturn {
         updatedAt: new Date(),
       };
       
-      addNotification({
-        type: 'info',
-        title: 'Maintenance Scheduled',
-        message: `Maintenance window scheduled for ${new Date(window.startTime).toLocaleDateString()}.`,
-      });
+      addNotification('info', `Maintenance window scheduled for ${new Date(window.startTime).toLocaleDateString()}.`);
       
       return newWindow;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Scheduling Failed',
-        message: 'Failed to schedule maintenance. Please try again.',
-      });
+      addNotification('error', 'Failed to schedule maintenance. Please try again.');
       return null;
     }
   }, [addNotification]);
@@ -847,11 +774,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
     try {
       await new Promise(resolve => setTimeout(resolve, 300));
       
-      addNotification({
-        type: 'info',
-        title: 'Maintenance Cancelled',
-        message: 'Maintenance window has been cancelled.',
-      });
+      addNotification('info', 'Maintenance window has been cancelled.');
       
       return true;
     } catch (err) {

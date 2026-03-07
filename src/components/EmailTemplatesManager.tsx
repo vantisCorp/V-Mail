@@ -28,6 +28,7 @@ const EmailTemplatesManager: React.FC = () => {
     restoreVersion,
     getTemplateAnalytics,
     getTemplateById,
+    getTemplatesByCategory,
     getFavorites,
     getSystemTemplates,
     getUserTemplates

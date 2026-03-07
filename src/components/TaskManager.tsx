@@ -31,6 +31,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
     deleteTask,
     convertEmailToTask,
     createSubTask,
+    updateSubTask,
     addComment,
     createChecklistItem,
     toggleChecklistItem,
@@ -90,9 +91,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
   };
 
   const handleToggleSubtask = async (taskId: string, subtaskId: string, completed: boolean) => {
-    await createSubTask(taskId, {
-      id: subtaskId,
-      title: 'Updated subtask',
+    await updateSubTask(taskId, subtaskId, {
       status: completed ? TaskStatus.COMPLETED : TaskStatus.TODO,
       completed: completed,
       completedAt: completed ? new Date().toISOString() : undefined

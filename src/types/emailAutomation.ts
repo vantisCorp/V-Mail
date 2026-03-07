@@ -148,6 +148,7 @@ export interface AutomationRule {
   description?: string;
   status: RuleStatus;
   priority: RulePriority;
+  categoryId?: string;
   
   // Triggers and conditions
   triggerType: TriggerType;
@@ -331,9 +332,7 @@ export interface RuleCategory {
 // Payload types for operations
 export type CreateRulePayload = Omit<AutomationRule, 'id' | 'createdAt' | 'updatedAt' | 'executionCount' | 'successCount' | 'failureCount'>;
 
-export type UpdateRulePayload = Partial<CreateRulePayload> & {
-  id: string;
-};
+export type UpdateRulePayload = Partial<CreateRulePayload>;
 
 export type CreateConditionPayload = Omit<RuleCondition, 'id'>;
 

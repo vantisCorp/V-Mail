@@ -54,7 +54,7 @@ export const useEmailDelegation = () => {
     return {
       totalDelegations: delegations.length,
       activeDelegations: activeDelegations.length,
-      pendingDelegitations: pendingDelegations.length,
+      pendingDelegations: pendingDelegations.length,
       ...permissionCounts,
       totalEmailsSent: delegatedEmails.length,
     };

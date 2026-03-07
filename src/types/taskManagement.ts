@@ -292,9 +292,7 @@ export interface TaskSprint {
 // Payload types for operations
 export type CreateTaskPayload = Omit<Task, 'id' | 'createdAt' | 'updatedAt' | 'activityLog'>;
 
-export type UpdateTaskPayload = Partial<CreateTaskPayload> & {
-  id: string;
-};
+export type UpdateTaskPayload = Partial<CreateTaskPayload>;
 
 export type CreateCommentPayload = Omit<TaskComment, 'id' | 'createdAt'>;
 

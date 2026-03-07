@@ -8,6 +8,7 @@ import type {
   ShareInvitation,
   FolderPermission,
   ShareTargetType,
+  ShareStatus,
   ShareFolderOptions,
   UpdatePermissionOptions,
   SharedFolderFilter,
@@ -326,7 +327,7 @@ export const useSharedFolders = () => {
           if (!participant) return folder;
           
           const updatedParticipants = folder.participants.map(p =>
-            p.id === participantId ? { ...p, status: 'revoked' } : p
+            p.id === participantId ? { ...p, status: 'revoked' as ShareStatus } : p
           );
           
           logActivity(

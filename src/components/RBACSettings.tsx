@@ -8,9 +8,9 @@ import {
   CustomPermissionSet,
   AccessPolicy,
   PermissionAuditLog,
-  PermissionRequest,
-  RBACSettings
+  PermissionRequest
 } from '../types/rbac';
+import type { RBACSettings as RBACSettingsType } from '../types/rbac';
 import '../styles/rbac.css';
 
 const RBACSettings: React.FC = () => {
@@ -75,13 +75,14 @@ const RBACSettings: React.FC = () => {
     );
   };
 
-  const StatusBadge: React.FC<{ status: 'active' | 'inactive' | 'pending' | 'approved' | 'rejected' }> = ({ status }) => {
+  const StatusBadge: React.FC<{ status: 'active' | 'inactive' | 'pending' | 'approved' | 'rejected' | 'expired' }> = ({ status }) => {
     const colors: Record<string, string> = {
       active: 'status-active',
       inactive: 'status-inactive',
       pending: 'status-pending',
       approved: 'status-approved',
-      rejected: 'status-rejected'
+      rejected: 'status-rejected',
+      expired: 'status-expired'
     };
     return <span className={`status-badge ${colors[status]}`}>{status.toUpperCase()}</span>;
   };

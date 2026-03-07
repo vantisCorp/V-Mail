@@ -183,6 +183,8 @@ export interface UpdateTemplatePayload {
   sections?: TemplateSection[];
   tags?: string[];
   isFavorite?: boolean;
+  versions?: TemplateVersion[];
+  currentVersionId?: string;
 }
 
 /**

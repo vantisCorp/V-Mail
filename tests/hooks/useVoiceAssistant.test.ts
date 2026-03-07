@@ -232,7 +232,7 @@ describe('useVoiceAssistant', () => {
 
       const { result } = renderHook(() => useVoiceAssistant());
 
-      let command;
+      let command: any;
       await act(async () => {
         command = await result.current.recognizeCommand('Compose email to John');
       });
@@ -246,7 +246,7 @@ describe('useVoiceAssistant', () => {
 
       const { result } = renderHook(() => useVoiceAssistant());
 
-      let command;
+      let command: any;
       await act(async () => {
         command = await result.current.recognizeCommand('Test command');
       });
@@ -408,7 +408,7 @@ describe('useVoiceAssistant', () => {
       expect(mockService.startListening).toHaveBeenCalled();
 
       // Recognize command
-      let command;
+      let command: any;
       await act(async () => {
         command = await result.current.recognizeCommand('Search for emails from John');
       });
@@ -472,7 +472,7 @@ describe('useVoiceAssistant', () => {
       const { result } = renderHook(() => useVoiceAssistant());
 
       for (const expectedCmd of commands) {
-        let command;
+        let command: any;
         await act(async () => {
           command = await result.current.recognizeCommand(expectedCmd.transcript);
         });

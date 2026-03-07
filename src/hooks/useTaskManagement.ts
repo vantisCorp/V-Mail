@@ -451,8 +451,6 @@ export const useTaskManagement = () => {
       assignedTo: options.autoAssign || [],
       assignedBy: 'current-user',
       assignmentType: AssignmentType.SINGLE,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
       progress: 0,
       sourceEmailId: emailId,
       emailConversation: [emailId],

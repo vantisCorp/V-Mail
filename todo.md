@@ -2,21 +2,22 @@
 
 ## v1.6.0 Release Status
 
-### Pull Requests Status
+### Pull Requests - Targeting `main`
 | PR # | Feature | Priority | Status |
 |------|---------|----------|--------|
-| #59 | Calendar Integration | P0 | ✅ RESOLVED |
+| #59 | Calendar Integration | P0 | ✅ MERGED |
 | #60 | Contacts Integration | P0 | ✅ RESOLVING |
-| #61 | Advanced Search | P1 | ✅ MERGEABLE |
-| #62 | Email Signatures | P3 | ⚠️ CONFLICTING |
-| #63 | File Attachments Preview | P3 | ⚠️ CONFLICTING |
-| #64 | Email Templates Tests | P1 | ⚠️ CONFLICTING |
+| #62 | Email Signatures | P3 | ✅ MERGEABLE |
 | #65 | Task Management Tests | P2 | ✅ MERGEABLE |
-| #49 | Email Export (v1.5.0) | P1 | ❓ UNKNOWN |
-| #50 | Advanced Caching (v1.5.0) | P1 | ❓ UNKNOWN |
 
-### Current Task
-Resolving merge conflicts and merging PRs in priority order.
+### Pull Requests - Targeting `develop`
+| PR # | Feature | Priority | Status |
+|------|---------|----------|--------|
+| #61 | Advanced Search | P1 | ✅ MERGEABLE |
+| #63 | File Attachments Preview | P3 | ✅ MERGEABLE |
+| #64 | Email Templates Tests | P1 | ✅ MERGEABLE |
+| #49 | Email Export (v1.5.0) | P1 | ✅ MERGEABLE |
+| #50 | Advanced Caching (v1.5.0) | P1 | ✅ MERGEABLE |
 
 ---
 

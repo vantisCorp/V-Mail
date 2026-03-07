@@ -1,20 +1,26 @@
-<![CDATA[# V-Mail Development Todo - Task Management
+# V-Mail Development Todo
 
-## Current Feature: Task Management (Issue #56) - v1.6.0 P2
+## v1.6.0 Release Status
 
-### Progress
-- [x] Check existing task management implementation
-- [x] Create task management tests
-- [x] Run tests and verify passing
-- [ ] Commit and push changes
-- [ ] Create Pull Request
+### Pull Requests - Targeting `main`
+| PR # | Feature | Priority | Status |
+|------|---------|----------|--------|
+| #59 | Calendar Integration | P0 | ✅ MERGED |
+| #60 | Contacts Integration | P0 | ✅ MERGED |
+| #62 | Email Signatures | P3 | ✅ RESOLVED |
+| #65 | Task Management Tests | P2 | ✅ RESOLVING |
 
-## v1.6.0 Feature Status
-- [x] Calendar Integration (P0) - PR #59
-- [x] Contacts Integration (P0) - PR #60
-- [x] Advanced Search (P1) - PR #61
-- [x] Email Templates (P1) - Tests PR #64
-- [ ] Task Management (P2) - **IN PROGRESS**
-- [x] Email Signatures (P3) - PR #62
-- [x] File Attachments Preview (P3) - PR #63
-]]>
+### Pull Requests - Targeting `develop`
+| PR # | Feature | Priority | Status |
+|------|---------|----------|--------|
+| #61 | Advanced Search | P1 | ✅ MERGEABLE |
+| #63 | File Attachments Preview | P3 | ✅ MERGEABLE |
+| #64 | Email Templates Tests | P1 | ✅ MERGEABLE |
+| #49 | Email Export (v1.5.0) | P1 | ✅ MERGEABLE |
+| #50 | Advanced Caching (v1.5.0) | P1 | ✅ MERGEABLE |
+
+---
+
+## v1.5.0 Release ✅ PUBLISHED
+
+**Release URL:** https://github.com/vantisCorp/V-Mail/releases/tag/v1.5.0

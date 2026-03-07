@@ -376,7 +376,7 @@ describe('useSmartSuggestions Hook', () => {
       });
 
       expect(results!.length).toBe(3);
-      results!.forEach((r, index) => {
+      results!.forEach((r: any, index: number) => {
         expect(r.suggestions.length).toBeGreaterThanOrEqual(0);
         expect(r.context.emailId).toBe(contexts[index].emailId);
       });

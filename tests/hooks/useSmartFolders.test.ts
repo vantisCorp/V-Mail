@@ -216,7 +216,7 @@ describe('useSmartFolders', () => {
         strategy: OrganizationStrategy.BY_TOPIC,
         rules: [{
           id: 'rule-1',
-          type: 'KEYWORD',
+          type: 'KEYWORD' as const,
           condition: 'contains',
           value: 'project',
           weight: 0.7,
@@ -254,7 +254,7 @@ describe('useSmartFolders', () => {
         strategy: OrganizationStrategy.BY_TOPIC,
         rules: [{
           id: 'rule-1',
-          type: 'KEYWORD',
+          type: 'KEYWORD' as const,
           condition: 'contains',
           value: 'unrelated',
           weight: 0.7,
@@ -301,7 +301,7 @@ describe('useSmartFolders', () => {
         strategy: OrganizationStrategy.BY_TOPIC,
         rules: [{
           id: 'rule-1',
-          type: 'KEYWORD',
+          type: 'KEYWORD' as const,
           condition: 'contains',
           value: 'project',
           weight: 0.7,
@@ -394,7 +394,7 @@ describe('useSmartFolders', () => {
         strategy: OrganizationStrategy.BY_TOPIC,
         rules: [{
           id: 'rule-1',
-          type: 'KEYWORD',
+          type: 'KEYWORD' as const,
           condition: 'contains',
           value: 'project',
           weight: 0.5,
@@ -442,7 +442,7 @@ describe('useSmartFolders', () => {
         strategy: OrganizationStrategy.BY_TOPIC,
         rules: [{
           id: 'rule-1',
-          type: 'KEYWORD',
+          type: 'KEYWORD' as const,
           condition: 'contains',
           value: 'project',
           weight: 0.5,

@@ -1,4 +1,4 @@
-<![CDATA[# V-Mail Development Todo
+# V-Mail Development Todo
 
 ## v1.6.0 Release Status
 
@@ -7,8 +7,8 @@
 |------|---------|----------|--------|
 | #59 | Calendar Integration | P0 | ✅ MERGED |
 | #60 | Contacts Integration | P0 | ✅ MERGED |
-| #62 | Email Signatures | P3 | ✅ RESOLVING |
-| #65 | Task Management Tests | P2 | ✅ MERGEABLE |
+| #62 | Email Signatures | P3 | ✅ MERGED |
+| #65 | Task Management Tests | P2 | ✅ RESOLVING |
 
 ### Pull Requests - Targeting `develop`
 | PR # | Feature | Priority | Status |
@@ -24,4 +24,3 @@
 ## v1.5.0 Release ✅ PUBLISHED
 
 **Release URL:** https://github.com/vantisCorp/V-Mail/releases/tag/v1.5.0
-]]>

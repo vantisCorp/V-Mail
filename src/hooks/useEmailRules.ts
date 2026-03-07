@@ -311,11 +311,11 @@ export const useEmailRules = () => {
           ...payload,
           conditions: payload.conditions ? payload.conditions.map((c, idx) => ({
             ...c,
-            id: c.id || `cond-${Date.now()}-${idx}`,
+            id: `cond-${Date.now()}-${idx}`,
           })) : rule.conditions,
           actions: payload.actions ? payload.actions.map((a, idx) => ({
             ...a,
-            id: a.id || `act-${Date.now()}-${idx}`,
+            id: `act-${Date.now()}-${idx}`,
           })) : rule.actions,
           updatedBy: currentUser.id,
           updatedByName: currentUser.name,

@@ -469,8 +469,7 @@ export const useRBAC = () => {
     const customSet: CustomPermissionSet = {
       id: `custom_${Date.now()}`,
       name: payload.name,
-      displayName: payload.displayName,
-      description: payload.description,
+      description: payload.description || '',
       permissions: payload.permissions,
       isDefault: payload.isDefault || false,
       createdAt: new Date().toISOString(),

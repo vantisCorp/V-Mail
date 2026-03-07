@@ -450,20 +450,12 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
       };
       
       setTeamAccount(newTeam);
-      addNotification({
-        type: 'success',
-        title: 'Team Created',
-        message: `Team "${payload.name}" has been created successfully.`,
-      });
+      addNotification('success', `Team "${payload.name}" has been created successfully.`);
       
       return newTeam;
     } catch (err) {
       setError('Failed to create team account');
-      addNotification({
-        type: 'error',
-        title: 'Creation Failed',
-        message: 'Failed to create team account. Please try again.',
-      });
+      addNotification('error', 'Failed to create team account. Please try again.');
       return null;
     } finally {
       setIsLoading(false);
@@ -486,20 +478,12 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
         };
       });
       
-      addNotification({
-        type: 'success',
-        title: 'Team Updated',
-        message: 'Team account has been updated successfully.',
-      });
+      addNotification('success', 'Team account has been updated successfully.');
       
       return teamAccount;
     } catch (err) {
       setError('Failed to update team account');
-      addNotification({
-        type: 'error',
-        title: 'Update Failed',
-        message: 'Failed to update team account. Please try again.',
-      });
+      addNotification('error', 'Failed to update team account. Please try again.');
       return null;
     } finally {
       setIsLoading(false);
@@ -518,20 +502,12 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
       setInvitations([]);
       setActivities([]);
       
-      addNotification({
-        type: 'success',
-        title: 'Team Deleted',
-        message: 'Team account has been deleted successfully.',
-      });
+      addNotification('success', 'Team account has been deleted successfully.');
       
       return true;
     } catch (err) {
       setError('Failed to delete team account');
-      addNotification({
-        type: 'error',
-        title: 'Deletion Failed',
-        message: 'Failed to delete team account. Please try again.',
-      });
+      addNotification('error', 'Failed to delete team account. Please try again.');
       return false;
     } finally {
       setIsLoading(false);
@@ -543,19 +519,11 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
       await new Promise(resolve => setTimeout(resolve, 300));
       const newLink = `https://vmail.app/invite/${teamId}/${Date.now().toString(36)}`;
       
-      addNotification({
-        type: 'success',
-        title: 'Link Generated',
-        message: 'New invite link has been generated.',
-      });
+      addNotification('success', 'New invite link has been generated.');
       
       return newLink;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Generation Failed',
-        message: 'Failed to generate invite link.',
-      });
+      addNotification('error', 'Failed to generate invite link.');
       return null;
     }
   }, [addNotification]);
@@ -583,20 +551,12 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
       
       setInvitations(prev => [...prev, invitation]);
       
-      addNotification({
-        type: 'success',
-        title: 'Invitation Sent',
-        message: `Invitation has been sent to ${payload.email}.`,
-      });
+      addNotification('success', `Invitation has been sent to ${payload.email}.`);
       
       return invitation;
     } catch (err) {
       setError('Failed to send invitation');
-      addNotification({
-        type: 'error',
-        title: 'Invitation Failed',
-        message: 'Failed to send invitation. Please try again.',
-      });
+      addNotification('error', 'Failed to send invitation. Please try again.');
       return null;
     } finally {
       setIsLoading(false);
@@ -613,19 +573,11 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
           : inv
       ));
       
-      addNotification({
-        type: 'success',
-        title: 'Invitation Accepted',
-        message: 'You have joined the team successfully.',
-      });
+      addNotification('success', 'You have joined the team successfully.');
       
       return true;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Acceptance Failed',
-        message: 'Failed to accept invitation.',
-      });
+      addNotification('error', 'Failed to accept invitation.');
       return false;
     }
   }, [addNotification]);
@@ -636,19 +588,11 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
       
       setInvitations(prev => prev.filter(inv => inv.id !== invitationId));
       
-      addNotification({
-        type: 'info',
-        title: 'Invitation Declined',
-        message: 'The invitation has been declined.',
-      });
+      addNotification('info', 'The invitation has been declined.');
       
       return true;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Decline Failed',
-        message: 'Failed to decline invitation.',
-      });
+      addNotification('error', 'Failed to decline invitation.');
       return false;
     }
   }, [addNotification]);
@@ -659,19 +603,11 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
       
       setMembers(prev => prev.filter(m => m.id !== memberId));
       
-      addNotification({
-        type: 'success',
-        title: 'Member Removed',
-        message: 'Member has been removed from the team.',
-      });
+      addNotification('success', 'Member has been removed from the team.');
       
       return true;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Removal Failed',
-        message: 'Failed to remove member.',
-      });
+      addNotification('error', 'Failed to remove member.');
       return false;
     }
   }, [addNotification]);
@@ -690,19 +626,11 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
         return m;
       }));
       
-      addNotification({
-        type: 'success',
-        title: 'Member Updated',
-        message: 'Member information has been updated.',
-      });
+      addNotification('success', 'Member information has been updated.');
       
       return updatedMember;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Update Failed',
-        message: 'Failed to update member.',
-      });
+      addNotification('error', 'Failed to update member.');
       return null;
     }
   }, [addNotification]);
@@ -715,19 +643,11 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
         m.id === memberId ? { ...m, role } : m
       ));
       
-      addNotification({
-        type: 'success',
-        title: 'Role Changed',
-        message: `Member role has been changed to ${role}.`,
-      });
+      addNotification('success', `Member role has been changed to ${role}.`);
       
       return true;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Role Change Failed',
-        message: 'Failed to change member role.',
-      });
+      addNotification('error', 'Failed to change member role.');
       return false;
     }
   }, [addNotification]);
@@ -740,19 +660,11 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
         m.id === memberId ? { ...m, status: 'suspended' as TeamMemberStatus } : m
       ));
       
-      addNotification({
-        type: 'warning',
-        title: 'Member Suspended',
-        message: 'Member has been suspended.',
-      });
+      addNotification('warning', 'Member has been suspended.');
       
       return true;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Suspension Failed',
-        message: 'Failed to suspend member.',
-      });
+      addNotification('error', 'Failed to suspend member.');
       return false;
     }
   }, [addNotification]);
@@ -765,19 +677,11 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
         m.id === memberId ? { ...m, status: 'active' as TeamMemberStatus } : m
       ));
       
-      addNotification({
-        type: 'success',
-        title: 'Member Reactivated',
-        message: 'Member has been reactivated.',
-      });
+      addNotification('success', 'Member has been reactivated.');
       
       return true;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Reactivation Failed',
-        message: 'Failed to reactivate member.',
-      });
+      addNotification('error', 'Failed to reactivate member.');
       return false;
     }
   }, [addNotification]);
@@ -798,19 +702,11 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
         };
       });
       
-      addNotification({
-        type: 'success',
-        title: 'Settings Updated',
-        message: 'Team settings have been updated.',
-      });
+      addNotification('success', 'Team settings have been updated.');
       
       return updatedSettings;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Update Failed',
-        message: 'Failed to update team settings.',
-      });
+      addNotification('error', 'Failed to update team settings.');
       return null;
     }
   }, [addNotification]);
@@ -830,19 +726,11 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
         };
       });
       
-      addNotification({
-        type: 'success',
-        title: 'Password Policy Updated',
-        message: 'Password policy has been updated.',
-      });
+      addNotification('success', 'Password policy has been updated.');
       
       return true;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Update Failed',
-        message: 'Failed to update password policy.',
-      });
+      addNotification('error', 'Failed to update password policy.');
       return false;
     }
   }, [addNotification]);
@@ -862,19 +750,11 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
         };
       });
       
-      addNotification({
-        type: 'success',
-        title: 'Session Policy Updated',
-        message: 'Session policy has been updated.',
-      });
+      addNotification('success', 'Session policy has been updated.');
       
       return true;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Update Failed',
-        message: 'Failed to update session policy.',
-      });
+      addNotification('error', 'Failed to update session policy.');
       return false;
     }
   }, [addNotification]);
@@ -894,19 +774,11 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
         };
       });
       
-      addNotification({
-        type: 'success',
-        title: 'Retention Policy Updated',
-        message: 'Retention policy has been updated.',
-      });
+      addNotification('success', 'Retention policy has been updated.');
       
       return true;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Update Failed',
-        message: 'Failed to update retention policy.',
-      });
+      addNotification('error', 'Failed to update retention policy.');
       return false;
     }
   }, [addNotification]);
@@ -941,19 +813,11 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
         };
       });
       
-      addNotification({
-        type: 'success',
-        title: 'Plan Updated',
-        message: `Your plan has been changed to ${plan}.`,
-      });
+      addNotification('success', `Your plan has been changed to ${plan}.`);
       
       return updatedBilling;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Plan Update Failed',
-        message: 'Failed to update plan.',
-      });
+      addNotification('error', 'Failed to update plan.');
       return null;
     }
   }, [addNotification]);
@@ -973,19 +837,11 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
         };
       });
       
-      addNotification({
-        type: 'success',
-        title: 'Payment Method Updated',
-        message: 'Payment method has been updated.',
-      });
+      addNotification('success', 'Payment method has been updated.');
       
       return true;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Update Failed',
-        message: 'Failed to update payment method.',
-      });
+      addNotification('error', 'Failed to update payment method.');
       return false;
     }
   }, [addNotification]);
@@ -1008,19 +864,11 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
         };
       });
       
-      addNotification({
-        type: 'success',
-        title: 'Billing Contact Updated',
-        message: 'Billing contact has been updated.',
-      });
+      addNotification('success', 'Billing contact has been updated.');
       
       return true;
     } catch (err) {
-      addNotification({
-        type: 'error',
-        title: 'Update Failed',
-        message: 'Failed to update billing contact.',
-      });
+      addNotification('error', 'Failed to update billing contact.');
       return false;
     }
   }, [addNotification]);

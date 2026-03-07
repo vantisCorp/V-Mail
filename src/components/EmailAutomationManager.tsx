@@ -464,7 +464,7 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
         <select
           className="filter-select"
           value={filterPriority || ''}
-          onChange={(e) => setFilterPriority(e.target.value as RulePriority | undefined)}
+          onChange={(e) => setFilterPriority(e.target.value ? (e.target.value as unknown as RulePriority) : undefined)}
         >
           <option value="">All Priorities</option>
           <option value={RulePriority.URGENT}>Urgent</option>

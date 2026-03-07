@@ -351,21 +351,29 @@ export const useCalendar = () => {
 
   const updateEvent = useCallback(async (eventId: string, payload: UpdateEventPayload): Promise<CalendarEvent | null> => {
     let updatedEvent: CalendarEvent | null = null;
-    
-    setEvents(prev => prev.map(event => {
-      if (event.id === eventId) {
+
+    setEvents(prev => {
+      const found = prev.find(e => e.id === eventId);
+      if (found) {
         updatedEvent = {
-          ...event,
+          ...found,
           ...payload,
-          start: payload.start || event.start,
-          end: payload.end || event.end,
+          start: payload.start || found.start,
+          end: payload.end || found.end,
+          attendees: payload.attendees?.map(a => ({
+            ...a,
+            responseStatus: a.responseStatus || 'needsAction' as const
+          })) || found.attendees,
+          reminders: payload.reminders?.useDefault 
+            ? [{ method: 'popup' as const, minutes: 30 }]
+            : payload.reminders?.overrides || found.reminders,
           updated: new Date().toISOString(),
         };
-        return updatedEvent;
+        return prev.map(e => e.id === eventId ? updatedEvent! : e);
       }
-      return event;
-    }));
-    
+      return prev;
+    });
+
     return updatedEvent;
   }, []);
 

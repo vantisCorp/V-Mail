@@ -451,8 +451,6 @@ export const useTaskManagement = () => {
       assignedTo: options.autoAssign || [],
       assignedBy: 'current-user',
       assignmentType: AssignmentType.SINGLE,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
       progress: 0,
       sourceEmailId: emailId,
       emailConversation: [emailId],
@@ -473,8 +471,7 @@ export const useTaskManagement = () => {
       comments: [],
       subtasks: [],
       checklist: [],
-      reminders: [],
-      activityLog: []
+      reminders: []
     };
 
     // Set due date if specified
@@ -737,7 +734,8 @@ export const useTaskManagement = () => {
     }
 
     if (filter?.assignedTo) {
-      filtered = filtered.filter(t => t.assignedTo.includes(filter.assignedTo));
+      const assignedTo = filter.assignedTo;
+      filtered = filtered.filter(t => t.assignedTo.includes(assignedTo));
     }
 
     if (filter?.projectId) {
@@ -745,11 +743,12 @@ export const useTaskManagement = () => {
     }
 
     if (filter?.dueDateRange) {
+      const dateRange = filter.dueDateRange;
       filtered = filtered.filter(t => {
         if (!t.dueDate) return false;
         const dueDate = new Date(t.dueDate);
-        const from = filter.dueDateRange.from ? new Date(filter.dueDateRange.from) : null;
-        const to = filter.dueDateRange.to ? new Date(filter.dueDateRange.to) : null;
+        const from = dateRange.from ? new Date(dateRange.from) : null;
+        const to = dateRange.to ? new Date(dateRange.to) : null;
         return (!from || dueDate >= from) && (!to || dueDate <= to);
       });
     }

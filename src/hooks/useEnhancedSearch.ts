@@ -19,6 +19,7 @@ import {
   SmartCategorization,
   AutoTaggingResult,
 } from '../types/enhancedSearch';
+import { searchEngineService } from '../services/searchEngineService';
 
 /**
  * Enhanced Search Hook
@@ -484,7 +485,23 @@ export const useEnhancedSearch = () => {
       s.text.toLowerCase().includes(queryLower)
     );
 
-    return [...new Map([...historySuggestions, ...matchingSuggestions].map(s => [s.text, s])).values()].slice(0, 10);
+    // Also get suggestions from the search engine service
+    const engineSuggestions = searchEngineService.getSuggestions(query, 5);
+
+    // Combine and dedupe suggestions
+    const allSuggestions = [
+      ...historySuggestions,
+      ...matchingSuggestions,
+      ...engineSuggestions.map(s => ({
+        id: s.id,
+        text: s.text,
+        type: s.type as SuggestionType,
+        description: s.description,
+        count: s.count,
+      })),
+    ];
+
+    return [...new Map(allSuggestions.map(s => [s.text, s])).values()].slice(0, 10);
   }, [suggestions, searchHistory]);
 
   // Natural Language Processing
@@ -767,5 +784,14 @@ export const useEnhancedSearch = () => {
     // Utility
     clearSearch,
     clearHistory,
+
+    // Search engine integration
+    searchEngine: {
+      indexEmails: (emails: any[]) => emails.forEach(e => searchEngineService.indexEmail(e)),
+      indexContacts: (contacts: any[]) => contacts.forEach(c => searchEngineService.indexContact(c)),
+      indexEvents: (events: any[]) => events.forEach(e => searchEngineService.indexEvent(e)),
+      search: (query: string, scope?: SearchScope) => searchEngineService.searchAll(query, scope),
+      getStats: () => searchEngineService.getStats(),
+    },
   };
 };

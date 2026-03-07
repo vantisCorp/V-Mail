@@ -7,7 +7,7 @@
 |------|---------|----------|--------|
 | #59 | Calendar Integration | P0 | ✅ MERGED |
 | #60 | Contacts Integration | P0 | ✅ MERGED |
-| #62 | Email Signatures | P3 | ✅ RESOLVED |
+| #62 | Email Signatures | P3 | ✅ MERGED |
 | #65 | Task Management Tests | P2 | ✅ RESOLVING |
 
 ### Pull Requests - Targeting `develop`

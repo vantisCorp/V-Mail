@@ -1,0 +1,20 @@
+# Snyk (https://snyk.io) policy file
+
+version: v1.25.0
+
+# ignores
+ignore: {}
+
+# patches
+patch: {}
+
+# limits
+limit:
+  # Limit the number of reachable vulnerabilities
+  severity:
+    - severity: 'high'
+      limit: 10
+    - severity: 'medium'
+      limit: 20
+    - severity: 'low'
+      limit: 50

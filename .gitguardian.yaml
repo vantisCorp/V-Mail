@@ -1,0 +1,22 @@
+version: 2
+
+secret:
+  ignored-paths:
+    - 'node_modules/**'
+    - 'dist/**'
+    - 'build/**'
+    - 'coverage/**'
+    - '**/*.min.js'
+    - '**/*.min.css'
+
+  ignored-matches:
+    # Add any false positives here
+    # - match: 'example-secret-key'
+    #   name: 'Example secret to ignore'
+
+# GitGuardian settings
+settings:
+  # Incident visibility: public or private
+  incident_visibility: private
+  # Enable push protection
+  push_protection: true

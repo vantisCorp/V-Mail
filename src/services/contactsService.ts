@@ -229,6 +229,10 @@ export class ContactsService {
               isPrimary: true,
             },
           ],
+          addresses: [],
+          websites: [],
+          socials: [],
+          customFields: [],
           groupIds: [],
           tags: [],
           createdAt: new Date().toISOString(),
@@ -573,7 +577,7 @@ export class ContactsService {
     // Check if contact already exists
     let existingContact: Contact | undefined;
     
-    if (extractedData.emails.length > 0) {
+    if (extractedData.emails && extractedData.emails.length > 0) {
       existingContact = this.getContactByEmail(extractedData.emails[0].address);
     }
 
@@ -594,14 +598,14 @@ export class ContactsService {
         if (extractedData.organization && !existingContact.organization) {
           mergedPayload.organization = extractedData.organization;
         }
-        mergedPayload.emails = [...existingContact.emails, ...extractedData.emails];
-        mergedPayload.phones = [...existingContact.phones, ...extractedData.phones];
+        mergedPayload.emails = [...existingContact.emails, ...(extractedData.emails || [])];
+        mergedPayload.phones = [...existingContact.phones, ...(extractedData.phones || [])];
       } else if (options.mergeStrategy === 'replace') {
         if (extractedData.firstName) mergedPayload.firstName = extractedData.firstName;
         if (extractedData.lastName) mergedPayload.lastName = extractedData.lastName;
         if (extractedData.organization) mergedPayload.organization = extractedData.organization;
-        mergedPayload.emails = extractedData.emails;
-        mergedPayload.phones = extractedData.phones;
+        mergedPayload.emails = extractedData.emails || [];
+        mergedPayload.phones = extractedData.phones || [];
       }
 
       return await this.updateContact(mergedPayload);
@@ -760,7 +764,7 @@ export class ContactsService {
       (c) => new Date(c.updatedAt) > oneWeekAgo
     ).length;
 
-    const duplicateContacts = await this.findDuplicateContacts().length;
+    const duplicateContacts = (await this.findDuplicateContacts()).length;
 
     return {
       totalContacts,

@@ -25,6 +25,8 @@ import {
   FORWARD_INDICATORS,
 } from '../types/duplicateDetection';
 
+export type { DetectionContext };
+
 // ============================================================================
 // Duplicate Detection Model Class
 // ============================================================================

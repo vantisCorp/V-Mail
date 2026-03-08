@@ -47,6 +47,7 @@ export const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({
 
       return () => clearInterval(interval);
     }
+    return undefined;
   }, [state.status, state.settings.defaultMethod, getTimeRemaining]);
 
   const handleMethodSelect = async (method: TwoFactorAuthMethod) => {

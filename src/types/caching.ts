@@ -73,6 +73,7 @@ export interface CacheStats {
   averageAccessTime: number;
   totalSize: number;
   entries: number;
+  lastCleanup?: number;
 }
 
 export interface CacheAdapter {

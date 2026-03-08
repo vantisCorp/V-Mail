@@ -219,7 +219,7 @@ export class FilePreviewService {
       securityStatus: SecurityStatus.PENDING,
       originalUrl: URL.createObjectURL(new Blob([payload.fileData], { type: payload.mimeType })),
       metadata: {
-        size: payload.fileData.byteLength,
+        size: payload.fileData instanceof Blob ? payload.fileData.size : payload.fileData.byteLength,
         mimeType: payload.mimeType,
         lastModified: new Date().toISOString(),
       },

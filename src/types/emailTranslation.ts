@@ -281,7 +281,7 @@ export const FORMAL_INDICATORS = [
 ];
 
 /** Common translation phrases for quality checking */
-export const COMMON_PHRASES: Record<string, Record<SupportedLanguage, string[]>> = {
+export const COMMON_PHRASES: Record<string, Partial<Record<SupportedLanguage, string[]>>> = {
   'thank you': {
     [SupportedLanguage.SPANISH]: ['gracias', 'muchas gracias'],
     [SupportedLanguage.FRENCH]: ['merci', 'je vous remercie'],

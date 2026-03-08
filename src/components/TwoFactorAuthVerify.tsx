@@ -43,6 +43,7 @@ export const TwoFactorAuthVerify: React.FC<TwoFactorAuthVerifyProps> = ({
 
       return () => clearInterval(interval);
     }
+    return undefined;
   }, [method]);
 
   const handleVerify = async () => {

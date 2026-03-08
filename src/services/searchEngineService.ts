@@ -25,7 +25,7 @@ import {
   SearchSuggestion,
   SuggestionType,
 } from '../types/enhancedSearch';
-import { Email } from '../types/email';
+import { Email } from '../types';
 import { Contact } from '../types/contacts';
 import { CalendarEvent } from '../types/calendar';
 
@@ -78,7 +78,7 @@ interface IndexedEvent {
 type IndexedDocument = IndexedEmail | IndexedContact | IndexedEvent;
 
 // Search result with metadata
-interface SearchResult {
+export interface SearchResult {
   id: string;
   type: 'email' | 'contact' | 'event';
   score: number;
@@ -125,7 +125,7 @@ export class SearchEngineService {
    */
   private initializeIndices(): void {
     // Email index
-    this.emailIndex = lunr(function(this: lunr.Index) {
+    this.emailIndex = lunr(function(this: any) {
       this.ref('id');
       this.field('subject', { boost: 10 });
       this.field('from', { boost: 8 });
@@ -136,13 +136,13 @@ export class SearchEngineService {
       this.field('body', { boost: 1 });
       this.field('labels', { boost: 4 });
       this.field('folder', { boost: 2 });
-      
+
       // Add pipeline functions for better tokenization
       this.pipeline.add(lunr.trimmer, lunr.stopWordFilter, lunr.stemmer);
     });
 
     // Contact index
-    this.contactIndex = lunr(function(this: lunr.Index) {
+    this.contactIndex = lunr(function(this: any) {
       this.ref('id');
       this.field('displayName', { boost: 10 });
       this.field('firstName', { boost: 8 });
@@ -158,7 +158,7 @@ export class SearchEngineService {
     });
 
     // Event index
-    this.eventIndex = lunr(function(this: lunr.Index) {
+    this.eventIndex = lunr(function(this: any) {
       this.ref('id');
       this.field('title', { boost: 10 });
       this.field('description', { boost: 5 });
@@ -179,22 +179,22 @@ export class SearchEngineService {
       id: `email-${email.id}`,
       type: 'email',
       subject: email.subject || '',
-      from: email.from?.email || '',
-      fromName: email.from?.name || '',
-      to: (email.to || []).map((t: any) => t.email).join(' '),
-      cc: (email.cc || []).map((c: any) => c.email).join(' '),
-      bcc: (email.bcc || []).map((b: any) => b.email).join(' '),
-      body: email.body || email.text || '',
-      labels: (email.labels || []).join(' '),
-      folder: email.folder || 'inbox',
-      date: email.date || email.receivedAt || '',
-      size: email.size || 0,
-      hasAttachments: (email.attachments?.length || 0) > 0,
-      priority: email.priority || 'normal',
+      from: typeof email.from === 'string' ? email.from : '',
+      fromName: '',
+      to: typeof email.to === 'string' ? email.to : '',
+      cc: '',
+      bcc: '',
+      body: email.body || '',
+      labels: '',
+      folder: email.folder?.name || 'inbox',
+      date: email.date?.toISOString() || '',
+      size: 0,
+      hasAttachments: email.hasAttachments || false,
+      priority: 'normal',
     };
 
     this.emails.set(indexed.id, indexed);
-    
+
     // Rebuild email index with new document
     this.rebuildEmailIndex();
   }
@@ -208,22 +208,22 @@ export class SearchEngineService {
         id: `email-${email.id}`,
         type: 'email',
         subject: email.subject || '',
-        from: email.from?.email || '',
-        fromName: email.from?.name || '',
-        to: (email.to || []).map((t: any) => t.email).join(' '),
-        cc: (email.cc || []).map((c: any) => c.email).join(' '),
-        bcc: (email.bcc || []).map((b: any) => b.email).join(' '),
-        body: email.body || email.text || '',
-        labels: (email.labels || []).join(' '),
-        folder: email.folder || 'inbox',
-        date: email.date || email.receivedAt || '',
-        size: email.size || 0,
-        hasAttachments: (email.attachments?.length || 0) > 0,
-        priority: email.priority || 'normal',
+        from: typeof email.from === 'string' ? email.from : '',
+        fromName: '',
+        to: typeof email.to === 'string' ? email.to : '',
+        cc: '',
+        bcc: '',
+        body: email.body || '',
+        labels: '',
+        folder: email.folder?.name || 'inbox',
+        date: email.date?.toISOString() || '',
+        size: 0,
+        hasAttachments: email.hasAttachments || false,
+        priority: 'normal',
       };
       this.emails.set(indexed.id, indexed);
     });
-    
+
     this.rebuildEmailIndex();
   }
 
@@ -233,7 +233,7 @@ export class SearchEngineService {
   private rebuildEmailIndex(): void {
     const documents = Array.from(this.emails.values());
     
-    this.emailIndex = lunr(function(this: lunr.Index) {
+    this.emailIndex = lunr(function(this: any) {
       this.ref('id');
       this.field('subject', { boost: 10 });
       this.field('from', { boost: 8 });
@@ -263,9 +263,9 @@ export class SearchEngineService {
       lastName: contact.lastName || '',
       emails: (contact.emails || []).map((e: any) => e.email).join(' '),
       phones: (contact.phones || []).map((p: any) => p.number || p.phone || '').join(' '),
-      company: contact.company || '',
-      jobTitle: contact.jobTitle || '',
-      notes: contact.notes || '',
+      company: contact.organization?.name || '',
+      jobTitle: contact.organization?.title || '',
+      notes: typeof contact.notes === 'string' ? contact.notes : (contact.notes || []).map((n: any) => n.content).join(' '),
       tags: (contact.tags || []).join(' '),
     };
 
@@ -286,9 +286,9 @@ export class SearchEngineService {
         lastName: contact.lastName || '',
         emails: (contact.emails || []).map((e: any) => e.email).join(' '),
         phones: (contact.phones || []).map((p: any) => p.number || p.phone || '').join(' '),
-        company: contact.company || '',
-        jobTitle: contact.jobTitle || '',
-        notes: contact.notes || '',
+        company: contact.organization?.name || '',
+        jobTitle: contact.organization?.title || '',
+        notes: typeof contact.notes === 'string' ? contact.notes : (contact.notes || []).map((n: any) => n.content).join(' '),
         tags: (contact.tags || []).join(' '),
       };
       this.contacts.set(indexed.id, indexed);
@@ -303,7 +303,7 @@ export class SearchEngineService {
   private rebuildContactIndex(): void {
     const documents = Array.from(this.contacts.values());
     
-    this.contactIndex = lunr(function(this: lunr.Index) {
+    this.contactIndex = lunr(function(this: any) {
       this.ref('id');
       this.field('displayName', { boost: 10 });
       this.field('firstName', { boost: 8 });
@@ -328,16 +328,16 @@ export class SearchEngineService {
     const indexed: IndexedEvent = {
       id: `event-${event.id}`,
       type: 'event',
-      title: event.title || event.summary || '',
+      title: event.summary || '',
       description: event.description || '',
       location: event.location || '',
       attendees: (event.attendees || []).map((a: any) => 
         typeof a === 'string' ? a : a.email || a.name || ''
       ).join(' '),
-      organizer: event.organizer?.email || event.organizer?.name || '',
+      organizer: event.organizer?.email || event.organizer?.displayName || '',
       status: event.status || 'confirmed',
-      startDate: event.start?.dateTime || event.start || '',
-      endDate: event.end?.dateTime || event.end || '',
+      startDate: event.start?.dateTime || String(event.start) || '',
+      endDate: event.end?.dateTime || String(event.end) || '',
     };
 
     this.events.set(indexed.id, indexed);
@@ -352,16 +352,16 @@ export class SearchEngineService {
       const indexed: IndexedEvent = {
         id: `event-${event.id}`,
         type: 'event',
-        title: event.title || event.summary || '',
+        title: event.summary || '',
         description: event.description || '',
         location: event.location || '',
         attendees: (event.attendees || []).map((a: any) => 
           typeof a === 'string' ? a : a.email || a.name || ''
         ).join(' '),
-        organizer: event.organizer?.email || event.organizer?.name || '',
+        organizer: event.organizer?.email || event.organizer?.displayName || '',
         status: event.status || 'confirmed',
-        startDate: event.start?.dateTime || event.start || '',
-        endDate: event.end?.dateTime || event.end || '',
+        startDate: event.start?.dateTime || String(event.start) || '',
+        endDate: event.end?.dateTime || String(event.end) || '',
       };
       this.events.set(indexed.id, indexed);
     });
@@ -375,7 +375,7 @@ export class SearchEngineService {
   private rebuildEventIndex(): void {
     const documents = Array.from(this.events.values());
     
-    this.eventIndex = lunr(function(this: lunr.Index) {
+    this.eventIndex = lunr(function(this: any) {
       this.ref('id');
       this.field('title', { boost: 10 });
       this.field('description', { boost: 5 });
@@ -683,7 +683,7 @@ export class SearchEngineService {
       });
 
     return suggestions
-      .sort((a, b) => b.score - a.score)
+      .sort((a, b) => (b.score || 0) - (a.score || 0))
       .slice(0, limit);
   }
 

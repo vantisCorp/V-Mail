@@ -15,6 +15,8 @@ import {
   CalendarSyncStatus,
   CalendarIntegrationOptions,
   CalendarProvider,
+  EventStatus,
+  EventVisibility,
 } from '../types/calendar';
 
 /**
@@ -286,8 +288,8 @@ export class CalendarService {
       summary: payload.summary,
       description: payload.description,
       location: payload.location,
-      status: 'confirmed',
-      visibility: payload.visibility || 'default',
+      status: EventStatus.CONFIRMED,
+      visibility: payload.visibility || EventVisibility.DEFAULT,
       start: payload.start,
       end: payload.end,
       recurrence: payload.recurrence,

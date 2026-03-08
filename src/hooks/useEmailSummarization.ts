@@ -8,6 +8,7 @@ import {
   SummaryType,
   SummaryLength,
   SummaryMetadata,
+  DEFAULT_SUMMARIZATION_CONFIG,
 } from '../types/emailSummarization';
 
 export interface UseEmailSummarizationReturn {
@@ -51,16 +52,7 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
   const [error, setError] = useState<string | null>(null);
   const [cache, setCache] = useState<Map<string, EmailSummary>>(new Map());
   const [config, setConfig] = useState<SummarizationConfig>({
-    summaryType: SummaryType.HYBRID,
-    length: SummaryLength.MEDIUM,
-    includeActionItems: true,
-    includeKeyPoints: true,
-    includeTlDr: true,
-    maxKeyPoints: 5,
-    maxActionItems: 5,
-    minScore: 0.3,
-    enableCache: true,
-    enableLearning: true,
+    ...DEFAULT_SUMMARIZATION_CONFIG,
     ...initialConfig,
   });
   const [statistics, setStatistics] = useState({
@@ -102,7 +94,7 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
 
       // Check cache
       const cacheKey = model.generateCacheKey(context);
-      if (config.enableCache && cache.has(cacheKey)) {
+      if (config.performance.cacheEnabled && cache.has(cacheKey)) {
         const cachedSummary = cache.get(cacheKey)!;
         setStatistics(prev => ({
           ...prev,
@@ -134,7 +126,7 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
       });
 
       // Update cache
-      if (config.enableCache) {
+      if (config.performance.cacheEnabled) {
         setCache(prev => new Map(prev).set(cacheKey, result));
       }
 
@@ -154,28 +146,30 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
     emails: Array<{ id: string; subject: string; body: string; from: string; date: string }>
   ): Promise<EmailSummary> => {
     return summarize({
-      emails,
-      summaryType: config.summaryType,
-      length: config.length,
-      includeActionItems: config.includeActionItems,
-      includeKeyPoints: config.includeKeyPoints,
-      includeTlDr: config.includeTlDr,
+      emails: emails as any,
+      summaryType: SummaryType.HYBRID,
+      summaryLength: SummaryLength.MEDIUM,
+      includeActionItems: true,
+      includeKeyPoints: true,
     });
-  }, [summarize, config]);
+  }, [summarize]);
 
   // Convenience method for single email summarization
   const summarizeEmail = useCallback(async (
     email: { id: string; subject: string; body: string; from: string; date: string }
   ): Promise<EmailSummary> => {
     return summarize({
-      emails: [email],
-      summaryType: config.summaryType,
-      length: config.length,
-      includeActionItems: config.includeActionItems,
-      includeKeyPoints: config.includeKeyPoints,
-      includeTlDr: config.includeTlDr,
+      emails: [{
+        ...email,
+        to: '',
+        timestamp: email.date,
+      } as any],
+      summaryType: SummaryType.HYBRID,
+      summaryLength: SummaryLength.MEDIUM,
+      includeActionItems: true,
+      includeKeyPoints: true,
     });
-  }, [summarize, config]);
+  }, [summarize]);
 
   // Get key points from summary
   const getKeyPoints = useCallback((summary: EmailSummary): KeyPoint[] => {

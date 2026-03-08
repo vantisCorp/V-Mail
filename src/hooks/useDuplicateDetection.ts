@@ -104,8 +104,8 @@ export const useDuplicateDetection = (initialConfig?: Partial<DetectionConfig>):
       }
 
       // Check cache for each pair
-      const cacheHits = 0;
-      const cacheMisses = 0;
+      const localCacheHits = 0;
+      const localCacheMisses = 0;
 
       // Run detection
       const results = model.detectDuplicates(context);
@@ -128,9 +128,11 @@ export const useDuplicateDetection = (initialConfig?: Partial<DetectionConfig>):
         ...prev,
         totalEmailsProcessed: prev.totalEmailsProcessed + context.emails.length,
         totalDuplicatesFound: prev.totalDuplicatesFound + results.length,
-        cacheHits: prev.cacheHits + cacheHits,
-        cacheMisses: prev.cacheMisses + cacheMisses + 1,
-        ...modelStats,
+        cacheHits: prev.cacheHits + localCacheHits,
+        cacheMisses: prev.cacheMisses + localCacheMisses + 1,
+        averageSimilarity: modelStats.averageSimilarity,
+        duplicatesByType: modelStats.duplicatesByType,
+        duplicatesBySeverity: modelStats.duplicatesBySeverity,
       }));
 
       setDuplicates(results);

@@ -396,6 +396,14 @@ export const QUICK_ACTION_PATTERNS: Record<QuickActionType, string[]> = {
     'junk',
     'not interested',
   ],
+  [QuickActionType.MARK_READ]: [
+    'read',
+    'seen',
+  ],
+  [QuickActionType.MARK_UNREAD]: [
+    'unread',
+    'not seen',
+  ],
   [QuickActionType.STAR]: [
     'important',
     'urgent',
@@ -403,12 +411,20 @@ export const QUICK_ACTION_PATTERNS: Record<QuickActionType, string[]> = {
     'critical',
     'asap',
   ],
+  [QuickActionType.UNSTAR]: [
+    'unimportant',
+    'not priority',
+  ],
   [QuickActionType.SNOOZE]: [
     'later',
     'not now',
     'next week',
     'next month',
     'follow up',
+  ],
+  [QuickActionType.MOVE_TO_INBOX]: [
+    'inbox',
+    'move to inbox',
   ],
   [QuickActionType.MOVE_TO_SPAM]: [
     'lottery',
@@ -429,5 +445,18 @@ export const QUICK_ACTION_PATTERNS: Record<QuickActionType, string[]> = {
     'invoice',
     'contract',
     'meeting',
+  ],
+  [QuickActionType.REPLY_ALL]: [
+    'reply all',
+    'respond to all',
+  ],
+  [QuickActionType.FLAG]: [
+    'flag',
+    'flagged',
+  ],
+  [QuickActionType.PIN]: [
+    'pin',
+    'pinned',
+    'top',
   ],
 };

@@ -28,7 +28,6 @@ export interface UseEmailTranslationReturn {
   detectTone: (text: string) => TranslationTone;
   updateConfig: (config: Partial<TranslationConfig>) => void;
   resetStatistics: () => void;
-  clearCache: () => void;
   clearError: () => void;
 }
 
@@ -37,23 +36,22 @@ export function useEmailTranslation(initialConfig?: Partial<TranslationConfig>):
   const [isTranslating, setIsTranslating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const defaultConfig: TranslationConfig = {
-    defaultSourceLanguage: 'auto',
-    defaultTargetLanguage: 'en',
+    defaultTargetLanguage: SupportedLanguage.ENGLISH,
     defaultTone: TranslationTone.NEUTRAL,
     quality: TranslationQuality.HIGH,
-    enableCache: true,
+    enableMemory: true,
+    enableContext: true,
     enableToneDetection: true,
-    maxCacheSize: 100,
-    maxTextLength: 10000,
-    enableAutoDetect: true,
-    confidenceThreshold: 0.7,
+    enableAlternatives: false,
+    maxLength: 10000,
+    enableLearning: true,
   };
   const [config, setConfig] = useState<TranslationConfig>({
     ...defaultConfig,
     ...initialConfig,
   });
   
-  const serviceRef = useRef<TranslationService>(TranslationService.getInstance());
+  const serviceRef = useRef<TranslationService>(new TranslationService());
 
   const translateEmail = useCallback(async (context: TranslationContext) => {
     setIsTranslating(true);
@@ -61,7 +59,7 @@ export function useEmailTranslation(initialConfig?: Partial<TranslationConfig>):
     
     try {
       const result = await serviceRef.current.translateEmail(context);
-      setTranslation(result.translation);
+      setTranslation(result.bodyTranslation);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Translation failed');
       setTranslation(null);
@@ -102,7 +100,7 @@ export function useEmailTranslation(initialConfig?: Partial<TranslationConfig>):
       return await serviceRef.current.detectLanguage(text);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Language detection failed');
-      return 'en';
+      return SupportedLanguage.ENGLISH;
     }
   }, []);
 
@@ -120,10 +118,6 @@ export function useEmailTranslation(initialConfig?: Partial<TranslationConfig>):
 
   const resetStatistics = useCallback(() => {
     serviceRef.current.resetStatistics();
-  }, []);
-
-  const clearCache = useCallback(() => {
-    serviceRef.current.clearCache();
   }, []);
 
   const clearError = useCallback(() => {
@@ -144,7 +138,6 @@ export function useEmailTranslation(initialConfig?: Partial<TranslationConfig>):
     detectTone,
     updateConfig,
     resetStatistics,
-    clearCache,
     clearError,
   };
 }

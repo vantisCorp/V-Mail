@@ -18,6 +18,7 @@ import {
   FOLDER_NAME_VARIATIONS,
   CONFIRMATION_PHRASES,
   CANCELLATION_PHRASES,
+  VOICE_PHRASE_PATTERNS,
   VOICE_FEEDBACK_MESSAGES,
   DEFAULT_VOICE_CONFIG,
 } from '../types/voiceAssistant';
@@ -372,7 +373,7 @@ export class VoiceAssistantService {
 
     utterance.onend = () => {
       this.speakingStatus = SpeechSynthesisStatus.IDLE;
-      this.statistics.totalSpeakingTime += utterance.duration || 0;
+      // duration is not available on all browsers, so we skip it
       this.emit('SPEAKING_STOPPED');
     };
 

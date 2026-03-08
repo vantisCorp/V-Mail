@@ -12,6 +12,7 @@ import type {
   CacheEvent,
   CacheInvalidationRule,
   CachePrewarmConfig,
+  CacheConfig,
 } from '../types/caching';
 
 interface UseCacheOptions {
@@ -28,7 +29,7 @@ export function useCache<T = any>(options: UseCacheOptions) {
   const [isStale, setIsStale] = useState(false);
 
   const cacheService = useRef(CacheService.getInstance());
-  const staleTimerRef = useRef<NodeJS.Timeout>();
+  const staleTimerRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   useEffect(() => {
     loadFromCache();

@@ -131,6 +131,8 @@ export enum SuggestionType {
   RECENT_SEARCH = 'recent_search',
   SAVED_SEARCH = 'saved_search',
   SMART_SUGGESTION = 'smart_suggestion',
+  HISTORY = 'history',
+  OPERATOR = 'operator',
 }
 
 /**
@@ -143,6 +145,7 @@ export interface SearchSuggestion {
   icon?: string;
   description?: string;
   count?: number; // Number of matching emails
+  score?: number; // Relevance score
   metadata?: Record<string, any>;
 }
 

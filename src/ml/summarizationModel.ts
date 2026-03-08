@@ -24,6 +24,8 @@ import {
   TLDR_PHRASES,
 } from '../types/emailSummarization';
 
+export type { SummarizationContext, SummarizationConfig };
+
 // ============================================================================
 // Summarization Model Class
 // ============================================================================
@@ -131,7 +133,9 @@ export class SummarizationModel {
       this.cache.set(cacheKey, { result, timestamp: Date.now() });
       if (this.cache.size > this.config.performance.cacheSize) {
         const firstKey = this.cache.keys().next().value;
-        this.cache.delete(firstKey);
+        if (firstKey !== undefined) {
+          this.cache.delete(firstKey);
+        }
       }
     }
 

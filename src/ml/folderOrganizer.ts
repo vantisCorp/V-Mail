@@ -32,6 +32,8 @@ import {
   SYSTEM_SENDERS,
 } from '../types/smartFolders';
 
+export type { OrganizationContext };
+
 // ============================================================================
 // Smart Folder Organizer Model Class
 // ============================================================================
@@ -316,7 +318,7 @@ private analyzePatterns(emails: EmailForOrganization[]): any {
 
 private generateTopicSuggestions(patterns: any, emails: EmailForOrganization[]): Suggestion[] {
   const suggestions: Suggestion[] = [];
-  const sortedTopics = Array.from(patterns.topics.entries())
+  const sortedTopics = Array.from(patterns.topics.entries() as [string, number][])
     .sort(([, a], [, b]) => b - a)
     .slice(0, this.config.maxSuggestions);
 
@@ -350,7 +352,7 @@ private generateTopicSuggestions(patterns: any, emails: EmailForOrganization[]):
 
 private generateSenderSuggestions(patterns: any, emails: EmailForOrganization[]): Suggestion[] {
   const suggestions: Suggestion[] = [];
-  const sortedSenders = Array.from(patterns.senders.entries())
+  const sortedSenders = Array.from(patterns.senders.entries() as [string, number][])
     .sort(([, a], [, b]) => b - a)
     .slice(0, this.config.maxSuggestions);
 
@@ -380,7 +382,7 @@ private generateSenderSuggestions(patterns: any, emails: EmailForOrganization[])
 
 private generateCategorySuggestions(patterns: any, emails: EmailForOrganization[]): Suggestion[] {
   const suggestions: Suggestion[] = [];
-  const sortedCategories = Array.from(patterns.categories.entries())
+  const sortedCategories = Array.from(patterns.categories.entries() as [string, number][])
     .sort(([, a], [, b]) => b - a);
 
   for (const [category, count] of sortedCategories) {
@@ -393,11 +395,11 @@ private generateCategorySuggestions(patterns: any, emails: EmailForOrganization[
     suggestions.push({
       id: `suggestion-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       folderName: category.toLowerCase(),
-      category,
+      category: category as FolderCategory,
       strategy: OrganizationStrategy.BY_PRIORITY,
       emailCount: categoryEmails.length,
       confidence: Math.min(1, (count as number) / emails.length * 2),
-      keywords: this.getCategoryKeywords(category),
+      keywords: this.getCategoryKeywords(category as FolderCategory),
       sampleEmails: categoryEmails.slice(0, 3).map(e => e.id),
       reason: `Found ${count} emails in ${category} category`,
       timestamp: new Date().toISOString(),

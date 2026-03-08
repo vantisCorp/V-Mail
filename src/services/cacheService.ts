@@ -19,7 +19,7 @@ import type {
 } from '../types/caching';
 
 class CacheService {
-  private static instance: CacheService;
+  private static instance: CacheService | null = null;
   private cache: Map<string, CacheEntry> = new Map();
   private metrics: CacheStats = {
     hits: 0,
@@ -60,7 +60,7 @@ class CacheService {
   /**
    * Get singleton instance
    */
-  static getInstance(config?: Partial<CacheConfig>): CacheService {
+  static getInstance(config: Partial<CacheConfig> = {}): CacheService {
     if (!CacheService.instance) {
       CacheService.instance = new CacheService(config);
     }

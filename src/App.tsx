@@ -14,16 +14,36 @@ import { Drafts } from './pages/Drafts';
 import { Trash } from './pages/Trash';
 
 // Lazy load modals for better performance
-const ComposeModal = lazy(() => import('./components/ComposeModal').then(m => ({ default: m.ComposeModal })));
-const PhantomModal = lazy(() => import('./components/PhantomModal').then(m => ({ default: m.PhantomModal })));
-const SelfDestructModal = lazy(() => import('./components/SelfDestructModal').then(m => ({ default: m.SelfDestructModal })));
-const PanicModal = lazy(() => import('./components/PanicModal').then(m => ({ default: m.PanicModal })));
-const AutoReplySettings = lazy(() => import('./components/AutoReplySettings').then(m => ({ default: m.AutoReplySettings })));
-const EmailFilterSettings = lazy(() => import('./components/EmailFilterSettings').then(m => ({ default: m.EmailFilterSettings })));
-const LabelSettings = lazy(() => import('./components/LabelSettings').then(m => ({ default: m.LabelSettings })));
-const AdvancedSearchPanel = lazy(() => import('./components/AdvancedSearchPanel').then(m => ({ default: m.AdvancedSearchPanel })));
-const EmailStatistics = lazy(() => import('./components/EmailStatistics').then(m => ({ default: m.EmailStatistics })));
-const KeyboardShortcutsHelp = lazy(() => import('./components/KeyboardShortcutsHelp').then(m => ({ default: m.KeyboardShortcutsHelp })));
+const ComposeModal = lazy(() =>
+  import('./components/ComposeModal').then((m) => ({ default: m.ComposeModal }))
+);
+const PhantomModal = lazy(() =>
+  import('./components/PhantomModal').then((m) => ({ default: m.PhantomModal }))
+);
+const SelfDestructModal = lazy(() =>
+  import('./components/SelfDestructModal').then((m) => ({ default: m.SelfDestructModal }))
+);
+const PanicModal = lazy(() =>
+  import('./components/PanicModal').then((m) => ({ default: m.PanicModal }))
+);
+const AutoReplySettings = lazy(() =>
+  import('./components/AutoReplySettings').then((m) => ({ default: m.AutoReplySettings }))
+);
+const EmailFilterSettings = lazy(() =>
+  import('./components/EmailFilterSettings').then((m) => ({ default: m.EmailFilterSettings }))
+);
+const LabelSettings = lazy(() =>
+  import('./components/LabelSettings').then((m) => ({ default: m.LabelSettings }))
+);
+const AdvancedSearchPanel = lazy(() =>
+  import('./components/AdvancedSearchPanel').then((m) => ({ default: m.AdvancedSearchPanel }))
+);
+const EmailStatistics = lazy(() =>
+  import('./components/EmailStatistics').then((m) => ({ default: m.EmailStatistics }))
+);
+const KeyboardShortcutsHelp = lazy(() =>
+  import('./components/KeyboardShortcutsHelp').then((m) => ({ default: m.KeyboardShortcutsHelp }))
+);
 
 // Loading component for lazy-loaded modals
 const ModalLoader: React.FC = () => (
@@ -65,9 +85,10 @@ export const App: React.FC = () => {
   const {
     statistics,
     timeRange,
-    setTimeRange,
+    setTimeRange: _setTimeRange,
     refreshStats
   } = useEmailStatistics(emails);
+  void _setTimeRange;
 
   const handleShortcutAction = useCallback((actionId: string) => {
     switch (actionId) {
@@ -96,13 +117,14 @@ export const App: React.FC = () => {
   }, []);
 
   const {
-    shortcuts,
+    shortcuts: _shortcuts,
     shortcutGroups,
     isEnabled: shortcutsEnabled,
     setEnabled: setShortcutsEnabled,
     showHelp: showShortcutsHelp,
     setShowHelp: setShowShortcutsHelp
   } = useKeyboardShortcuts(handleShortcutAction);
+  void _shortcuts;
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -152,7 +174,18 @@ export const App: React.FC = () => {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [showComposeModal, showPhantomModal, showSelfDestructModal, showPanicModal, showAutoReplySettings, showFilterSettings, showLabelSettings, showAdvancedSearch, showStatistics, showKeyboardShortcuts]);
+  }, [
+    showComposeModal,
+    showPhantomModal,
+    showSelfDestructModal,
+    showPanicModal,
+    showAutoReplySettings,
+    showFilterSettings,
+    showLabelSettings,
+    showAdvancedSearch,
+    showStatistics,
+    showKeyboardShortcuts
+  ]);
 
   const handleCompose = () => {
     setShowComposeModal(true);
@@ -194,7 +227,8 @@ export const App: React.FC = () => {
     setShowKeyboardShortcuts(true);
   };
 
-  const handleSendEmail = async (data: any) => {
+  const handleSendEmail = async (data: { to: string; subject: string; body: string }) => {
+    // eslint-disable-next-line no-console
     console.log('Sending email:', data);
     await new Promise((resolve) => setTimeout(resolve, 1000));
   };

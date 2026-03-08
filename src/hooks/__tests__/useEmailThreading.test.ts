@@ -22,18 +22,21 @@ const createMockEmail = (overrides: Partial<Email> = {}): Email => ({
 });
 
 describe('useEmailThreading', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   describe('initial state', () => {
     it('should initialize with empty state', async () => {
-      const { result } = renderHook(() => useEmailThreading([]));
+      // Use a stable empty array reference
+      const emptyEmails: Email[] = [];
 
-      // Wait for loading to complete
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false);
-      });
+      const { result } = renderHook(() => useEmailThreading(emptyEmails));
+
+      // The hook uses setTimeout(100ms) to simulate async operation
+      // Use waitFor to wait for loading to complete
+      await waitFor(
+        () => {
+          expect(result.current.loading).toBe(false);
+        },
+        { timeout: 3000, interval: 50 }
+      );
 
       expect(result.current.threads).toHaveLength(0);
       expect(result.current.allThreads).toHaveLength(0);

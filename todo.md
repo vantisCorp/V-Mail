@@ -5,23 +5,23 @@
 - [ ] Check if all changes are pushed
 - [ ] Check if repository is up to date
 
-## 2. CI/CD Pipeline
+## 2. CI/CD Pipeline - GitHub Actions
 
 - [ ] Check workflow runs status
 - [ ] Identify failing checks
-- [ ] Configure secrets (SNYK_TOKEN, CODECOV_TOKEN, SONAR_TOKEN)
+- [ ] Fix any issues
 
 ## 3. External Apps Configuration
 
-- [ ] Configure Snyk token
-- [ ] Configure Codecov token
-- [ ] Configure SonarQube token
+- [ ] Snyk.io configuration
+- [ ] Codecov configuration
+- [ ] SonarQube configuration
+- [ ] Other GitHub Apps
 
-## 4. Verify All Checks Pass
+## 4. Branch Protection
 
-- [ ] All GitHub Actions jobs pass
-- [ ] All external app checks pass
+- [ ] Verify protection rules
 
 ## 5. Final Verification
 
-- [ ] Run full CI/CD test
+- [ ] All checks pass

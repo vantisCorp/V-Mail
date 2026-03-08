@@ -145,9 +145,10 @@ describe('useCacheManager', () => {
     it('should provide cache metrics', async () => {
       const { result } = renderHook(() => useCacheManager());
 
+      // Wait for the interval to populate metrics (1000ms interval in hook)
       await waitFor(() => {
         expect(result.current.metrics).not.toBeNull();
-      });
+      }, { timeout: 2000 });
 
       if (result.current.metrics) {
         expect(result.current.metrics.hits).toBeGreaterThanOrEqual(0);

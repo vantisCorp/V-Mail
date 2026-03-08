@@ -281,7 +281,11 @@ Mike`,
 
     it('should not cache when enableCache is false', async () => {
       const { result } = renderHook(() => useEmailSummarization({
-        enableCache: false,
+        performance: {
+          cacheEnabled: false,
+          cacheSize: 100,
+          maxProcessingTime: 500,
+        },
       }));
 
       await act(async () => {

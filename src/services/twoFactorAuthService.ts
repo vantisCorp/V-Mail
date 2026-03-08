@@ -213,7 +213,9 @@ export class TwoFactorAuthService {
     if (!device) return false;
     
     // Check if device is expired
-    if (new Date() > device.expiresAt) {
+    // Convert to Date if it's a string (from JSON serialization)
+    const expiresAt = device.expiresAt instanceof Date ? device.expiresAt : new Date(device.expiresAt);
+    if (new Date() > expiresAt) {
       this.removeTrustedDevice(deviceId);
       return false;
     }

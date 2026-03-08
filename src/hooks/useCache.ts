@@ -195,28 +195,37 @@ export function useCachedFetch<T = any>(
   fetchRef.current = fetcher;
 
   const fetch = useCallback(async () => {
-    if (!options?.enabled) return;
-
+    // Only skip automatic fetch when disabled, but allow manual fetch
     try {
       setIsFetching(true);
       const data = await fetchRef.current();
       await cache.set(data);
       return data;
     } catch (err) {
+      // Set the error state from the cache hook
+      const errorMessage = err instanceof Error ? err.message : 'Fetch failed';
+      // We need to trigger the error state - useCache doesn't expose setError directly
+      // So we'll just re-throw and let the caller handle it
       throw err;
     } finally {
       setIsFetching(false);
     }
-  }, [options?.enabled, cache]);
+  }, [cache.set]);
+
+  // Track fetch errors
+  const [fetchError, setFetchError] = useState<Error | null>(null);
 
   useEffect(() => {
     if (options?.enabled !== false && cache.data === null) {
-      fetch();
+      fetch().catch((err) => {
+        setFetchError(err instanceof Error ? err : new Error('Fetch failed'));
+      });
     }
   }, [options?.enabled, cache.data, fetch]);
 
   return {
     ...cache,
+    error: cache.error || fetchError,
     fetch,
     isFetching,
   };

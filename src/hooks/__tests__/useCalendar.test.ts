@@ -20,7 +20,7 @@ describe('useCalendar', () => {
 
       expect(result.current.calendars).toBeDefined();
       expect(result.current.events).toBeDefined();
-      expect(result.current.error).toBeNull();
+      // Note: error state is not exposed by this hook
     });
   });
 
@@ -39,6 +39,14 @@ describe('useCalendar', () => {
     test('should disconnect a calendar account', async () => {
       const { result } = renderHook(() => useCalendar());
 
+      // Wait for initial load
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
+
+      // Initially there are 2 mock accounts
+      const initialCount = result.current.accounts.length;
+
       await act(async () => {
         const account = await result.current.connectCalendar(CalendarProvider.GOOGLE);
         if (account) {
@@ -46,7 +54,8 @@ describe('useCalendar', () => {
         }
       });
 
-      expect(result.current.accounts).toHaveLength(1); // Mock accounts remain
+      // After connecting and disconnecting a new account, we should be back to initial count
+      expect(result.current.accounts).toHaveLength(initialCount);
     });
 
     test('should refresh account token', async () => {
@@ -64,15 +73,16 @@ describe('useCalendar', () => {
   });
 
   describe('Event CRUD Operations', () => {
-    beforeEach(async () => {
-      const { result } = renderHook(() => useCalendar());
-      await waitFor(() => !result.current.isLoading);
-    });
-
     test('should create a new event', async () => {
       const { result } = renderHook(() => useCalendar());
 
-      await waitFor(() => !result.current.isLoading);
+      // Wait for initial data load (500ms timeout in hook)
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      }, { timeout: 2000 });
+
+      // Verify calendars are loaded
+      expect(result.current.calendars.length).toBeGreaterThan(0);
 
       await act(async () => {
         const calendar = result.current.calendars[0];
@@ -95,7 +105,11 @@ describe('useCalendar', () => {
     test('should update an existing event', async () => {
       const { result } = renderHook(() => useCalendar());
 
-      await waitFor(() => !result.current.isLoading);
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      }, { timeout: 2000 });
+
+      expect(result.current.calendars.length).toBeGreaterThan(0);
 
       await act(async () => {
         const calendar = result.current.calendars[0];
@@ -127,7 +141,11 @@ describe('useCalendar', () => {
     test('should delete an event', async () => {
       const { result } = renderHook(() => useCalendar());
 
-      await waitFor(() => !result.current.isLoading);
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      }, { timeout: 2000 });
+
+      expect(result.current.calendars.length).toBeGreaterThan(0);
 
       let eventId = '';
       await act(async () => {
@@ -156,7 +174,11 @@ describe('useCalendar', () => {
     test('should get event by ID', async () => {
       const { result } = renderHook(() => useCalendar());
 
-      await waitFor(() => !result.current.isLoading);
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      }, { timeout: 2000 });
+
+      expect(result.current.calendars.length).toBeGreaterThan(0);
 
       let createdEventId = '';
       await act(async () => {
@@ -363,7 +385,11 @@ describe('useCalendar', () => {
     test('should sync specific calendar', async () => {
       const { result } = renderHook(() => useCalendar());
 
-      await waitFor(() => !result.current.isLoading);
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      }, { timeout: 2000 });
+
+      expect(result.current.calendars.length).toBeGreaterThan(0);
 
       const calendar = result.current.calendars[0];
       
@@ -376,13 +402,20 @@ describe('useCalendar', () => {
   });
 
   describe('Attendee Management', () => {
-    beforeEach(async () => {
+    test('should add attendee to event', async () => {
       const { result } = renderHook(() => useCalendar());
-      await waitFor(() => !result.current.isLoading);
 
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      }, { timeout: 2000 });
+
+      expect(result.current.calendars.length).toBeGreaterThan(0);
+
+      // First create an event with attendees
+      let eventId = '';
       await act(async () => {
         const calendar = result.current.calendars[0];
-        await result.current.createEvent({
+        const event = await result.current.createEvent({
           calendarId: calendar.calendarId,
           summary: 'Meeting with Attendees',
           start: {
@@ -396,45 +429,60 @@ describe('useCalendar', () => {
             { email: 'attendee2@example.com' },
           ],
         });
+        if (event) {
+          eventId = event.id;
+        }
       });
-    });
 
-    test('should add attendee to event', async () => {
-      const { result } = renderHook(() => useCalendar());
+      await act(async () => {
+        await result.current.addAttendee(eventId, 'newattendee@example.com', 'New Attendee');
+      });
 
-      await waitFor(() => !result.current.isLoading);
-
-      const event = result.current.events.find(
-        (e) => e.summary === 'Meeting with Attendees'
-      );
-
-      if (event) {
-        await act(async () => {
-          await result.current.addAttendee(event.id, 'newattendee@example.com', 'New Attendee');
-        });
-
-        const updatedEvent = result.current.getEventById(event.id);
-        expect(updatedEvent?.attendees?.length).toBe(3);
-      }
+      const updatedEvent = result.current.getEventById(eventId);
+      expect(updatedEvent?.attendees?.length).toBe(3);
     });
 
     test('should remove attendee from event', async () => {
       const { result } = renderHook(() => useCalendar());
 
-      await waitFor(() => !result.current.isLoading);
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      }, { timeout: 2000 });
 
-      const event = result.current.events.find(
-        (e) => e.summary === 'Meeting with Attendees'
-      );
+      expect(result.current.calendars.length).toBeGreaterThan(0);
 
+      // First create an event with attendees
+      let eventId = '';
+      await act(async () => {
+        const calendar = result.current.calendars[0];
+        const event = await result.current.createEvent({
+          calendarId: calendar.calendarId,
+          summary: 'Meeting with Attendees',
+          start: {
+            dateTime: new Date(Date.now() + 3600000).toISOString(),
+          },
+          end: {
+            dateTime: new Date(Date.now() + 7200000).toISOString(),
+          },
+          attendees: [
+            { email: 'attendee1@example.com' },
+            { email: 'attendee2@example.com' },
+          ],
+        });
+        if (event) {
+          eventId = event.id;
+        }
+      });
+
+      const event = result.current.getEventById(eventId);
       if (event && event.attendees && event.attendees.length > 0) {
         const attendeeToRemove = event.attendees[0].email;
 
         await act(async () => {
-          await result.current.removeAttendee(event.id, attendeeToRemove);
+          await result.current.removeAttendee(eventId, attendeeToRemove);
         });
 
-        const updatedEvent = result.current.getEventById(event.id);
+        const updatedEvent = result.current.getEventById(eventId);
         expect(updatedEvent?.attendees?.length).toBe(1);
       }
     });
@@ -442,24 +490,48 @@ describe('useCalendar', () => {
     test('should update attendee status', async () => {
       const { result } = renderHook(() => useCalendar());
 
-      await waitFor(() => !result.current.isLoading);
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      }, { timeout: 2000 });
 
-      const event = result.current.events.find(
-        (e) => e.summary === 'Meeting with Attendees'
-      );
+      expect(result.current.calendars.length).toBeGreaterThan(0);
 
+      // First create an event with attendees
+      let eventId = '';
+      await act(async () => {
+        const calendar = result.current.calendars[0];
+        const event = await result.current.createEvent({
+          calendarId: calendar.calendarId,
+          summary: 'Meeting with Attendees',
+          start: {
+            dateTime: new Date(Date.now() + 3600000).toISOString(),
+          },
+          end: {
+            dateTime: new Date(Date.now() + 7200000).toISOString(),
+          },
+          attendees: [
+            { email: 'attendee1@example.com' },
+            { email: 'attendee2@example.com' },
+          ],
+        });
+        if (event) {
+          eventId = event.id;
+        }
+      });
+
+      const event = result.current.getEventById(eventId);
       if (event && event.attendees && event.attendees.length > 0) {
         const attendee = event.attendees[0];
 
         await act(async () => {
           await result.current.updateAttendeeStatus(
-            event.id,
+            eventId,
             attendee.email,
             'accepted'
           );
         });
 
-        const updatedEvent = result.current.getEventById(event.id);
+        const updatedEvent = result.current.getEventById(eventId);
         const updatedAttendee = updatedEvent?.attendees?.find(
           (a) => a.email === attendee.email
         );

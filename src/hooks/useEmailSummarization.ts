@@ -164,12 +164,12 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
         to: '',
         timestamp: email.date,
       } as any],
-      summaryType: SummaryType.HYBRID,
+      summaryType: config.summaryType,
       summaryLength: SummaryLength.MEDIUM,
       includeActionItems: true,
       includeKeyPoints: true,
     });
-  }, [summarize]);
+  }, [summarize, config.summaryType]);
 
   // Get key points from summary
   const getKeyPoints = useCallback((summary: EmailSummary): KeyPoint[] => {

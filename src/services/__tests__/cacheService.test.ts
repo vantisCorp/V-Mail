@@ -166,6 +166,7 @@ describe('CacheService', () => {
     });
 
     it('should track evictions', async () => {
+      CacheService.reset(); // Reset to allow custom config
       const smallCache = CacheService.getInstance({ maxEntries: 2 });
       await smallCache.set('key1', 'value1');
       await smallCache.set('key2', 'value2');

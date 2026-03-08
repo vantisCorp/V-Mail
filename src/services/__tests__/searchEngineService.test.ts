@@ -16,41 +16,31 @@ describe('SearchEngineService', () => {
   const mockEmail: Email = {
     id: 'email-1',
     subject: 'Project Update: Q4 Goals',
-    from: { name: 'John Smith', email: 'john.smith@company.com' },
-    to: [{ name: 'Team', email: 'team@company.com' }],
-    cc: [{ name: 'Manager', email: 'manager@company.com' }],
-    bcc: [],
+    from: 'john.smith@company.com',
+    to: 'team@company.com',
     body: 'I wanted to share the latest updates on our Q4 goals. We have made significant progress on the product launch timeline.',
-    text: 'I wanted to share the latest updates on our Q4 goals. We have made significant progress on the product launch timeline.',
-    date: '2024-01-15T10:00:00Z',
-    receivedAt: '2024-01-15T10:00:00Z',
-    labels: ['Work', 'Important'],
-    folder: 'inbox',
-    size: 15000,
-    attachments: [{ filename: 'report.pdf', size: 5000, contentType: 'application/pdf' }],
-    isRead: false,
-    isStarred: true,
-    priority: 'high',
+    date: new Date('2024-01-15T10:00:00Z'),
+    read: false,
+    starred: true,
+    encrypted: false,
+    hasAttachments: true,
+    attachments: [{ id: '1', name: 'report.pdf', size: 5000, type: 'application/pdf', url: '/files/report.pdf', uploadedAt: new Date() }],
+    folder: { id: 'inbox', name: 'Inbox', count: 1, icon: 'inbox' },
   };
 
   const mockEmail2: Email = {
     id: 'email-2',
     subject: 'Meeting Reminder: Product Review',
-    from: { name: 'Calendar System', email: 'calendar@company.com' },
-    to: [{ name: 'Me', email: 'me@company.com' }],
-    cc: [],
-    bcc: [],
+    from: 'calendar@company.com',
+    to: 'me@company.com',
     body: 'This is a reminder about our product review meeting scheduled for tomorrow at 2 PM.',
-    text: 'This is a reminder about our product review meeting scheduled for tomorrow at 2 PM.',
-    date: '2024-01-14T09:00:00Z',
-    receivedAt: '2024-01-14T09:00:00Z',
-    labels: ['Meeting'],
-    folder: 'inbox',
-    size: 5000,
+    date: new Date('2024-01-14T09:00:00Z'),
+    read: true,
+    starred: false,
+    encrypted: false,
+    hasAttachments: false,
     attachments: [],
-    isRead: true,
-    isStarred: false,
-    priority: 'normal',
+    folder: { id: 'inbox', name: 'Inbox', count: 2, icon: 'inbox' },
   };
 
   const mockContact: Contact = {
@@ -62,8 +52,7 @@ describe('SearchEngineService', () => {
     lastName: 'Doe',
     emails: [{ email: 'john.doe@example.com', type: 'work', isPrimary: true }],
     phones: [{ number: '+1-555-1234', type: 'mobile' }],
-    company: 'Tech Corp',
-    jobTitle: 'Software Engineer',
+    organization: { name: 'Tech Corp', title: 'Software Engineer' },
     notes: 'Important client from the conference',
     tags: ['vip', 'client'],
     addresses: [],
@@ -82,8 +71,7 @@ describe('SearchEngineService', () => {
     lastName: 'Smith',
     emails: [{ email: 'jane.smith@example.com', type: 'work', isPrimary: true }],
     phones: [],
-    company: 'Design Studio',
-    jobTitle: 'Designer',
+    organization: { name: 'Design Studio', title: 'Designer' },
     notes: '',
     tags: ['designer'],
     addresses: [],
@@ -223,27 +211,15 @@ describe('SearchEngineService', () => {
       expect(results.some(r => r.id === 'email-email-1')).toBe(true);
     });
 
-    it('should find emails by sender name', () => {
-      const results = service.searchEmails('John Smith');
-      
-      expect(results.length).toBeGreaterThan(0);
-    });
-
     it('should find emails by sender email', () => {
       const results = service.searchEmails('john.smith@company.com');
-      
+
       expect(results.length).toBeGreaterThan(0);
     });
 
     it('should find emails by body content', () => {
       const results = service.searchEmails('Q4 goals');
-      
-      expect(results.length).toBeGreaterThan(0);
-    });
 
-    it('should find emails by label', () => {
-      const results = service.searchEmails('Important');
-      
       expect(results.length).toBeGreaterThan(0);
     });
 

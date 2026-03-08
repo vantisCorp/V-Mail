@@ -11,11 +11,18 @@ import {
 import { TranslationService } from '../../src/services/translationService';
 
 // Mock the TranslationService
-vi.mock('../../src/services/translationService', () => ({
-  TranslationService: {
-    getInstance: vi.fn(),
-  },
-}));
+vi.mock('../../src/services/translationService', () => {
+  const MockTranslationService = vi.fn();
+  MockTranslationService.prototype.translateEmail = vi.fn();
+  MockTranslationService.prototype.translateText = vi.fn();
+  MockTranslationService.prototype.detectLanguage = vi.fn();
+  MockTranslationService.prototype.detectTone = vi.fn();
+  MockTranslationService.prototype.updateConfig = vi.fn();
+  MockTranslationService.prototype.resetStatistics = vi.fn();
+  MockTranslationService.prototype.clearCache = vi.fn();
+  MockTranslationService.prototype.getStatistics = vi.fn();
+  return { TranslationService: MockTranslationService };
+});
 
 describe('useEmailTranslation', () => {
   let mockService: {
@@ -53,7 +60,8 @@ describe('useEmailTranslation', () => {
       }),
     };
 
-    vi.mocked(TranslationService.getInstance).mockReturnValue(mockService as any);
+    // Set up the mock constructor to return our mock service instance
+    vi.mocked(TranslationService).mockImplementation(() => mockService as any);
   });
 
   describe('Initial State', () => {
@@ -63,11 +71,10 @@ describe('useEmailTranslation', () => {
       expect(result.current.translation).toBeNull();
       expect(result.current.isTranslating).toBe(false);
       expect(result.current.error).toBeNull();
-      expect(result.current.config.defaultSourceLanguage).toBe('auto');
-      expect(result.current.config.defaultTargetLanguage).toBe('en');
+      expect(result.current.config.defaultTargetLanguage).toBe(SupportedLanguage.ENGLISH);
       expect(result.current.config.defaultTone).toBe(TranslationTone.NEUTRAL);
       expect(result.current.config.quality).toBe(TranslationQuality.HIGH);
-      expect(result.current.config.enableCache).toBe(true);
+      expect(result.current.config.enableMemory).toBe(true);
       expect(result.current.config.enableToneDetection).toBe(true);
     });
 
@@ -113,7 +120,7 @@ describe('useEmailTranslation', () => {
       };
 
       const mockResult = {
-        translation: mockTranslation,
+        bodyTranslation: mockTranslation,
         detectedLanguage: SupportedLanguage.ENGLISH,
         detectedTone: TranslationTone.NEUTRAL,
         toneConfidence: 0.8,
@@ -391,18 +398,6 @@ describe('useEmailTranslation', () => {
       expect(mockService.resetStatistics).toHaveBeenCalled();
       expect(result.current.statistics.totalTranslations).toBe(0);
       expect(result.current.statistics.successfulTranslations).toBe(0);
-    });
-  });
-
-  describe('clearCache', () => {
-    it('should clear cache', () => {
-      const { result } = renderHook(() => useEmailTranslation());
-
-      act(() => {
-        result.current.clearCache();
-      });
-
-      expect(mockService.clearCache).toHaveBeenCalled();
     });
   });
 

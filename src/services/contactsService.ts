@@ -65,6 +65,40 @@ export class ContactsService {
   }
 
   /**
+   * Reset the singleton instance (for testing)
+   */
+  public static resetInstance(): void {
+    ContactsService.instance = new ContactsService();
+  }
+
+  /**
+   * Clear all contacts data (for testing)
+   */
+  public clearAll(): void {
+    this.contacts.clear();
+    this.accounts.clear();
+    this.groups.clear();
+    this.preferences = {
+      defaultView: 'list',
+      sortOptions: {
+        field: 'displayName',
+        order: 'asc',
+      },
+      displayFields: ['displayName', 'email', 'phone'],
+      showAvatar: true,
+      showEmail: true,
+      showPhone: true,
+      showCompany: true,
+      showGroups: true,
+      showTags: true,
+      enableAutoMerge: false,
+      mergeThreshold: 0.8,
+      duplicateCheckEnabled: true,
+      emailTrackingEnabled: true,
+    };
+  }
+
+  /**
    * Load contacts data from localStorage
    */
   private loadFromStorage(): void {
@@ -383,8 +417,8 @@ export class ContactsService {
       photo: payload.photo,
       groupIds: payload.groupIds || [],
       tags: payload.tags || [],
-      starred: payload.starred,
-      favorite: false,
+      starred: payload.starred || false,
+      favorite: payload.favorite || false,
       hidden: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

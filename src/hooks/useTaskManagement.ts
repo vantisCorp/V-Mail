@@ -790,7 +790,7 @@ export const useTaskManagement = () => {
           comparison = new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
           break;
         case 'priority':
-          const priorityOrder = [TaskPriority.URGENT, TaskPriority.HIGH, TaskPriority.MEDIUM, TaskPriority.LOW];
+          const priorityOrder = [TaskPriority.LOW, TaskPriority.MEDIUM, TaskPriority.HIGH, TaskPriority.URGENT];
           comparison = priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority);
           break;
         case 'createdAt':

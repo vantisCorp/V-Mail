@@ -14,7 +14,8 @@ describe('ContactsService', () => {
     // Clear localStorage before each test
     localStorage.clear();
     
-    // Get fresh instance
+    // Reset singleton and get fresh instance
+    ContactsService.resetInstance();
     contactsService = ContactsService.getInstance();
   });
 

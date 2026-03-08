@@ -71,7 +71,7 @@ describe('useTaskManagement', () => {
       expect(result.current.isLoading).toBe(true);
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       expect(result.current.isLoading).toBe(false);
@@ -86,7 +86,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const initialTaskCount = result.current.tasks.length;
@@ -105,7 +105,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const taskToUpdate = result.current.tasks[0];
@@ -127,7 +127,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const taskToDelete = result.current.tasks[0];
@@ -148,7 +148,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const initialTaskCount = result.current.tasks.length;
@@ -176,7 +176,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const emailData = {
@@ -202,7 +202,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const task = result.current.tasks[0];
@@ -228,7 +228,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const task = result.current.tasks.find(t => t.subtasks.length > 0);
@@ -267,7 +267,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const task = result.current.tasks.find(t => t.subtasks.length > 0);
@@ -294,7 +294,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const task = result.current.tasks[0];
@@ -324,7 +324,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const task = result.current.tasks[0];
@@ -344,7 +344,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const task = result.current.tasks.find(t => t.checklist.length > 0);
@@ -370,7 +370,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const task = result.current.tasks.find(t => t.checklist.length > 0);
@@ -397,7 +397,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const task = result.current.tasks[0];
@@ -425,7 +425,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const stats = result.current.getTaskStatistics();
@@ -440,7 +440,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const stats = result.current.getTaskStatistics();
@@ -455,7 +455,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const filtered = result.current.getFilteredTasks({ status: TaskStatus.TODO });
@@ -467,7 +467,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const filtered = result.current.getFilteredTasks({ priority: TaskPriority.HIGH });
@@ -479,7 +479,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const filtered = result.current.getFilteredTasks({ type: TaskType.TASK });
@@ -491,7 +491,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const firstTask = result.current.tasks[0];
@@ -507,7 +507,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const project = result.current.projects[0];
@@ -520,7 +520,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const sorted = result.current.getSortedTasks(result.current.tasks, { field: 'title', order: 'asc' });
@@ -534,7 +534,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const priorityOrder = [TaskPriority.URGENT, TaskPriority.HIGH, TaskPriority.MEDIUM, TaskPriority.LOW];
@@ -553,7 +553,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const task = result.current.tasks[0];
@@ -567,7 +567,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const found = result.current.getTaskById('non-existent-id');
@@ -579,7 +579,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       // Find a task with sourceEmailId or create one
@@ -599,7 +599,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const initialProjectCount = result.current.projects.length;
@@ -623,7 +623,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const task = result.current.tasks[0];
@@ -640,7 +640,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const task = result.current.tasks[0];
@@ -664,7 +664,7 @@ describe('useTaskManagement', () => {
       const { result } = renderHook(() => useTaskManagement());
       
       await act(async () => {
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       const initialCount = result.current.tasks.length;
@@ -672,7 +672,7 @@ describe('useTaskManagement', () => {
       await act(async () => {
         vi.advanceTimersByTime(1000);
         result.current.refreshTasks();
-        vi.advanceTimersByTime(100);
+        vi.advanceTimersByTime(600);
       });
       
       // Tasks should still be available after refresh

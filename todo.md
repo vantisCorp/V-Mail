@@ -1,32 +1,13 @@
-# V-Mail Development Todo
+# Fix Failing Tests
 
-## v1.6.0 Release Status - ALL PRs MERGED ✅
+## Issues to Fix
+1. `TranslationService is not a constructor` - Service export issue
+2. `email.date?.toISOString is not a function` - Date handling in tests
+3. Various mock/setup issues
 
-### Pull Requests - Targeting `main` - ALL MERGED
-| PR # | Feature | Priority | Status |
-|------|---------|----------|--------|
-| #59 | Calendar Integration | P0 | ✅ MERGED |
-| #60 | Contacts Integration | P0 | ✅ MERGED |
-| #62 | Email Signatures | P3 | ✅ MERGED |
-| #65 | Task Management Tests | P2 | ✅ MERGED |
-
-### Pull Requests - Targeting `develop` - ALL MERGED
-| PR # | Feature | Priority | Status |
-|------|---------|----------|--------|
-| #61 | Advanced Search | P1 | ✅ MERGED |
-| #63 | File Attachments Preview | P3 | ✅ MERGED |
-| #64 | Email Templates Tests | P1 | ✅ MERGED |
-| #49 | Email Export (v1.5.0) | P1 | ✅ MERGED |
-| #50 | Advanced Caching (v1.5.0) | P1 | ✅ MERGED |
-
----
-
-## v1.5.0 Release ✅ PUBLISHED
-
-**Release URL:** https://github.com/vantisCorp/V-Mail/releases/tag/v1.5.0
-
----
-
-## Next Steps
-1. Run tests to verify all features work together
-2. Create v1.6.0 release
+## Tasks
+- [x] Fix TranslationService export issue
+- [x] Fix date handling in searchEngineService tests
+- [ ] Fix other failing tests
+- [ ] Run tests to verify fixes
+- [ ] Commit and push changes

@@ -641,7 +641,7 @@ describe('useTaskManagement', () => {
         order: 'desc',
       });
 
-      const priorityOrder = [TaskPriority.URGENT, TaskPriority.HIGH, TaskPriority.MEDIUM, TaskPriority.LOW];
+      const priorityOrder = [TaskPriority.LOW, TaskPriority.MEDIUM, TaskPriority.HIGH, TaskPriority.URGENT];
       
       for (let i = 1; i < sorted.length; i++) {
         const prevPriority = priorityOrder.indexOf(sorted[i-1].priority);

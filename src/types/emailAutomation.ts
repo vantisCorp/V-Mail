@@ -13,18 +13,18 @@ export enum TriggerType {
   SUBJECT = 'subject',
   BODY = 'body',
   ATTACHMENT = 'attachment',
-  
+
   // Email metadata triggers
   IMPORTANCE = 'importance',
   FLAGGED = 'flagged',
   READ = 'read',
   UNREAD = 'unread',
-  
+
   // Time-based triggers
   RECEIVED = 'received',
   SENT = 'sent',
   DATE = 'date',
-  
+
   // Custom triggers
   HEADER = 'header',
   TAG = 'tag',
@@ -56,40 +56,40 @@ export enum ActionType {
   MOVE_TO_FOLDER = 'move_to_folder',
   COPY_TO_FOLDER = 'copy_to_folder',
   MOVE_TO_SHARED_FOLDER = 'move_to_shared_folder',
-  
+
   // Label actions
   ADD_LABEL = 'add_label',
   REMOVE_LABEL = 'remove_label',
   SET_LABEL = 'set_label',
-  
+
   // Response actions
   REPLY = 'reply',
   REPLY_ALL = 'reply_all',
   FORWARD = 'forward',
   AUTO_REPLY = 'auto_reply',
-  
+
   // Delete actions
   DELETE = 'delete',
   ARCHIVE = 'archive',
   MOVE_TO_TRASH = 'move_to_trash',
-  
+
   // Flag actions
   MARK_READ = 'mark_read',
   MARK_UNREAD = 'mark_unread',
   FLAG = 'flag',
   UNFLAG = 'unflag',
-  
+
   // Template actions
   USE_TEMPLATE = 'use_template',
   SEND_TEMPLATE = 'send_template',
-  
+
   // Tag actions
   ADD_TAG = 'add_tag',
   REMOVE_TAG = 'remove_tag',
-  
+
   // Priority actions
   SET_IMPORTANCE = 'set_importance',
-  
+
   // Custom actions
   ADD_HEADER = 'add_header',
   REMOVE_HEADER = 'remove_header',
@@ -149,32 +149,32 @@ export interface AutomationRule {
   status: RuleStatus;
   priority: RulePriority;
   categoryId?: string;
-  
+
   // Triggers and conditions
   triggerType: TriggerType;
   conditionGroups: ConditionGroup[];
   conditions: RuleCondition[];
-  
+
   // Actions
   actions: RuleAction[];
-  
+
   // Timing and execution
   applyTo?: 'incoming' | 'outgoing' | 'both';
   executeOn?: 'receive' | 'read' | 'send';
   schedule?: RuleSchedule;
-  
+
   // Metadata
   createdBy: string;
   updatedBy?: string;
   createdAt: string;
   updatedAt: string;
-  
+
   // Execution statistics
   executionCount: number;
   lastExecutedAt?: string;
   successCount: number;
   failureCount: number;
-  
+
   // Testing
   isTesting?: boolean;
   testMode?: boolean;
@@ -198,7 +198,7 @@ export interface RuleExecutionLog {
   ruleName: string;
   emailId: string;
   emailSubject?: string;
-  
+
   status: 'success' | 'failure' | 'partial';
   executedActions: Array<{
     actionId: string;
@@ -207,13 +207,13 @@ export interface RuleExecutionLog {
     error?: string;
     duration?: number;
   }>;
-  
+
   executedAt: string;
   executedBy: string;
-  
+
   // Performance metrics
   totalDuration: number;
-  
+
   // Additional data
   metadata?: Record<string, any>;
 }
@@ -238,29 +238,29 @@ export interface RuleTestResult {
 export interface RuleStatistics {
   ruleId: string;
   ruleName: string;
-  
+
   totalExecutions: number;
   successfulExecutions: number;
   failedExecutions: number;
-  
+
   successRate: number;
-  
+
   lastExecutedAt: string;
   averageExecutionTime: number;
-  
+
   // Actions statistics
   actionStats: Array<{
     actionType: ActionType;
     count: number;
     successRate: number;
   }>;
-  
+
   // Time-based statistics
   executionsByDay: Array<{
     date: string;
     count: number;
   }>;
-  
+
   // Errors
   recentErrors: Array<{
     timestamp: string;

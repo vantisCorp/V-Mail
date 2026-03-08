@@ -6,8 +6,8 @@ import type { EmailFilter, FilterConditionField, FilterActionType } from '../../
 // Mock the useNotifications hook
 vi.mock('../../src/hooks/useNotifications', () => ({
   useNotifications: () => ({
-    addNotification: vi.fn(),
-  }),
+    addNotification: vi.fn()
+  })
 }));
 
 describe('useEmailFilters', () => {
@@ -18,7 +18,7 @@ describe('useEmailFilters', () => {
     expect(result.current.stats).toEqual({
       totalRules: 0,
       activeRules: 0,
-      emailsProcessed: 0,
+      emailsProcessed: 0
     });
   });
 
@@ -28,12 +28,12 @@ describe('useEmailFilters', () => {
     const newFilter = {
       name: 'Work Filter',
       conditions: [
-        { id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: '@work.com' },
+        { id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: '@work.com' }
       ],
       actions: [{ id: 'act-1', type: 'move_to_folder' as FilterActionType, value: 'Work' }],
       enabled: true,
       priority: 1,
-      matchAll: false,
+      matchAll: false
     };
 
     act(() => {
@@ -57,7 +57,7 @@ describe('useEmailFilters', () => {
         actions: [{ id: 'act-1', type: 'mark_as_read' as FilterActionType }],
         enabled: true,
         priority: 1,
-        matchAll: false,
+        matchAll: false
       });
     });
 
@@ -83,7 +83,7 @@ describe('useEmailFilters', () => {
         actions: [{ id: 'act-1', type: 'delete' as FilterActionType }],
         enabled: true,
         priority: 1,
-        matchAll: false,
+        matchAll: false
       });
     });
 
@@ -108,7 +108,7 @@ describe('useEmailFilters', () => {
         actions: [{ id: 'act-1', type: 'mark_as_read' as FilterActionType }],
         enabled: true,
         priority: 1,
-        matchAll: false,
+        matchAll: false
       });
     });
 
@@ -140,7 +140,7 @@ describe('useEmailFilters', () => {
         actions: [{ id: 'act-1', type: 'label' as FilterActionType, value: 'test-label' }],
         enabled: true,
         priority: 1,
-        matchAll: false,
+        matchAll: false
       });
     });
 
@@ -168,7 +168,7 @@ describe('useEmailFilters', () => {
         actions: [{ id: 'act-1', type: 'mark_as_read' as FilterActionType }],
         enabled: true,
         priority: 1,
-        matchAll: false,
+        matchAll: false
       });
     });
 
@@ -179,7 +179,7 @@ describe('useEmailFilters', () => {
         actions: [{ id: 'act-1', type: 'archive' as FilterActionType }],
         enabled: true,
         priority: 2,
-        matchAll: false,
+        matchAll: false
       });
     });
 
@@ -206,7 +206,7 @@ describe('useEmailFilters', () => {
         actions: [{ id: 'act-1', type: 'move_to_folder' as FilterActionType, value: 'Work' }],
         enabled: true,
         priority: 1,
-        matchAll: false,
+        matchAll: false
       });
     });
 
@@ -217,7 +217,7 @@ describe('useEmailFilters', () => {
       body: 'Test body',
       hasAttachment: false,
       size: 1024,
-      priority: 'normal',
+      priority: 'normal'
     };
 
     const result_obj = result.current.applyFilters(email);
@@ -240,7 +240,7 @@ describe('useEmailFilters', () => {
         actions: [{ id: 'act-1', type: 'delete' as FilterActionType }],
         enabled: false,
         priority: 1,
-        matchAll: false,
+        matchAll: false
       });
     });
 
@@ -251,7 +251,7 @@ describe('useEmailFilters', () => {
       body: 'Test body',
       hasAttachment: false,
       size: 1024,
-      priority: 'normal',
+      priority: 'normal'
     };
 
     const result_obj = result.current.applyFilters(email);
@@ -268,12 +268,12 @@ describe('useEmailFilters', () => {
         name: 'Multi-condition Filter',
         conditions: [
           { id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: '@company.com' },
-          { id: 'cond-2', field: 'subject' as FilterConditionField, operator: 'contains' as const, value: 'Important' },
+          { id: 'cond-2', field: 'subject' as FilterConditionField, operator: 'contains' as const, value: 'Important' }
         ],
         actions: [{ id: 'act-1', type: 'mark_as_important' as FilterActionType }],
         enabled: true,
         priority: 1,
-        matchAll: true,
+        matchAll: true
       });
     });
 
@@ -285,7 +285,7 @@ describe('useEmailFilters', () => {
       body: 'Test body',
       hasAttachment: false,
       size: 1024,
-      priority: 'normal',
+      priority: 'normal'
     };
 
     const partialResult = result.current.applyFilters(partialMatchEmail);
@@ -299,7 +299,7 @@ describe('useEmailFilters', () => {
       body: 'Test body',
       hasAttachment: false,
       size: 1024,
-      priority: 'normal',
+      priority: 'normal'
     };
 
     const fullResult = result.current.applyFilters(fullMatchEmail);
@@ -318,7 +318,7 @@ describe('useEmailFilters', () => {
         actions: [{ id: 'act-1', type: 'label' as FilterActionType, value: 'large' }],
         enabled: true,
         priority: 1,
-        matchAll: false,
+        matchAll: false
       });
     });
 
@@ -329,7 +329,7 @@ describe('useEmailFilters', () => {
       body: 'Test body',
       hasAttachment: true,
       size: 15 * 1024 * 1024, // 15 MB
-      priority: 'normal',
+      priority: 'normal'
     };
 
     const result_obj = result.current.applyFilters(largeEmail);
@@ -347,7 +347,7 @@ describe('useEmailFilters', () => {
         actions: [{ id: 'act-1', type: 'archive' as FilterActionType }],
         enabled: true,
         priority: 1,
-        matchAll: false,
+        matchAll: false
       });
     });
 
@@ -366,7 +366,7 @@ describe('useEmailFilters', () => {
         actions: [{ id: 'act-1', type: 'archive' as FilterActionType }],
         enabled: true,
         priority: 1,
-        matchAll: false,
+        matchAll: false
       });
     });
 

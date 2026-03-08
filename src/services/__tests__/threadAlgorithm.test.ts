@@ -17,20 +17,20 @@ describe('ThreadAlgorithm', () => {
     isRead: false,
     isStarred: false,
     folderId: 'inbox',
-    ...overrides,
+    ...overrides
   });
 
   describe('buildThreadTree', () => {
     it('should build a simple thread tree', () => {
       const rootEmail = createEmail({
         id: '1',
-        messageId: 'root',
+        messageId: 'root'
       });
 
       const replyEmail = createEmail({
         id: '2',
         messageId: 'reply',
-        inReplyTo: 'root',
+        inReplyTo: 'root'
       });
 
       const tree = ThreadAlgorithm.buildThreadTree([rootEmail, replyEmail]);
@@ -44,19 +44,19 @@ describe('ThreadAlgorithm', () => {
     it('should build a tree with multiple levels', () => {
       const rootEmail = createEmail({
         id: '1',
-        messageId: 'root',
+        messageId: 'root'
       });
 
       const reply1 = createEmail({
         id: '2',
         messageId: 'reply1',
-        inReplyTo: 'root',
+        inReplyTo: 'root'
       });
 
       const reply2 = createEmail({
         id: '3',
         messageId: 'reply2',
-        inReplyTo: 'reply1',
+        inReplyTo: 'reply1'
       });
 
       const tree = ThreadAlgorithm.buildThreadTree([rootEmail, reply1, reply2]);
@@ -70,12 +70,12 @@ describe('ThreadAlgorithm', () => {
     it('should handle multiple root emails', () => {
       const email1 = createEmail({
         id: '1',
-        messageId: 'msg1',
+        messageId: 'msg1'
       });
 
       const email2 = createEmail({
         id: '2',
-        messageId: 'msg2',
+        messageId: 'msg2'
       });
 
       const tree = ThreadAlgorithm.buildThreadTree([email1, email2]);
@@ -86,13 +86,13 @@ describe('ThreadAlgorithm', () => {
     it('should use references to build tree', () => {
       const rootEmail = createEmail({
         id: '1',
-        messageId: 'root',
+        messageId: 'root'
       });
 
       const replyEmail = createEmail({
         id: '2',
         messageId: 'reply',
-        references: ['root'],
+        references: ['root']
       });
 
       const tree = ThreadAlgorithm.buildThreadTree([rootEmail, replyEmail]);
@@ -107,14 +107,14 @@ describe('ThreadAlgorithm', () => {
       const email1 = createEmail({
         id: '1',
         messageId: 'msg1',
-        subject: 'Test Subject',
+        subject: 'Test Subject'
       });
 
       const email2 = createEmail({
         id: '2',
         messageId: 'msg2',
         subject: 'Re: Test Subject',
-        inReplyTo: 'msg1',
+        inReplyTo: 'msg1'
       });
 
       const threads = ThreadAlgorithm.groupEmailsIntoThreads([email1, email2]);
@@ -127,13 +127,13 @@ describe('ThreadAlgorithm', () => {
       const email1 = createEmail({
         id: '1',
         messageId: 'msg1',
-        subject: 'Subject 1',
+        subject: 'Subject 1'
       });
 
       const email2 = createEmail({
         id: '2',
         messageId: 'msg2',
-        subject: 'Subject 2',
+        subject: 'Subject 2'
       });
 
       const threads = ThreadAlgorithm.groupEmailsIntoThreads([email1, email2]);
@@ -145,14 +145,14 @@ describe('ThreadAlgorithm', () => {
       const email1 = createEmail({
         id: '1',
         messageId: 'msg1',
-        subject: 'Test Subject',
+        subject: 'Test Subject'
       });
 
       const email2 = createEmail({
         id: '2',
         messageId: 'msg2',
         subject: 'Re: Test Subject',
-        inReplyTo: 'msg1',
+        inReplyTo: 'msg1'
       });
 
       const threads = ThreadAlgorithm.groupEmailsIntoThreads([email1, email2]);
@@ -166,7 +166,7 @@ describe('ThreadAlgorithm', () => {
         id: '1',
         messageId: 'msg1',
         from: 'user1@example.com',
-        isRead: true, // First email is read
+        isRead: true // First email is read
       });
 
       const email2 = createEmail({
@@ -174,7 +174,7 @@ describe('ThreadAlgorithm', () => {
         messageId: 'msg2',
         from: 'user2@example.com',
         inReplyTo: 'msg1',
-        isRead: false, // Second email is unread
+        isRead: false // Second email is unread
       });
 
       const threads = ThreadAlgorithm.groupEmailsIntoThreads([email1, email2]);
@@ -190,13 +190,13 @@ describe('ThreadAlgorithm', () => {
     it('should mark root emails correctly', () => {
       const email1 = createEmail({
         id: '1',
-        messageId: 'msg1',
+        messageId: 'msg1'
       });
 
       const email2 = createEmail({
         id: '2',
         messageId: 'msg2',
-        inReplyTo: 'msg1',
+        inReplyTo: 'msg1'
       });
 
       const threads = ThreadAlgorithm.groupEmailsIntoThreads([email1, email2]);
@@ -208,13 +208,13 @@ describe('ThreadAlgorithm', () => {
     it('should detect replies', () => {
       const email1 = createEmail({
         id: '1',
-        messageId: 'msg1',
+        messageId: 'msg1'
       });
 
       const email2 = createEmail({
         id: '2',
         messageId: 'msg2',
-        inReplyTo: 'msg1',
+        inReplyTo: 'msg1'
       });
 
       const threads = ThreadAlgorithm.groupEmailsIntoThreads([email1, email2]);
@@ -237,7 +237,7 @@ describe('ThreadAlgorithm', () => {
         unreadCount: 0,
         isExpanded: false,
         lastActivityAt: new Date('2024-01-01'),
-        createdAt: new Date('2024-01-01'),
+        createdAt: new Date('2024-01-01')
       };
 
       const thread2: EmailThread = {
@@ -251,7 +251,7 @@ describe('ThreadAlgorithm', () => {
         unreadCount: 0,
         isExpanded: false,
         lastActivityAt: new Date('2024-01-02'),
-        createdAt: new Date('2024-01-02'),
+        createdAt: new Date('2024-01-02')
       };
 
       const sorted = ThreadAlgorithm.sortThreads([thread1, thread2], 'newest');
@@ -272,7 +272,7 @@ describe('ThreadAlgorithm', () => {
         unreadCount: 0,
         isExpanded: false,
         lastActivityAt: new Date('2024-01-01'),
-        createdAt: new Date('2024-01-01'),
+        createdAt: new Date('2024-01-01')
       };
 
       const thread2: EmailThread = {
@@ -286,7 +286,7 @@ describe('ThreadAlgorithm', () => {
         unreadCount: 0,
         isExpanded: false,
         lastActivityAt: new Date('2024-01-02'),
-        createdAt: new Date('2024-01-02'),
+        createdAt: new Date('2024-01-02')
       };
 
       const sorted = ThreadAlgorithm.sortThreads([thread1, thread2], 'oldest');
@@ -309,7 +309,7 @@ describe('ThreadAlgorithm', () => {
         unreadCount: 0,
         isExpanded: false,
         lastActivityAt: new Date('2024-01-01'),
-        createdAt: new Date('2024-01-01'),
+        createdAt: new Date('2024-01-01')
       };
 
       const thread2: EmailThread = {
@@ -323,7 +323,7 @@ describe('ThreadAlgorithm', () => {
         unreadCount: 1,
         isExpanded: false,
         lastActivityAt: new Date('2024-01-02'),
-        createdAt: new Date('2024-01-02'),
+        createdAt: new Date('2024-01-02')
       };
 
       const merged = ThreadAlgorithm.mergeThreads(thread1, thread2);
@@ -344,7 +344,7 @@ describe('ThreadAlgorithm', () => {
         messages: [
           createEmail({ id: '1', messageId: 'msg1' }),
           createEmail({ id: '2', messageId: 'msg2' }),
-          createEmail({ id: '3', messageId: 'msg3' }),
+          createEmail({ id: '3', messageId: 'msg3' })
         ],
         rootMessageId: 'msg1',
         participantEmails: [],
@@ -353,7 +353,7 @@ describe('ThreadAlgorithm', () => {
         unreadCount: 0,
         isExpanded: false,
         lastActivityAt: new Date('2024-01-03'),
-        createdAt: new Date('2024-01-01'),
+        createdAt: new Date('2024-01-01')
       };
 
       const [part1, part2] = ThreadAlgorithm.splitThread(thread, 1);
@@ -379,7 +379,7 @@ describe('ThreadAlgorithm', () => {
         isExpanded: false,
         lastActivityAt: new Date(),
         createdAt: new Date(),
-        folderId: 'inbox',
+        folderId: 'inbox'
       };
 
       const thread2: EmailThread = {
@@ -394,7 +394,7 @@ describe('ThreadAlgorithm', () => {
         isExpanded: false,
         lastActivityAt: new Date(),
         createdAt: new Date(),
-        folderId: 'archive',
+        folderId: 'archive'
       };
 
       const filtered = ThreadAlgorithm.filterThreads([thread1, thread2], { folderId: 'inbox' });
@@ -415,7 +415,7 @@ describe('ThreadAlgorithm', () => {
         unreadCount: 1,
         isExpanded: false,
         lastActivityAt: new Date(),
-        createdAt: new Date(),
+        createdAt: new Date()
       };
 
       const thread2: EmailThread = {
@@ -429,7 +429,7 @@ describe('ThreadAlgorithm', () => {
         unreadCount: 0,
         isExpanded: false,
         lastActivityAt: new Date(),
-        createdAt: new Date(),
+        createdAt: new Date()
       };
 
       const filtered = ThreadAlgorithm.filterThreads([thread1, thread2], { unreadOnly: true });
@@ -450,7 +450,7 @@ describe('ThreadAlgorithm', () => {
         unreadCount: 0,
         isExpanded: false,
         lastActivityAt: new Date(),
-        createdAt: new Date(),
+        createdAt: new Date()
       };
 
       const thread2: EmailThread = {
@@ -464,7 +464,7 @@ describe('ThreadAlgorithm', () => {
         unreadCount: 0,
         isExpanded: false,
         lastActivityAt: new Date(),
-        createdAt: new Date(),
+        createdAt: new Date()
       };
 
       const filtered = ThreadAlgorithm.filterThreads([thread1, thread2], { participant: 'user1@example.com' });
@@ -485,7 +485,7 @@ describe('ThreadAlgorithm', () => {
         unreadCount: 0,
         isExpanded: false,
         lastActivityAt: new Date(),
-        createdAt: new Date(),
+        createdAt: new Date()
       };
 
       const thread2: EmailThread = {
@@ -499,7 +499,7 @@ describe('ThreadAlgorithm', () => {
         unreadCount: 0,
         isExpanded: false,
         lastActivityAt: new Date(),
-        createdAt: new Date(),
+        createdAt: new Date()
       };
 
       const filtered = ThreadAlgorithm.filterThreads([thread1, thread2], { subjectContains: 'important' });
@@ -522,7 +522,7 @@ describe('ThreadAlgorithm', () => {
         unreadCount: 2,
         isExpanded: false,
         lastActivityAt: new Date(),
-        createdAt: new Date(),
+        createdAt: new Date()
       };
 
       const thread2: EmailThread = {
@@ -536,7 +536,7 @@ describe('ThreadAlgorithm', () => {
         unreadCount: 1,
         isExpanded: false,
         lastActivityAt: new Date(),
-        createdAt: new Date(),
+        createdAt: new Date()
       };
 
       const stats = ThreadAlgorithm.getThreadStats([thread1, thread2]);

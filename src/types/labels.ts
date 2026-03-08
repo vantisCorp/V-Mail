@@ -14,7 +14,7 @@ export interface LabelStats {
   totalLabeledEmails: number;
 }
 
-export type LabelAction = 
+export type LabelAction =
   | 'add'
   | 'remove'
   | 'toggle';

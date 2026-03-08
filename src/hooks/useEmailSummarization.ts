@@ -8,7 +8,7 @@ import {
   SummaryType,
   SummaryLength,
   SummaryMetadata,
-  DEFAULT_SUMMARIZATION_CONFIG,
+  DEFAULT_SUMMARIZATION_CONFIG
 } from '../types/emailSummarization';
 
 export interface UseEmailSummarizationReturn {
@@ -33,7 +33,7 @@ export interface UseEmailSummarizationReturn {
   getActionItems: (summary: EmailSummary) => ActionItem[];
   getSegments: (summary: EmailSummary) => SummarySegment[];
   getTlDr: (summary: EmailSummary) => string;
-  
+
   // Configuration
   config: SummarizationConfig;
   updateConfig: (config: Partial<SummarizationConfig>) => void;
@@ -45,7 +45,7 @@ export interface UseEmailSummarizationReturn {
 export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfig>): UseEmailSummarizationReturn => {
   // Initialize model
   const modelRef = useRef<SummarizationModel | null>(null);
-  
+
   // State
   const [summary, setSummary] = useState<EmailSummary | null>(null);
   const [isSummarizing, setIsSummarizing] = useState<boolean>(false);
@@ -53,14 +53,14 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
   const [cache, setCache] = useState<Map<string, EmailSummary>>(new Map());
   const [config, setConfig] = useState<SummarizationConfig>({
     ...DEFAULT_SUMMARIZATION_CONFIG,
-    ...initialConfig,
+    ...initialConfig
   });
   const [statistics, setStatistics] = useState({
     totalSummaries: 0,
     averageProcessingTime: 0,
     totalProcessingTime: 0,
     cacheHits: 0,
-    cacheMisses: 0,
+    cacheMisses: 0
   });
 
   // Initialize model if needed
@@ -83,9 +83,9 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
   const summarize = useCallback(async (context: SummarizationContext): Promise<EmailSummary> => {
     setIsSummarizing(true);
     setError(null);
-    
+
     const startTime = Date.now();
-    
+
     try {
       const model = modelRef.current;
       if (!model) {
@@ -98,7 +98,7 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
         const cachedSummary = cache.get(cacheKey)!;
         setStatistics(prev => ({
           ...prev,
-          cacheHits: prev.cacheHits + 1,
+          cacheHits: prev.cacheHits + 1
         }));
         setSummary(cachedSummary);
         return cachedSummary;
@@ -106,7 +106,7 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
 
       setStatistics(prev => ({
         ...prev,
-        cacheMisses: prev.cacheMisses + 1,
+        cacheMisses: prev.cacheMisses + 1
       }));
 
       // Generate summary
@@ -116,13 +116,13 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
       const processingTime = Date.now() - startTime;
       const totalTime = statistics.totalProcessingTime + processingTime;
       const totalSummaries = statistics.totalSummaries + 1;
-      
+
       setStatistics({
         totalSummaries,
         totalProcessingTime: totalTime,
         averageProcessingTime: totalTime / totalSummaries,
         cacheHits: statistics.cacheHits,
-        cacheMisses: statistics.cacheMisses + 1,
+        cacheMisses: statistics.cacheMisses + 1
       });
 
       // Update cache
@@ -150,7 +150,7 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
       summaryType: SummaryType.HYBRID,
       summaryLength: SummaryLength.MEDIUM,
       includeActionItems: true,
-      includeKeyPoints: true,
+      includeKeyPoints: true
     });
   }, [summarize]);
 
@@ -162,14 +162,14 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
       emails: [{
         ...email,
         to: '',
-        timestamp: email.date,
+        timestamp: email.date
       } as any],
-      summaryType: config.summaryType,
-      summaryLength: SummaryLength.MEDIUM,
+      summaryType: config.defaultSummaryType || SummaryType.EXTRACTIVE,
+      summaryLength: config.defaultSummaryLength || SummaryLength.MEDIUM,
       includeActionItems: true,
-      includeKeyPoints: true,
+      includeKeyPoints: true
     });
-  }, [summarize, config.summaryType]);
+  }, [summarize, config.defaultSummaryType, config.defaultSummaryLength]);
 
   // Get key points from summary
   const getKeyPoints = useCallback((summary: EmailSummary): KeyPoint[] => {
@@ -212,7 +212,7 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
       averageProcessingTime: 0,
       totalProcessingTime: 0,
       cacheHits: 0,
-      cacheMisses: 0,
+      cacheMisses: 0
     });
   }, []);
 
@@ -233,6 +233,6 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
     updateConfig,
     clearCache,
     clearError,
-    reset,
+    reset
   };
 };

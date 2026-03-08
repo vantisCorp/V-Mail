@@ -10,7 +10,7 @@ import {
   DuplicateType,
   DuplicateSeverity,
   UserFeedback,
-  DEFAULT_DETECTION_CONFIG,
+  DEFAULT_DETECTION_CONFIG
 } from '../types/duplicateDetection';
 
 export interface UseDuplicateDetectionReturn {
@@ -50,7 +50,7 @@ export const useDuplicateDetection = (initialConfig?: Partial<DetectionConfig>):
   const [cache, setCache] = useState<Map<string, DuplicateResult[]>>(new Map());
   const [config, setConfig] = useState<DetectionConfig>({
     ...DEFAULT_DETECTION_CONFIG,
-    ...initialConfig,
+    ...initialConfig
   });
   const [statistics, setStatistics] = useState<DetectionStatistics>({
     totalEmailsProcessed: 0,
@@ -61,17 +61,17 @@ export const useDuplicateDetection = (initialConfig?: Partial<DetectionConfig>):
       [DuplicateType.EXACT]: 0,
       [DuplicateType.NEAR]: 0,
       [DuplicateType.PARTIAL]: 0,
-      [DuplicateType.THREAD]: 0,
+      [DuplicateType.THREAD]: 0
     },
     duplicatesBySeverity: {
       [DuplicateSeverity.HIGH]: 0,
       [DuplicateSeverity.MEDIUM]: 0,
-      [DuplicateSeverity.LOW]: 0,
+      [DuplicateSeverity.LOW]: 0
     },
     totalProcessingTime: 0,
     averageProcessingTime: 0,
     cacheHits: 0,
-    cacheMisses: 0,
+    cacheMisses: 0
   });
 
   // Initialize model if needed
@@ -132,7 +132,7 @@ export const useDuplicateDetection = (initialConfig?: Partial<DetectionConfig>):
         cacheMisses: prev.cacheMisses + localCacheMisses + 1,
         averageSimilarity: modelStats.averageSimilarity,
         duplicatesByType: modelStats.duplicatesByType,
-        duplicatesBySeverity: modelStats.duplicatesBySeverity,
+        duplicatesBySeverity: modelStats.duplicatesBySeverity
       }));
 
       setDuplicates(results);
@@ -164,7 +164,7 @@ export const useDuplicateDetection = (initialConfig?: Partial<DetectionConfig>):
   const detectInList = useCallback(async (emails: EmailForDetection[]): Promise<DuplicateResult[]> => {
     return detect({
       emails,
-      config: { ...config },
+      config: { ...config }
     });
   }, [detect, config]);
 
@@ -223,17 +223,17 @@ export const useDuplicateDetection = (initialConfig?: Partial<DetectionConfig>):
         [DuplicateType.EXACT]: 0,
         [DuplicateType.NEAR]: 0,
         [DuplicateType.PARTIAL]: 0,
-        [DuplicateType.THREAD]: 0,
+        [DuplicateType.THREAD]: 0
       },
       duplicatesBySeverity: {
         [DuplicateSeverity.HIGH]: 0,
         [DuplicateSeverity.MEDIUM]: 0,
-        [DuplicateSeverity.LOW]: 0,
+        [DuplicateSeverity.LOW]: 0
       },
       totalProcessingTime: 0,
       averageProcessingTime: 0,
       cacheHits: 0,
-      cacheMisses: 0,
+      cacheMisses: 0
     });
   }, []);
 
@@ -254,6 +254,6 @@ export const useDuplicateDetection = (initialConfig?: Partial<DetectionConfig>):
     updateConfig,
     clearCache,
     clearError,
-    reset,
+    reset
   };
 };

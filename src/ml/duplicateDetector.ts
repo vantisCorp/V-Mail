@@ -22,7 +22,7 @@ import {
   SUBJECT_PREFIXES,
   SIGNATURE_PATTERNS,
   FOOTER_PATTERNS,
-  FORWARD_INDICATORS,
+  FORWARD_INDICATORS
 } from '../types/duplicateDetection';
 
 export type { DetectionContext };
@@ -49,7 +49,7 @@ export class DuplicateDetector {
       userFeedback: [],
       commonPatterns: new Map(),
       userEmails: new Map(),
-      learningEnabled: this.config.enableLearning,
+      learningEnabled: this.config.enableLearning
     };
   }
 
@@ -74,7 +74,7 @@ export class DuplicateDetector {
     for (let i = 0; i < emails.length; i++) {
       for (let j = i + 1; j < emails.length; j++) {
         const pairKey = this.getPairKey(emails[i], emails[j]);
-        
+
         if (processedPairs.has(pairKey)) {
           continue;
         }
@@ -178,15 +178,15 @@ export class DuplicateDetector {
           subject: subjectSimilarity,
           body: bodySimilarity,
           from: fromSimilarity,
-          attachments: attachmentSimilarity,
+          attachments: attachmentSimilarity
         },
         contentHash: {
           original: contentHashOriginal,
-          duplicate: contentHashDuplicate,
+          duplicate: contentHashDuplicate
         },
-        reason: this.generateReason(type, severity, similarity),
+        reason: this.generateReason(type, severity, similarity)
       },
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
   }
 
@@ -238,7 +238,7 @@ export class DuplicateDetector {
           averageSimilarity: duplicate.similarityScore,
           emails: [duplicate.originalEmail, duplicate.duplicateEmail],
           created: new Date().toISOString(),
-          updated: new Date().toISOString(),
+          updated: new Date().toISOString()
         };
         groups.set(groupId, group);
         emailToGroup.set(duplicate.originalEmail.id, groupId);
@@ -297,13 +297,13 @@ export class DuplicateDetector {
       [DuplicateType.EXACT]: 0,
       [DuplicateType.NEAR]: 0,
       [DuplicateType.PARTIAL]: 0,
-      [DuplicateType.THREAD]: 0,
+      [DuplicateType.THREAD]: 0
     };
 
     const duplicatesBySeverity = {
       [DuplicateSeverity.HIGH]: 0,
       [DuplicateSeverity.MEDIUM]: 0,
-      [DuplicateSeverity.LOW]: 0,
+      [DuplicateSeverity.LOW]: 0
     };
 
     for (const duplicate of duplicates) {
@@ -321,7 +321,7 @@ export class DuplicateDetector {
       totalProcessingTime,
       averageProcessingTime: totalDuplicates > 0 ? totalProcessingTime / totalDuplicates : 0,
       cacheHits: 0, // To be tracked in hook
-      cacheMisses: 0, // To be tracked in hook
+      cacheMisses: 0 // To be tracked in hook
     };
   }
 
@@ -544,7 +544,7 @@ private cleanBody(body: string): string {
 private tokenize(text: string): string[] {
   return text
     .toLowerCase()
-    .split(/[\s,.!?;:"'(){}\[\]<>]+/)
+    .split(/[\s,.!?;:"'(){}[\]<>]+/)
     .filter(word => word.length > 2);
 }
 
@@ -600,10 +600,18 @@ private getMatchedFields(
   const matched: string[] = [];
   const threshold = 0.8;
 
-  if (subjectSimilarity >= threshold) matched.push('subject');
-  if (bodySimilarity >= threshold) matched.push('body');
-  if (fromSimilarity >= threshold) matched.push('from');
-  if (attachmentSimilarity >= threshold) matched.push('attachments');
+  if (subjectSimilarity >= threshold) {
+matched.push('subject');
+}
+  if (bodySimilarity >= threshold) {
+matched.push('body');
+}
+  if (fromSimilarity >= threshold) {
+matched.push('from');
+}
+  if (attachmentSimilarity >= threshold) {
+matched.push('attachments');
+}
 
   return matched;
 }
@@ -616,14 +624,24 @@ private getDifferences(
 ): string[] {
   const differences: string[] = [];
 
-  if (subjectSimilarity < 1.0) differences.push('subject');
-  if (bodySimilarity < 1.0) differences.push('body');
-  if (email1.from !== email2.from) differences.push('sender');
-  if (email1.to.join(',') !== email2.to.join(',')) differences.push('recipients');
-  
+  if (subjectSimilarity < 1.0) {
+differences.push('subject');
+}
+  if (bodySimilarity < 1.0) {
+differences.push('body');
+}
+  if (email1.from !== email2.from) {
+differences.push('sender');
+}
+  if (email1.to.join(',') !== email2.to.join(',')) {
+differences.push('recipients');
+}
+
   const att1 = email1.attachments || [];
   const att2 = email2.attachments || [];
-  if (att1.length !== att2.length) differences.push('attachments');
+  if (att1.length !== att2.length) {
+differences.push('attachments');
+}
 
   return differences;
 }

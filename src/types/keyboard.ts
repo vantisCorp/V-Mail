@@ -1,6 +1,6 @@
 // Keyboard Shortcuts Types
 
-export type KeyboardShortcutCategory = 
+export type KeyboardShortcutCategory =
   | 'navigation'
   | 'compose'
   | 'email-actions'

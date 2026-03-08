@@ -11,7 +11,7 @@ describe('usePerformanceOptimizations', () => {
   describe('Performance Metrics', () => {
     it('should record a metric successfully', () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       act(() => {
         result.current.recordMetric(
           MetricType.API_CALL,
@@ -29,7 +29,7 @@ describe('usePerformanceOptimizations', () => {
 
     it('should create a performance snapshot', async () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       act(() => {
         result.current.recordMetric(
           MetricType.API_CALL,
@@ -52,7 +52,7 @@ describe('usePerformanceOptimizations', () => {
 
     it('should measure render time', () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       let renderTime;
       act(() => {
         renderTime = result.current.measureRender('TestComponent', () => {
@@ -69,7 +69,7 @@ describe('usePerformanceOptimizations', () => {
 
     it('should measure API call time', async () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       const mockApiCall = async () => {
         await new Promise(resolve => setTimeout(resolve, 10));
         return 'api result';
@@ -89,7 +89,7 @@ describe('usePerformanceOptimizations', () => {
 
     it('should detect threshold violations', async () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       // Note: Using default thresholds where API_CALL error is 1000ms
       act(() => {
         result.current.recordMetric(
@@ -110,7 +110,7 @@ describe('usePerformanceOptimizations', () => {
   describe('Cache Operations', () => {
     it('should set and get cache values', () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       act(() => {
         result.current.cache.set('test_key', 'test_value');
       });
@@ -121,14 +121,14 @@ describe('usePerformanceOptimizations', () => {
 
     it('should return null for non-existent cache keys', () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       const value = result.current.cache.get('non_existent_key');
       expect(value).toBeNull();
     });
 
     it('should check if key exists in cache', () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       act(() => {
         result.current.cache.set('test_key', 'test_value');
       });
@@ -139,7 +139,7 @@ describe('usePerformanceOptimizations', () => {
 
     it('should delete cache entries', () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       act(() => {
         result.current.cache.set('test_key', 'test_value');
         result.current.cache.delete('test_key');
@@ -150,7 +150,7 @@ describe('usePerformanceOptimizations', () => {
 
     it('should clear all cache entries', () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       act(() => {
         result.current.cache.set('key1', 'value1');
         result.current.cache.set('key2', 'value2');
@@ -163,7 +163,7 @@ describe('usePerformanceOptimizations', () => {
 
     it('should get cache statistics', () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       act(() => {
         result.current.cache.set('key1', 'value1');
         result.current.cache.set('key2', 'value2');
@@ -190,7 +190,7 @@ describe('usePerformanceOptimizations', () => {
   describe('Memoization', () => {
     it('should memoize a function', () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       let callCount = 0;
       const expensiveFn = (x: number) => {
         callCount++;
@@ -198,9 +198,9 @@ describe('usePerformanceOptimizations', () => {
       };
 
       const memoizedFn = result.current.memoize(expensiveFn, 'test_fn');
-      
+
       expect(callCount).toBe(0);
-      
+
       const result1 = memoizedFn(5);
       expect(result1).toBe(10);
       expect(callCount).toBe(1);
@@ -212,7 +212,7 @@ describe('usePerformanceOptimizations', () => {
 
     it('should memoize multiple function calls with different arguments', () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       let callCount = 0;
       const expensiveFn = (x: number) => {
         callCount++;
@@ -220,7 +220,7 @@ describe('usePerformanceOptimizations', () => {
       };
 
       const memoizedFn = result.current.memoize(expensiveFn, 'test_fn');
-      
+
       memoizedFn(5);
       memoizedFn(10);
       memoizedFn(5); // Cached
@@ -234,7 +234,7 @@ describe('usePerformanceOptimizations', () => {
   describe('Performance Reports', () => {
     it('should generate a performance report', () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       act(() => {
         result.current.recordMetric(
           MetricType.API_CALL,
@@ -271,7 +271,7 @@ describe('usePerformanceOptimizations', () => {
 
     it('should provide recommendations based on metrics', () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       act(() => {
         result.current.recordMetric(
           MetricType.API_CALL,
@@ -306,7 +306,7 @@ describe('usePerformanceOptimizations', () => {
   describe('Alerts', () => {
     it('should create alerts for critical metrics', async () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       // Record a critical metric (default critical threshold for API_CALL is 5000ms)
       act(() => {
         result.current.recordMetric(
@@ -324,7 +324,7 @@ describe('usePerformanceOptimizations', () => {
 
     it('should acknowledge alerts', async () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       act(() => {
         result.current.recordMetric(
           MetricType.API_CALL,
@@ -347,7 +347,7 @@ describe('usePerformanceOptimizations', () => {
   describe('Configuration', () => {
     it('should toggle performance monitoring', async () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       await waitFor(() => {
         expect(result.current.isEnabled).toBe(true);
       });
@@ -375,7 +375,7 @@ describe('usePerformanceOptimizations', () => {
 
     it('should update cache configuration', async () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       act(() => {
         result.current.setCacheConfig({
           strategy: 'lfu',
@@ -395,7 +395,7 @@ describe('usePerformanceOptimizations', () => {
   describe('Clear Operations', () => {
     it('should clear metrics', () => {
       const { result } = renderHook(() => usePerformanceOptimizations());
-      
+
       act(() => {
         result.current.recordMetric(
           MetricType.API_CALL,

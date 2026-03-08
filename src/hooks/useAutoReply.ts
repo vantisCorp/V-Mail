@@ -39,16 +39,16 @@ export const useAutoReply = (): AutoReplyContext => {
       body: 'Thank you for your email. I am currently out of the office and will respond as soon as possible.',
       delayMinutes: 60,
       schedule: {
-        enabled: false,
-      },
-    },
+        enabled: false
+      }
+    }
   ]);
 
   const addRule = useCallback(
     (rule: Omit<AutoReplyRule, 'id'>) => {
       const newRule: AutoReplyRule = {
         ...rule,
-        id: `rule-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+        id: `rule-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
       };
       setRules((prevRules) => [...prevRules, newRule]);
       addNotification('success', 'Auto-reply rule created');
@@ -152,13 +152,14 @@ export const useAutoReply = (): AutoReplyContext => {
             );
             break;
 
-          case 'keywords':
+          case 'keywords': {
             const keywords = (rule.triggerValue || '')
               .split(',')
               .map((k) => k.trim().toLowerCase());
             const combinedText = `${subject} ${body}`.toLowerCase();
             shouldTrigger = keywords.some((keyword) => combinedText.includes(keyword));
             break;
+          }
         }
 
         if (shouldTrigger) {
@@ -177,6 +178,6 @@ export const useAutoReply = (): AutoReplyContext => {
     updateRule,
     deleteRule,
     toggleRule,
-    checkAutoReply,
+    checkAutoReply
   };
 };

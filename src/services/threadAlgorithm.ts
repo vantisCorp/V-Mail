@@ -8,7 +8,7 @@ import {
   Email,
   EmailThread,
   ThreadNode,
-  ThreadedEmail,
+  ThreadedEmail
 } from '../types/emailThreading';
 
 export class ThreadAlgorithm {
@@ -27,7 +27,7 @@ export class ThreadAlgorithm {
         inReplyTo: email.inReplyTo,
         references: email.references,
         children: [],
-        depth: 0,
+        depth: 0
       };
       messageMap.set(email.messageId, node);
     });
@@ -35,7 +35,9 @@ export class ThreadAlgorithm {
     // Build tree structure
     emails.forEach((email) => {
       const node = messageMap.get(email.messageId);
-      if (!node) return;
+      if (!node) {
+return;
+}
 
       // Try to find parent using inReplyTo
       if (email.inReplyTo) {
@@ -73,7 +75,7 @@ export class ThreadAlgorithm {
     const emailToThreadMap = new Map<string, string>();
 
     emails.forEach((email) => {
-      let threadId = this.getThreadId(email);
+      const threadId = this.getThreadId(email);
 
       // Check if we've already assigned this email to a thread
       if (emailToThreadMap.has(email.id)) {
@@ -94,7 +96,7 @@ export class ThreadAlgorithm {
           isExpanded: false,
           lastActivityAt: email.timestamp,
           createdAt: email.timestamp,
-          folderId: email.folderId,
+          folderId: email.folderId
         };
         threads.set(threadId, newThread);
       }
@@ -109,7 +111,7 @@ export class ThreadAlgorithm {
         depth: this.calculateEmailDepth(email),
         hasReplies: false,
         isRoot: !email.inReplyTo,
-        isLastInThread: false,
+        isLastInThread: false
       };
 
       thread.messages.push(threadedEmail);
@@ -124,7 +126,7 @@ export class ThreadAlgorithm {
       for (let i = 0; i < thread.messages.length; i++) {
         const currentEmail = thread.messages[i];
         const nextEmails = thread.messages.slice(i + 1);
-        
+
         currentEmail.hasReplies = nextEmails.some(
           (next) => next.inReplyTo === currentEmail.messageId ||
                    (next.references && next.references.includes(currentEmail.messageId))
@@ -221,13 +223,13 @@ export class ThreadAlgorithm {
     switch (order) {
       case 'newest':
         return sorted.sort((a, b) => b.lastActivityAt.getTime() - a.lastActivityAt.getTime());
-      
+
       case 'oldest':
         return sorted.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
-      
+
       case 'recent':
         return sorted.sort((a, b) => b.lastActivityAt.getTime() - a.lastActivityAt.getTime());
-      
+
       default:
         return sorted;
     }
@@ -244,11 +246,11 @@ export class ThreadAlgorithm {
       unreadCount: thread1.unreadCount + thread2.unreadCount,
       participantEmails: [
         ...thread1.participantEmails,
-        ...thread2.participantEmails.filter((p) => !thread1.participantEmails.includes(p)),
+        ...thread2.participantEmails.filter((p) => !thread1.participantEmails.includes(p))
       ],
       participantCount: 0, // Will be calculated
       lastActivityAt: thread1.lastActivityAt > thread2.lastActivityAt ? thread1.lastActivityAt : thread2.lastActivityAt,
-      createdAt: thread1.createdAt < thread2.createdAt ? thread1.createdAt : thread2.createdAt,
+      createdAt: thread1.createdAt < thread2.createdAt ? thread1.createdAt : thread2.createdAt
     };
 
     merged.participantCount = merged.participantEmails.length;
@@ -274,7 +276,7 @@ export class ThreadAlgorithm {
       messages: part1Messages,
       messageCount: part1Messages.length,
       unreadCount: part1Messages.filter((e) => !e.isRead).length,
-      lastActivityAt: part1Messages[part1Messages.length - 1].timestamp,
+      lastActivityAt: part1Messages[part1Messages.length - 1].timestamp
     };
 
     const part2: EmailThread = {
@@ -284,7 +286,7 @@ export class ThreadAlgorithm {
       messageCount: part2Messages.length,
       unreadCount: part2Messages.filter((e) => !e.isRead).length,
       createdAt: part2Messages[0].timestamp,
-      rootMessageId: part2Messages[0].messageId,
+      rootMessageId: part2Messages[0].messageId
     };
 
     return [part1, part2];
@@ -307,7 +309,7 @@ export class ThreadAlgorithm {
     return {
       participantEmails: participants,
       participantCount: thread.participantCount - 3,
-      preview,
+      preview
     };
   }
 
@@ -326,12 +328,24 @@ export class ThreadAlgorithm {
     }
   ): EmailThread[] {
     return threads.filter((thread) => {
-      if (filter.folderId && thread.folderId !== filter.folderId) return false;
-      if (filter.unreadOnly && thread.unreadCount === 0) return false;
-      if (filter.starredOnly && !thread.messages.some((e) => e.isStarred)) return false;
-      if (filter.hasAttachments && !thread.messages.some((e) => e.attachments && e.attachments.length > 0)) return false;
-      if (filter.participant && !thread.participantEmails.includes(filter.participant)) return false;
-      if (filter.subjectContains && !thread.subject.toLowerCase().includes(filter.subjectContains.toLowerCase())) return false;
+      if (filter.folderId && thread.folderId !== filter.folderId) {
+return false;
+}
+      if (filter.unreadOnly && thread.unreadCount === 0) {
+return false;
+}
+      if (filter.starredOnly && !thread.messages.some((e) => e.isStarred)) {
+return false;
+}
+      if (filter.hasAttachments && !thread.messages.some((e) => e.attachments && e.attachments.length > 0)) {
+return false;
+}
+      if (filter.participant && !thread.participantEmails.includes(filter.participant)) {
+return false;
+}
+      if (filter.subjectContains && !thread.subject.toLowerCase().includes(filter.subjectContains.toLowerCase())) {
+return false;
+}
 
       return true;
     });
@@ -348,7 +362,7 @@ export class ThreadAlgorithm {
       unreadMessages: threads.reduce((sum, t) => sum + t.unreadCount, 0),
       starredThreads: threads.filter((t) => t.messages.some((e) => e.isStarred)).length,
       threadsWithAttachments: threads.filter((t) => t.messages.some((e) => e.attachments && e.attachments.length > 0)).length,
-      averageMessagesPerThread: 0,
+      averageMessagesPerThread: 0
     };
 
     if (stats.totalThreads > 0) {

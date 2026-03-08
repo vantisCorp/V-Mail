@@ -11,10 +11,10 @@ interface EmailFiltersContext {
   toggleFilter: (id: string) => void;
   duplicateFilter: (id: string) => void;
   reorderFilters: (fromIndex: number, toIndex: number) => void;
-  applyFilters: (email: { 
-    from: string; 
-    to: string; 
-    subject: string; 
+  applyFilters: (email: {
+    from: string;
+    to: string;
+    subject: string;
     body: string;
     hasAttachment: boolean;
     size: number;
@@ -31,7 +31,7 @@ export const useEmailFilters = (): EmailFiltersContext => {
   const [stats, setStats] = useState<FilterStats>({
     totalRules: 0,
     activeRules: 0,
-    emailsProcessed: 0,
+    emailsProcessed: 0
   });
 
   const updateStats = useCallback((newFilters: EmailFilter[]) => {
@@ -39,7 +39,7 @@ export const useEmailFilters = (): EmailFiltersContext => {
       totalRules: newFilters.length,
       activeRules: newFilters.filter(f => f.enabled).length,
       emailsProcessed: stats.emailsProcessed,
-      lastProcessed: stats.lastProcessed,
+      lastProcessed: stats.lastProcessed
     });
   }, [stats.emailsProcessed, stats.lastProcessed]);
 
@@ -50,7 +50,7 @@ export const useEmailFilters = (): EmailFiltersContext => {
         ...filter,
         id: generateId(),
         createdAt: now,
-        updatedAt: now,
+        updatedAt: now
       };
       const newFilters = [...filters, newFilter];
       setFilters(newFilters);
@@ -101,7 +101,9 @@ export const useEmailFilters = (): EmailFiltersContext => {
   const duplicateFilter = useCallback(
     (id: string) => {
       const filter = filters.find(f => f.id === id);
-      if (!filter) return;
+      if (!filter) {
+return;
+}
 
       const now = new Date().toISOString();
       const newFilter: EmailFilter = {
@@ -109,7 +111,7 @@ export const useEmailFilters = (): EmailFiltersContext => {
         id: generateId(),
         name: `${filter.name} (Copy)`,
         createdAt: now,
-        updatedAt: now,
+        updatedAt: now
       };
       const newFilters = [...filters, newFilter];
       setFilters(newFilters);
@@ -124,12 +126,12 @@ export const useEmailFilters = (): EmailFiltersContext => {
       const newFilters = [...filters];
       const [removed] = newFilters.splice(fromIndex, 1);
       newFilters.splice(toIndex, 0, removed);
-      
+
       // Update priorities
       newFilters.forEach((f, idx) => {
         f.priority = idx;
       });
-      
+
       setFilters(newFilters);
       addNotification('success', 'Filters reordered');
     },
@@ -138,10 +140,10 @@ export const useEmailFilters = (): EmailFiltersContext => {
 
   const evaluateCondition = (
     condition: FilterCondition,
-    email: { 
-      from: string; 
-      to: string; 
-      subject: string; 
+    email: {
+      from: string;
+      to: string;
+      subject: string;
       body: string;
       hasAttachment: boolean;
       size: number;
@@ -152,14 +154,18 @@ export const useEmailFilters = (): EmailFiltersContext => {
     if (condition.field === 'size_greater') {
       const sizeMB = email.size / (1024 * 1024); // Convert bytes to MB
       const threshold = parseFloat(condition.value);
-      if (isNaN(threshold)) return false;
+      if (isNaN(threshold)) {
+return false;
+}
       return sizeMB > threshold;
     }
-    
+
     if (condition.field === 'size_less') {
       const sizeMB = email.size / (1024 * 1024); // Convert bytes to MB
       const threshold = parseFloat(condition.value);
-      if (isNaN(threshold)) return false;
+      if (isNaN(threshold)) {
+return false;
+}
       return sizeMB < threshold;
     }
 
@@ -216,10 +222,10 @@ export const useEmailFilters = (): EmailFiltersContext => {
   };
 
   const applyFilters = useCallback(
-    (email: { 
-      from: string; 
-      to: string; 
-      subject: string; 
+    (email: {
+      from: string;
+      to: string;
+      subject: string;
       body: string;
       hasAttachment: boolean;
       size: number;
@@ -231,7 +237,7 @@ export const useEmailFilters = (): EmailFiltersContext => {
         .sort((a, b) => a.priority - b.priority);
 
       for (const filter of sortedFilters) {
-        const results = filter.conditions.map(condition => 
+        const results = filter.conditions.map(condition =>
           evaluateCondition(condition, email)
         );
 
@@ -243,7 +249,7 @@ export const useEmailFilters = (): EmailFiltersContext => {
           setStats(prev => ({
             ...prev,
             emailsProcessed: prev.emailsProcessed + 1,
-            lastProcessed: new Date().toISOString(),
+            lastProcessed: new Date().toISOString()
           }));
           return { actions: filter.actions, matchedFilter: filter };
         }
@@ -269,6 +275,6 @@ export const useEmailFilters = (): EmailFiltersContext => {
     duplicateFilter,
     reorderFilters,
     applyFilters,
-    getFilterById,
+    getFilterById
   };
 };

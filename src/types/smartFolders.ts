@@ -219,7 +219,7 @@ export const DEFAULT_ORGANIZATION_CONFIG: OrganizationConfig = {
   minEmailsForFolder: 3,
   subjectWeight: 0.3,
   bodyWeight: 0.5,
-  senderWeight: 0.2,
+  senderWeight: 0.2
 };
 
 // ============================================================================
@@ -231,68 +231,68 @@ export const WORK_KEYWORDS = [
   'project', 'meeting', 'report', 'deadline', 'presentation',
   'proposal', 'invoice', 'contract', 'review', 'approval',
   'schedule', 'calendar', 'task', 'assign', 'deliverable',
-  'milestone', 'quarterly', 'annual', 'budget', 'team',
+  'milestone', 'quarterly', 'annual', 'budget', 'team'
 ];
 
 /** Personal email keywords */
 export const PERSONAL_KEYWORDS = [
   'family', 'friend', 'personal', 'birthday', 'wedding',
   'vacation', 'party', 'invitation', 'dinner', 'weekend',
-  'holiday', 'trip', 'photos', 'congratulations', 'thanks',
+  'holiday', 'trip', 'photos', 'congratulations', 'thanks'
 ];
 
 /** Promotional keywords */
 export const PROMOTIONS_KEYWORDS = [
   'sale', 'discount', 'offer', 'deal', 'promo', 'coupon',
   'limited time', 'special', 'exclusive', 'save', 'free',
-  'off', 'buy now', 'order', 'shop', 'store',
+  'off', 'buy now', 'order', 'shop', 'store'
 ];
 
 /** Financial keywords */
 export const FINANCE_KEYWORDS = [
   'bank', 'account', 'statement', 'payment', 'transaction',
   'deposit', 'withdrawal', 'transfer', 'credit', 'debit',
-  'invoice', 'receipt', 'tax', 'refund', 'investment',
+  'invoice', 'receipt', 'tax', 'refund', 'investment'
 ];
 
 /** Travel-related keywords */
 export const TRAVEL_KEYWORDS = [
   'flight', 'hotel', 'booking', 'reservation', 'itinerary',
   'airport', 'airline', 'car rental', 'vacation', 'trip',
-  'passport', 'visa', 'check-in', 'luggage', 'boarding',
+  'passport', 'visa', 'check-in', 'luggage', 'boarding'
 ];
 
 /** Shopping keywords */
 export const SHOPPING_KEYWORDS = [
   'order', 'shipped', 'delivery', 'purchase', 'confirm',
   'receipt', 'invoice', 'thank you', 'your order', 'item',
-  'package', 'tracking', 'store', 'checkout',
+  'package', 'tracking', 'store', 'checkout'
 ];
 
 /** Newsletter keywords */
 export const NEWSLETTER_KEYWORDS = [
   'newsletter', 'digest', 'weekly', 'monthly', 'update',
   'unsubscribe', 'bulletin', 'news', 'edition', 'issue',
-  'subscribe', 'alert', 'notification',
+  'subscribe', 'alert', 'notification'
 ];
 
 /** Priority indicators */
 export const URGENT_KEYWORDS = [
   'urgent', 'asap', 'immediate', 'emergency', 'critical',
-  'deadline', 'important', 'priority', 'attention',
+  'deadline', 'important', 'priority', 'attention'
 ];
 
 /** System email indicators */
 export const SYSTEM_SENDERS = [
   'noreply', 'no-reply', 'donotreply', 'support', 'notifications',
-  'alert', 'system', 'admin', 'bot', 'auto',
+  'alert', 'system', 'admin', 'bot', 'auto'
 ];
 
 /** Confidence thresholds */
 export const CONFIDENCE_THRESHOLDS = {
   HIGH: 0.8,
   MEDIUM: 0.6,
-  LOW: 0.4,
+  LOW: 0.4
 } as const;
 
 /** Topic extraction patterns */
@@ -301,5 +301,5 @@ export const TOPIC_PATTERNS = [
   /meeting\s+(?:about|regarding)?\s*(\w+)/i,
   /(\w+)\s+update/i,
   /(\w+)\s+review/i,
-  /(\w+)\s+report/i,
+  /(\w+)\s+report/i
 ];

@@ -262,7 +262,7 @@ export const DEFAULT_VOICE_CONFIG: VoiceAssistantConfig = {
   defaultSpeechRate: 1,
   defaultSpeechPitch: 1,
   defaultSpeechVolume: 1,
-  maxRetryAttempts: 3,
+  maxRetryAttempts: 3
 };
 
 /** Voice phrase patterns for common commands */
@@ -273,65 +273,65 @@ export const VOICE_PHRASE_PATTERNS: VoicePhrasePattern[] = [
       /compose\s+(?:an? )?email\s+(?:to\s+)?(.+)?/i,
       /write\s+(?:an? )?email\s+(?:to\s+)?(.+)?/i,
       /new\s+email\s+(?:to\s+)?(.+)?/i,
-      /send\s+(?:an? )?email\s+(?:to\s+)?(.+)?/i,
+      /send\s+(?:an? )?email\s+(?:to\s+)?(.+)?/i
     ],
     examples: [
       'Compose an email to John',
       'Write a new email',
-      'Send email to mary@example.com',
-    ],
+      'Send email to mary@example.com'
+    ]
   },
   {
     type: VoiceCommandType.REPLY,
     patterns: [
       /reply\s+(?:to\s+)?(?:this\s+)?email/i,
       /reply\s+(?:to\s+)?(.+)/i,
-      /respond\s+(?:to\s+)?(?:this\s+)?email/i,
+      /respond\s+(?:to\s+)?(?:this\s+)?email/i
     ],
     examples: [
       'Reply to this email',
       'Reply to John',
-      'Respond to this message',
-    ],
+      'Respond to this message'
+    ]
   },
   {
     type: VoiceCommandType.FORWARD,
     patterns: [
       /forward\s+(?:this\s+)?email\s+(?:to\s+)?(.+)?/i,
       /forward\s+(?:to\s+)?(.+)/i,
-      /send\s+this\s+to\s+(.+)/i,
+      /send\s+this\s+to\s+(.+)/i
     ],
     examples: [
       'Forward this email to John',
       'Forward to team@example.com',
-      'Send this to Sarah',
-    ],
+      'Send this to Sarah'
+    ]
   },
   {
     type: VoiceCommandType.ARCHIVE,
     patterns: [
       /archive\s+(?:this\s+)?email/i,
       /archive\s+it/i,
-      /move\s+(?:this\s+)?email\s+to\s+archive/i,
+      /move\s+(?:this\s+)?email\s+to\s+archive/i
     ],
     examples: [
       'Archive this email',
       'Archive it',
-      'Move to archive',
-    ],
+      'Move to archive'
+    ]
   },
   {
     type: VoiceCommandType.DELETE,
     patterns: [
       /delete\s+(?:this\s+)?email/i,
       /delete\s+it/i,
-      /remove\s+(?:this\s+)?email/i,
+      /remove\s+(?:this\s+)?email/i
     ],
     examples: [
       'Delete this email',
       'Delete it',
-      'Remove this message',
-    ],
+      'Remove this message'
+    ]
   },
   {
     type: VoiceCommandType.MARK,
@@ -340,14 +340,14 @@ export const VOICE_PHRASE_PATTERNS: VoicePhrasePattern[] = [
       /mark\s+(?:as\s+)?unread/i,
       /mark\s+(?:as\s+)?starred?/i,
       /mark\s+(?:as\s+)?important/i,
-      /un(?:star|important)/i,
+      /un(?:star|important)/i
     ],
     examples: [
       'Mark as read',
       'Mark as unread',
       'Star this email',
-      'Mark as important',
-    ],
+      'Mark as important'
+    ]
   },
   {
     type: VoiceCommandType.SEARCH,
@@ -355,13 +355,13 @@ export const VOICE_PHRASE_PATTERNS: VoicePhrasePattern[] = [
       /search\s+(?:for\s+)?(.+)/i,
       /find\s+(?:emails?\s+)?(?:from\s+)?(.+)/i,
       /look\s+(?:for\s+)?(.+)/i,
-      /show\s+me\s+(.+)/i,
+      /show\s+me\s+(.+)/i
     ],
     examples: [
       'Search for emails from John',
       'Find emails about project',
-      'Show me unread emails',
-    ],
+      'Show me unread emails'
+    ]
   },
   {
     type: VoiceCommandType.NAVIGATE,
@@ -369,40 +369,40 @@ export const VOICE_PHRASE_PATTERNS: VoicePhrasePattern[] = [
       /go\s+to\s+(.+)/i,
       /navigate\s+to\s+(.+)/i,
       /open\s+(?:folder\s+)?(.+)/i,
-      /show\s+(?:folder\s+)?(.+)/i,
+      /show\s+(?:folder\s+)?(.+)/i
     ],
     examples: [
       'Go to inbox',
       'Navigate to sent folder',
-      'Open spam folder',
-    ],
+      'Open spam folder'
+    ]
   },
   {
     type: VoiceCommandType.LABEL,
     patterns: [
       /label\s+(?:this\s+)?(?:email\s+)?(?:as\s+)?(.+)/i,
       /add\s+label\s+(.+)/i,
-      /tag\s+(?:this\s+)?(?:email\s+)?(?:with\s+)?(.+)/i,
+      /tag\s+(?:this\s+)?(?:email\s+)?(?:with\s+)?(.+)/i
     ],
     examples: [
       'Label this as important',
       'Add label project',
-      'Tag this with work',
-    ],
+      'Tag this with work'
+    ]
   },
   {
     type: VoiceCommandType.OPEN,
     patterns: [
       /open\s+(?:email\s+)?(?:from\s+)?(.+)/i,
       /read\s+(?:email\s+)?(?:from\s+)?(.+)/i,
-      /show\s+(?:email\s+)?(?:from\s+)?(.+)/i,
+      /show\s+(?:email\s+)?(?:from\s+)?(.+)/i
     ],
     examples: [
       'Open email from John',
       'Read email from Mary',
-      'Show me the latest email',
-    ],
-  },
+      'Show me the latest email'
+    ]
+  }
 ];
 
 /** Folder name variations for navigation */
@@ -414,7 +414,7 @@ export const FOLDER_NAME_VARIATIONS: Record<string, string[]> = {
   spam: ['spam', 'junk', 'trash'],
   trash: ['trash', 'deleted', 'bin'],
   starred: ['starred', 'important', 'favorites'],
-  important: ['important', 'priority', 'urgent'],
+  important: ['important', 'priority', 'urgent']
 };
 
 /** Confirmation phrases */
@@ -428,7 +428,7 @@ export const CONFIRMATION_PHRASES = [
   'go ahead',
   'okay',
   'ok',
-  'please do',
+  'please do'
 ];
 
 /** Cancellation phrases */
@@ -440,7 +440,7 @@ export const CANCELLATION_PHRASES = [
   'don\'t',
   'never mind',
   'forget it',
-  'abort',
+  'abort'
 ];
 
 /** Voice feedback messages */
@@ -452,5 +452,5 @@ export const VOICE_FEEDBACK_MESSAGES = {
   commandFailed: 'Sorry, I couldn\'t execute that command',
   unrecognized: 'Sorry, I didn\'t catch that',
   timeout: 'I didn\' hear anything',
-  error: 'An error occurred',
+  error: 'An error occurred'
 };

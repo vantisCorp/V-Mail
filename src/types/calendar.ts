@@ -43,7 +43,7 @@ export interface CalendarEvent {
   location?: string;
   status: EventStatus;
   visibility: EventVisibility;
-  
+
   // Dates
   start: {
     dateTime?: string; // ISO 8601 format with timezone
@@ -55,25 +55,25 @@ export interface CalendarEvent {
     date?: string;
     timeZone?: string;
   };
-  
+
   // Recurrence
   recurrence?: RecurrenceRule[];
-  
+
   // Attendees
   attendees?: EventAttendee[];
-  
+
   // Reminders
   reminders?: EventReminder[];
-  
+
   // Email integration
   sourceEmailId?: string;
-  
+
   // Metadata
   created: string;
   updated: string;
   creator?: EventCreator;
   organizer?: EventOrganizer;
-  
+
   // Colors and display
   colorId?: string;
   hangoutLink?: string;

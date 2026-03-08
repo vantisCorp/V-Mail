@@ -17,13 +17,13 @@ describe('useEmailAutomation Hook', () => {
   describe('Initialization', () => {
     it('should initialize with loading state', () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       expect(result.current.isLoading).toBe(true);
     });
 
     it('should load rules after initialization', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -35,7 +35,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should load mock rules', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -48,7 +48,7 @@ describe('useEmailAutomation Hook', () => {
   describe('Rule CRUD Operations', () => {
     it('should create a new rule', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -84,7 +84,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should update an existing rule', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -105,7 +105,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should delete a rule', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -123,7 +123,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should duplicate a rule', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -136,8 +136,8 @@ describe('useEmailAutomation Hook', () => {
       });
 
       expect(result.current.rules.length).toBe(initialCount + 1);
-      
-      const duplicate = result.current.rules.find(r => 
+
+      const duplicate = result.current.rules.find(r =>
         r.name === `${originalRule.name} (Copy)` && r.id !== originalRule.id
       );
       expect(duplicate).toBeDefined();
@@ -149,7 +149,7 @@ describe('useEmailAutomation Hook', () => {
   describe('Rule Status Management', () => {
     it('should activate a rule', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -167,7 +167,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should pause a rule', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -185,7 +185,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should disable a rule', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -204,7 +204,7 @@ describe('useEmailAutomation Hook', () => {
   describe('Condition Management', () => {
     it('should add a condition to a rule', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -226,7 +226,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should update a condition', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -249,7 +249,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should remove a condition', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -271,7 +271,7 @@ describe('useEmailAutomation Hook', () => {
   describe('Action Management', () => {
     it('should add an action to a rule', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -292,7 +292,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should update an action', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -313,7 +313,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should remove an action', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -332,7 +332,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should reorder actions', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -353,13 +353,13 @@ describe('useEmailAutomation Hook', () => {
   describe('Rule Testing', () => {
     it('should test a rule with matching conditions', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
 
       const rule = result.current.rules[0];
-      
+
       const testResult = await result.current.testRule(rule.id, {
         [rule.triggerType]: rule.conditions[0].value
       });
@@ -370,13 +370,13 @@ describe('useEmailAutomation Hook', () => {
 
     it('should test a rule with non-matching conditions', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
 
       const rule = result.current.rules[0];
-      
+
       const testResult = await result.current.testRule(rule.id, {
         [rule.triggerType]: 'non-matching-value'
       });
@@ -388,7 +388,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should return null for non-existent rule', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -401,7 +401,7 @@ describe('useEmailAutomation Hook', () => {
   describe('Rule Validation', () => {
     it('should validate a complete rule', () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       const validRule = {
         name: 'Valid Rule',
         status: RuleStatus.ACTIVE,
@@ -430,7 +430,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should validate rule with missing name', () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       const invalidRule = {
         name: '',
         status: RuleStatus.ACTIVE,
@@ -448,7 +448,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should validate rule with missing conditions', () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       const invalidRule = {
         name: 'Test Rule',
         status: RuleStatus.ACTIVE,
@@ -466,7 +466,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should validate rule with missing actions', () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       const invalidRule = {
         name: 'Test Rule',
         status: RuleStatus.ACTIVE,
@@ -492,7 +492,7 @@ describe('useEmailAutomation Hook', () => {
   describe('Rule Statistics', () => {
     it('should get statistics for a rule', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -508,7 +508,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should return null for non-existent rule', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -521,7 +521,7 @@ describe('useEmailAutomation Hook', () => {
   describe('Filtering and Search', () => {
     it('should filter rules by status', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -535,7 +535,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should filter rules by priority', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -549,7 +549,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should search rules by name', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -558,14 +558,14 @@ describe('useEmailAutomation Hook', () => {
         search: 'Auto-Reply'
       });
 
-      expect(filtered.every(r => 
+      expect(filtered.every(r =>
         r.name.toLowerCase().includes('auto-reply')
       )).toBe(true);
     });
 
     it('should apply multiple filters together', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -575,7 +575,7 @@ describe('useEmailAutomation Hook', () => {
         priority: RulePriority.HIGH
       });
 
-      expect(filtered.every(r => 
+      expect(filtered.every(r =>
         r.status === RuleStatus.ACTIVE && r.priority === RulePriority.HIGH
       )).toBe(true);
     });
@@ -584,7 +584,7 @@ describe('useEmailAutomation Hook', () => {
   describe('Category Management', () => {
     it('should create a category', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -605,7 +605,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should update a category', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -626,7 +626,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should delete a category', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -645,7 +645,7 @@ describe('useEmailAutomation Hook', () => {
   describe('Utility Functions', () => {
     it('should get rule by id', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -659,7 +659,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should get active rules', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -670,7 +670,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should get execution logs', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -682,7 +682,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should get execution logs for specific rule', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -698,7 +698,7 @@ describe('useEmailAutomation Hook', () => {
   describe('Refresh Functions', () => {
     it('should refresh rules', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -713,7 +713,7 @@ describe('useEmailAutomation Hook', () => {
 
     it('should refresh execution logs', async () => {
       const { result } = renderHook(() => useEmailAutomation());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });

@@ -36,7 +36,7 @@ import {
   SPAM_INDICATOR_WEIGHTS,
   URGENCY_PHRASES,
   SUSPICIOUS_TLDS,
-  MALICIOUS_URL_PATTERNS,
+  MALICIOUS_URL_PATTERNS
 } from '../types/anomalyDetection';
 
 export class AnomalyDetectionService {
@@ -70,7 +70,7 @@ export class AnomalyDetectionService {
       detectionsByType: {} as any,
       detectionsBySeverity: {} as any,
       accuracy: 0,
-      lastReset: Date.now(),
+      lastReset: Date.now()
     };
   }
 
@@ -95,7 +95,7 @@ export class AnomalyDetectionService {
       timestamp: Date.now(),
       description: '',
       indicators: [],
-      recommendedActions: [],
+      recommendedActions: []
     };
 
     try {
@@ -105,7 +105,7 @@ export class AnomalyDetectionService {
         this.analyzeSenderReputation(email),
         this.analyzeBehavior(email),
         this.scanLinks(email),
-        this.scanAttachments(email),
+        this.scanAttachments(email)
       ]);
 
       const [phishingResult, spamResult, senderResult, behaviorResult, linkResult, attachmentResult] = analyses;
@@ -236,7 +236,9 @@ export class AnomalyDetectionService {
       indicatorCount++;
     }
 
-    if (indicatorCount === 0) return null;
+    if (indicatorCount === 0) {
+return null;
+}
 
     const riskScore = totalScore / indicatorCount;
     const confidence = Math.min(riskScore + 0.1, 1);
@@ -281,7 +283,9 @@ export class AnomalyDetectionService {
       indicatorCount++;
     }
 
-    if (indicatorCount === 0) return null;
+    if (indicatorCount === 0) {
+return null;
+}
 
     const riskScore = totalScore / indicatorCount;
     const confidence = Math.min(riskScore + 0.1, 1);
@@ -290,7 +294,9 @@ export class AnomalyDetectionService {
   }
 
   private async analyzeSenderReputation(email: any): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
-    if (!email.sender || !email.sender.email) return null;
+    if (!email.sender || !email.sender.email) {
+return null;
+}
 
     const senderEmail = email.sender.email;
     const domain = senderEmail.split('@')[1];
@@ -305,7 +311,7 @@ export class AnomalyDetectionService {
         type: SenderFlag.NEW_SENDER,
         value: 'New sender detected',
         confidence: 0.6,
-        source: 'sender-reputation',
+        source: 'sender-reputation'
       });
       riskScore += 0.3;
       confidence = 0.7;
@@ -317,24 +323,30 @@ export class AnomalyDetectionService {
         type: SenderFlag.SUSPICIOUS_DOMAIN,
         value: `Suspicious domain: ${domain}`,
         confidence: 0.8,
-        source: 'sender-reputation',
+        source: 'sender-reputation'
       });
       riskScore += 0.7;
       confidence = 0.9;
     }
 
-    if (indicators.length === 0) return null;
+    if (indicators.length === 0) {
+return null;
+}
 
     return { riskScore, confidence, indicators };
   }
 
   private async analyzeBehavior(email: any): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
-    if (!email.sender || !email.sender.email) return null;
+    if (!email.sender || !email.sender.email) {
+return null;
+}
 
     const senderEmail = email.sender.email;
     const baseline = this.behavioralBaselines.get(senderEmail);
 
-    if (!baseline) return null;
+    if (!baseline) {
+return null;
+}
 
     const indicators: AnomalyIndicator[] = [];
     let totalDeviation = 0;
@@ -348,7 +360,9 @@ export class AnomalyDetectionService {
       indicatorCount++;
     }
 
-    if (indicatorCount === 0) return null;
+    if (indicatorCount === 0) {
+return null;
+}
 
     const riskScore = totalDeviation / indicatorCount;
     const confidence = 0.7;
@@ -358,10 +372,12 @@ export class AnomalyDetectionService {
 
   private async scanLinks(email: any): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     const body = email.body || '';
-    const urlRegex = /https?:\/\/[^\s<>"{}|\\^`\[\]]+/g;
+    const urlRegex = /https?:\/\/[^\s<>"{}|\\^`[\]]+/g;
     const urls = body.match(urlRegex);
 
-    if (!urls || urls.length === 0) return null;
+    if (!urls || urls.length === 0) {
+return null;
+}
 
     const indicators: AnomalyIndicator[] = [];
     let riskScore = 0;
@@ -374,20 +390,24 @@ export class AnomalyDetectionService {
           type: LinkCategory.SUSPICIOUS,
           value: url,
           confidence: linkAnalysis.riskScore,
-          source: 'link-scan',
+          source: 'link-scan'
         });
         riskScore = Math.max(riskScore, linkAnalysis.riskScore);
         confidence = Math.max(confidence, linkAnalysis.riskScore);
       }
     }
 
-    if (indicators.length === 0) return null;
+    if (indicators.length === 0) {
+return null;
+}
 
     return { riskScore, confidence, indicators };
   }
 
   private async scanAttachments(email: any): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
-    if (!email.attachments || email.attachments.length === 0) return null;
+    if (!email.attachments || email.attachments.length === 0) {
+return null;
+}
 
     const indicators: AnomalyIndicator[] = [];
     let riskScore = 0;
@@ -400,14 +420,16 @@ export class AnomalyDetectionService {
           type: 'MALICIOUS_ATTACHMENT',
           value: attachment.filename,
           confidence: attachmentAnalysis.riskScore,
-          source: 'attachment-scan',
+          source: 'attachment-scan'
         });
         riskScore = Math.max(riskScore, attachmentAnalysis.riskScore);
         confidence = Math.max(confidence, attachmentAnalysis.riskScore);
       }
     }
 
-    if (indicators.length === 0) return null;
+    if (indicators.length === 0) {
+return null;
+}
 
     return { riskScore, confidence, indicators };
   }
@@ -417,7 +439,7 @@ export class AnomalyDetectionService {
       url,
       isMalicious: false,
       riskScore: 0,
-      categories: [],
+      categories: []
     };
 
     try {
@@ -463,20 +485,20 @@ export class AnomalyDetectionService {
       size: attachment.size || 0,
       isMalicious: false,
       riskScore: 0,
-      indicators: [],
+      indicators: []
     };
 
     // Check for suspicious file extensions
     const suspiciousExtensions = ['.exe', '.bat', '.cmd', '.scr', '.pif', '.vbs', '.js'];
     const ext = result.filename.slice(result.filename.lastIndexOf('.')).toLowerCase();
-    
+
     if (suspiciousExtensions.includes(ext)) {
       result.riskScore += 0.7;
       result.isMalicious = result.riskScore >= 0.7;
       result.indicators.push({
         type: 'SUSPICIOUS_EXTENSION',
         value: ext,
-        confidence: 0.7,
+        confidence: 0.7
       });
     }
 
@@ -488,7 +510,7 @@ export class AnomalyDetectionService {
       result.indicators.push({
         type: 'SUSPICIOUS_MIME_TYPE',
         value: result.mimeType,
-        confidence: 0.6,
+        confidence: 0.6
       });
     }
 
@@ -496,7 +518,9 @@ export class AnomalyDetectionService {
   }
 
   private checkDomainMismatch(email: any): AnomalyIndicator | null {
-    if (!email.sender || !email.sender.name || !email.sender.email) return null;
+    if (!email.sender || !email.sender.name || !email.sender.email) {
+return null;
+}
 
     const senderName = email.sender.name.toLowerCase();
     const senderEmail = email.sender.email.toLowerCase();
@@ -508,7 +532,7 @@ export class AnomalyDetectionService {
         type: PhishingIndicatorType.DOMAIN_MISMATCH,
         value: 'Display name does not match domain',
         confidence: 0.6,
-        source: 'phishing-detection',
+        source: 'phishing-detection'
       };
     }
 
@@ -526,7 +550,7 @@ export class AnomalyDetectionService {
           type: PhishingIndicatorType.URGENCY_LANGUAGE,
           value: `Found urgency phrase: "${phrase}"`,
           confidence: 0.7,
-          source: 'phishing-detection',
+          source: 'phishing-detection'
         };
       }
     }
@@ -544,7 +568,7 @@ export class AnomalyDetectionService {
           type: PhishingIndicatorType.CREDENTIAL_REQUEST,
           value: `Credential request detected: "${word}"`,
           confidence: 0.9,
-          source: 'phishing-detection',
+          source: 'phishing-detection'
         };
       }
     }
@@ -554,10 +578,12 @@ export class AnomalyDetectionService {
 
   private checkSuspiciousUrls(email: any): AnomalyIndicator[] {
     const body = email.body || '';
-    const urlRegex = /https?:\/\/[^\s<>"{}|\\^`\[\]]+/g;
+    const urlRegex = /https?:\/\/[^\s<>"{}|\\^`[\]]+/g;
     const urls = body.match(urlRegex);
 
-    if (!urls) return [];
+    if (!urls) {
+return [];
+}
 
     const indicators: AnomalyIndicator[] = [];
     for (const url of urls) {
@@ -567,7 +593,7 @@ export class AnomalyDetectionService {
           type: PhishingIndicatorType.SUSPICIOUS_URL,
           value: url,
           confidence: analysis.riskScore,
-          source: 'link-scan',
+          source: 'link-scan'
         });
       }
     }
@@ -585,7 +611,7 @@ export class AnomalyDetectionService {
           type: PhishingIndicatorType.GENERIC_GREETING,
           value: `Generic greeting: "${greeting}"`,
           confidence: 0.5,
-          source: 'phishing-detection',
+          source: 'phishing-detection'
         };
       }
     }
@@ -599,10 +625,12 @@ export class AnomalyDetectionService {
     const combined = subject + ' ' + body;
 
     const promoWords = ['free', 'discount', 'offer', 'sale', 'promotion', 'limited time', 'exclusive', 'save'];
-    
+
     let count = 0;
     for (const word of promoWords) {
-      if (combined.includes(word)) count++;
+      if (combined.includes(word)) {
+count++;
+}
     }
 
     if (count >= 3) {
@@ -610,7 +638,7 @@ export class AnomalyDetectionService {
         type: SpamIndicatorType.PROMOTIONAL_LANGUAGE,
         value: `Multiple promotional words found: ${count}`,
         confidence: 0.6,
-        source: 'spam-detection',
+        source: 'spam-detection'
       };
     }
 
@@ -630,7 +658,7 @@ export class AnomalyDetectionService {
         type: SpamIndicatorType.EXCESSIVE_CAPS,
         value: 'Excessive capitalization detected',
         confidence: 0.7,
-        source: 'spam-detection',
+        source: 'spam-detection'
       };
     }
 
@@ -649,7 +677,7 @@ export class AnomalyDetectionService {
         type: SpamIndicatorType.EXCESSIVE_PUNCTUATION,
         value: 'Excessive punctuation detected',
         confidence: 0.6,
-        source: 'spam-detection',
+        source: 'spam-detection'
       };
     }
 
@@ -669,7 +697,7 @@ export class AnomalyDetectionService {
         type: SpamIndicatorType.PRICE_MENTION,
         value: `Multiple price mentions: ${prices.length}`,
         confidence: 0.5,
-        source: 'spam-detection',
+        source: 'spam-detection'
       };
     }
 
@@ -691,7 +719,7 @@ export class AnomalyDetectionService {
         type: PatternType.UNUSUAL_VOLUME,
         value: `Unusual email volume: ${recentCount.toFixed(0)} vs baseline ${baseline.avgEmailsPerDay.toFixed(0)}`,
         confidence: 0.8,
-        source: 'behavioral-analysis',
+        source: 'behavioral-analysis'
       };
     }
 
@@ -703,7 +731,7 @@ export class AnomalyDetectionService {
       return {
         type: AnomalyType.UNKNOWN,
         severity: AnomalySeverity.INFO,
-        description: 'No significant anomalies detected',
+        description: 'No significant anomalies detected'
       };
     }
 
@@ -732,9 +760,13 @@ export class AnomalyDetectionService {
 
     // Determine severity
     let severity = AnomalySeverity.LOW;
-    if (result.riskScore >= 0.8) severity = AnomalySeverity.CRITICAL;
-    else if (result.riskScore >= 0.6) severity = AnomalySeverity.HIGH;
-    else if (result.riskScore >= 0.4) severity = AnomalySeverity.MEDIUM;
+    if (result.riskScore >= 0.8) {
+severity = AnomalySeverity.CRITICAL;
+} else if (result.riskScore >= 0.6) {
+severity = AnomalySeverity.HIGH;
+} else if (result.riskScore >= 0.4) {
+severity = AnomalySeverity.MEDIUM;
+}
 
     return { type, severity, description };
   }
@@ -747,7 +779,7 @@ export class AnomalyDetectionService {
         type: ActionType.DELETE_EMAIL,
         description: 'Delete this email immediately',
         priority: 1,
-        automated: false,
+        automated: false
       });
     }
 
@@ -756,13 +788,13 @@ export class AnomalyDetectionService {
         type: ActionType.REPORT_PHISHING,
         description: 'Report as phishing attempt',
         priority: 1,
-        automated: false,
+        automated: false
       });
       actions.push({
         type: ActionType.BLOCK_SENDER,
         description: 'Block the sender',
         priority: 2,
-        automated: true,
+        automated: true
       });
     }
 
@@ -771,7 +803,7 @@ export class AnomalyDetectionService {
         type: ActionType.MARK_AS_SPAM,
         description: 'Mark as spam',
         priority: 1,
-        automated: true,
+        automated: true
       });
     }
 
@@ -779,7 +811,7 @@ export class AnomalyDetectionService {
       type: ActionType.ALERT_USER,
       description: 'Alert user about potential threat',
       priority: 2,
-      automated: false,
+      automated: false
     });
 
     return actions.sort((a, b) => a.priority - b.priority);

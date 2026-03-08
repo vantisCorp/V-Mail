@@ -1,7 +1,7 @@
 /**
  * usePredictiveTyping Hook
  * Part of v1.4.0 AI-Powered Intelligence
- * 
+ *
  * Provides AI-powered text completion and suggestion while composing emails.
  */
 
@@ -22,11 +22,11 @@ import {
   DEFAULT_USER_PREFERENCES,
   TypingStatistics,
   PredictiveTypingConfig,
-  DEFAULT_PREDICTIVE_TYPING_CONFIG,
+  DEFAULT_PREDICTIVE_TYPING_CONFIG
 } from '../types/predictiveTyping';
 import {
   LanguageModel,
-  createLanguageModel,
+  createLanguageModel
 } from '../ml/languageModel';
 
 // ============================================================================
@@ -82,18 +82,18 @@ export function usePredictiveTyping(
     isLoading: false,
     error: null,
     currentSuggestions: null,
-    statistics: null,
+    statistics: null
   });
 
   // Refs
   const modelRef = useRef<LanguageModel | null>(null);
   const preferencesRef = useRef<UserPreferences>({
     ...DEFAULT_USER_PREFERENCES,
-    ...initialPreferences,
+    ...initialPreferences
   });
   const configRef = useRef<PredictiveTypingConfig>({
     ...DEFAULT_PREDICTIVE_TYPING_CONFIG,
-    ...initialConfig,
+    ...initialConfig
   });
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -115,7 +115,7 @@ export function usePredictiveTyping(
         suggestions: [],
         processingTime: 0,
         modelVersion: '',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
     }
 
@@ -127,7 +127,7 @@ export function usePredictiveTyping(
       setState(prev => ({
         ...prev,
         isLoading: false,
-        currentSuggestions: result,
+        currentSuggestions: result
       }));
 
       return result;
@@ -136,14 +136,14 @@ export function usePredictiveTyping(
       setState(prev => ({
         ...prev,
         isLoading: false,
-        error: errorMessage,
+        error: errorMessage
       }));
 
       return {
         suggestions: [],
         processingTime: 0,
         modelVersion: '',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
     }
   }, []);
@@ -152,7 +152,9 @@ export function usePredictiveTyping(
    * Accept a suggestion
    */
   const acceptSuggestion = useCallback((suggestionId: string): void => {
-    if (!state.currentSuggestions) return;
+    if (!state.currentSuggestions) {
+return;
+}
 
     const suggestion = state.currentSuggestions.suggestions.find(s => s.id === suggestionId);
     if (suggestion) {
@@ -179,7 +181,9 @@ export function usePredictiveTyping(
    * Analyze text for statistics
    */
   const analyzeText = useCallback((text: string): void => {
-    if (!modelRef.current) return;
+    if (!modelRef.current) {
+return;
+}
 
     const statistics = modelRef.current.getTypingStatistics(text);
     setState(prev => ({ ...prev, statistics }));
@@ -189,7 +193,9 @@ export function usePredictiveTyping(
    * Learn from user's text
    */
   const learnFromText = useCallback((text: string, acceptedSuggestion?: Suggestion): void => {
-    if (!modelRef.current) return;
+    if (!modelRef.current) {
+return;
+}
 
     modelRef.current.learnFromUser(text, acceptedSuggestion);
   }, []);
@@ -226,7 +232,7 @@ export function usePredictiveTyping(
   const updatePreferences = useCallback((preferences: Partial<UserPreferences>): void => {
     preferencesRef.current = {
       ...preferencesRef.current,
-      ...preferences,
+      ...preferences
     };
   }, []);
 
@@ -243,9 +249,9 @@ export function usePredictiveTyping(
   const updateConfig = useCallback((config: Partial<PredictiveTypingConfig>): void => {
     configRef.current = {
       ...configRef.current,
-      ...config,
+      ...config
     };
-    
+
     // Reinitialize model with new config
     if (modelRef.current) {
       modelRef.current = createLanguageModel(configRef.current);
@@ -275,7 +281,7 @@ export function usePredictiveTyping(
         commonWords: {},
         commonPhrases: {},
         typingSpeed: 0,
-        acceptanceRate: 0,
+        acceptanceRate: 0
       };
     }
 
@@ -338,7 +344,7 @@ export function usePredictiveTyping(
     getStatistics,
 
     // Cache management
-    clearCache,
+    clearCache
   };
 }
 

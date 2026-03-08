@@ -14,11 +14,11 @@ import {
   LabelSuggestion,
   SuggestionFeedback,
   SuggestionStatistics,
-  TrainingExample,
+  TrainingExample
 } from '../types/smartSuggestions';
 import {
   SuggestionEngine,
-  createSuggestionEngine,
+  createSuggestionEngine
 } from '../ml/suggestionEngine';
 
 interface UseSmartSuggestionsState {
@@ -65,7 +65,7 @@ const initialStatistics: SuggestionStatistics = {
   byType: {} as any,
   byCategory: {},
   topSuggestions: [],
-  recentFeedback: [],
+  recentFeedback: []
 };
 
 export function useSmartSuggestions(
@@ -76,7 +76,7 @@ export function useSmartSuggestions(
     error: null,
     currentSuggestions: [],
     lastResult: null,
-    statistics: { ...initialStatistics },
+    statistics: { ...initialStatistics }
   });
 
   const engineRef = useRef<SuggestionEngine | null>(null);
@@ -99,7 +99,7 @@ export function useSmartSuggestions(
         setState(prev => ({
           ...prev,
           currentSuggestions: cachedResult.suggestions,
-          lastResult: cachedResult,
+          lastResult: cachedResult
         }));
         return cachedResult;
       }
@@ -115,7 +115,7 @@ export function useSmartSuggestions(
           isLoading: false,
           currentSuggestions: result.suggestions,
           lastResult: result,
-          statistics: updateStatistics(prev.statistics, result),
+          statistics: updateStatistics(prev.statistics, result)
         }));
 
         return result;
@@ -124,7 +124,7 @@ export function useSmartSuggestions(
         setState(prev => ({
           ...prev,
           isLoading: false,
-          error: errorMessage,
+          error: errorMessage
         }));
         throw error;
       }
@@ -157,7 +157,7 @@ export function useSmartSuggestions(
           ...prev,
           isLoading: false,
           currentSuggestions: lastResult?.suggestions || [],
-          lastResult,
+          lastResult
         }));
 
         return results;
@@ -166,7 +166,7 @@ export function useSmartSuggestions(
         setState(prev => ({
           ...prev,
           isLoading: false,
-          error: errorMessage,
+          error: errorMessage
         }));
         throw error;
       }
@@ -176,57 +176,73 @@ export function useSmartSuggestions(
 
   const getReplySuggestions = useCallback((emailId: string): ReplySuggestion[] => {
     const cached = suggestionsCache.current.get(emailId);
-    if (!cached) return [];
+    if (!cached) {
+return [];
+}
     return cached.suggestions.filter((s): s is ReplySuggestion => s.type === SuggestionType.REPLY);
   }, []);
 
   const getQuickActionSuggestions = useCallback((emailId: string): QuickActionSuggestion[] => {
     const cached = suggestionsCache.current.get(emailId);
-    if (!cached) return [];
+    if (!cached) {
+return [];
+}
     return cached.suggestions.filter((s): s is QuickActionSuggestion => s.type === SuggestionType.QUICK_ACTION);
   }, []);
 
   const getFollowUpSuggestions = useCallback((emailId: string): FollowUpSuggestion[] => {
     const cached = suggestionsCache.current.get(emailId);
-    if (!cached) return [];
+    if (!cached) {
+return [];
+}
     return cached.suggestions.filter((s): s is FollowUpSuggestion => s.type === SuggestionType.FOLLOW_UP);
   }, []);
 
   const getAttachmentSuggestions = useCallback((emailId: string): AttachmentSuggestion[] => {
     const cached = suggestionsCache.current.get(emailId);
-    if (!cached) return [];
+    if (!cached) {
+return [];
+}
     return cached.suggestions.filter((s): s is AttachmentSuggestion => s.type === SuggestionType.ATTACHMENT);
   }, []);
 
   const getRecipientSuggestions = useCallback((emailId: string): RecipientSuggestion[] => {
     const cached = suggestionsCache.current.get(emailId);
-    if (!cached) return [];
+    if (!cached) {
+return [];
+}
     return cached.suggestions.filter((s): s is RecipientSuggestion => s.type === SuggestionType.RECIPIENT);
   }, []);
 
   const getLabelSuggestions = useCallback((emailId: string): LabelSuggestion[] => {
     const cached = suggestionsCache.current.get(emailId);
-    if (!cached) return [];
+    if (!cached) {
+return [];
+}
     return cached.suggestions.filter((s): s is LabelSuggestion => s.type === SuggestionType.LABEL);
   }, []);
 
   const findSuggestionById = useCallback((id: string): Suggestion | null => {
     for (const [, result] of suggestionsCache.current) {
       const suggestion = result.suggestions.find(s => s.id === id);
-      if (suggestion) return suggestion;
+      if (suggestion) {
+return suggestion;
+}
     }
     return null;
   }, []);
 
   const acceptSuggestion = useCallback((suggestionId: string) => {
     const suggestion = findSuggestionById(suggestionId);
-    if (!suggestion) return;
+    if (!suggestion) {
+return;
+}
 
     const feedback: SuggestionFeedback = {
       suggestionId,
       accepted: true,
       timestamp: new Date(),
-      rating: 5,
+      rating: 5
     };
 
     feedbackHistory.current.push(feedback);
@@ -236,7 +252,7 @@ export function useSmartSuggestions(
         suggestion,
         feedback,
         emailContext: state.lastResult.context,
-        outcome: 'positive',
+        outcome: 'positive'
       };
       trainingExamples.current.push(example);
       engineRef.current?.addTrainingExample(example);
@@ -251,20 +267,22 @@ export function useSmartSuggestions(
           prev.statistics.acceptedSuggestions + 1,
           prev.statistics.rejectedSuggestions
         ),
-        recentFeedback: [...prev.statistics.recentFeedback.slice(-9), feedback],
-      },
+        recentFeedback: [...prev.statistics.recentFeedback.slice(-9), feedback]
+      }
     }));
   }, [state.lastResult, findSuggestionById]);
 
   const rejectSuggestion = useCallback((suggestionId: string) => {
     const suggestion = findSuggestionById(suggestionId);
-    if (!suggestion) return;
+    if (!suggestion) {
+return;
+}
 
     const feedback: SuggestionFeedback = {
       suggestionId,
       accepted: false,
       timestamp: new Date(),
-      rating: 1,
+      rating: 1
     };
 
     feedbackHistory.current.push(feedback);
@@ -274,7 +292,7 @@ export function useSmartSuggestions(
         suggestion,
         feedback,
         emailContext: state.lastResult.context,
-        outcome: 'negative',
+        outcome: 'negative'
       };
       trainingExamples.current.push(example);
       engineRef.current?.addTrainingExample(example);
@@ -289,14 +307,16 @@ export function useSmartSuggestions(
           prev.statistics.acceptedSuggestions,
           prev.statistics.rejectedSuggestions + 1
         ),
-        recentFeedback: [...prev.statistics.recentFeedback.slice(-9), feedback],
-      },
+        recentFeedback: [...prev.statistics.recentFeedback.slice(-9), feedback]
+      }
     }));
   }, [state.lastResult, findSuggestionById]);
 
   const addFeedback = useCallback((suggestionId: string, feedback: SuggestionFeedback) => {
     const suggestion = findSuggestionById(suggestionId);
-    if (!suggestion) return;
+    if (!suggestion) {
+return;
+}
 
     feedbackHistory.current.push(feedback);
 
@@ -312,7 +332,7 @@ export function useSmartSuggestions(
         suggestion,
         feedback,
         emailContext: state.lastResult.context,
-        outcome,
+        outcome
       };
       trainingExamples.current.push(example);
       engineRef.current?.addTrainingExample(example);
@@ -322,8 +342,8 @@ export function useSmartSuggestions(
       ...prev,
       statistics: {
         ...prev.statistics,
-        recentFeedback: [...prev.statistics.recentFeedback.slice(-9), feedback],
-      },
+        recentFeedback: [...prev.statistics.recentFeedback.slice(-9), feedback]
+      }
     }));
   }, [state.lastResult, findSuggestionById]);
 
@@ -331,7 +351,7 @@ export function useSmartSuggestions(
     setState(prev => ({
       ...prev,
       currentSuggestions: [],
-      lastResult: null,
+      lastResult: null
     }));
   }, []);
 
@@ -356,7 +376,7 @@ export function useSmartSuggestions(
     engineRef.current?.resetUserBehavior();
     setState(prev => ({
       ...prev,
-      statistics: { ...initialStatistics },
+      statistics: { ...initialStatistics }
     }));
   }, []);
 
@@ -367,7 +387,7 @@ export function useSmartSuggestions(
   const resetStatistics = useCallback(() => {
     setState(prev => ({
       ...prev,
-      statistics: { ...initialStatistics },
+      statistics: { ...initialStatistics }
     }));
   }, []);
 
@@ -394,7 +414,7 @@ export function useSmartSuggestions(
     addTrainingExample,
     resetLearning,
     getStatistics,
-    resetStatistics,
+    resetStatistics
   };
 }
 

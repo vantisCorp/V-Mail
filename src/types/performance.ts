@@ -1,6 +1,6 @@
 /**
  * Performance Optimizations Type Definitions
- * 
+ *
  * Provides types for performance monitoring, optimization strategies,
  * and caching mechanisms.
  */

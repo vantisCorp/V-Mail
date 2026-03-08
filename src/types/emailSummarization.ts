@@ -185,6 +185,10 @@ export interface SummarizationPreferences {
  * Configuration for summarization model
  */
 export interface SummarizationConfig {
+  /** Default summary type */
+  defaultSummaryType?: SummaryType;
+  /** Default summary length */
+  defaultSummaryLength?: SummaryLength;
   /** Model settings */
   model: {
     name: string;
@@ -220,31 +224,33 @@ export interface SummarizationConfig {
  * Default configuration
  */
 export const DEFAULT_SUMMARIZATION_CONFIG: SummarizationConfig = {
+  defaultSummaryType: SummaryType.EXTRACTIVE,
+  defaultSummaryLength: SummaryLength.MEDIUM,
   model: {
     name: 'summarizer',
     version: '1.0.0',
     maxTokens: 500,
-    temperature: 0.7,
+    temperature: 0.7
   },
   performance: {
     cacheEnabled: true,
     cacheSize: 100,
-    maxProcessingTime: 500,
+    maxProcessingTime: 500
   },
   summarization: {
     maxSentences: 5,
     minSentenceLength: 10,
     maxSentenceLength: 200,
     keywordDensity: 0.1,
-    positionWeight: 0.3,
+    positionWeight: 0.3
   },
   features: {
     actionItemExtraction: true,
     keyPointExtraction: true,
     decisionExtraction: true,
     questionExtraction: true,
-    sentimentAnalysis: false,
-  },
+    sentimentAnalysis: false
+  }
 };
 
 /**
@@ -257,7 +263,7 @@ export const DEFAULT_SUMMARIZATION_PREFERENCES: SummarizationPreferences = {
   includeKeyPoints: true,
   includeDecisions: true,
   includeQuestions: true,
-  minImportance: 0.5,
+  minImportance: 0.5
 };
 
 // ============================================================================
@@ -272,20 +278,20 @@ export const ACTION_ITEM_PATTERNS = [
   /\b(follow up|followup|follow-up):\s+(.*?)(?:\.|$)/gi,
   /\b(review|check|verify):\s+(.*?)(?:\.|$)/gi,
   /\b(complete|finish|done):\s+(.*?)(?:\.|$)/gi,
-  /\b(send|email|write):\s+(.*?)(?:\.|$)/gi,
+  /\b(send|email|write):\s+(.*?)(?:\.|$)/gi
 ];
 
 export const DECISION_PATTERNS = [
   /\b(decided|agreed|concluded|resolved):\s+(.*?)(?:\.|$)/gi,
   /\b(decision|agreement|conclusion|resolution):\s+(.*?)(?:\.|$)/gi,
   /\b(will|going to|shall):\s+(.*?)(?:\.|$)/gi,
-  /\b(not|won't|will not):\s+(.*?)(?:\.|$)/gi,
+  /\b(not|won't|will not):\s+(.*?)(?:\.|$)/gi
 ];
 
 export const QUESTION_PATTERNS = [
   /\?/g,
   /\b(what|where|when|why|who|how|which|whose)\b/gi,
-  /\b(can|could|would|should|will)\s+(.*?)(?:\?|$)/gi,
+  /\b(can|could|would|should|will)\s+(.*?)(?:\?|$)/gi
 ];
 
 // ============================================================================
@@ -303,7 +309,7 @@ export const KEY_POINT_KEYWORDS = [
   'goal', 'objective', 'target', 'aim', 'purpose',
   'result', 'outcome', 'impact', 'effect', 'consequence',
   'next steps', 'following', 'subsequent', 'then', 'after that',
-  'conclusion', 'summary', 'recap', 'overview', 'in summary',
+  'conclusion', 'summary', 'recap', 'overview', 'in summary'
 ];
 
 export const STOP_WORDS = [
@@ -320,7 +326,7 @@ export const STOP_WORDS = [
   'each', 'every', 'both', 'few', 'more', 'most', 'other', 'some', 'such',
   'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very',
   'just', 'also', 'now', 'here', 'there', 'then', 'once', 'never', 'always',
-  'often', 'sometimes', 'usually', 'still', 'already', 'yet', 'again',
+  'often', 'sometimes', 'usually', 'still', 'already', 'yet', 'again'
 ];
 
 // ============================================================================
@@ -331,7 +337,7 @@ export const SUMMARY_TEMPLATES = {
   very_short: 'TL;DR: {summary}',
   short: 'Summary: {summary}',
   medium: '## Summary\n\n{summary}\n\n## Key Points\n\n{key_points}\n\n## Action Items\n\n{action_items}',
-  long: '## Thread Summary\n\n{summary}\n\n## Key Points\n\n{key_points}\n\n## Action Items\n\n{action_items}\n\n## Decisions Made\n\n{decisions}\n\n## Questions\n\n{questions}',
+  long: '## Thread Summary\n\n{summary}\n\n## Key Points\n\n{key_points}\n\n## Action Items\n\n{action_items}\n\n## Decisions Made\n\n{decisions}\n\n## Questions\n\n{questions}'
 };
 
 export const TLDR_PHRASES = [
@@ -340,5 +346,5 @@ export const TLDR_PHRASES = [
   'Bottom line:',
   'TL;DR:',
   'Key takeaway:',
-  'Main point:',
+  'Main point:'
 ];

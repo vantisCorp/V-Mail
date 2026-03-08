@@ -23,7 +23,7 @@ export const EmailFilterSettings: React.FC<EmailFilterSettingsProps> = ({ onClos
       matchAll: true,
       priority: filters.length,
       createdAt: '',
-      updatedAt: '',
+      updatedAt: ''
     });
     setIsEditing(true);
   };
@@ -51,7 +51,7 @@ export const EmailFilterSettings: React.FC<EmailFilterSettingsProps> = ({ onClos
         conditions: filter.conditions,
         actions: filter.actions,
         matchAll: filter.matchAll,
-        priority: filter.priority,
+        priority: filter.priority
       });
     }
     setIsEditing(false);
@@ -247,11 +247,11 @@ const FilterEditForm: React.FC<FilterEditFormProps> = ({ filter, onSave, onCance
   const [newCondition, setNewCondition] = useState<Omit<FilterCondition, 'id'>>({
     field: 'from',
     operator: 'contains',
-    value: '',
+    value: ''
   });
   const [newAction, setNewAction] = useState<Omit<FilterAction, 'id'>>({
     type: 'move_to_folder',
-    value: '',
+    value: ''
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -268,14 +268,16 @@ const FilterEditForm: React.FC<FilterEditFormProps> = ({ filter, onSave, onCance
   };
 
   const addCondition = () => {
-    if (!newCondition.value.trim()) return;
+    if (!newCondition.value.trim()) {
+return;
+}
     const condition: FilterCondition = {
       id: `cond-${Date.now()}`,
-      ...newCondition,
+      ...newCondition
     };
     setFormData({
       ...formData,
-      conditions: [...formData.conditions, condition],
+      conditions: [...formData.conditions, condition]
     });
     setNewCondition({ field: 'from', operator: 'contains', value: '' });
   };
@@ -283,18 +285,18 @@ const FilterEditForm: React.FC<FilterEditFormProps> = ({ filter, onSave, onCance
   const removeCondition = (id: string) => {
     setFormData({
       ...formData,
-      conditions: formData.conditions.filter(c => c.id !== id),
+      conditions: formData.conditions.filter(c => c.id !== id)
     });
   };
 
   const addAction = () => {
     const action: FilterAction = {
       id: `act-${Date.now()}`,
-      ...newAction,
+      ...newAction
     };
     setFormData({
       ...formData,
-      actions: [...formData.actions, action],
+      actions: [...formData.actions, action]
     });
     setNewAction({ type: 'move_to_folder', value: '' });
   };
@@ -302,7 +304,7 @@ const FilterEditForm: React.FC<FilterEditFormProps> = ({ filter, onSave, onCance
   const removeAction = (id: string) => {
     setFormData({
       ...formData,
-      actions: formData.actions.filter(a => a.id !== id),
+      actions: formData.actions.filter(a => a.id !== id)
     });
   };
 

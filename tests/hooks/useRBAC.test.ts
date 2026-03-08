@@ -28,11 +28,11 @@ describe('useRBAC Hook', () => {
 
     it('should load data after initial render', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
-      
+
       expect(result.current.isLoading).toBe(false);
       expect(result.current.userRoleAssignments.length).toBeGreaterThan(0);
       expect(result.current.customPermissionSets.length).toBeGreaterThan(0);
@@ -45,7 +45,7 @@ describe('useRBAC Hook', () => {
   describe('Permission Checking', () => {
     it('should check if user has permission', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -57,7 +57,7 @@ describe('useRBAC Hook', () => {
 
     it('should return false for non-existent user', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -69,7 +69,7 @@ describe('useRBAC Hook', () => {
 
     it('should check custom permissions', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -82,7 +82,7 @@ describe('useRBAC Hook', () => {
 
     it('should check all permissions', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -93,7 +93,7 @@ describe('useRBAC Hook', () => {
 
     it('should check any permission', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -107,7 +107,7 @@ describe('useRBAC Hook', () => {
   describe('Role Hierarchy', () => {
     it('should return correct role levels', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -122,7 +122,7 @@ describe('useRBAC Hook', () => {
 
     it('should check if role can assign to another', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -136,7 +136,7 @@ describe('useRBAC Hook', () => {
 
     it('should compare role levels', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -150,7 +150,7 @@ describe('useRBAC Hook', () => {
   describe('User Role Management', () => {
     it('should assign a new role', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -171,7 +171,7 @@ describe('useRBAC Hook', () => {
 
     it('should create audit log when assigning role', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -192,7 +192,7 @@ describe('useRBAC Hook', () => {
 
     it('should revoke a role', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -207,7 +207,7 @@ describe('useRBAC Hook', () => {
 
     it('should update user permissions', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -229,7 +229,7 @@ describe('useRBAC Hook', () => {
   describe('Custom Permission Sets', () => {
     it('should create a custom permission set', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -254,7 +254,7 @@ describe('useRBAC Hook', () => {
 
     it('should update a custom permission set', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -273,7 +273,7 @@ describe('useRBAC Hook', () => {
 
     it('should delete a custom permission set', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -303,7 +303,7 @@ describe('useRBAC Hook', () => {
   describe('Access Policies', () => {
     it('should create an access policy', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -329,7 +329,7 @@ describe('useRBAC Hook', () => {
 
     it('should update an access policy', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -346,7 +346,7 @@ describe('useRBAC Hook', () => {
 
     it('should delete an access policy', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -378,7 +378,7 @@ describe('useRBAC Hook', () => {
   describe('Permission Requests', () => {
     it('should approve a permission request', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -397,7 +397,7 @@ describe('useRBAC Hook', () => {
 
     it('should reject a permission request', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -422,7 +422,7 @@ describe('useRBAC Hook', () => {
   describe('Settings', () => {
     it('should have default settings', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -434,7 +434,7 @@ describe('useRBAC Hook', () => {
 
     it('should update settings', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -450,7 +450,7 @@ describe('useRBAC Hook', () => {
   describe('Statistics', () => {
     it('should calculate correct stats', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -462,7 +462,7 @@ describe('useRBAC Hook', () => {
 
     it('should count users by role', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -475,7 +475,7 @@ describe('useRBAC Hook', () => {
   describe('Utility Functions', () => {
     it('should get users by role', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -487,7 +487,7 @@ describe('useRBAC Hook', () => {
 
     it('should get permissions by category', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -499,7 +499,7 @@ describe('useRBAC Hook', () => {
 
     it('should filter audit logs', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -510,7 +510,7 @@ describe('useRBAC Hook', () => {
 
     it('should filter audit logs by user', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -523,7 +523,7 @@ describe('useRBAC Hook', () => {
   describe('Refresh Functions', () => {
     it('should refresh user role assignments', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -537,7 +537,7 @@ describe('useRBAC Hook', () => {
 
     it('should refresh audit logs', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -551,7 +551,7 @@ describe('useRBAC Hook', () => {
 
     it('should refresh stats', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -567,7 +567,7 @@ describe('useRBAC Hook', () => {
   describe('Edge Cases', () => {
     it('should return null for invalid custom permission set update', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -578,7 +578,7 @@ describe('useRBAC Hook', () => {
 
     it('should return null for invalid access policy update', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -589,7 +589,7 @@ describe('useRBAC Hook', () => {
 
     it('should return false for invalid revoke', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -600,7 +600,7 @@ describe('useRBAC Hook', () => {
 
     it('should return false for invalid permission update', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -614,7 +614,7 @@ describe('useRBAC Hook', () => {
 
     it('should return false for deleting non-existent custom permission set', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -625,7 +625,7 @@ describe('useRBAC Hook', () => {
 
     it('should return false for deleting non-existent access policy', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -636,7 +636,7 @@ describe('useRBAC Hook', () => {
 
     it('should return false for approving non-existent request', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });
@@ -647,7 +647,7 @@ describe('useRBAC Hook', () => {
 
     it('should return false for rejecting non-existent request', async () => {
       const { result } = renderHook(() => useRBAC());
-      
+
       await act(async () => {
         await new Promise(resolve => setTimeout(resolve, 600));
       });

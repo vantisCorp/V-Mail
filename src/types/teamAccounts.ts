@@ -1,30 +1,30 @@
 /**
  * Team Account Types for V-Mail v1.2.0
- * 
+ *
  * This module defines comprehensive types for team account management,
  * including member roles, team settings, and billing information.
  */
 
-export type TeamMemberRole = 
+export type TeamMemberRole =
   | 'owner'        // Team owner - full access
   | 'admin'        // Team administrator - can manage members and settings
   | 'manager'      // Team manager - can manage members and view reports
   | 'member'       // Team member - standard access
   | 'viewer';      // Team viewer - read-only access
 
-export type TeamMemberStatus = 
+export type TeamMemberStatus =
   | 'active'       // Member is active in the team
   | 'pending'      // Invitation sent, not yet accepted
   | 'suspended'    // Member temporarily suspended
   | 'removed';     // Member has been removed from team
 
-export type TeamBillingPlan = 
+export type TeamBillingPlan =
   | 'free'         // Free plan with limited members
   | 'starter'      // Starter plan - up to 10 members
   | 'professional' // Professional plan - up to 50 members
   | 'enterprise';  // Enterprise plan - unlimited members
 
-export type TeamSubscriptionStatus = 
+export type TeamSubscriptionStatus =
   | 'trial'        // Trial period
   | 'active'       // Active subscription
   | 'past_due'     // Payment past due

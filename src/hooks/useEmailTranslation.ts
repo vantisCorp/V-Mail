@@ -6,7 +6,7 @@ import {
   TranslationStatistics,
   SupportedLanguage,
   TranslationTone,
-  TranslationQuality,
+  TranslationQuality
 } from '../types/emailTranslation';
 import { TranslationService } from '../services/translationService';
 
@@ -44,19 +44,19 @@ export function useEmailTranslation(initialConfig?: Partial<TranslationConfig>):
     enableToneDetection: true,
     enableAlternatives: false,
     maxLength: 10000,
-    enableLearning: true,
+    enableLearning: true
   };
   const [config, setConfig] = useState<TranslationConfig>({
     ...defaultConfig,
-    ...initialConfig,
+    ...initialConfig
   });
-  
+
   const serviceRef = useRef<TranslationService>(new TranslationService());
 
   const translateEmail = useCallback(async (context: TranslationContext) => {
     setIsTranslating(true);
     setError(null);
-    
+
     try {
       const result = await serviceRef.current.translateEmail(context);
       setTranslation(result.bodyTranslation);
@@ -77,7 +77,7 @@ export function useEmailTranslation(initialConfig?: Partial<TranslationConfig>):
   ) => {
     setIsTranslating(true);
     setError(null);
-    
+
     try {
       const result = await serviceRef.current.translateText(
         text,
@@ -138,6 +138,6 @@ export function useEmailTranslation(initialConfig?: Partial<TranslationConfig>):
     detectTone,
     updateConfig,
     resetStatistics,
-    clearError,
+    clearError
   };
 }

@@ -55,7 +55,9 @@ const EmailTemplatesManager: React.FC = () => {
             {template.isFavorite && <span className="favorite-badge">★</span>}
           </div>
         </div>
-        <button className="btn-favorite" onClick={(e) => { e.stopPropagation(); toggleFavorite(template.id); }}>
+        <button className="btn-favorite" onClick={(e) => {
+ e.stopPropagation(); toggleFavorite(template.id);
+}}>
           {template.isFavorite ? '★' : '☆'}
         </button>
       </div>
@@ -78,10 +80,16 @@ const EmailTemplatesManager: React.FC = () => {
         {template.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
       </div>
       <div className="template-actions">
-        <button className="btn-icon" onClick={(e) => { e.stopPropagation(); setShowPreview(true); }}>👁️</button>
-        <button className="btn-icon" onClick={(e) => { e.stopPropagation(); cloneTemplate({ sourceTemplateId: template.id, name: `Copy of ${template.name}` }); }}>📋</button>
+        <button className="btn-icon" onClick={(e) => {
+ e.stopPropagation(); setShowPreview(true);
+}}>👁️</button>
+        <button className="btn-icon" onClick={(e) => {
+ e.stopPropagation(); cloneTemplate({ sourceTemplateId: template.id, name: `Copy of ${template.name}` });
+}}>📋</button>
         {!template.isSystem && (
-          <button className="btn-icon danger" onClick={(e) => { e.stopPropagation(); deleteTemplate(template.id); }}>🗑️</button>
+          <button className="btn-icon danger" onClick={(e) => {
+ e.stopPropagation(); deleteTemplate(template.id);
+}}>🗑️</button>
         )}
       </div>
     </div>

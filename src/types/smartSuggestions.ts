@@ -267,17 +267,17 @@ export const DEFAULT_SUGGESTION_CONFIG: SuggestionConfig = {
     SuggestionType.QUICK_ACTION,
     SuggestionType.FOLLOW_UP,
     SuggestionType.LABEL,
-    SuggestionType.RECIPIENT,
+    SuggestionType.RECIPIENT
   ],
   priorityWeights: {
     high: 1.0,
     medium: 0.7,
-    low: 0.4,
+    low: 0.4
   },
   responseTimeLimit: 100,
   enableFollowUpDetection: true,
   enableAttachmentSuggestions: true,
-  enableRecipientSuggestions: true,
+  enableRecipientSuggestions: true
 };
 
 export interface SuggestionFeedback {
@@ -321,64 +321,64 @@ export const REPLY_TEMPLATES: Record<ReplyCategory, string[]> = {
   [ReplyCategory.ACKNOWLEDGEMENT]: [
     'Thank you for your email. I have received it and will review it shortly.',
     'Got it, thanks for reaching out.',
-    'I acknowledge receipt of your message and will get back to you soon.',
+    'I acknowledge receipt of your message and will get back to you soon.'
   ],
   [ReplyCategory.CONFIRMATION]: [
     'Thank you for confirming. I will proceed as discussed.',
     'Confirmed! I\'ll take care of this right away.',
-    'This is confirmed. Please let me know if you need anything else.',
+    'This is confirmed. Please let me know if you need anything else.'
   ],
   [ReplyCategory.REJECTION]: [
     'Thank you for your request, but I\'m unable to accommodate it at this time.',
     'I appreciate you reaching out, but I\'ll have to decline.',
-    'Unfortunately, I cannot proceed with this request. Thank you for understanding.',
+    'Unfortunately, I cannot proceed with this request. Thank you for understanding.'
   ],
   [ReplyCategory.FOLLOW_UP]: [
     'Thanks for the update. I\'ll follow up with you next week.',
     'I\'ll be in touch soon to discuss this further.',
-    'Let\'s schedule a follow-up meeting to discuss next steps.',
+    'Let\'s schedule a follow-up meeting to discuss next steps.'
   ],
   [ReplyCategory.THANK_YOU]: [
     'Thank you so much for your help with this.',
     'I really appreciate your assistance and time.',
-    'Many thanks for your support on this matter.',
+    'Many thanks for your support on this matter.'
   ],
   [ReplyCategory.APOLOGY]: [
     'I sincerely apologize for any inconvenience this may have caused.',
     'Please accept my apologies for this oversight.',
-    'I\'m sorry for the delay and any inconvenience it may have caused.',
+    'I\'m sorry for the delay and any inconvenience it may have caused.'
   ],
   [ReplyCategory.REQUEST]: [
     'Could you please provide more information about this?',
     'I would appreciate your help with the following:',
-    'Would it be possible to get an update on this matter?',
+    'Would it be possible to get an update on this matter?'
   ],
   [ReplyCategory.INFORMATION]: [
     'Here\'s the information you requested:',
     'I\'m happy to provide the details below:',
-    'Please find the information you asked for attached.',
+    'Please find the information you asked for attached.'
   ],
   [ReplyCategory.SCHEDULING]: [
     'Would you be available for a meeting next week?',
     'Let me know what times work best for you to discuss this.',
-    'I\'d like to schedule a call to go over the details.',
+    'I\'d like to schedule a call to go over the details.'
   ],
   [ReplyCategory.CANCELLATION]: [
     'I\'m sorry to inform you that I need to cancel our meeting.',
     'Due to unforeseen circumstances, I won\'t be able to attend.',
-    'I regret to inform you that I must cancel our scheduled appointment.',
+    'I regret to inform you that I must cancel our scheduled appointment.'
   ],
   [ReplyCategory.QUESTION]: [
     'I have a question regarding this matter.',
     'Could you clarify something for me?',
-    'I\'d like to ask about a few details.',
+    'I\'d like to ask about a few details.'
   ],
   [ReplyCategory.INQUIRY]: [
     'I\'m writing to inquire about',
     'I\'d like to request information about',
-    'Could you please provide details regarding',
+    'Could you please provide details regarding'
   ],
-  [ReplyCategory.CUSTOM]: [],
+  [ReplyCategory.CUSTOM]: []
 };
 
 export const QUICK_ACTION_PATTERNS: Record<QuickActionType, string[]> = {
@@ -387,76 +387,76 @@ export const QUICK_ACTION_PATTERNS: Record<QuickActionType, string[]> = {
     'done',
     'resolved',
     'closed',
-    'finished',
+    'finished'
   ],
   [QuickActionType.DELETE]: [
     'spam',
     'unsubscribe',
     'unwanted',
     'junk',
-    'not interested',
+    'not interested'
   ],
   [QuickActionType.MARK_READ]: [
     'read',
-    'seen',
+    'seen'
   ],
   [QuickActionType.MARK_UNREAD]: [
     'unread',
-    'not seen',
+    'not seen'
   ],
   [QuickActionType.STAR]: [
     'important',
     'urgent',
     'priority',
     'critical',
-    'asap',
+    'asap'
   ],
   [QuickActionType.UNSTAR]: [
     'unimportant',
-    'not priority',
+    'not priority'
   ],
   [QuickActionType.SNOOZE]: [
     'later',
     'not now',
     'next week',
     'next month',
-    'follow up',
+    'follow up'
   ],
   [QuickActionType.MOVE_TO_INBOX]: [
     'inbox',
-    'move to inbox',
+    'move to inbox'
   ],
   [QuickActionType.MOVE_TO_SPAM]: [
     'lottery',
     'winner',
     'free money',
     'congratulations',
-    'claim prize',
+    'claim prize'
   ],
   [QuickActionType.FORWARD]: [
     'fyi',
     'for your information',
     'please share',
-    'pass this on',
+    'pass this on'
   ],
   [QuickActionType.LABEL]: [
     'project',
     'client',
     'invoice',
     'contract',
-    'meeting',
+    'meeting'
   ],
   [QuickActionType.REPLY_ALL]: [
     'reply all',
-    'respond to all',
+    'respond to all'
   ],
   [QuickActionType.FLAG]: [
     'flag',
-    'flagged',
+    'flagged'
   ],
   [QuickActionType.PIN]: [
     'pin',
     'pinned',
-    'top',
-  ],
+    'top'
+  ]
 };

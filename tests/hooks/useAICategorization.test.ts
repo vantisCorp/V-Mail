@@ -29,7 +29,7 @@ describe('useAICategorization', () => {
         body: 'Hi, we have a project meeting tomorrow at 2pm. Please attend.',
         timestamp: new Date().toISOString(),
         priority: 'normal',
-        attachments: [],
+        attachments: []
       };
 
       let categorizationResult;
@@ -58,7 +58,7 @@ describe('useAICategorization', () => {
         body: 'Don\'t miss our amazing sale! 50% off everything. Buy now before it expires. Unsubscribe: link',
         timestamp: new Date().toISOString(),
         priority: 'low',
-        attachments: [],
+        attachments: []
       };
 
       let categorizationResult;
@@ -81,7 +81,7 @@ describe('useAICategorization', () => {
         body: 'Please review the attached Q4 report and provide feedback by Friday.',
         timestamp: new Date().toISOString(),
         priority: 'high',
-        attachments: [{ type: 'application/pdf' }],
+        attachments: [{ type: 'application/pdf' }]
       };
 
       let categorizationResult;
@@ -104,7 +104,7 @@ describe('useAICategorization', () => {
         body: 'Hey! Want to grab dinner this weekend? Let me know what works for you.',
         timestamp: new Date().toISOString(),
         priority: 'normal',
-        attachments: [],
+        attachments: []
       };
 
       let categorizationResult;
@@ -127,7 +127,7 @@ describe('useAICategorization', () => {
         body: 'Your monthly bank statement for October is now available. View your payment history.',
         timestamp: new Date().toISOString(),
         priority: 'normal',
-        attachments: [],
+        attachments: []
       };
 
       let categorizationResult;
@@ -151,7 +151,7 @@ describe('useAICategorization', () => {
           to: ['user@example.com'],
           subject: 'Project Meeting',
           body: 'Meeting at 2pm',
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toISOString()
         },
         {
           id: 'email-2',
@@ -159,7 +159,7 @@ describe('useAICategorization', () => {
           to: ['user@example.com'],
           subject: 'SALE!',
           body: 'Buy now',
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toISOString()
         },
         {
           id: 'email-3',
@@ -167,8 +167,8 @@ describe('useAICategorization', () => {
           to: ['user@example.com'],
           subject: 'Dinner?',
           body: 'Let\'s eat',
-          timestamp: new Date().toISOString(),
-        },
+          timestamp: new Date().toISOString()
+        }
       ];
 
       let batchResult;
@@ -193,10 +193,10 @@ describe('useAICategorization', () => {
           to: ['user@example.com'],
           subject: 'Project Meeting',
           body: 'Meeting at 2pm',
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toISOString()
         },
         // Invalid email
-        null as any,
+        null as any
       ];
 
       let batchResult;
@@ -222,7 +222,7 @@ describe('useAICategorization', () => {
           keywords: ['mom', 'dad', 'sister', 'brother'],
           senders: ['family@domain.com'],
           subjects: ['family'],
-          examples: [],
+          examples: []
         });
       });
 
@@ -245,7 +245,7 @@ describe('useAICategorization', () => {
           keywords: [],
           senders: [],
           subjects: [],
-          examples: [],
+          examples: []
         });
         categoryId = category.id;
       });
@@ -253,7 +253,7 @@ describe('useAICategorization', () => {
       act(() => {
         result.current.updateCustomCategory(categoryId, {
           name: 'Extended Family',
-          description: 'Emails from extended family members',
+          description: 'Emails from extended family members'
         });
       });
 
@@ -275,7 +275,7 @@ describe('useAICategorization', () => {
           keywords: [],
           senders: [],
           subjects: [],
-          examples: [],
+          examples: []
         });
         categoryId = category.id;
       });
@@ -305,10 +305,10 @@ describe('useAICategorization', () => {
               field: 'subject',
               operator: 'contains',
               value: 'urgent',
-              caseSensitive: false,
-            },
+              caseSensitive: false
+            }
           ],
-          logicOperator: 'or',
+          logicOperator: 'or'
         });
       });
 
@@ -330,10 +330,10 @@ describe('useAICategorization', () => {
               field: 'subject',
               operator: 'contains',
               value: 'urgent',
-              caseSensitive: false,
-            },
+              caseSensitive: false
+            }
           ],
-          logicOperator: 'or',
+          logicOperator: 'or'
         });
       });
 
@@ -343,7 +343,7 @@ describe('useAICategorization', () => {
         to: ['user@example.com'],
         subject: 'URGENT: Action required',
         body: 'Please respond immediately',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
 
       let categorizationResult;
@@ -367,7 +367,7 @@ describe('useAICategorization', () => {
           enabled: true,
           priority: 1,
           conditions: [],
-          logicOperator: 'or',
+          logicOperator: 'or'
         });
         ruleId = rule.id;
       });
@@ -375,7 +375,7 @@ describe('useAICategorization', () => {
       act(() => {
         result.current.updateRule(ruleId, {
           enabled: false,
-          name: 'Disabled Rule',
+          name: 'Disabled Rule'
         });
       });
 
@@ -395,7 +395,7 @@ describe('useAICategorization', () => {
           enabled: true,
           priority: 1,
           conditions: [],
-          logicOperator: 'or',
+          logicOperator: 'or'
         });
         ruleId = rule.id;
       });
@@ -419,7 +419,7 @@ describe('useAICategorization', () => {
           emailId: 'email-1',
           categoryId: EmailCategory.WORK,
           userId: 'user-1',
-          feedbackType: 'positive',
+          feedbackType: 'positive'
         });
       });
 
@@ -430,7 +430,7 @@ describe('useAICategorization', () => {
 
     it('should not trigger auto-training when disabled', () => {
       const { result } = renderHook(() => useAICategorization({
-        enableAutoTraining: false,
+        enableAutoTraining: false
       }));
 
       act(() => {
@@ -438,7 +438,7 @@ describe('useAICategorization', () => {
           emailId: 'email-1',
           categoryId: EmailCategory.WORK,
           userId: 'user-1',
-          feedbackType: 'positive',
+          feedbackType: 'positive'
         });
       });
 
@@ -458,7 +458,7 @@ describe('useAICategorization', () => {
           to: ['user@example.com'],
           subject: 'Work email',
           body: 'Project update',
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toISOString()
         },
         {
           id: 'email-2',
@@ -466,8 +466,8 @@ describe('useAICategorization', () => {
           to: ['user@example.com'],
           subject: 'Personal email',
           body: 'Let\'s meet',
-          timestamp: new Date().toISOString(),
-        },
+          timestamp: new Date().toISOString()
+        }
       ];
 
       await act(async () => {
@@ -505,7 +505,7 @@ describe('useAICategorization', () => {
 
     it('should throw error when categorization disabled', async () => {
       const { result } = renderHook(() => useAICategorization({
-        enabled: false,
+        enabled: false
       }));
 
       const email = {
@@ -514,7 +514,7 @@ describe('useAICategorization', () => {
         to: ['user@example.com'],
         subject: 'Test',
         body: 'Test body',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
 
       await expect(async () => {
@@ -528,7 +528,7 @@ describe('useAICategorization', () => {
       act(() => {
         result.current.updateConfig({
           minConfidence: 0.8,
-          maxAlternatives: 2,
+          maxAlternatives: 2
         });
       });
 
@@ -547,7 +547,7 @@ describe('useAICategorization', () => {
         to: ['user@example.com'],
         subject: 'Test',
         body: 'Test',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
 
       await act(async () => {

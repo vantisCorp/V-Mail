@@ -17,7 +17,7 @@ interface EmailThreadListProps {
 export const EmailThreadList: React.FC<EmailThreadListProps> = ({
   emails,
   onEmailClick,
-  onThreadClick,
+  onThreadClick
 }) => {
   const {
     threads,
@@ -39,7 +39,7 @@ export const EmailThreadList: React.FC<EmailThreadListProps> = ({
     updatePreferences,
     updateFilter,
     clearFilter,
-    isThreadExpanded,
+    isThreadExpanded
   } = useEmailThreading(emails);
 
   // Keyboard shortcuts

@@ -17,13 +17,13 @@ import {
   SemanticSearchOptions,
   NaturalLanguageQuery,
   SmartCategorization,
-  AutoTaggingResult,
+  AutoTaggingResult
 } from '../types/enhancedSearch';
 import { searchEngineService } from '../services/searchEngineService';
 
 /**
  * Enhanced Search Hook
- * 
+ *
  * Provides advanced search functionality including:
  * - Simple and advanced search
  * - Search suggestions
@@ -55,7 +55,7 @@ const generateMockEmails = (): SearchResultItem[] => {
       labels: ['Work', 'Important'],
       folder: 'Inbox',
       relevanceScore: 95,
-      highlights: [{ field: 'subject', fragments: ['<mark>Project</mark> <mark>Update</mark>'] }],
+      highlights: [{ field: 'subject', fragments: ['<mark>Project</mark> <mark>Update</mark>'] }]
     },
     {
       id: 'email-2',
@@ -72,7 +72,7 @@ const generateMockEmails = (): SearchResultItem[] => {
       labels: ['Meeting'],
       folder: 'Inbox',
       relevanceScore: 88,
-      highlights: [{ field: 'subject', fragments: ['<mark>Meeting</mark> <mark>Reminder</mark>'] }],
+      highlights: [{ field: 'subject', fragments: ['<mark>Meeting</mark> <mark>Reminder</mark>'] }]
     },
     {
       id: 'email-3',
@@ -89,7 +89,7 @@ const generateMockEmails = (): SearchResultItem[] => {
       labels: ['Finance', 'Invoice'],
       folder: 'Inbox',
       relevanceScore: 75,
-      highlights: [],
+      highlights: []
     },
     {
       id: 'email-4',
@@ -106,7 +106,7 @@ const generateMockEmails = (): SearchResultItem[] => {
       labels: ['Updates'],
       folder: 'Inbox',
       relevanceScore: 70,
-      highlights: [],
+      highlights: []
     },
     {
       id: 'email-5',
@@ -123,8 +123,8 @@ const generateMockEmails = (): SearchResultItem[] => {
       labels: ['Legal', 'Contract'],
       folder: 'Inbox',
       relevanceScore: 85,
-      highlights: [],
-    },
+      highlights: []
+    }
   ];
 };
 
@@ -137,7 +137,7 @@ const generateMockSuggestions = (): SearchSuggestion[] => {
     { id: 'sug-5', text: 'Work', type: SuggestionType.LABEL, count: 156 },
     { id: 'sug-6', text: 'has:attachment', type: SuggestionType.SMART_SUGGESTION, description: 'Emails with attachments' },
     { id: 'sug-7', text: 'is:unread', type: SuggestionType.SMART_SUGGESTION, description: 'Unread emails' },
-    { id: 'sug-8', text: 'from:manager', type: SuggestionType.SMART_SUGGESTION, description: 'From manager' },
+    { id: 'sug-8', text: 'from:manager', type: SuggestionType.SMART_SUGGESTION, description: 'From manager' }
   ];
 };
 
@@ -155,7 +155,7 @@ const generateMockSavedSearches = (): SavedSearch[] => {
         isStarred: true,
         sortOrder: SortOrder.DATE_DESC,
         pageSize: 20,
-        page: 1,
+        page: 1
       },
       createdBy: 'user-1',
       createdAt: '2025-01-10T00:00:00Z',
@@ -163,7 +163,7 @@ const generateMockSavedSearches = (): SavedSearch[] => {
       lastUsed: '2025-01-20T08:00:00Z',
       useCount: 25,
       isPinned: true,
-      notificationEnabled: false,
+      notificationEnabled: false
     },
     {
       id: 'saved-2',
@@ -176,11 +176,11 @@ const generateMockSavedSearches = (): SavedSearch[] => {
         dateRange: {
           start: new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString(),
           end: new Date().toISOString(),
-          field: 'received',
+          field: 'received'
         },
         sortOrder: SortOrder.DATE_DESC,
         pageSize: 20,
-        page: 1,
+        page: 1
       },
       createdBy: 'user-1',
       createdAt: '2025-01-05T00:00:00Z',
@@ -189,8 +189,8 @@ const generateMockSavedSearches = (): SavedSearch[] => {
       useCount: 12,
       isPinned: false,
       notificationEnabled: true,
-      notificationFrequency: 'daily',
-    },
+      notificationFrequency: 'daily'
+    }
   ];
 };
 
@@ -207,7 +207,7 @@ export const useEnhancedSearch = () => {
     expandSynonyms: true,
     includeRelated: true,
     minRelevanceScore: 50,
-    contentUnderstanding: true,
+    contentUnderstanding: true
   });
 
   // Mock emails for search
@@ -237,12 +237,16 @@ export const useEnhancedSearch = () => {
         const matchSnippet = email.snippet.toLowerCase().includes(searchText);
         const matchFrom = email.from.email.toLowerCase().includes(searchText) ||
           email.from.name.toLowerCase().includes(searchText);
-        if (!matchSubject && !matchSnippet && !matchFrom) return false;
+        if (!matchSubject && !matchSnippet && !matchFrom) {
+return false;
+}
       }
 
       // Scope filtering
       if (query.scope && query.scope !== SearchScope.ALL) {
-        if (query.scope === SearchScope.INBOX && email.folder !== 'Inbox') return false;
+        if (query.scope === SearchScope.INBOX && email.folder !== 'Inbox') {
+return false;
+}
       }
 
       return true;
@@ -256,7 +260,7 @@ export const useEnhancedSearch = () => {
       pageSize: 20,
       totalPages: Math.ceil(filteredEmails.length / 20),
       hasMore: false,
-      executionTime: Date.now() - startTime,
+      executionTime: Date.now() - startTime
     };
 
     setSearchResults(results);
@@ -311,28 +315,28 @@ export const useEnhancedSearch = () => {
 
     // Attachment filter
     if (query.hasAttachments !== undefined) {
-      filteredEmails = filteredEmails.filter(email => 
+      filteredEmails = filteredEmails.filter(email =>
         email.hasAttachments === query.hasAttachments
       );
     }
 
     // Unread filter
     if (query.isUnread !== undefined) {
-      filteredEmails = filteredEmails.filter(email => 
+      filteredEmails = filteredEmails.filter(email =>
         email.isRead !== query.isUnread
       );
     }
 
     // Starred filter
     if (query.isStarred !== undefined) {
-      filteredEmails = filteredEmails.filter(email => 
+      filteredEmails = filteredEmails.filter(email =>
         email.isStarred === query.isStarred
       );
     }
 
     // Labels filter
     if (query.labels && query.labels.length > 0) {
-      filteredEmails = filteredEmails.filter(email => 
+      filteredEmails = filteredEmails.filter(email =>
         query.labels!.some(label => email.labels.includes(label))
       );
     }
@@ -372,7 +376,7 @@ export const useEnhancedSearch = () => {
       pageSize,
       totalPages: Math.ceil(filteredEmails.length / pageSize),
       hasMore: startIndex + pageSize < filteredEmails.length,
-      executionTime: Date.now() - startTime,
+      executionTime: Date.now() - startTime
     };
 
     setSearchResults(results);
@@ -446,14 +450,16 @@ export const useEnhancedSearch = () => {
     scope: SearchScope,
     resultCount: number
   ): void => {
-    if (!queryText.trim()) return;
+    if (!queryText.trim()) {
+return;
+}
 
     const historyItem: SearchHistoryItem = {
       id: `history-${Date.now()}`,
       query: queryText,
       scope,
       timestamp: new Date().toISOString(),
-      resultCount,
+      resultCount
     };
 
     setSearchHistory(prev => {
@@ -473,7 +479,7 @@ export const useEnhancedSearch = () => {
     }
 
     const queryLower = query.toLowerCase();
-    
+
     // Combine recent searches and other suggestions
     const historySuggestions: SearchSuggestion[] = searchHistory
       .filter(h => h.query.toLowerCase().includes(queryLower))
@@ -482,10 +488,10 @@ export const useEnhancedSearch = () => {
         id: `h-${h.id}`,
         text: h.query,
         type: SuggestionType.RECENT_SEARCH,
-        count: h.resultCount,
+        count: h.resultCount
       }));
 
-    const matchingSuggestions = suggestions.filter(s => 
+    const matchingSuggestions = suggestions.filter(s =>
       s.text.toLowerCase().includes(queryLower)
     );
 
@@ -501,8 +507,8 @@ export const useEnhancedSearch = () => {
         text: s.text,
         type: s.type as SuggestionType,
         description: s.description,
-        count: s.count,
-      })),
+        count: s.count
+      }))
     ];
 
     return [...new Map(allSuggestions.map(s => [s.text, s])).values()].slice(0, 10);
@@ -515,7 +521,7 @@ export const useEnhancedSearch = () => {
     const original = query;
     let text = query;
     const filters: SearchFilter[] = [];
-    let scope = SearchScope.ALL;
+    const scope = SearchScope.ALL;
     let intent: 'search' | 'filter' | 'action' | 'unknown' = 'search';
     let confidence = 70;
 
@@ -526,7 +532,7 @@ export const useEnhancedSearch = () => {
       filters.push({
         field: SearchFieldType.FROM,
         operator: SearchOperator.CONTAINS,
-        value: fromMatch[1],
+        value: fromMatch[1]
       });
       text = text.replace(fromMatch[0], '').trim();
       confidence += 10;
@@ -538,7 +544,7 @@ export const useEnhancedSearch = () => {
       filters.push({
         field: SearchFieldType.TO,
         operator: SearchOperator.CONTAINS,
-        value: toMatch[1],
+        value: toMatch[1]
       });
       text = text.replace(toMatch[0], '').trim();
       confidence += 10;
@@ -550,7 +556,7 @@ export const useEnhancedSearch = () => {
       filters.push({
         field: SearchFieldType.SUBJECT,
         operator: SearchOperator.CONTAINS,
-        value: subjectMatch[1],
+        value: subjectMatch[1]
       });
       text = text.replace(subjectMatch[0], '').trim();
       confidence += 10;
@@ -584,9 +590,9 @@ export const useEnhancedSearch = () => {
         text,
         filters,
         scope,
-        intent,
+        intent
       },
-      confidence: Math.min(confidence, 100),
+      confidence: Math.min(confidence, 100)
     };
   }, []);
 
@@ -601,7 +607,7 @@ export const useEnhancedSearch = () => {
       query: {
         ...payload.query,
         pageSize: 20,
-        page: 1,
+        page: 1
       },
       createdBy: 'user-1',
       createdAt: new Date().toISOString(),
@@ -609,7 +615,7 @@ export const useEnhancedSearch = () => {
       useCount: 0,
       isPinned: false,
       notificationEnabled: payload.notificationEnabled || false,
-      notificationFrequency: payload.notificationFrequency,
+      notificationFrequency: payload.notificationFrequency
     };
 
     setSavedSearches(prev => [...prev, newSavedSearch]);
@@ -642,7 +648,9 @@ export const useEnhancedSearch = () => {
     id: string
   ): Promise<SearchResults> => {
     const saved = savedSearches.find(s => s.id === id);
-    if (!saved) throw new Error('Saved search not found');
+    if (!saved) {
+throw new Error('Saved search not found');
+}
 
     // Update use count
     setSavedSearches(prev => prev.map(s => {
@@ -655,7 +663,7 @@ export const useEnhancedSearch = () => {
     return advancedSearch({
       ...saved.query,
       page: 1,
-      pageSize: 20,
+      pageSize: 20
     });
   }, [savedSearches, advancedSearch]);
 
@@ -670,7 +678,7 @@ export const useEnhancedSearch = () => {
         suggestedLabels: [],
         category: 'primary',
         confidence: 0,
-        reasons: ['Email not found'],
+        reasons: ['Email not found']
       };
     }
 
@@ -691,7 +699,7 @@ export const useEnhancedSearch = () => {
       category = 'social';
       reasons.push('Social media sender');
       confidence = 90;
-    } else if (email.subject.toLowerCase().includes('invoice') || 
+    } else if (email.subject.toLowerCase().includes('invoice') ||
                email.subject.toLowerCase().includes('receipt')) {
       category = 'updates';
       reasons.push('Financial/billing email');
@@ -705,7 +713,7 @@ export const useEnhancedSearch = () => {
       suggestedLabels,
       category,
       confidence,
-      reasons,
+      reasons
     };
   }, [allEmails]);
 
@@ -799,7 +807,7 @@ export const useEnhancedSearch = () => {
       indexContacts: (contacts: any[]) => contacts.forEach(c => searchEngineService.indexContact(c)),
       indexEvents: (events: any[]) => events.forEach(e => searchEngineService.indexEvent(e)),
       search: (query: string, scope?: SearchScope) => searchEngineService.searchAll(query, scope),
-      getStats: () => searchEngineService.getStats(),
-    },
+      getStats: () => searchEngineService.getStats()
+    }
   };
 };

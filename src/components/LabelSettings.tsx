@@ -15,13 +15,13 @@ const DEFAULT_COLORS = [
   '#06b6d4', // cyan
   '#3b82f6', // blue
   '#8b5cf6', // violet
-  '#ec4899', // pink
+  '#ec4899' // pink
 ];
 
 export const LabelSettings: React.FC<LabelSettingsProps> = ({ onClose }) => {
   const { labels, stats, addLabel, updateLabel, deleteLabel, duplicateLabel } = useLabels();
   const { addNotification } = useNotifications();
-  
+
   const [newLabelName, setNewLabelName] = useState('');
   const [newLabelColor, setNewLabelColor] = useState(DEFAULT_COLORS[0]);
   const [newLabelDescription, setNewLabelDescription] = useState('');
@@ -39,7 +39,7 @@ export const LabelSettings: React.FC<LabelSettingsProps> = ({ onClose }) => {
     addLabel({
       name: newLabelName.trim(),
       color: newLabelColor,
-      description: newLabelDescription.trim() || undefined,
+      description: newLabelDescription.trim() || undefined
     });
 
     setNewLabelName('');
@@ -55,8 +55,10 @@ export const LabelSettings: React.FC<LabelSettingsProps> = ({ onClose }) => {
   };
 
   const handleSaveEdit = () => {
-    if (!editingLabel) return;
-    
+    if (!editingLabel) {
+return;
+}
+
     if (!editName.trim()) {
       addNotification('error', 'Label name is required');
       return;
@@ -65,7 +67,7 @@ export const LabelSettings: React.FC<LabelSettingsProps> = ({ onClose }) => {
     updateLabel(editingLabel.id, {
       name: editName.trim(),
       color: editColor,
-      description: editDescription.trim() || undefined,
+      description: editDescription.trim() || undefined
     });
 
     setEditingLabel(null);

@@ -9,8 +9,8 @@ import { useAdminPanel } from '../../src/hooks/useAdminPanel';
 // Mock useNotifications
 vi.mock('../../src/hooks/useNotifications', () => ({
   useNotifications: () => ({
-    addNotification: vi.fn(),
-  }),
+    addNotification: vi.fn()
+  })
 }));
 
 describe('useAdminPanel Hook', () => {
@@ -112,7 +112,7 @@ describe('useAdminPanel Hook', () => {
         const user = await result.current.createUser({
           email: 'newuser@test.com',
           name: 'New User',
-          role: 'support',
+          role: 'support'
         });
 
         expect(user).not.toBeNull();
@@ -134,7 +134,7 @@ describe('useAdminPanel Hook', () => {
 
       await act(async () => {
         await result.current.updateUser(userToUpdate.id, {
-          name: 'Updated Name',
+          name: 'Updated Name'
         });
       });
 
@@ -340,7 +340,7 @@ describe('useAdminPanel Hook', () => {
 
       await act(async () => {
         await result.current.updateSettings({
-          maxUsersPerTeam: 100,
+          maxUsersPerTeam: 100
         });
       });
 
@@ -374,7 +374,7 @@ describe('useAdminPanel Hook', () => {
           endTime: new Date(Date.now() + 25 * 60 * 60 * 1000),
           status: 'scheduled',
           affectedServices: ['API', 'Database'],
-          createdBy: 'admin',
+          createdBy: 'admin'
         });
 
         expect(maintenance).not.toBeNull();
@@ -401,7 +401,7 @@ describe('useAdminPanel Hook', () => {
       });
 
       const filtered = result.current.getFilteredUsers({
-        status: ['active'],
+        status: ['active']
       });
 
       expect(filtered.length).toBeGreaterThan(0);
@@ -417,7 +417,7 @@ describe('useAdminPanel Hook', () => {
 
       const sorted = result.current.getFilteredUsers({
         sortBy: 'name',
-        sortOrder: 'asc',
+        sortOrder: 'asc'
       });
 
       for (let i = 1; i < sorted.length; i++) {
@@ -433,7 +433,7 @@ describe('useAdminPanel Hook', () => {
       });
 
       const filtered = result.current.getFilteredAuditLogs({
-        severity: ['critical'],
+        severity: ['critical']
       });
 
       expect(filtered.length).toBeGreaterThan(0);
@@ -462,7 +462,7 @@ describe('useAdminPanel Hook', () => {
 
       const exported = await result.current.exportUsers({
         format: 'json',
-        fields: ['name', 'email'],
+        fields: ['name', 'email']
       });
 
       const parsed = JSON.parse(exported);
@@ -480,7 +480,7 @@ describe('useAdminPanel Hook', () => {
 
       const exported = await result.current.exportUsers({
         format: 'csv',
-        fields: ['name', 'email'],
+        fields: ['name', 'email']
       });
 
       expect(exported).toContain('name,email');
@@ -495,7 +495,7 @@ describe('useAdminPanel Hook', () => {
 
       const exported = await result.current.exportAuditLogs({
         format: 'json',
-        fields: ['action', 'severity', 'timestamp'],
+        fields: ['action', 'severity', 'timestamp']
       });
 
       const parsed = JSON.parse(exported);

@@ -6,8 +6,8 @@ import type { Email } from '../../src/types';
 // Mock the useNotifications hook
 vi.mock('../../src/hooks/useNotifications', () => ({
   useNotifications: () => ({
-    addNotification: vi.fn(),
-  }),
+    addNotification: vi.fn()
+  })
 }));
 
 const mockEmails: Email[] = [
@@ -22,7 +22,7 @@ const mockEmails: Email[] = [
     starred: true,
     hasAttachments: true,
     encrypted: true,
-    folder: { id: 'inbox', name: 'Inbox', count: 0, icon: '📥' },
+    folder: { id: 'inbox', name: 'Inbox', count: 0, icon: '📥' }
   },
   {
     id: 'email-2',
@@ -35,7 +35,7 @@ const mockEmails: Email[] = [
     starred: false,
     hasAttachments: false,
     encrypted: false,
-    folder: { id: 'inbox', name: 'Inbox', count: 0, icon: '📥' },
+    folder: { id: 'inbox', name: 'Inbox', count: 0, icon: '📥' }
   },
   {
     id: 'email-3',
@@ -48,8 +48,8 @@ const mockEmails: Email[] = [
     starred: false,
     hasAttachments: true,
     encrypted: true,
-    folder: { id: 'inbox', name: 'Inbox', count: 0, icon: '📥' },
-  },
+    folder: { id: 'inbox', name: 'Inbox', count: 0, icon: '📥' }
+  }
 ];
 
 describe('useAdvancedSearch', () => {
@@ -121,7 +121,7 @@ describe('useAdvancedSearch', () => {
       result.current.addCondition({
         field: 'from',
         operator: 'contains',
-        value: 'company.com',
+        value: 'company.com'
       });
     });
 
@@ -138,7 +138,7 @@ describe('useAdvancedSearch', () => {
       result.current.addCondition({
         field: 'from',
         operator: 'contains',
-        value: 'company.com',
+        value: 'company.com'
       });
     });
 
@@ -153,7 +153,7 @@ describe('useAdvancedSearch', () => {
       result.current.addCondition({
         field: 'from',
         operator: 'contains',
-        value: 'test',
+        value: 'test'
       });
     });
 
@@ -173,7 +173,7 @@ describe('useAdvancedSearch', () => {
       result.current.addCondition({
         field: 'from',
         operator: 'contains',
-        value: 'company.com',
+        value: 'company.com'
       });
     });
 
@@ -195,12 +195,12 @@ describe('useAdvancedSearch', () => {
       result.current.addCondition({
         field: 'from',
         operator: 'contains',
-        value: 'test',
+        value: 'test'
       });
       result.current.addCondition({
         field: 'subject',
         operator: 'contains',
-        value: 'email',
+        value: 'email'
       });
     });
 
@@ -222,7 +222,7 @@ describe('useAdvancedSearch', () => {
       result.current.addCondition({
         field: 'has_attachment',
         operator: 'equals',
-        value: 'true',
+        value: 'true'
       });
       result.current.setMatchMode('all');
     });
@@ -232,7 +232,7 @@ describe('useAdvancedSearch', () => {
       result.current.addCondition({
         field: 'is_starred',
         operator: 'equals',
-        value: 'true',
+        value: 'true'
       });
     });
 
@@ -248,7 +248,7 @@ describe('useAdvancedSearch', () => {
       result.current.addCondition({
         field: 'is_starred',
         operator: 'equals',
-        value: 'true',
+        value: 'true'
       });
       // Match mode 'any' is default
     });
@@ -257,7 +257,7 @@ describe('useAdvancedSearch', () => {
       result.current.addCondition({
         field: 'has_attachment',
         operator: 'equals',
-        value: 'true',
+        value: 'true'
       });
     });
 
@@ -292,7 +292,7 @@ describe('useAdvancedSearch', () => {
       result.current.addCondition({
         field: 'from',
         operator: 'contains',
-        value: 'company.com',
+        value: 'company.com'
       });
     });
 
@@ -312,7 +312,7 @@ describe('useAdvancedSearch', () => {
       result.current.addCondition({
         field: 'from',
         operator: 'contains',
-        value: 'company.com',
+        value: 'company.com'
       });
     });
 
@@ -343,7 +343,7 @@ describe('useAdvancedSearch', () => {
       result.current.addCondition({
         field: 'from',
         operator: 'contains',
-        value: 'company.com',
+        value: 'company.com'
       });
     });
 

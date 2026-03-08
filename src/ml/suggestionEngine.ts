@@ -20,7 +20,7 @@ import {
   REPLY_TEMPLATES,
   QUICK_ACTION_PATTERNS,
   TrainingExample,
-  UserBehavior,
+  UserBehavior
 } from '../types/smartSuggestions';
 
 export class SuggestionEngine {
@@ -80,7 +80,7 @@ export class SuggestionEngine {
       timestamp: new Date().toISOString(),
       processingTime,
       modelVersion: this.modelVersion,
-      metadata: this.calculateMetadata(limitedSuggestions),
+      metadata: this.calculateMetadata(limitedSuggestions)
     };
   }
 
@@ -94,7 +94,7 @@ export class SuggestionEngine {
 
     templates.forEach((template, index) => {
       const confidence = this.calculateReplyConfidence(template, context, category);
-      
+
       if (confidence >= this.config.minConfidence) {
         suggestions.push({
           id: `reply-${category}-${index}-${Date.now()}`,
@@ -104,7 +104,7 @@ export class SuggestionEngine {
           priority: this.determinePriority(confidence),
           category,
           context: 'Based on email content and detected category',
-          explanation: this.getReplyExplanation(category),
+          explanation: this.getReplyExplanation(category)
         });
       }
     });
@@ -124,13 +124,13 @@ export class SuggestionEngine {
 
     Object.entries(QUICK_ACTION_PATTERNS).forEach(([action, patterns]) => {
       const actionType = action as QuickActionType;
-      const matches = patterns.filter(pattern => 
+      const matches = patterns.filter(pattern =>
         content.includes(pattern) || subject.includes(pattern)
       );
 
       if (matches.length > 0) {
         const confidence = Math.min(0.9, 0.5 + (matches.length * 0.1));
-        
+
         suggestions.push({
           id: `action-${actionType}-${Date.now()}`,
           type: SuggestionType.QUICK_ACTION,
@@ -138,7 +138,7 @@ export class SuggestionEngine {
           confidence,
           priority: this.determinePriority(confidence),
           reason: `Detected keywords: ${matches.join(', ')}`,
-          context: 'Based on email content analysis',
+          context: 'Based on email content analysis'
         });
       }
     });
@@ -156,29 +156,29 @@ export class SuggestionEngine {
     const content = context.content.toLowerCase();
 
     const followUpKeywords = [
-      { keywords: ['follow up', 'get back to you', 'will contact', 'let you know'], 
-        action: FollowUpAction.REMIND_WEEK, 
+      { keywords: ['follow up', 'get back to you', 'will contact', 'let you know'],
+        action: FollowUpAction.REMIND_WEEK,
         reason: 'Sender mentioned they will follow up' },
-      { keywords: ['tomorrow', 'next day'], 
-        action: FollowUpAction.REMIND_TOMORROW, 
+      { keywords: ['tomorrow', 'next day'],
+        action: FollowUpAction.REMIND_TOMORROW,
         reason: 'Mentioned tomorrow' },
-      { keywords: ['next week', 'week from now'], 
-        action: FollowUpAction.REMIND_WEEK, 
+      { keywords: ['next week', 'week from now'],
+        action: FollowUpAction.REMIND_WEEK,
         reason: 'Mentioned next week' },
-      { keywords: ['next month', 'month from now'], 
-        action: FollowUpAction.REMIND_MONTH, 
+      { keywords: ['next month', 'month from now'],
+        action: FollowUpAction.REMIND_MONTH,
         reason: 'Mentioned next month' },
-      { keywords: ['meeting', 'call', 'discuss', 'schedule'], 
-        action: FollowUpAction.SCHEDULE_MEETING, 
-        reason: 'Scheduling discussion requested' },
+      { keywords: ['meeting', 'call', 'discuss', 'schedule'],
+        action: FollowUpAction.SCHEDULE_MEETING,
+        reason: 'Scheduling discussion requested' }
     ];
 
     followUpKeywords.forEach(({ keywords, action, reason }) => {
       const matches = keywords.filter(keyword => content.includes(keyword));
-      
+
       if (matches.length > 0) {
         const confidence = 0.7 + (matches.length * 0.05);
-        
+
         suggestions.push({
           id: `followup-${action}-${Date.now()}`,
           type: SuggestionType.FOLLOW_UP,
@@ -186,7 +186,7 @@ export class SuggestionEngine {
           confidence: Math.min(0.95, confidence),
           priority: SuggestionPriority.MEDIUM,
           reason,
-          suggestedDate: this.calculateSuggestedDate(action),
+          suggestedDate: this.calculateSuggestedDate(action)
         });
       }
     });
@@ -199,7 +199,7 @@ export class SuggestionEngine {
         confidence: 0.6,
         priority: SuggestionPriority.LOW,
         reason: 'Email thread is getting long - consider following up',
-        suggestedDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        suggestedDate: new Date(Date.now() + 24 * 60 * 60 * 1000)
       });
     }
 
@@ -222,7 +222,7 @@ export class SuggestionEngine {
       { keyword: 'resume', reason: 'Resume mentioned in email' },
       { keyword: 'cv', reason: 'CV mentioned in email' },
       { keyword: 'invoice', reason: 'Invoice mentioned in email' },
-      { keyword: 'report', reason: 'Report mentioned in email' },
+      { keyword: 'report', reason: 'Report mentioned in email' }
     ];
 
     attachmentKeywords.forEach(({ keyword, reason }) => {
@@ -235,7 +235,7 @@ export class SuggestionEngine {
           confidence: 0.7,
           priority: SuggestionPriority.MEDIUM,
           reason,
-          description: `Consider attaching a ${keyword} based on email content`,
+          description: `Consider attaching a ${keyword} based on email content`
         });
       }
     });
@@ -255,11 +255,11 @@ export class SuggestionEngine {
       'team': ['team', 'colleague', 'coworker'],
       'hr': ['hr', 'human resources', 'personnel'],
       'finance': ['finance', 'accounting', 'billing'],
-      'legal': ['legal', 'attorney', 'counsel'],
+      'legal': ['legal', 'attorney', 'counsel']
     };
 
     Object.entries(teamKeywords).forEach(([role, keywords]) => {
-      const matches = keywords.filter(keyword => 
+      const matches = keywords.filter(keyword =>
         context.content.toLowerCase().includes(keyword)
       );
 
@@ -272,7 +272,7 @@ export class SuggestionEngine {
           name: `${role.charAt(0).toUpperCase() + role.slice(1)}`,
           confidence: 0.6 + (matches.length * 0.05),
           priority: SuggestionPriority.MEDIUM,
-          reason: `Mentioned ${matches.join(', ')} - consider adding ${role}`,
+          reason: `Mentioned ${matches.join(', ')} - consider adding ${role}`
         });
       }
     });
@@ -287,7 +287,7 @@ export class SuggestionEngine {
           name: email.split('@')[0],
           confidence: 0.5,
           priority: SuggestionPriority.LOW,
-          reason: 'Frequent contact based on your email history',
+          reason: 'Frequent contact based on your email history'
         });
       });
     }
@@ -308,17 +308,17 @@ export class SuggestionEngine {
       { keywords: ['urgent', 'important', 'priority', 'asap'], label: 'Important', color: '#e74c3c' },
       { keywords: ['personal', 'family', 'friend'], label: 'Personal', color: '#2ecc71' },
       { keywords: ['travel', 'trip', 'vacation'], label: 'Travel', color: '#1abc9c' },
-      { keywords: ['newsletter', 'update', 'announcement'], label: 'Updates', color: '#95a5a6' },
+      { keywords: ['newsletter', 'update', 'announcement'], label: 'Updates', color: '#95a5a6' }
     ];
 
     labelMappings.forEach(({ keywords, label, color }) => {
-      const matches = keywords.filter(keyword => 
+      const matches = keywords.filter(keyword =>
         content.includes(keyword) || subject.includes(keyword)
       );
 
       if (matches.length > 0) {
         const confidence = 0.6 + (matches.length * 0.05);
-        
+
         suggestions.push({
           id: `label-${label}-${Date.now()}`,
           type: SuggestionType.LABEL,
@@ -326,7 +326,7 @@ export class SuggestionEngine {
           color,
           confidence: Math.min(0.95, confidence),
           priority: this.determinePriority(confidence),
-          reason: `Detected keywords: ${matches.join(', ')}`,
+          reason: `Detected keywords: ${matches.join(', ')}`
         });
       }
     });
@@ -350,7 +350,7 @@ export class SuggestionEngine {
       [ReplyCategory.CANCELLATION]: ['cancel', 'cannot attend', 'unable to make'],
       [ReplyCategory.QUESTION]: ['question', 'clarify', 'ask about', 'wondering'],
       [ReplyCategory.INQUIRY]: ['inquire', 'request information', 'like to know'],
-      [ReplyCategory.CUSTOM]: [],
+      [ReplyCategory.CUSTOM]: []
     };
 
     let bestMatch = ReplyCategory.CUSTOM;
@@ -392,8 +392,12 @@ export class SuggestionEngine {
   }
 
   private determinePriority(confidence: ConfidenceScore): SuggestionPriority {
-    if (confidence >= 0.8) return SuggestionPriority.HIGH;
-    if (confidence >= 0.6) return SuggestionPriority.MEDIUM;
+    if (confidence >= 0.8) {
+return SuggestionPriority.HIGH;
+}
+    if (confidence >= 0.6) {
+return SuggestionPriority.MEDIUM;
+}
     return SuggestionPriority.LOW;
   }
 
@@ -411,7 +415,7 @@ export class SuggestionEngine {
       [ReplyCategory.CANCELLATION]: 'Email may require cancellation notification',
       [ReplyCategory.QUESTION]: 'Email contains questions that need answering',
       [ReplyCategory.INQUIRY]: 'Email is an inquiry requesting information',
-      [ReplyCategory.CUSTOM]: 'Based on email content analysis',
+      [ReplyCategory.CUSTOM]: 'Based on email content analysis'
     };
 
     return explanations[category];
@@ -435,7 +439,7 @@ export class SuggestionEngine {
           priority: SuggestionPriority.MEDIUM,
           category,
           context: 'Based on your preferences',
-          explanation: 'This is one of your preferred reply types',
+          explanation: 'This is one of your preferred reply types'
         });
       }
     });
@@ -464,7 +468,7 @@ export class SuggestionEngine {
           confidence: 0.6,
           priority: SuggestionPriority.LOW,
           reason: `You frequently use this action (${count} times)`,
-          context: 'Based on your usage patterns',
+          context: 'Based on your usage patterns'
         });
       }
     });
@@ -474,7 +478,7 @@ export class SuggestionEngine {
 
   private calculateSuggestedDate(action: FollowUpAction): Date {
     const now = new Date();
-    
+
     switch (action) {
       case FollowUpAction.REMIND_TOMORROW:
         return new Date(now.getTime() + 24 * 60 * 60 * 1000);
@@ -488,11 +492,11 @@ export class SuggestionEngine {
   }
 
   private filterAndSortSuggestions(suggestions: Suggestion[]): Suggestion[] {
-    let filtered = suggestions.filter(s => s.confidence >= this.config.minConfidence);
+    const filtered = suggestions.filter(s => s.confidence >= this.config.minConfidence);
 
     const weightedSuggestions = filtered.map(suggestion => {
       let weight = suggestion.confidence;
-      
+
       switch (suggestion.priority) {
         case SuggestionPriority.HIGH:
           weight *= this.config.priorityWeights.high;
@@ -504,7 +508,7 @@ export class SuggestionEngine {
           weight *= this.config.priorityWeights.low;
           break;
       }
-      
+
       return { suggestion, weight };
     });
 
@@ -528,7 +532,7 @@ export class SuggestionEngine {
       totalSuggestions: suggestions.length,
       byType,
       byPriority,
-      avgConfidence: suggestions.length > 0 ? totalConfidence / suggestions.length : 0,
+      avgConfidence: suggestions.length > 0 ? totalConfidence / suggestions.length : 0
     };
   }
 
@@ -564,14 +568,14 @@ export class SuggestionEngine {
         workingHours: {
           start: '09:00',
           end: '17:00',
-          timezone: 'UTC',
-        },
+          timezone: 'UTC'
+        }
       };
     }
 
     if (feedback.suggestion.type === SuggestionType.QUICK_ACTION) {
       const action = (feedback.suggestion as QuickActionSuggestion).action;
-      this.userBehavior.commonActions[action] = 
+      this.userBehavior.commonActions[action] =
         (this.userBehavior.commonActions[action] || 0) + 1;
     }
 
@@ -587,7 +591,7 @@ export class SuggestionEngine {
 
   addTrainingExample(example: TrainingExample): void {
     this.trainingData.push(example);
-    
+
     if (this.config.enableLearning) {
       this.updateUserBehavior(example);
     }
@@ -598,7 +602,7 @@ export class SuggestionEngine {
       totalExamples: this.trainingData.length,
       positiveOutcomes: this.trainingData.filter(e => e.outcome === 'positive').length,
       negativeOutcomes: this.trainingData.filter(e => e.outcome === 'negative').length,
-      neutralOutcomes: this.trainingData.filter(e => e.outcome === 'neutral').length,
+      neutralOutcomes: this.trainingData.filter(e => e.outcome === 'neutral').length
     };
   }
 

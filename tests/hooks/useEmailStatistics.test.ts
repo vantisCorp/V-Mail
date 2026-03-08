@@ -6,8 +6,8 @@ import type { Email } from '../../src/types';
 // Mock the useNotifications hook
 vi.mock('../../src/hooks/useNotifications', () => ({
   useNotifications: () => ({
-    addNotification: vi.fn(),
-  }),
+    addNotification: vi.fn()
+  })
 }));
 
 const createMockEmail = (id: string, overrides: Partial<Email> = {}): Email => ({
@@ -22,7 +22,7 @@ const createMockEmail = (id: string, overrides: Partial<Email> = {}): Email => (
   encrypted: false,
   hasAttachments: false,
   folder: { id: 'inbox', name: 'Inbox', count: 0, icon: '📥' },
-  ...overrides,
+  ...overrides
 });
 
 describe('useEmailStatistics', () => {
@@ -32,36 +32,36 @@ describe('useEmailStatistics', () => {
       starred: true,
       hasAttachments: true,
       encrypted: true,
-      folder: { id: 'inbox', name: 'Inbox', count: 0, icon: '📥' },
+      folder: { id: 'inbox', name: 'Inbox', count: 0, icon: '📥' }
     }),
     createMockEmail('email-2', {
       read: false,
       starred: false,
       hasAttachments: false,
       encrypted: false,
-      folder: { id: 'inbox', name: 'Inbox', count: 0, icon: '📥' },
+      folder: { id: 'inbox', name: 'Inbox', count: 0, icon: '📥' }
     }),
     createMockEmail('email-3', {
       read: true,
       starred: false,
       hasAttachments: true,
       encrypted: true,
-      folder: { id: 'sent', name: 'Sent', count: 0, icon: '📤' },
+      folder: { id: 'sent', name: 'Sent', count: 0, icon: '📤' }
     }),
     createMockEmail('email-4', {
       read: false,
       starred: true,
       hasAttachments: false,
       encrypted: false,
-      folder: { id: 'drafts', name: 'Drafts', count: 0, icon: '📝' },
+      folder: { id: 'drafts', name: 'Drafts', count: 0, icon: '📝' }
     }),
     createMockEmail('email-5', {
       read: true,
       starred: false,
       hasAttachments: true,
       encrypted: true,
-      folder: { id: 'trash', name: 'Trash', count: 0, icon: '🗑️' },
-    }),
+      folder: { id: 'trash', name: 'Trash', count: 0, icon: '🗑️' }
+    })
   ];
 
   it('should initialize with correct email stats', () => {
@@ -96,7 +96,7 @@ describe('useEmailStatistics', () => {
     const todayEmails: Email[] = [
       createMockEmail('today-1', { date: today }),
       createMockEmail('today-2', { date: today }),
-      createMockEmail('yesterday-1', { date: yesterday }),
+      createMockEmail('yesterday-1', { date: yesterday })
     ];
 
     const { result } = renderHook(() => useEmailStatistics(todayEmails));
@@ -115,7 +115,7 @@ describe('useEmailStatistics', () => {
       createMockEmail('3', { from: 'alice@example.com' }),
       createMockEmail('4', { from: 'bob@example.com' }),
       createMockEmail('5', { from: 'bob@example.com' }),
-      createMockEmail('6', { from: 'charlie@example.com' }),
+      createMockEmail('6', { from: 'charlie@example.com' })
     ];
 
     const { result } = renderHook(() => useEmailStatistics(emails));
@@ -131,7 +131,7 @@ describe('useEmailStatistics', () => {
     const emails = [
       createMockEmail('1', { to: 'team1@example.com' }),
       createMockEmail('2', { to: 'team1@example.com' }),
-      createMockEmail('3', { to: 'team2@example.com' }),
+      createMockEmail('3', { to: 'team2@example.com' })
     ];
 
     const { result } = renderHook(() => useEmailStatistics(emails));
@@ -147,15 +147,15 @@ describe('useEmailStatistics', () => {
         hasAttachments: true,
         attachments: [
           { id: 'a1', name: 'doc.pdf', size: 1000, type: 'application/pdf', url: 'http://example.com/doc.pdf', uploadedAt: new Date() },
-          { id: 'a2', name: 'image.png', size: 2000, type: 'image/png', url: 'http://example.com/image.png', uploadedAt: new Date() },
-        ],
+          { id: 'a2', name: 'image.png', size: 2000, type: 'image/png', url: 'http://example.com/image.png', uploadedAt: new Date() }
+        ]
       }),
       createMockEmail('2', {
         hasAttachments: true,
         attachments: [
-          { id: 'a3', name: 'doc.pdf', size: 500, type: 'application/pdf', url: 'http://example.com/doc.pdf', uploadedAt: new Date() },
-        ],
-      }),
+          { id: 'a3', name: 'doc.pdf', size: 500, type: 'application/pdf', url: 'http://example.com/doc.pdf', uploadedAt: new Date() }
+        ]
+      })
     ];
 
     const { result } = renderHook(() => useEmailStatistics(emailsWithAttachments));
@@ -196,7 +196,7 @@ describe('useEmailStatistics', () => {
     act(() => {
       result.current.setTimeRange({
         start: new Date('2000-01-01'),
-        end: new Date('2000-01-02'),
+        end: new Date('2000-01-02')
       });
     });
 
@@ -206,7 +206,7 @@ describe('useEmailStatistics', () => {
     act(() => {
       result.current.setTimeRange({
         start: new Date(0),
-        end: new Date(),
+        end: new Date()
       });
     });
 
@@ -250,7 +250,7 @@ describe('useEmailStatistics', () => {
     const emails = [
       createMockEmail('1', { phantomAlias: 'phantom@example.com' }),
       createMockEmail('2', { phantomAlias: 'another@example.com' }),
-      createMockEmail('3', { selfDestruct: new Date(Date.now() + 10000) }),
+      createMockEmail('3', { selfDestruct: new Date(Date.now() + 10000) })
     ];
 
     const { result } = renderHook(() => useEmailStatistics(emails));
@@ -263,7 +263,7 @@ describe('useEmailStatistics', () => {
     const emails = [
       createMockEmail('1', { from: 'same@example.com' }),
       createMockEmail('2', { from: 'same@example.com' }),
-      createMockEmail('3', { from: 'same@example.com' }),
+      createMockEmail('3', { from: 'same@example.com' })
     ];
 
     const { result } = renderHook(() => useEmailStatistics(emails));

@@ -7,7 +7,7 @@ import {
   PreviewFileType,
   PreviewQuality,
   PreviewStatus,
-  SecurityStatus,
+  SecurityStatus
 } from '../../types/filePreview';
 
 // Mock localStorage
@@ -15,14 +15,20 @@ const localStorageMock = (() => {
   let store: Record<string, string> = {};
   return {
     getItem: (key: string) => store[key] || null,
-    setItem: (key: string, value: string) => { store[key] = value.toString(); },
-    removeItem: (key: string) => { delete store[key]; },
-    clear: () => { store = {}; },
+    setItem: (key: string, value: string) => {
+ store[key] = value.toString();
+},
+    removeItem: (key: string) => {
+ delete store[key];
+},
+    clear: () => {
+ store = {};
+}
   };
 })();
 
 Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock,
+  value: localStorageMock
 });
 
 // Mock URL.createObjectURL and URL.revokeObjectURL
@@ -50,13 +56,15 @@ const mockImageLoad = (width: number, height: number) => {
       src = '';
       onload: (() => void) | null = null;
       onerror: (() => void) | null = null;
-      
+
       constructor() {
         setTimeout(() => {
-          if (this.onload) this.onload();
+          if (this.onload) {
+this.onload();
+}
         }, 0);
       }
-    },
+    }
   });
 };
 
@@ -72,7 +80,7 @@ const mockAudioLoad = (duration: number) => {
 
 // Mock canvas for thumbnail generation
 HTMLCanvasElement.prototype.getContext = vi.fn(() => ({
-  drawImage: vi.fn(),
+  drawImage: vi.fn()
 })) as any;
 
 HTMLCanvasElement.prototype.toBlob = vi.fn((callback: (blob: Blob | null) => void) => {
@@ -182,7 +190,7 @@ describe('FilePreviewService', () => {
   describe('createPreview', () => {
     it('should create a preview for an image file', async () => {
       mockImageLoad(800, 600);
-      
+
       const fileData = new ArrayBuffer(1024);
       const preview = await service.createPreview({
         fileId: 'file-1',
@@ -190,7 +198,7 @@ describe('FilePreviewService', () => {
         mimeType: 'image/jpeg',
         fileData,
         generateThumbnails: false,
-        performSecurityScan: false,
+        performSecurityScan: false
       });
 
       expect(preview).toBeDefined();
@@ -203,7 +211,7 @@ describe('FilePreviewService', () => {
 
     it('should create a preview with thumbnails when requested', async () => {
       mockImageLoad(800, 600);
-      
+
       const fileData = new ArrayBuffer(2048);
       const preview = await service.createPreview({
         fileId: 'file-2',
@@ -211,7 +219,7 @@ describe('FilePreviewService', () => {
         mimeType: 'image/png',
         fileData,
         generateThumbnails: true,
-        performSecurityScan: false,
+        performSecurityScan: false
       });
 
       expect(preview.thumbnails).toBeDefined();
@@ -226,7 +234,7 @@ describe('FilePreviewService', () => {
         mimeType: 'text/plain',
         fileData,
         generateThumbnails: false,
-        performSecurityScan: true,
+        performSecurityScan: true
       });
 
       // Security scan updates the preview status
@@ -242,7 +250,7 @@ describe('FilePreviewService', () => {
         mimeType: 'application/octet-stream',
         fileData,
         generateThumbnails: false,
-        performSecurityScan: true,
+        performSecurityScan: true
       });
 
       expect(preview.securityStatus).toBe(SecurityStatus.SUSPICIOUS);
@@ -252,14 +260,14 @@ describe('FilePreviewService', () => {
       const textContent = 'Hello, this is a test file content!';
       const encoder = new TextEncoder();
       const fileData = encoder.encode(textContent);
-      
+
       const preview = await service.createPreview({
         fileId: 'file-5',
         fileName: 'readme.txt',
         mimeType: 'text/plain',
         fileData,
         generateThumbnails: false,
-        performSecurityScan: false,
+        performSecurityScan: false
       });
 
       // Text content may be extracted depending on blob handling
@@ -275,13 +283,15 @@ describe('FilePreviewService', () => {
           src = '';
           onload: (() => void) | null = null;
           onerror: (() => void) | null = null;
-          
+
           constructor() {
             setTimeout(() => {
-              if (this.onerror) this.onerror();
+              if (this.onerror) {
+this.onerror();
+}
             }, 0);
           }
-        },
+        }
       });
 
       const fileData = new ArrayBuffer(1024);
@@ -291,7 +301,7 @@ describe('FilePreviewService', () => {
         mimeType: 'image/jpeg',
         fileData,
         generateThumbnails: false,
-        performSecurityScan: false,
+        performSecurityScan: false
       });
 
       expect(preview.status).toBe(PreviewStatus.ERROR);
@@ -300,7 +310,7 @@ describe('FilePreviewService', () => {
 
     it('should update statistics after creating preview', async () => {
       mockImageLoad(800, 600);
-      
+
       const fileData = new ArrayBuffer(1024);
       await service.createPreview({
         fileId: 'file-7',
@@ -308,7 +318,7 @@ describe('FilePreviewService', () => {
         mimeType: 'image/jpeg',
         fileData,
         generateThumbnails: false,
-        performSecurityScan: false,
+        performSecurityScan: false
       });
 
       const stats = service.getStats();
@@ -321,13 +331,13 @@ describe('FilePreviewService', () => {
   describe('getPreview', () => {
     it('should return preview by ID', async () => {
       mockImageLoad(800, 600);
-      
+
       const fileData = new ArrayBuffer(1024);
       const created = await service.createPreview({
         fileId: 'file-8',
         fileName: 'get-test.jpg',
         mimeType: 'image/jpeg',
-        fileData,
+        fileData
       });
 
       const retrieved = service.getPreview(created.id);
@@ -344,13 +354,13 @@ describe('FilePreviewService', () => {
   describe('getPreviewByFileId', () => {
     it('should return preview by file ID', async () => {
       mockImageLoad(800, 600);
-      
+
       const fileData = new ArrayBuffer(1024);
       await service.createPreview({
         fileId: 'file-9',
         fileName: 'fileid-test.jpg',
         mimeType: 'image/jpeg',
-        fileData,
+        fileData
       });
 
       const retrieved = service.getPreviewByFileId('file-9');
@@ -367,13 +377,13 @@ describe('FilePreviewService', () => {
   describe('deletePreview', () => {
     it('should delete preview and revoke URLs', async () => {
       mockImageLoad(800, 600);
-      
+
       const fileData = new ArrayBuffer(1024);
       const created = await service.createPreview({
         fileId: 'file-10',
         fileName: 'delete-test.jpg',
         mimeType: 'image/jpeg',
-        fileData,
+        fileData
       });
 
       const result = service.deletePreview(created.id);
@@ -390,23 +400,23 @@ describe('FilePreviewService', () => {
   describe('clearAllPreviews', () => {
     it('should clear all previews', async () => {
       mockImageLoad(800, 600);
-      
+
       const fileData = new ArrayBuffer(1024);
       await service.createPreview({
         fileId: 'file-11',
         fileName: 'clear-test-1.jpg',
         mimeType: 'image/jpeg',
-        fileData,
+        fileData
       });
       await service.createPreview({
         fileId: 'file-12',
         fileName: 'clear-test-2.jpg',
         mimeType: 'image/png',
-        fileData,
+        fileData
       });
 
       service.clearAllPreviews();
-      
+
       const stats = service.getStats();
       expect(stats.cachedPreviews).toBe(0);
     });
@@ -415,14 +425,14 @@ describe('FilePreviewService', () => {
   describe('getThumbnail', () => {
     it('should return thumbnail for preview', async () => {
       mockImageLoad(800, 600);
-      
+
       const fileData = new ArrayBuffer(2048);
       const preview = await service.createPreview({
         fileId: 'file-13',
         fileName: 'thumb-test.jpg',
         mimeType: 'image/jpeg',
         fileData,
-        generateThumbnails: true,
+        generateThumbnails: true
       });
 
       // Need to wait for async thumbnail generation
@@ -440,13 +450,13 @@ describe('FilePreviewService', () => {
   describe('getPreviewUrl', () => {
     it('should return preview URL', async () => {
       mockImageLoad(800, 600);
-      
+
       const fileData = new ArrayBuffer(1024);
       const preview = await service.createPreview({
         fileId: 'file-14',
         fileName: 'url-test.jpg',
         mimeType: 'image/jpeg',
-        fileData,
+        fileData
       });
 
       const url = service.getPreviewUrl(preview.id);
@@ -467,7 +477,7 @@ describe('FilePreviewService', () => {
         fileId: 'file-15',
         fileName: 'safe-document.pdf',
         mimeType: 'application/pdf',
-        fileData,
+        fileData
       });
 
       const result = await service.performSecurityScan(preview);
@@ -481,7 +491,7 @@ describe('FilePreviewService', () => {
         fileId: 'file-16',
         fileName: 'suspicious.bat',
         mimeType: 'application/octet-stream',
-        fileData,
+        fileData
       });
 
       const result = await service.performSecurityScan(preview);
@@ -533,7 +543,7 @@ describe('FilePreviewService', () => {
     it('should return empty archive content', async () => {
       const blob = new Blob(['archive-data']);
       const contents = await service.extractArchiveContents(blob);
-      
+
       expect(contents.files).toEqual([]);
       expect(contents.totalFiles).toBe(0);
       expect(contents.compressedSize).toBe(blob.size);

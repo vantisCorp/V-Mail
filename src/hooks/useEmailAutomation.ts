@@ -431,7 +431,9 @@ export const useEmailAutomation = () => {
 
   const duplicateRule = useCallback(async (ruleId: string, newName?: string): Promise<AutomationRule | null> => {
     const originalRule = rules.find(r => r.id === ruleId);
-    if (!originalRule) return null;
+    if (!originalRule) {
+return null;
+}
 
     const newRule: AutomationRule = {
       ...originalRule,
@@ -571,7 +573,7 @@ export const useEmailAutomation = () => {
       if (rule.id === ruleId) {
         const actionMap = new Map(rule.actions.map(a => [a.id, a]));
         const reorderedActions = actionIds.map(id => actionMap.get(id)!).filter(Boolean);
-        
+
         return {
           ...rule,
           actions: reorderedActions,
@@ -586,7 +588,9 @@ export const useEmailAutomation = () => {
   // Rule testing
   const testRule = useCallback(async (ruleId: string, emailData: Record<string, any>): Promise<RuleTestResult | null> => {
     const rule = rules.find(r => r.id === ruleId);
-    if (!rule) return null;
+    if (!rule) {
+return null;
+}
 
     const startTime = Date.now();
     const matchedConditions: string[] = [];
@@ -683,7 +687,9 @@ export const useEmailAutomation = () => {
   // Rule statistics
   const getRuleStatistics = useCallback((ruleId: string): RuleStatistics | null => {
     const rule = rules.find(r => r.id === ruleId);
-    if (!rule) return null;
+    if (!rule) {
+return null;
+}
 
     const logs = executionLogs.filter(l => l.ruleId === ruleId);
     const successCount = logs.filter(l => l.status === 'success').length;

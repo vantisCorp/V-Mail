@@ -18,12 +18,12 @@ import {
   ConditionLogic,
   RuleFieldType,
   RuleOperator,
-  RuleActionType,
+  RuleActionType
 } from '../types/emailRules';
 
 /**
  * Email Rules & Automation Hook
- * 
+ *
  * Provides functionality for managing email automation rules including:
  * - Rule CRUD operations
  * - Rule testing and validation
@@ -34,7 +34,7 @@ import {
 
 const currentUser = {
   id: 'user-1',
-  name: 'Current User',
+  name: 'Current User'
 };
 
 // Mock data generators
@@ -53,8 +53,8 @@ const generateMockRules = (): EmailRule[] => {
           field: RuleFieldType.TO,
           operator: RuleOperator.CONTAINS,
           value: 'support@',
-          caseSensitive: false,
-        },
+          caseSensitive: false
+        }
       ],
       conditionLogic: ConditionLogic.AND,
       actions: [
@@ -63,16 +63,16 @@ const generateMockRules = (): EmailRule[] => {
           type: RuleActionType.AUTO_REPLY,
           parameters: {
             templateId: 'tpl-support-auto-reply',
-            subject: 'Thank you for contacting support',
+            subject: 'Thank you for contacting support'
           },
-          stopProcessing: false,
+          stopProcessing: false
         },
         {
           id: 'act-2',
           type: RuleActionType.ADD_LABEL,
           parameters: { label: 'Support' },
-          stopProcessing: false,
-        },
+          stopProcessing: false
+        }
       ],
       triggerOnIncoming: true,
       triggerOnOutgoing: false,
@@ -82,7 +82,7 @@ const generateMockRules = (): EmailRule[] => {
       createdAt: '2025-01-10T09:00:00Z',
       lastExecuted: '2025-01-20T14:30:00Z',
       executionCount: 142,
-      executionHistory: [],
+      executionHistory: []
     },
     {
       id: 'rule-2',
@@ -97,8 +97,8 @@ const generateMockRules = (): EmailRule[] => {
           field: RuleFieldType.FROM,
           operator: RuleOperator.CONTAINS,
           value: ['ceo@', 'manager@', 'director@'],
-          caseSensitive: false,
-        },
+          caseSensitive: false
+        }
       ],
       conditionLogic: ConditionLogic.OR,
       actions: [
@@ -106,14 +106,14 @@ const generateMockRules = (): EmailRule[] => {
           id: 'act-3',
           type: RuleActionType.MARK_AS_STARRED,
           parameters: {},
-          stopProcessing: false,
+          stopProcessing: false
         },
         {
           id: 'act-4',
           type: RuleActionType.ADD_LABEL,
           parameters: { label: 'Important' },
-          stopProcessing: false,
-        },
+          stopProcessing: false
+        }
       ],
       triggerOnIncoming: true,
       triggerOnOutgoing: false,
@@ -123,7 +123,7 @@ const generateMockRules = (): EmailRule[] => {
       createdAt: '2025-01-08T10:30:00Z',
       lastExecuted: '2025-01-20T11:15:00Z',
       executionCount: 89,
-      executionHistory: [],
+      executionHistory: []
     },
     {
       id: 'rule-3',
@@ -138,8 +138,8 @@ const generateMockRules = (): EmailRule[] => {
           field: RuleFieldType.FROM,
           operator: RuleOperator.CONTAINS,
           value: ['newsletter', 'noreply'],
-          caseSensitive: false,
-        },
+          caseSensitive: false
+        }
       ],
       conditionLogic: ConditionLogic.AND,
       actions: [
@@ -147,14 +147,14 @@ const generateMockRules = (): EmailRule[] => {
           id: 'act-5',
           type: RuleActionType.ARCHIVE,
           parameters: {},
-          stopProcessing: true,
+          stopProcessing: true
         },
         {
           id: 'act-6',
           type: RuleActionType.MARK_AS_READ,
           parameters: {},
-          stopProcessing: false,
-        },
+          stopProcessing: false
+        }
       ],
       triggerOnIncoming: true,
       triggerOnOutgoing: false,
@@ -163,8 +163,8 @@ const generateMockRules = (): EmailRule[] => {
       createdByName: currentUser.name,
       createdAt: '2025-01-05T14:00:00Z',
       executionCount: 256,
-      executionHistory: [],
-    },
+      executionHistory: []
+    }
   ];
 };
 
@@ -180,8 +180,8 @@ const generateMockTemplates = (): RuleTemplate[] => {
         {
           field: RuleFieldType.FROM,
           operator: RuleOperator.NOT_EQUALS,
-          value: ['internal@', 'team@'],
-        },
+          value: ['internal@', 'team@']
+        }
       ],
       conditionLogic: ConditionLogic.AND,
       actions: [
@@ -189,12 +189,12 @@ const generateMockTemplates = (): RuleTemplate[] => {
           type: RuleActionType.AUTO_REPLY,
           parameters: {
             subject: 'Out of Office',
-            message: 'I am currently out of office...',
-          },
-        },
+            message: 'I am currently out of office...'
+          }
+        }
       ],
       isSystem: true,
-      popularity: 234,
+      popularity: 234
     },
     {
       id: 'tpl-2',
@@ -206,22 +206,22 @@ const generateMockTemplates = (): RuleTemplate[] => {
         {
           field: RuleFieldType.SUBJECT,
           operator: RuleOperator.CONTAINS,
-          value: ['invoice', 'payment', 'receipt'],
-        },
+          value: ['invoice', 'payment', 'receipt']
+        }
       ],
       conditionLogic: ConditionLogic.OR,
       actions: [
         {
           type: RuleActionType.ADD_LABEL,
-          parameters: { label: 'Finance' },
+          parameters: { label: 'Finance' }
         },
         {
           type: RuleActionType.FORWARD,
-          parameters: { to: 'finance@company.com' },
-        },
+          parameters: { to: 'finance@company.com' }
+        }
       ],
       isSystem: true,
-      popularity: 189,
+      popularity: 189
     },
     {
       id: 'tpl-3',
@@ -233,19 +233,19 @@ const generateMockTemplates = (): RuleTemplate[] => {
         {
           field: RuleFieldType.SUBJECT,
           operator: RuleOperator.CONTAINS,
-          value: ['winner', 'congratulations', 'free money'],
-        },
+          value: ['winner', 'congratulations', 'free money']
+        }
       ],
       conditionLogic: ConditionLogic.OR,
       actions: [
         {
           type: RuleActionType.MOVE_TO_FOLDER,
-          parameters: { folder: 'Spam' },
-        },
+          parameters: { folder: 'Spam' }
+        }
       ],
       isSystem: true,
-      popularity: 456,
-    },
+      popularity: 456
+    }
   ];
 };
 
@@ -276,12 +276,12 @@ export const useEmailRules = () => {
       priority: payload.priority,
       conditions: payload.conditions.map((c, idx) => ({
         ...c,
-        id: `cond-${Date.now()}-${idx}`,
+        id: `cond-${Date.now()}-${idx}`
       })),
       conditionLogic: payload.conditionLogic,
       actions: payload.actions.map((a, idx) => ({
         ...a,
-        id: `act-${Date.now()}-${idx}`,
+        id: `act-${Date.now()}-${idx}`
       })),
       triggerOnIncoming: payload.triggerOnIncoming ?? true,
       triggerOnOutgoing: payload.triggerOnOutgoing ?? false,
@@ -291,7 +291,7 @@ export const useEmailRules = () => {
       createdByName: currentUser.name,
       createdAt: new Date().toISOString(),
       executionCount: 0,
-      executionHistory: [],
+      executionHistory: []
     };
 
     setRules(prev => [...prev, newRule]);
@@ -311,15 +311,15 @@ export const useEmailRules = () => {
           ...payload,
           conditions: payload.conditions ? payload.conditions.map((c, idx) => ({
             ...c,
-            id: `cond-${Date.now()}-${idx}`,
+            id: `cond-${Date.now()}-${idx}`
           })) : rule.conditions,
           actions: payload.actions ? payload.actions.map((a, idx) => ({
             ...a,
-            id: `act-${Date.now()}-${idx}`,
+            id: `act-${Date.now()}-${idx}`
           })) : rule.actions,
           updatedBy: currentUser.id,
           updatedByName: currentUser.name,
-          updatedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
         };
         return updatedRule;
       }
@@ -347,15 +347,15 @@ export const useEmailRules = () => {
     setRules(prev => prev.map(rule => {
       if (rule.id === ruleId) {
         success = true;
-        const newStatus = rule.status === RuleStatus.ACTIVE 
-          ? RuleStatus.PAUSED 
+        const newStatus = rule.status === RuleStatus.ACTIVE
+          ? RuleStatus.PAUSED
           : RuleStatus.ACTIVE;
-        return { 
-          ...rule, 
+        return {
+          ...rule,
           status: newStatus,
           updatedBy: currentUser.id,
           updatedByName: currentUser.name,
-          updatedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
         };
       }
       return rule;
@@ -403,7 +403,7 @@ export const useEmailRules = () => {
       matches,
       matchedConditions,
       actionsToExecute: matches ? rule.actions : [],
-      warnings: warnings.length > 0 ? warnings : undefined,
+      warnings: warnings.length > 0 ? warnings : undefined
     };
   }, [rules]);
 
@@ -463,51 +463,55 @@ export const useEmailRules = () => {
 
     switch (condition.operator) {
       case RuleOperator.EQUALS:
-        result = caseSensitive 
+        result = caseSensitive
           ? String(value) === String(conditionValue)
           : String(value).toLowerCase() === String(conditionValue).toLowerCase();
         break;
       case RuleOperator.NOT_EQUALS:
-        result = caseSensitive 
+        result = caseSensitive
           ? String(value) !== String(conditionValue)
           : String(value).toLowerCase() !== String(conditionValue).toLowerCase();
         break;
-      case RuleOperator.CONTAINS:
-        const containsValue = caseSensitive 
+      case RuleOperator.CONTAINS: {
+        const containsValue = caseSensitive
           ? String(value)
           : String(value).toLowerCase();
-        const containsCondition = caseSensitive 
+        const containsCondition = caseSensitive
           ? String(conditionValue)
           : String(conditionValue).toLowerCase();
         result = containsValue.includes(containsCondition);
         break;
-      case RuleOperator.NOT_CONTAINS:
-        const notContainsValue = caseSensitive 
+      }
+      case RuleOperator.NOT_CONTAINS: {
+        const notContainsValue = caseSensitive
           ? String(value)
           : String(value).toLowerCase();
-        const notContainsCondition = caseSensitive 
+        const notContainsCondition = caseSensitive
           ? String(conditionValue)
           : String(conditionValue).toLowerCase();
         result = !notContainsValue.includes(notContainsCondition);
         break;
-      case RuleOperator.STARTS_WITH:
-        const startsValue = caseSensitive 
+      }
+      case RuleOperator.STARTS_WITH: {
+        const startsValue = caseSensitive
           ? String(value)
           : String(value).toLowerCase();
-        const startsCondition = caseSensitive 
+        const startsCondition = caseSensitive
           ? String(conditionValue)
           : String(conditionValue).toLowerCase();
         result = startsValue.startsWith(startsCondition);
         break;
-      case RuleOperator.ENDS_WITH:
-        const endsValue = caseSensitive 
+      }
+      case RuleOperator.ENDS_WITH: {
+        const endsValue = caseSensitive
           ? String(value)
           : String(value).toLowerCase();
-        const endsCondition = caseSensitive 
+        const endsCondition = caseSensitive
           ? String(conditionValue)
           : String(conditionValue).toLowerCase();
         result = endsValue.endsWith(endsCondition);
         break;
+      }
       case RuleOperator.GREATER_THAN:
         result = Number(value) > Number(conditionValue);
         break;
@@ -538,7 +542,9 @@ export const useEmailRules = () => {
     logic: ConditionLogic,
     email: EmailContext
   ): boolean => {
-    if (conditions.length === 0) return true;
+    if (conditions.length === 0) {
+return true;
+}
 
     if (logic === ConditionLogic.AND) {
       return conditions.every(condition => evaluateCondition(condition, email));
@@ -554,12 +560,16 @@ export const useEmailRules = () => {
     dryRun: boolean = false
   ): Promise<boolean> => {
     const rule = rules.find(r => r.id === ruleId);
-    if (!rule) return false;
+    if (!rule) {
+return false;
+}
 
     const startTime = Date.now();
     const matches = evaluateConditions(rule.conditions, rule.conditionLogic, email);
 
-    if (!matches) return false;
+    if (!matches) {
+return false;
+}
 
     const execution: RuleExecution = {
       id: `exec-${Date.now()}`,
@@ -572,7 +582,7 @@ export const useEmailRules = () => {
       executedAt: new Date().toISOString(),
       duration: 0,
       success: true,
-      actionsExecuted: [],
+      actionsExecuted: []
     };
 
     if (!dryRun) {
@@ -582,7 +592,9 @@ export const useEmailRules = () => {
         try {
           // Simulate action execution
           actionsExecuted.push(action.id);
-          if (action.stopProcessing) break;
+          if (action.stopProcessing) {
+break;
+}
         } catch (error) {
           execution.success = false;
           execution.errorMessage = String(error);
@@ -598,7 +610,7 @@ export const useEmailRules = () => {
             ...r,
             executionCount: r.executionCount + 1,
             lastExecuted: new Date().toISOString(),
-            executionHistory: [execution, ...r.executionHistory].slice(0, 100),
+            executionHistory: [execution, ...r.executionHistory].slice(0, 100)
           };
         }
         return r;
@@ -612,7 +624,9 @@ export const useEmailRules = () => {
   // Rule Statistics
   const getRuleStatistics = useCallback((ruleId: string): RuleStatistics | null => {
     const rule = rules.find(r => r.id === ruleId);
-    if (!rule) return null;
+    if (!rule) {
+return null;
+}
 
     const successfulExecutions = rule.executionHistory.filter(e => e.success).length;
     const failedExecutions = rule.executionHistory.filter(e => !e.success).length;
@@ -623,8 +637,8 @@ export const useEmailRules = () => {
       totalExecutions: rule.executionCount,
       successfulExecutions,
       failedExecutions,
-      successRate: rule.executionCount > 0 
-        ? (successfulExecutions / rule.executionCount) * 100 
+      successRate: rule.executionCount > 0
+        ? (successfulExecutions / rule.executionCount) * 100
         : 0,
       avgExecutionTime: rule.executionHistory.length > 0
         ? rule.executionHistory.reduce((sum, e) => sum + e.duration, 0) / rule.executionHistory.length
@@ -632,23 +646,33 @@ export const useEmailRules = () => {
       lastExecuted: rule.lastExecuted || '',
       executionsByDay: [],
       executionsByHour: [],
-      topTriggeredConditions: [],
+      topTriggeredConditions: []
     };
   }, [rules]);
 
   // Rule Filtering
   const getFilteredRules = useCallback((filter: RuleFilter): EmailRule[] => {
     return rules.filter(rule => {
-      if (filter.type && rule.type !== filter.type) return false;
-      if (filter.status && rule.status !== filter.status) return false;
-      if (filter.priority && rule.priority !== filter.priority) return false;
-      if (filter.createdBy && rule.createdBy !== filter.createdBy) return false;
+      if (filter.type && rule.type !== filter.type) {
+return false;
+}
+      if (filter.status && rule.status !== filter.status) {
+return false;
+}
+      if (filter.priority && rule.priority !== filter.priority) {
+return false;
+}
+      if (filter.createdBy && rule.createdBy !== filter.createdBy) {
+return false;
+}
 
       if (filter.searchQuery) {
         const query = filter.searchQuery.toLowerCase();
         const matchName = rule.name.toLowerCase().includes(query);
         const matchDescription = rule.description?.toLowerCase().includes(query);
-        if (!matchName && !matchDescription) return false;
+        if (!matchName && !matchDescription) {
+return false;
+}
       }
 
       return true;
@@ -659,7 +683,9 @@ export const useEmailRules = () => {
   const createRuleFromTemplate = useCallback(
     async (templateId: string, name: string, priority: RulePriority): Promise<EmailRule | null> => {
       const template = templates.find(t => t.id === templateId);
-      if (!template) return null;
+      if (!template) {
+return null;
+}
 
       return createRule({
         name,
@@ -668,7 +694,7 @@ export const useEmailRules = () => {
         priority,
         conditions: template.conditions,
         conditionLogic: template.conditionLogic,
-        actions: template.actions,
+        actions: template.actions
       });
     },
     [templates, createRule]
@@ -706,6 +732,6 @@ export const useEmailRules = () => {
     getFilteredRules,
 
     // Templates
-    createRuleFromTemplate,
+    createRuleFromTemplate
   };
 };

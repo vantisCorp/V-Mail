@@ -13,7 +13,7 @@ import {
   TwoFactorAuthSettings,
   TrustedDevice,
   TwoFactorAuthStatus,
-  TwoFactorAuthMethod,
+  TwoFactorAuthMethod
 } from '../types/twoFactorAuth';
 
 export class TwoFactorAuthService {
@@ -31,7 +31,7 @@ export class TwoFactorAuthService {
     switch (method) {
       case 'totp':
         return await TOTPService.generateSetupData(username);
-      
+
       case 'sms':
         if (!phoneNumber) {
           throw new Error('Phone number is required for SMS method');
@@ -40,15 +40,16 @@ export class TwoFactorAuthService {
           throw new Error('Invalid phone number format');
         }
         return await SMSService.generateSetupData(phoneNumber);
-      
-      case 'backup':
+
+      case 'backup': {
         const backupCodes = TOTPService.generateBackupCodes();
         return {
           method: 'backup',
           backupCodes,
-          isVerified: false,
+          isVerified: false
         };
-      
+      }
+
       default:
         throw new Error(`Unsupported 2FA method: ${method}`);
     }
@@ -67,45 +68,46 @@ export class TwoFactorAuthService {
         if (!secret) {
           return {
             success: false,
-            message: 'TOTP secret not found',
+            message: 'TOTP secret not found'
           };
         }
         return TOTPService.verifyCodeWithDetails(secret, request.code);
-      
+
       case 'sms':
         if (!request.backupCode) {
           return {
             success: false,
-            message: 'Phone number required for SMS verification',
+            message: 'Phone number required for SMS verification'
           };
         }
         return SMSService.verifySMSCode(request.backupCode, request.code);
-      
-      case 'backup':
+
+      case 'backup': {
         if (!request.backupCode || !backupCodes) {
           return {
             success: false,
-            message: 'Backup codes not available',
+            message: 'Backup codes not available'
           };
         }
         const result = TOTPService.verifyBackupCode(backupCodes, request.backupCode);
-        
+
         if (result.isValid) {
           return {
             success: true,
-            message: 'Backup code verified successfully',
+            message: 'Backup code verified successfully'
           };
         } else {
           return {
             success: false,
-            message: 'Invalid backup code',
+            message: 'Invalid backup code'
           };
         }
-      
+      }
+
       default:
         return {
           success: false,
-          message: `Unsupported 2FA method: ${request.method}`,
+          message: `Unsupported 2FA method: ${request.method}`
         };
     }
   }
@@ -143,7 +145,7 @@ export class TwoFactorAuthService {
       defaultMethod: 'totp',
       requireOnNewDevice: true,
       trustedDevices: [],
-      backupCodesRemaining: 10,
+      backupCodesRemaining: 10
     };
   }
 
@@ -152,22 +154,22 @@ export class TwoFactorAuthService {
    */
   static enable2FA(method: TwoFactorAuthMethod, secret?: string, phoneNumber?: string): void {
     const settings = this.loadSettings() || this.getDefaultSettings();
-    
+
     settings.enabled = true;
-    
+
     if (!settings.methods.includes(method)) {
       settings.methods.push(method);
     }
-    
+
     if (secret) {
       // Store secret securely (in production, encrypt this)
       settings.defaultMethod = method;
     }
-    
+
     if (phoneNumber) {
       settings.smsPhoneNumber = phoneNumber;
     }
-    
+
     this.saveSettings(settings);
   }
 
@@ -207,11 +209,15 @@ export class TwoFactorAuthService {
    */
   static isDeviceTrusted(deviceId: string): boolean {
     const settings = this.loadSettings();
-    if (!settings) return false;
-    
+    if (!settings) {
+return false;
+}
+
     const device = settings.trustedDevices.find(d => d.id === deviceId);
-    if (!device) return false;
-    
+    if (!device) {
+return false;
+}
+
     // Check if device is expired
     // Convert to Date if it's a string (from JSON serialization)
     const expiresAt = device.expiresAt instanceof Date ? device.expiresAt : new Date(device.expiresAt);
@@ -219,7 +225,7 @@ export class TwoFactorAuthService {
       this.removeTrustedDevice(deviceId);
       return false;
     }
-    
+
     return true;
   }
 
@@ -228,7 +234,9 @@ export class TwoFactorAuthService {
    */
   static getStatus(): TwoFactorAuthStatus {
     const settings = this.loadSettings();
-    if (!settings || !settings.enabled) return 'disabled';
+    if (!settings || !settings.enabled) {
+return 'disabled';
+}
     return 'enabled';
   }
 

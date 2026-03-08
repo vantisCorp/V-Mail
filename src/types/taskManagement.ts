@@ -64,37 +64,37 @@ export interface Task {
   id: string;
   title: string;
   description?: string;
-  
+
   // Task classification
   type: TaskType;
   status: TaskStatus;
   priority: TaskPriority;
-  
+
   // Assignment
   assignedTo: string[];
   assignedBy: string;
   assignmentType: AssignmentType;
-  
+
   // Dates
   dueDate?: string;
   startDate?: string;
   completedAt?: string;
   createdAt: string;
   updatedAt: string;
-  
+
   // Progress
   progress: number;
   estimatedHours?: number;
   actualHours?: number;
-  
+
   // Email integration
   sourceEmailId?: string;
   emailConversation?: string[];
-  
+
   // Dependencies
   dependsOn: string[];
   blocks: string[];
-  
+
   // Recurrence
   recurrence?: {
     type: RecurrenceType;
@@ -102,32 +102,32 @@ export interface Task {
     daysOfWeek?: number[];
     endDate?: string;
   };
-  
+
   // Labels and tags
   labels: string[];
   tags: string[];
-  
+
   // Attachments
   attachments: TaskAttachment[];
-  
+
   // Comments
   comments: TaskComment[];
-  
+
   // Subtasks
   subtasks: SubTask[];
-  
+
   // Checklist
   checklist: ChecklistItem[];
-  
+
   // Reminders
   reminders: TaskReminder[];
-  
+
   // Activity log
   activityLog: TaskActivity[];
-  
+
   // Custom fields
   customFields?: Record<string, any>;
-  
+
   // Metadata
   projectId?: string;
   epicId?: string;

@@ -13,14 +13,14 @@ import {
   TwoFactorAuthSettings,
   TwoFactorAuthMethod,
   TwoFactorAuthStatus,
-  TrustedDevice,
+  TrustedDevice
 } from '../types/twoFactorAuth';
 
 export const useTwoFactorAuth = (username: string = 'user@example.com') => {
   const [state, setState] = useState<TwoFactorAuthState>({
     status: 'disabled',
     settings: TwoFactorAuthService.getDefaultSettings(),
-    isSetupPending: false,
+    isSetupPending: false
   });
 
   const [loading, setLoading] = useState(false);
@@ -33,7 +33,7 @@ export const useTwoFactorAuth = (username: string = 'user@example.com') => {
       setState(prev => ({
         ...prev,
         settings,
-        status: settings.enabled ? 'enabled' : 'disabled',
+        status: settings.enabled ? 'enabled' : 'disabled'
       }));
     }
   }, []);
@@ -58,7 +58,7 @@ export const useTwoFactorAuth = (username: string = 'user@example.com') => {
       setState(prev => ({
         ...prev,
         setupData,
-        isSetupPending: true,
+        isSetupPending: true
       }));
 
       return setupData;
@@ -103,10 +103,10 @@ export const useTwoFactorAuth = (username: string = 'user@example.com') => {
             ...prev.settings,
             enabled: true,
             defaultMethod: request.method,
-            backupCodesRemaining: backupCodes?.length || 10,
+            backupCodesRemaining: backupCodes?.length || 10
           },
           isSetupPending: false,
-          setupData: undefined,
+          setupData: undefined
         }));
 
         return true;
@@ -128,14 +128,14 @@ export const useTwoFactorAuth = (username: string = 'user@example.com') => {
    */
   const disable2FA = useCallback((): void => {
     TwoFactorAuthService.disable2FA();
-    
+
     setState(prev => ({
       ...prev,
       status: 'disabled',
       settings: {
         ...prev.settings,
-        enabled: false,
-      },
+        enabled: false
+      }
     }));
   }, []);
 
@@ -144,13 +144,13 @@ export const useTwoFactorAuth = (username: string = 'user@example.com') => {
    */
   const regenerateBackupCodes = useCallback((): string[] => {
     const newCodes = TwoFactorAuthService.regenerateBackupCodes();
-    
+
     setState(prev => ({
       ...prev,
       settings: {
         ...prev.settings,
-        backupCodesRemaining: newCodes.length,
-      },
+        backupCodesRemaining: newCodes.length
+      }
     }));
 
     return newCodes;
@@ -161,13 +161,13 @@ export const useTwoFactorAuth = (username: string = 'user@example.com') => {
    */
   const addTrustedDevice = useCallback((device: TrustedDevice): void => {
     TwoFactorAuthService.addTrustedDevice(device);
-    
+
     setState(prev => ({
       ...prev,
       settings: {
         ...prev.settings,
-        trustedDevices: [...prev.settings.trustedDevices, device],
-      },
+        trustedDevices: [...prev.settings.trustedDevices, device]
+      }
     }));
   }, []);
 
@@ -176,13 +176,13 @@ export const useTwoFactorAuth = (username: string = 'user@example.com') => {
    */
   const removeTrustedDevice = useCallback((deviceId: string): void => {
     TwoFactorAuthService.removeTrustedDevice(deviceId);
-    
+
     setState(prev => ({
       ...prev,
       settings: {
         ...prev.settings,
-        trustedDevices: prev.settings.trustedDevices.filter(d => d.id !== deviceId),
-      },
+        trustedDevices: prev.settings.trustedDevices.filter(d => d.id !== deviceId)
+      }
     }));
   }, []);
 
@@ -200,7 +200,7 @@ export const useTwoFactorAuth = (username: string = 'user@example.com') => {
     setState(prev => ({
       ...prev,
       isSetupPending: false,
-      setupData: undefined,
+      setupData: undefined
     }));
     setError(null);
   }, []);
@@ -216,6 +216,6 @@ export const useTwoFactorAuth = (username: string = 'user@example.com') => {
     addTrustedDevice,
     removeTrustedDevice,
     getTimeRemaining,
-    cancelSetup,
+    cancelSetup
   };
 };

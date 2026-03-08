@@ -219,7 +219,7 @@ export const DEFAULT_TRANSLATION_CONFIG: TranslationConfig = {
   enableToneDetection: true,
   enableAlternatives: false,
   maxLength: 10000,
-  enableLearning: true,
+  enableLearning: true
 };
 
 // ============================================================================
@@ -247,7 +247,7 @@ export const LANGUAGE_NAMES: Record<SupportedLanguage, string> = {
   [SupportedLanguage.THAI]: 'Thai',
   [SupportedLanguage.INDONESIAN]: 'Indonesian',
   [SupportedLanguage.SWEDISH]: 'Swedish',
-  [SupportedLanguage.NORWEGIAN]: 'Norwegian',
+  [SupportedLanguage.NORWEGIAN]: 'Norwegian'
 };
 
 /** Common language pairs for optimization */
@@ -259,25 +259,25 @@ export const COMMON_LANGUAGE_PAIRS = [
   ['en', 'ja'],
   ['es', 'en'],
   ['fr', 'en'],
-  ['de', 'en'],
+  ['de', 'en']
 ];
 
 /** Professional tone indicators */
 export const PROFESSIONAL_INDICATORS = [
   'dear', 'sincerely', 'regards', 'respectfully', 'kindly',
-  'please find attached', 'i am writing to', 'thank you for your attention',
+  'please find attached', 'i am writing to', 'thank you for your attention'
 ];
 
 /** Casual tone indicators */
 export const CASUAL_INDICATORS = [
   'hey', 'hi there', 'thanks', 'cheers', 'best', 'talk soon',
-  'catch up', 'no worries', 'sounds good', 'let me know',
+  'catch up', 'no worries', 'sounds good', 'let me know'
 ];
 
 /** Formal tone indicators */
 export const FORMAL_INDICATORS = [
   'to whom it may concern', 'dear sir or madam', 'yours faithfully',
-  'i hereby', 'please accept', 'in accordance with', 'pursuant to',
+  'i hereby', 'please accept', 'in accordance with', 'pursuant to'
 ];
 
 /** Common translation phrases for quality checking */
@@ -286,28 +286,28 @@ export const COMMON_PHRASES: Record<string, Partial<Record<SupportedLanguage, st
     [SupportedLanguage.SPANISH]: ['gracias', 'muchas gracias'],
     [SupportedLanguage.FRENCH]: ['merci', 'je vous remercie'],
     [SupportedLanguage.GERMAN]: ['danke', 'vielen dank'],
-    [SupportedLanguage.ITALIAN]: ['grazie', 'molte grazie'],
+    [SupportedLanguage.ITALIAN]: ['grazie', 'molte grazie']
   },
   'best regards': {
     [SupportedLanguage.SPANISH]: ['saludos', 'atentamente'],
     [SupportedLanguage.FRENCH]: ['cordialement', 'bien cordialement'],
     [SupportedLanguage.GERMAN]: ['mit freundlichen grüßen', 'beste grüße'],
-    [SupportedLanguage.ITALIAN]: ['cordiali saluti', 'distinti saluti'],
-  },
+    [SupportedLanguage.ITALIAN]: ['cordiali saluti', 'distinti saluti']
+  }
 };
 
 /** Language detection patterns */
 export const LANGUAGE_PATTERNS: Partial<Record<SupportedLanguage, RegExp[]>> = {
   [SupportedLanguage.ENGLISH]: [
-    /\b(the|is|are|was|were|have|has|had|do|does|did|will|would|can|could|shall|should)\b/i,
+    /\b(the|is|are|was|were|have|has|had|do|does|did|will|would|can|could|shall|should)\b/i
   ],
   [SupportedLanguage.SPANISH]: [
-    /\b(el|la|los|las|es|son|está|están|tiene|tienen|hacer|hago|haré)\b/i,
+    /\b(el|la|los|las|es|son|está|están|tiene|tienen|hacer|hago|haré)\b/i
   ],
   [SupportedLanguage.FRENCH]: [
-    /\b(le|la|les|est|sont|avoir|être|je|tu|il|elle|nous|vous|ils)\b/i,
+    /\b(le|la|les|est|sont|avoir|être|je|tu|il|elle|nous|vous|ils)\b/i
   ],
   [SupportedLanguage.GERMAN]: [
-    /\b(der|die|das|ist|sind|haben|werden|kann|können|muss|müssen)\b/i,
-  ],
+    /\b(der|die|das|ist|sind|haben|werden|kann|können|muss|müssen)\b/i
+  ]
 };

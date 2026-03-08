@@ -222,7 +222,7 @@ export const DEFAULT_SENTIMENT_CONFIG: SentimentConfig = {
   minConfidence: 0.5,
   cacheResults: true,
   cacheTimeout: 5 * 60 * 1000, // 5 minutes
-  languages: ['en', 'en-US', 'en-GB'],
+  languages: ['en', 'en-US', 'en-GB']
 };
 
 // ============================================================================
@@ -240,7 +240,7 @@ export const POSITIVE_WORDS = [
   'success', 'successful', 'accomplish', 'achieve', 'congratulations',
   'beautiful', 'perfect', 'best', 'positive', 'optimistic', 'hopeful',
   'grateful', 'blessed', 'fortunate', 'lucky', 'pleasure', 'glad',
-  'recommend', 'approved', 'accepted', 'agreed', 'confirmed',
+  'recommend', 'approved', 'accepted', 'agreed', 'confirmed'
 ];
 
 /**
@@ -255,7 +255,7 @@ export const NEGATIVE_WORDS = [
   'problem', 'issue', 'trouble', 'difficult', 'challenge',
   'worst', 'negative', 'pessimistic', 'hopeless', 'impossible',
   'worried', 'concerned', 'anxious', 'stressed', 'overwhelmed',
-  'unacceptable', 'unfair', 'unjust', 'wrong', 'mistake', 'error',
+  'unacceptable', 'unfair', 'unjust', 'wrong', 'mistake', 'error'
 ];
 
 /**
@@ -264,7 +264,7 @@ export const NEGATIVE_WORDS = [
 export const URGENT_WORDS = [
   'urgent', 'asap', 'immediately', 'right now', 'today', 'now',
   'emergency', 'critical', 'priority', 'important', 'deadline',
-  'time sensitive', 'hurry', 'quickly', 'soon', 'at once',
+  'time sensitive', 'hurry', 'quickly', 'soon', 'at once'
 ];
 
 /**
@@ -274,7 +274,7 @@ export const FORMAL_WORDS = [
   'dear', 'sincerely', 'regards', 'respectfully', 'cordially',
   'furthermore', 'moreover', 'therefore', 'consequently', 'additionally',
   'accordingly', 'herewith', 'please find', 'attached hereto',
-  'hereby', 'whereas', 'pursuant to', 'notwithstanding',
+  'hereby', 'whereas', 'pursuant to', 'notwithstanding'
 ];
 
 /**
@@ -284,7 +284,7 @@ export const CASUAL_WORDS = [
   'hey', 'hi', 'hello', 'hiya', 'yo', 'what\'s up', 'sup',
   'cool', 'awesome', 'great', 'thanks', 'cheers', 'thanks a lot',
   'btw', 'by the way', 'lol', 'omg', 'wow', 'yeah', 'yep',
-  'kinda', 'sorta', 'gonna', 'wanna', 'gotta',
+  'kinda', 'sorta', 'gonna', 'wanna', 'gotta'
 ];
 
 /**
@@ -293,7 +293,7 @@ export const CASUAL_WORDS = [
 export const AGGRESSIVE_WORDS = [
   'demand', 'must', 'have to', 'need to', 'expect', 'require',
   'insist', 'insist on', 'immediately', 'right now', 'or else',
-  'better', 'should', 'should have', 'ought to',
+  'better', 'should', 'should have', 'ought to'
 ];
 
 /**
@@ -303,40 +303,40 @@ export const EMOTION_WORDS: Record<Emotion, string[]> = {
   [Emotion.JOY]: [
     'happy', 'joy', 'joyful', 'excited', 'delighted', 'thrilled',
     'elated', 'ecstatic', 'overjoyed', 'cheerful', 'gleeful',
-    'amused', 'entertained', 'pleased', 'content', 'satisfied',
+    'amused', 'entertained', 'pleased', 'content', 'satisfied'
   ],
   [Emotion.SADNESS]: [
     'sad', 'unhappy', 'depressed', 'down', 'blue', 'gloomy',
     'miserable', 'heartbroken', 'devastated', 'disappointed',
-    'discouraged', 'hopeless', 'sorrowful', 'grieving',
+    'discouraged', 'hopeless', 'sorrowful', 'grieving'
   ],
   [Emotion.ANGER]: [
     'angry', 'furious', 'mad', 'irate', 'outraged', 'annoyed',
     'irritated', 'frustrated', 'upset', 'livid', 'incensed',
-    'enraged', 'hostile', 'resentful', 'indignant',
+    'enraged', 'hostile', 'resentful', 'indignant'
   ],
   [Emotion.FEAR]: [
     'afraid', 'scared', 'frightened', 'terrified', 'anxious',
     'worried', 'concerned', 'nervous', 'apprehensive', 'uneasy',
-    'fearful', 'dreadful', 'panic', 'fear',
+    'fearful', 'dreadful', 'panic', 'fear'
   ],
   [Emotion.SURPRISE]: [
     'surprised', 'shocked', 'amazed', 'astonished', 'stunned',
-    'astounded', 'flabbergasted', 'bewildered', 'confused',
+    'astounded', 'flabbergasted', 'bewildered', 'confused'
   ],
   [Emotion.DISGUST]: [
     'disgusted', 'revolted', 'repulsed', 'sickened', 'nauseated',
-    'appalled', 'horrified', 'dislike', 'loathe',
+    'appalled', 'horrified', 'dislike', 'loathe'
   ],
   [Emotion.ANTICIPATION]: [
     'expect', 'anticipate', 'look forward', 'hope', 'eager',
-    'await', 'prepare', 'plan', 'foresee',
+    'await', 'prepare', 'plan', 'foresee'
   ],
   [Emotion.TRUST]: [
     'trust', 'believe', 'confidence', 'faith', 'rely', 'depend',
-    'certain', 'sure', 'assured', 'convinced',
+    'certain', 'sure', 'assured', 'convinced'
   ],
-  [Emotion.NEUTRAL]: [],
+  [Emotion.NEUTRAL]: []
 };
 
 // ============================================================================
@@ -349,36 +349,36 @@ export const EMOTION_WORDS: Record<Emotion, string[]> = {
 export const REPLY_TONE_EXAMPLES: Record<Tone, string[]> = {
   [Tone.FORMAL]: [
     'Dear [Name], Thank you for your email. I will review the information and respond shortly.',
-    'Dear [Name], I acknowledge receipt of your message and will address the matter at hand.',
+    'Dear [Name], I acknowledge receipt of your message and will address the matter at hand.'
   ],
   [Tone.CASUAL]: [
     'Hey [Name], Thanks for reaching out! I\'ll take a look and get back to you soon.',
-    'Hi [Name], Got your message! Let me check on that and let you know.',
+    'Hi [Name], Got your message! Let me check on that and let you know.'
   ],
   [Tone.URGENT]: [
     'Dear [Name], I am treating this as urgent and will respond immediately.',
-    '[Name], This requires immediate attention. I am prioritizing this request.',
+    '[Name], This requires immediate attention. I am prioritizing this request.'
   ],
   [Tone.PROFESSIONAL]: [
     'Dear [Name], Thank you for your inquiry. I will provide a comprehensive response.',
-    'Hello [Name], I appreciate your message and will follow up appropriately.',
+    'Hello [Name], I appreciate your message and will follow up appropriately.'
   ],
   [Tone.FRIENDLY]: [
     'Hi [Name], Thanks so much for your message! I\'m happy to help with this.',
-    'Hello [Name], Great to hear from you! Let me assist you with this.',
+    'Hello [Name], Great to hear from you! Let me assist you with this.'
   ],
   [Tone.AGGRESSIVE]: [],
   [Tone.PASSIVE]: [
-    'Dear [Name], I understand your concern and will look into this when possible.',
+    'Dear [Name], I understand your concern and will look into this when possible.'
   ],
   [Tone.ASSERTIVE]: [
     'Dear [Name], I will address this matter and provide a clear resolution.',
-    '[Name], I understand the requirements and will proceed accordingly.',
+    '[Name], I understand the requirements and will proceed accordingly.'
   ],
   [Tone.POLITE]: [
     'Dear [Name], Thank you for your email. I would be happy to assist you.',
-    'Hello [Name], I appreciate your message and will do my best to help.',
-  ],
+    'Hello [Name], I appreciate your message and will do my best to help.'
+  ]
 };
 
 // ============================================================================

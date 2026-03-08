@@ -6,15 +6,15 @@ import {
   VoiceRecognitionStatus,
   SpeechSynthesisStatus,
   VoiceLanguage,
-  MarkAction,
+  MarkAction
 } from '../../src/types/voiceAssistant';
 import { VoiceAssistantService } from '../../src/services/voiceAssistantService';
 
 // Mock the VoiceAssistantService
 vi.mock('../../src/services/voiceAssistantService', () => ({
   VoiceAssistantService: {
-    getInstance: vi.fn(),
-  },
+    getInstance: vi.fn()
+  }
 }));
 
 describe('useVoiceAssistant', () => {
@@ -37,7 +37,7 @@ describe('useVoiceAssistant', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     mockService = {
       startListening: vi.fn(),
       stopListening: vi.fn(),
@@ -57,13 +57,13 @@ describe('useVoiceAssistant', () => {
         emailsRead: 0,
         commandsByType: {},
         averageConfidence: 0,
-        lastReset: Date.now(),
+        lastReset: Date.now()
       }),
       getAvailableVoices: vi.fn().mockReturnValue([]),
       isConfirmation: vi.fn().mockReturnValue(false),
       isCancellation: vi.fn().mockReturnValue(false),
       on: vi.fn(),
-      off: vi.fn(),
+      off: vi.fn()
     };
 
     vi.mocked(VoiceAssistantService.getInstance).mockReturnValue(mockService as any);
@@ -86,7 +86,7 @@ describe('useVoiceAssistant', () => {
       const customConfig = {
         language: VoiceLanguage.SPANISH,
         continuousListening: true,
-        confidenceThreshold: 0.8,
+        confidenceThreshold: 0.8
       };
       const { result } = renderHook(() => useVoiceAssistant(customConfig));
 
@@ -225,7 +225,7 @@ describe('useVoiceAssistant', () => {
         type: VoiceCommandType.COMPOSE,
         transcript: 'Compose email to John',
         confidence: 0.85,
-        timestamp: Date.now(),
+        timestamp: Date.now()
       };
 
       mockService.recognizeCommand.mockResolvedValue(mockCommand);
@@ -263,7 +263,7 @@ describe('useVoiceAssistant', () => {
       act(() => {
         result.current.updateConfig({
           language: VoiceLanguage.FRENCH,
-          confidenceThreshold: 0.9,
+          confidenceThreshold: 0.9
         });
       });
 
@@ -289,7 +289,7 @@ describe('useVoiceAssistant', () => {
     it('should return available voices', () => {
       const mockVoices = [
         { voiceURI: 'voice-1', name: 'Voice 1', lang: 'en-US' },
-        { voiceURI: 'voice-2', name: 'Voice 2', lang: 'es-ES' },
+        { voiceURI: 'voice-2', name: 'Voice 2', lang: 'es-ES' }
       ];
 
       mockService.getAvailableVoices.mockReturnValue(mockVoices);
@@ -393,7 +393,7 @@ describe('useVoiceAssistant', () => {
         transcript: 'Search for emails from John',
         confidence: 0.9,
         timestamp: Date.now(),
-        searchQuery: 'John',
+        searchQuery: 'John'
       };
 
       mockService.recognizeCommand.mockResolvedValue(mockCommand);
@@ -449,7 +449,7 @@ describe('useVoiceAssistant', () => {
         result.current.updateConfig({
           language: VoiceLanguage.GERMAN,
           confidenceThreshold: 0.85,
-          continuousListening: true,
+          continuousListening: true
         });
       });
 
@@ -462,7 +462,7 @@ describe('useVoiceAssistant', () => {
       const commands = [
         { id: '1', type: VoiceCommandType.COMPOSE, transcript: 'Compose email', confidence: 0.8, timestamp: Date.now() },
         { id: '2', type: VoiceCommandType.SEARCH, transcript: 'Search emails', confidence: 0.9, timestamp: Date.now() },
-        { id: '3', type: VoiceCommandType.ARCHIVE, transcript: 'Archive this', confidence: 0.85, timestamp: Date.now() },
+        { id: '3', type: VoiceCommandType.ARCHIVE, transcript: 'Archive this', confidence: 0.85, timestamp: Date.now() }
       ];
 
       commands.forEach((cmd) => {

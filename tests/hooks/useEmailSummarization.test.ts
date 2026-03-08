@@ -25,7 +25,7 @@ Let's schedule a follow-up meeting next week to discuss progress.
 Best regards,
 John`,
     from: 'john@company.com',
-    date: '2024-10-15',
+    date: '2024-10-15'
   };
 
   const mockThread = [
@@ -44,7 +44,7 @@ Action items for the team:
 Best regards,
 John`,
       from: 'john@company.com',
-      date: '2024-10-15',
+      date: '2024-10-15'
     },
     {
       id: '2',
@@ -56,7 +56,7 @@ I have also scheduled a code review session for next Monday.
 Regards,
 Sarah`,
       from: 'sarah@company.com',
-      date: '2024-10-16',
+      date: '2024-10-16'
     },
     {
       id: '3',
@@ -67,8 +67,8 @@ Also, I noticed we need to update the roadmap document before the meeting.
       
 Mike`,
       from: 'mike@company.com',
-      date: '2024-10-16',
-    },
+      date: '2024-10-16'
+    }
   ];
 
   beforeEach(() => {
@@ -92,7 +92,7 @@ Mike`,
       const { result } = renderHook(() => useEmailSummarization({
         summaryType: SummaryType.EXTRACTIVE,
         length: SummaryLength.SHORT,
-        maxKeyPoints: 3,
+        maxKeyPoints: 3
       }));
 
       expect(result.current.config.summaryType).toBe(SummaryType.EXTRACTIVE);
@@ -130,7 +130,7 @@ Mike`,
 
     it('should generate TL;DR when enabled', async () => {
       const { result } = renderHook(() => useEmailSummarization({
-        includeTlDr: true,
+        includeTlDr: true
       }));
 
       await act(async () => {
@@ -143,7 +143,7 @@ Mike`,
 
     it('should not generate TL;DR when disabled', async () => {
       const { result } = renderHook(() => useEmailSummarization({
-        includeTlDr: false,
+        includeTlDr: false
       }));
 
       await act(async () => {
@@ -157,7 +157,7 @@ Mike`,
     it('should extract key points when enabled', async () => {
       const { result } = renderHook(() => useEmailSummarization({
         includeKeyPoints: true,
-        maxKeyPoints: 5,
+        maxKeyPoints: 5
       }));
 
       await act(async () => {
@@ -170,7 +170,7 @@ Mike`,
 
     it('should not extract key points when disabled', async () => {
       const { result } = renderHook(() => useEmailSummarization({
-        includeKeyPoints: false,
+        includeKeyPoints: false
       }));
 
       await act(async () => {
@@ -184,7 +184,7 @@ Mike`,
     it('should extract action items when enabled', async () => {
       const { result } = renderHook(() => useEmailSummarization({
         includeActionItems: true,
-        maxActionItems: 5,
+        maxActionItems: 5
       }));
 
       await act(async () => {
@@ -197,7 +197,7 @@ Mike`,
 
     it('should not extract action items when disabled', async () => {
       const { result } = renderHook(() => useEmailSummarization({
-        includeActionItems: false,
+        includeActionItems: false
       }));
 
       await act(async () => {
@@ -210,7 +210,7 @@ Mike`,
 
     it('should respect summary type configuration', async () => {
       const extractiveResult = renderHook(() => useEmailSummarization({
-        summaryType: SummaryType.EXTRACTIVE,
+        summaryType: SummaryType.EXTRACTIVE
       }));
 
       await act(async () => {
@@ -235,7 +235,7 @@ Mike`,
 
       await act(async () => {
         const summary = await result.current.summarize({
-          emails: [],
+          emails: []
         });
         expect(summary.tlDr).toBe('No content to summarize.');
       });
@@ -245,7 +245,7 @@ Mike`,
   describe('Caching', () => {
     it('should cache summary when enableCache is true', async () => {
       const { result } = renderHook(() => useEmailSummarization({
-        enableCache: true,
+        enableCache: true
       }));
 
       await act(async () => {
@@ -258,7 +258,7 @@ Mike`,
 
     it('should use cached summary on subsequent calls', async () => {
       const { result } = renderHook(() => useEmailSummarization({
-        enableCache: true,
+        enableCache: true
       }));
 
       await act(async () => {
@@ -284,8 +284,8 @@ Mike`,
         performance: {
           cacheEnabled: false,
           cacheSize: 100,
-          maxProcessingTime: 500,
-        },
+          maxProcessingTime: 500
+        }
       }));
 
       await act(async () => {
@@ -297,7 +297,7 @@ Mike`,
 
     it('should clear cache', async () => {
       const { result } = renderHook(() => useEmailSummarization({
-        enableCache: true,
+        enableCache: true
       }));
 
       await act(async () => {
@@ -329,7 +329,7 @@ Mike`,
 
     it('should calculate average processing time correctly', async () => {
       const { result } = renderHook(() => useEmailSummarization({
-        enableCache: false,
+        enableCache: false
       }));
 
       await act(async () => {
@@ -340,7 +340,7 @@ Mike`,
 
       // Use a different email to avoid cache
       const differentEmail = { ...mockEmail, id: 'different-id' };
-      
+
       await act(async () => {
         await result.current.summarizeEmail(differentEmail);
       });
@@ -386,7 +386,7 @@ Mike`,
 
     it('should get TL;DR from summary', async () => {
       const { result } = renderHook(() => useEmailSummarization({
-        includeTlDr: true,
+        includeTlDr: true
       }));
 
       await act(async () => {
@@ -406,7 +406,7 @@ Mike`,
       act(() => {
         result.current.updateConfig({
           summaryType: SummaryType.ABSTRACTIVE,
-          length: SummaryLength.DETAILED,
+          length: SummaryLength.DETAILED
         });
       });
 
@@ -418,12 +418,12 @@ Mike`,
       const { result } = renderHook(() => useEmailSummarization({
         summaryType: SummaryType.EXTRACTIVE,
         length: SummaryLength.SHORT,
-        maxKeyPoints: 3,
+        maxKeyPoints: 3
       }));
 
       act(() => {
         result.current.updateConfig({
-          length: SummaryLength.MEDIUM,
+          length: SummaryLength.MEDIUM
         });
       });
 
@@ -440,7 +440,7 @@ Mike`,
       await act(async () => {
         try {
           await result.current.summarize({
-            emails: [],
+            emails: []
           });
         } catch (err) {
           // Expected
@@ -460,7 +460,7 @@ Mike`,
 
       await act(async () => {
         const summary = await result.current.summarize({
-          emails: [],
+          emails: []
         });
         expect(summary.tlDr).toBe('No content to summarize.');
       });
@@ -470,7 +470,7 @@ Mike`,
   describe('Reset', () => {
     it('should reset all state', async () => {
       const { result } = renderHook(() => useEmailSummarization({
-        enableCache: true,
+        enableCache: true
       }));
 
       await act(async () => {

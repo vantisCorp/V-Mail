@@ -5,15 +5,15 @@ import {
   AnomalyType,
   AnomalySeverity,
   DetectionStatus,
-  RiskLevel,
+  RiskLevel
 } from '../../src/types/anomalyDetection';
 import { AnomalyDetectionService } from '../../src/services/anomalyDetectionService';
 
 // Mock the AnomalyDetectionService
 vi.mock('../../src/services/anomalyDetectionService', () => ({
   AnomalyDetectionService: {
-    getInstance: vi.fn(),
-  },
+    getInstance: vi.fn()
+  }
 }));
 
 describe('useAnomalyDetection', () => {
@@ -27,7 +27,7 @@ describe('useAnomalyDetection', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     mockService = {
       detectAnomalies: vi.fn(),
       updateConfig: vi.fn(),
@@ -41,10 +41,10 @@ describe('useAnomalyDetection', () => {
         detectionsByType: {},
         detectionsBySeverity: {},
         accuracy: 0,
-        lastReset: Date.now(),
+        lastReset: Date.now()
       }),
       resetStatistics: vi.fn(),
-      clearCache: vi.fn(),
+      clearCache: vi.fn()
     };
 
     vi.mocked(AnomalyDetectionService.getInstance).mockReturnValue(mockService as any);
@@ -63,7 +63,7 @@ describe('useAnomalyDetection', () => {
       const customConfig = {
         confidenceThreshold: 0.8,
         riskScoreThreshold: 0.6,
-        enableAutomatedActions: true,
+        enableAutomatedActions: true
       };
       const { result } = renderHook(() => useAnomalyDetection(customConfig));
 
@@ -95,7 +95,7 @@ describe('useAnomalyDetection', () => {
         timestamp: Date.now(),
         description: 'Phishing attempt detected',
         indicators: [],
-        recommendedActions: [],
+        recommendedActions: []
       };
 
       mockService.detectAnomalies.mockResolvedValue(mockResult);
@@ -145,7 +145,7 @@ describe('useAnomalyDetection', () => {
           timestamp: Date.now(),
           description: 'No anomalies',
           indicators: [],
-          recommendedActions: [],
+          recommendedActions: []
         }), 100))
       );
 
@@ -179,7 +179,7 @@ describe('useAnomalyDetection', () => {
           timestamp: Date.now(),
           description: 'Phishing',
           indicators: [],
-          recommendedActions: [],
+          recommendedActions: []
         },
         {
           id: '2',
@@ -192,8 +192,8 @@ describe('useAnomalyDetection', () => {
           timestamp: Date.now(),
           description: 'Spam',
           indicators: [],
-          recommendedActions: [],
-        },
+          recommendedActions: []
+        }
       ];
 
       mockService.detectAnomalies
@@ -204,7 +204,7 @@ describe('useAnomalyDetection', () => {
 
       const emails = [
         { id: 'email-1', subject: 'Test 1', body: 'Body 1', sender: { email: 'test1@example.com' } },
-        { id: 'email-2', subject: 'Test 2', body: 'Body 2', sender: { email: 'test2@example.com' } },
+        { id: 'email-2', subject: 'Test 2', body: 'Body 2', sender: { email: 'test2@example.com' } }
       ];
 
       let results;
@@ -223,7 +223,7 @@ describe('useAnomalyDetection', () => {
       const { result } = renderHook(() => useAnomalyDetection());
 
       const emails = [
-        { id: 'email-1', subject: 'Test', body: 'Body', sender: { email: 'test@example.com' } },
+        { id: 'email-1', subject: 'Test', body: 'Body', sender: { email: 'test@example.com' } }
       ];
 
       let results;
@@ -282,7 +282,7 @@ describe('useAnomalyDetection', () => {
         result.current.updateConfig({
           confidenceThreshold: 0.9,
           riskScoreThreshold: 0.7,
-          enableAutomatedActions: true,
+          enableAutomatedActions: true
         });
       });
 
@@ -350,7 +350,7 @@ describe('useAnomalyDetection', () => {
         timestamp: Date.now(),
         description: 'Phishing detected',
         indicators: [],
-        recommendedActions: [],
+        recommendedActions: []
       };
 
       mockService.detectAnomalies.mockResolvedValue(mockResult);
@@ -388,7 +388,7 @@ describe('useAnomalyDetection', () => {
           timestamp: Date.now(),
           description: 'Phishing',
           indicators: [],
-          recommendedActions: [],
+          recommendedActions: []
         },
         {
           id: '2',
@@ -401,7 +401,7 @@ describe('useAnomalyDetection', () => {
           timestamp: Date.now(),
           description: 'Spam',
           indicators: [],
-          recommendedActions: [],
+          recommendedActions: []
         },
         {
           id: '3',
@@ -414,8 +414,8 @@ describe('useAnomalyDetection', () => {
           timestamp: Date.now(),
           description: 'No anomalies',
           indicators: [],
-          recommendedActions: [],
-        },
+          recommendedActions: []
+        }
       ];
 
       mockResults.forEach((res) => {
@@ -449,7 +449,7 @@ describe('useAnomalyDetection', () => {
         timestamp: Date.now(),
         description: 'No anomalies',
         indicators: [],
-        recommendedActions: [],
+        recommendedActions: []
       };
 
       mockService.detectAnomalies.mockResolvedValue(mockResult);
@@ -460,7 +460,7 @@ describe('useAnomalyDetection', () => {
       act(() => {
         result.current.updateConfig({
           confidenceThreshold: 0.9,
-          riskScoreThreshold: 0.7,
+          riskScoreThreshold: 0.7
         });
       });
 

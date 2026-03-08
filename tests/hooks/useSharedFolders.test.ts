@@ -4,14 +4,14 @@ import { useSharedFolders } from '../../src/hooks/useSharedFolders';
 import type {
   SharedFolder,
   FolderPermission,
-  ShareTargetType,
+  ShareTargetType
 } from '../../src/types/sharedFolders';
 
 // Mock the useNotifications hook
 vi.mock('../../src/hooks/useNotifications', () => ({
   useNotifications: () => ({
-    addNotification: vi.fn(),
-  }),
+    addNotification: vi.fn()
+  })
 }));
 
 describe('useSharedFolders', () => {
@@ -27,7 +27,7 @@ describe('useSharedFolders', () => {
       totalParticipants: 0,
       foldersByPermission: { read: 0, write: 0, admin: 0 },
       pendingInvitations: 0,
-      activeShares: 0,
+      activeShares: 0
     });
   });
 
@@ -45,7 +45,7 @@ describe('useSharedFolders', () => {
           targetId: 'user-2',
           targetName: 'Jane Smith',
           targetEmail: 'jane@example.com',
-          permission: 'read',
+          permission: 'read'
         },
         currentUserId,
         currentUserName
@@ -72,7 +72,7 @@ describe('useSharedFolders', () => {
           targetType: 'team',
           targetId: 'team-1',
           targetName: 'Engineering Team',
-          permission: 'write',
+          permission: 'write'
         },
         'user-1',
         'John Doe'
@@ -98,7 +98,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: 'user-2',
           targetName: 'Jane Smith',
-          permission: 'read',
+          permission: 'read'
         },
         currentUserId,
         currentUserName
@@ -112,7 +112,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: 'user-3',
           targetName: 'Bob Johnson',
-          permission: 'write',
+          permission: 'write'
         },
         currentUserId,
         currentUserName
@@ -133,7 +133,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: 'user-2',
           targetName: 'Jane Smith',
-          permission: 'read',
+          permission: 'read'
         },
         'user-1',
         'John Doe'
@@ -148,7 +148,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: 'user-2',
           targetName: 'Jane Smith',
-          permission: 'write',
+          permission: 'write'
         },
         'user-1',
         'John Doe'
@@ -171,7 +171,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: 'user-2',
           targetName: 'Jane Smith',
-          permission: 'read',
+          permission: 'read'
         },
         currentUserId,
         currentUserName
@@ -201,7 +201,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: 'user-2',
           targetName: 'Jane Smith',
-          permission: 'read',
+          permission: 'read'
         },
         currentUserId,
         currentUserName
@@ -234,7 +234,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: 'user-2',
           targetName: 'Jane Smith',
-          permission: 'read',
+          permission: 'read'
         },
         currentUserId,
         currentUserName
@@ -261,7 +261,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: userId,
           targetName: 'Jane Smith',
-          permission: 'read',
+          permission: 'read'
         },
         'user-1',
         'John Doe'
@@ -291,7 +291,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: 'user-2',
           targetName: 'Jane Smith',
-          permission: 'read',
+          permission: 'read'
         },
         ownerId,
         'John Doe'
@@ -315,7 +315,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: 'user-2',
           targetName: 'Jane Smith',
-          permission: 'read',
+          permission: 'read'
         },
         'user-1',
         'John Doe'
@@ -341,7 +341,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: userId,
           targetName: 'Jane Smith',
-          permission: 'read',
+          permission: 'read'
         },
         ownerId,
         'John Doe'
@@ -381,7 +381,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: 'user-2',
           targetName: 'Jane Smith',
-          permission: 'read',
+          permission: 'read'
         },
         currentUserId,
         currentUserName
@@ -413,7 +413,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: 'user-2',
           targetName: 'Jane Smith',
-          permission: 'read',
+          permission: 'read'
         },
         currentUserId,
         currentUserName
@@ -425,7 +425,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: 'user-3',
           targetName: 'Bob Johnson',
-          permission: 'write',
+          permission: 'write'
         },
         currentUserId,
         currentUserName
@@ -454,7 +454,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: 'user-2',
           targetName: 'Jane Smith',
-          permission: 'read',
+          permission: 'read'
         },
         currentUserId,
         currentUserName
@@ -466,7 +466,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: 'user-3',
           targetName: 'Bob Johnson',
-          permission: 'write',
+          permission: 'write'
         },
         currentUserId,
         currentUserName
@@ -475,7 +475,7 @@ describe('useSharedFolders', () => {
 
     const sorted = result.current.getFilteredFolders(undefined, {
       field: 'folderName',
-      order: 'desc',
+      order: 'desc'
     });
 
     expect(sorted[0].folderId).toBe('folder-2');
@@ -494,7 +494,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: 'user-2',
           targetName: 'Jane Smith',
-          permission: 'read',
+          permission: 'read'
         },
         currentUserId,
         currentUserName
@@ -506,7 +506,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: 'user-3',
           targetName: 'Bob Johnson',
-          permission: 'write',
+          permission: 'write'
         },
         currentUserId,
         currentUserName
@@ -529,7 +529,7 @@ describe('useSharedFolders', () => {
           targetType: 'user',
           targetId: 'user-2',
           targetName: 'Jane Smith',
-          permission: 'read',
+          permission: 'read'
         },
         'user-1',
         'John Doe'
@@ -556,7 +556,7 @@ describe('useSharedFolders', () => {
             targetType: 'user',
             targetId: `user-${i}`,
             targetName: `User ${i}`,
-            permission: 'read',
+            permission: 'read'
           },
           'user-1',
             'John Doe'

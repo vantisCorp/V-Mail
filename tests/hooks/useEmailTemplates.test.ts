@@ -10,13 +10,13 @@ describe('useEmailTemplates Hook', () => {
   describe('Initialization', () => {
     it('should initialize with loading state', () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       expect(result.current.isLoading).toBe(true);
     });
 
     it('should load templates after initialization', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -27,7 +27,7 @@ describe('useEmailTemplates Hook', () => {
 
     it('should load system templates', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -40,7 +40,7 @@ describe('useEmailTemplates Hook', () => {
   describe('Template CRUD Operations', () => {
     it('should create a new template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -64,7 +64,7 @@ describe('useEmailTemplates Hook', () => {
 
     it('should update an existing template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -85,7 +85,7 @@ describe('useEmailTemplates Hook', () => {
 
     it('should delete a template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -118,7 +118,7 @@ describe('useEmailTemplates Hook', () => {
 
     it('should not allow deletion of system templates', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -137,7 +137,7 @@ describe('useEmailTemplates Hook', () => {
 
     it('should clone a template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -160,7 +160,7 @@ describe('useEmailTemplates Hook', () => {
   describe('Template Preview and Validation', () => {
     it('should preview template with variables replaced', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -172,14 +172,14 @@ describe('useEmailTemplates Hook', () => {
         templateId: template!.id,
         variables: {}
       });
-      
+
       expect(preview).toBeDefined();
       expect(typeof preview).toBe('string');
     });
 
     it('should validate template with valid content', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -193,7 +193,7 @@ describe('useEmailTemplates Hook', () => {
 
     it('should validate template with invalid content', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -209,7 +209,7 @@ describe('useEmailTemplates Hook', () => {
   describe('Template Filtering and Search', () => {
     it('should filter templates by type', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -223,7 +223,7 @@ describe('useEmailTemplates Hook', () => {
 
     it('should filter templates by category', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -236,7 +236,7 @@ describe('useEmailTemplates Hook', () => {
 
     it('should search templates by tag', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -250,7 +250,7 @@ describe('useEmailTemplates Hook', () => {
 
     it('should apply multiple filters together', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -260,7 +260,7 @@ describe('useEmailTemplates Hook', () => {
         permission: 'public'
       });
 
-      expect(filtered.every(t => 
+      expect(filtered.every(t =>
         t.type === 'standard' &&
         t.permission === 'public'
       )).toBe(true);
@@ -270,7 +270,7 @@ describe('useEmailTemplates Hook', () => {
   describe('Template Variables Management', () => {
     it('should add variable to template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -306,7 +306,7 @@ describe('useEmailTemplates Hook', () => {
 
     it('should update variable in template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -331,7 +331,7 @@ describe('useEmailTemplates Hook', () => {
 
     it('should remove variable from template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -355,7 +355,7 @@ describe('useEmailTemplates Hook', () => {
   describe('Template Favorites', () => {
     it('should add template to favorites', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -373,7 +373,7 @@ describe('useEmailTemplates Hook', () => {
 
     it('should remove template from favorites', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -394,7 +394,7 @@ describe('useEmailTemplates Hook', () => {
 
     it('should get favorite templates', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -414,7 +414,7 @@ describe('useEmailTemplates Hook', () => {
   describe('Template Version Management', () => {
     it('should create a new version', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -432,7 +432,7 @@ describe('useEmailTemplates Hook', () => {
 
     it('should restore a previous version', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -460,7 +460,7 @@ describe('useEmailTemplates Hook', () => {
   describe('Template Analytics', () => {
     it('should get template analytics', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -475,7 +475,7 @@ describe('useEmailTemplates Hook', () => {
   describe('Usage Logs', () => {
     it('should get usage logs', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -486,7 +486,7 @@ describe('useEmailTemplates Hook', () => {
 
     it('should get usage logs for specific template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -501,7 +501,7 @@ describe('useEmailTemplates Hook', () => {
   describe('Error Handling', () => {
     it('should handle updating non-existent template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -516,7 +516,7 @@ describe('useEmailTemplates Hook', () => {
 
     it('should handle deleting non-existent template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -535,7 +535,7 @@ describe('useEmailTemplates Hook', () => {
   describe('Refresh Functions', () => {
     it('should refresh templates', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -549,7 +549,7 @@ describe('useEmailTemplates Hook', () => {
 
     it('should refresh usage logs', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });

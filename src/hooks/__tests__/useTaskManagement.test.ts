@@ -10,7 +10,7 @@ import {
   TaskStatus,
   TaskType,
   AssignmentType,
-  RecurrenceType,
+  RecurrenceType
 } from '../../types/taskManagement';
 
 // Mock timers
@@ -24,13 +24,13 @@ describe('useTaskManagement', () => {
   describe('initial state', () => {
     it('should start with loading state', () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       expect(result.current.isLoading).toBe(true);
     });
 
     it('should load tasks after initialization', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -41,7 +41,7 @@ describe('useTaskManagement', () => {
 
     it('should load projects after initialization', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -53,7 +53,7 @@ describe('useTaskManagement', () => {
   describe('createTask', () => {
     it('should create a new task', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -81,7 +81,7 @@ describe('useTaskManagement', () => {
           subtasks: [],
           checklist: [],
           reminders: [],
-          activityLog: [],
+          activityLog: []
         });
       });
 
@@ -92,7 +92,7 @@ describe('useTaskManagement', () => {
 
     it('should add activity log entry on creation', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -118,7 +118,7 @@ describe('useTaskManagement', () => {
           subtasks: [],
           checklist: [],
           reminders: [],
-          activityLog: [],
+          activityLog: []
         });
       });
 
@@ -130,17 +130,17 @@ describe('useTaskManagement', () => {
   describe('updateTask', () => {
     it('should update an existing task', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
 
       const task = result.current.tasks[0];
-      
+
       await act(async () => {
         await result.current.updateTask(task.id, {
           title: 'Updated Title',
-          assignedBy: 'admin',
+          assignedBy: 'admin'
         });
       });
 
@@ -151,7 +151,7 @@ describe('useTaskManagement', () => {
 
     it('should add activity log for status changes', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -167,7 +167,7 @@ describe('useTaskManagement', () => {
       await act(async () => {
         await result.current.updateTask(task.id, {
           status: TaskStatus.COMPLETED,
-          assignedBy: 'admin',
+          assignedBy: 'admin'
         });
       });
 
@@ -179,7 +179,7 @@ describe('useTaskManagement', () => {
   describe('deleteTask', () => {
     it('should delete a task', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -206,7 +206,7 @@ describe('useTaskManagement', () => {
           subtasks: [],
           checklist: [],
           reminders: [],
-          activityLog: [],
+          activityLog: []
         });
       });
 
@@ -224,7 +224,7 @@ describe('useTaskManagement', () => {
   describe('convertEmailToTask', () => {
     it('should convert email to task', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -232,7 +232,7 @@ describe('useTaskManagement', () => {
       const emailData = {
         subject: 'Important Email',
         body: 'This is the email body content',
-        attachments: [{ name: 'doc.pdf', url: 'http://example.com/doc.pdf' }],
+        attachments: [{ name: 'doc.pdf', url: 'http://example.com/doc.pdf' }]
       };
 
       let newTask: any;
@@ -244,7 +244,7 @@ describe('useTaskManagement', () => {
           defaultPriority: TaskPriority.HIGH,
           defaultType: TaskType.TASK,
           createSubtasks: false,
-          createChecklist: false,
+          createChecklist: false
         });
       });
 
@@ -257,7 +257,7 @@ describe('useTaskManagement', () => {
 
     it('should apply default due date offset', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -272,7 +272,7 @@ describe('useTaskManagement', () => {
           defaultType: TaskType.TASK,
           createSubtasks: false,
           createChecklist: false,
-          defaultDueDateOffset: 7,
+          defaultDueDateOffset: 7
         });
       });
 
@@ -283,7 +283,7 @@ describe('useTaskManagement', () => {
   describe('subtask management', () => {
     it('should create a subtask', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -295,7 +295,7 @@ describe('useTaskManagement', () => {
         newSubTask = await result.current.createSubTask(task.id, {
           title: 'New Subtask',
           status: TaskStatus.TODO,
-          completed: false,
+          completed: false
         });
       });
 
@@ -305,7 +305,7 @@ describe('useTaskManagement', () => {
 
     it('should update a subtask', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -320,7 +320,7 @@ describe('useTaskManagement', () => {
 
       await act(async () => {
         const success = await result.current.updateSubTask(task.id, subtaskId, {
-          completed: true,
+          completed: true
         });
         expect(success).toBe(true);
       });
@@ -328,7 +328,7 @@ describe('useTaskManagement', () => {
 
     it('should delete a subtask', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -355,7 +355,7 @@ describe('useTaskManagement', () => {
   describe('comment management', () => {
     it('should add a comment', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -370,7 +370,7 @@ describe('useTaskManagement', () => {
           authorId: 'user-1',
           authorName: 'Test User',
           mentions: [],
-          attachments: [],
+          attachments: []
         });
       });
 
@@ -383,7 +383,7 @@ describe('useTaskManagement', () => {
 
     it('should add activity log entry for comment', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -397,7 +397,7 @@ describe('useTaskManagement', () => {
           authorId: 'user-1',
           authorName: 'Test User',
           mentions: [],
-          attachments: [],
+          attachments: []
         });
       });
 
@@ -410,7 +410,7 @@ describe('useTaskManagement', () => {
   describe('checklist management', () => {
     it('should create a checklist item', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -429,7 +429,7 @@ describe('useTaskManagement', () => {
 
     it('should toggle a checklist item', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -455,7 +455,7 @@ describe('useTaskManagement', () => {
 
     it('should delete a checklist item', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -482,7 +482,7 @@ describe('useTaskManagement', () => {
   describe('reminder management', () => {
     it('should create a reminder', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -494,7 +494,7 @@ describe('useTaskManagement', () => {
         newReminder = await result.current.createReminder(task.id, {
           type: 'email',
           reminderTime: new Date().toISOString(),
-          message: 'Task due soon',
+          message: 'Task due soon'
         });
       });
 
@@ -507,7 +507,7 @@ describe('useTaskManagement', () => {
   describe('getTaskStatistics', () => {
     it('should return correct statistics', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -522,7 +522,7 @@ describe('useTaskManagement', () => {
 
     it('should count completed tasks correctly', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -537,13 +537,13 @@ describe('useTaskManagement', () => {
   describe('getFilteredTasks', () => {
     it('should filter by status', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
 
       const filtered = result.current.getFilteredTasks({
-        status: TaskStatus.TODO,
+        status: TaskStatus.TODO
       });
 
       expect(filtered.every(t => t.status === TaskStatus.TODO)).toBe(true);
@@ -551,13 +551,13 @@ describe('useTaskManagement', () => {
 
     it('should filter by priority', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
 
       const filtered = result.current.getFilteredTasks({
-        priority: TaskPriority.HIGH,
+        priority: TaskPriority.HIGH
       });
 
       expect(filtered.every(t => t.priority === TaskPriority.HIGH)).toBe(true);
@@ -565,13 +565,13 @@ describe('useTaskManagement', () => {
 
     it('should filter by type', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
 
       const filtered = result.current.getFilteredTasks({
-        type: TaskType.BUG,
+        type: TaskType.BUG
       });
 
       expect(filtered.every(t => t.type === TaskType.BUG)).toBe(true);
@@ -579,32 +579,32 @@ describe('useTaskManagement', () => {
 
     it('should filter by search query', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
 
       const filtered = result.current.getFilteredTasks({
-        search: 'Marketing',
+        search: 'Marketing'
       });
 
       expect(filtered.length).toBeGreaterThan(0);
-      expect(filtered.some(t => 
-        t.title.toLowerCase().includes('marketing') || 
+      expect(filtered.some(t =>
+        t.title.toLowerCase().includes('marketing') ||
         t.description?.toLowerCase().includes('marketing')
       )).toBe(true);
     });
 
     it('should filter by project', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
 
       const project = result.current.projects[0];
       const filtered = result.current.getFilteredTasks({
-        projectId: project.id,
+        projectId: project.id
       });
 
       expect(filtered.every(t => t.projectId === project.id)).toBe(true);
@@ -614,14 +614,14 @@ describe('useTaskManagement', () => {
   describe('getSortedTasks', () => {
     it('should sort by title ascending', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
 
       const sorted = result.current.getSortedTasks(result.current.tasks, {
         field: 'title',
-        order: 'asc',
+        order: 'asc'
       });
 
       for (let i = 1; i < sorted.length; i++) {
@@ -631,18 +631,18 @@ describe('useTaskManagement', () => {
 
     it('should sort by priority descending', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
 
       const sorted = result.current.getSortedTasks(result.current.tasks, {
         field: 'priority',
-        order: 'desc',
+        order: 'desc'
       });
 
       const priorityOrder = [TaskPriority.LOW, TaskPriority.MEDIUM, TaskPriority.HIGH, TaskPriority.URGENT];
-      
+
       for (let i = 1; i < sorted.length; i++) {
         const prevPriority = priorityOrder.indexOf(sorted[i-1].priority);
         const currPriority = priorityOrder.indexOf(sorted[i].priority);
@@ -654,7 +654,7 @@ describe('useTaskManagement', () => {
   describe('utility functions', () => {
     it('should get task by ID', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -668,7 +668,7 @@ describe('useTaskManagement', () => {
 
     it('should return null for non-existent task ID', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -679,7 +679,7 @@ describe('useTaskManagement', () => {
 
     it('should get tasks by email ID', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -692,7 +692,7 @@ describe('useTaskManagement', () => {
   describe('project management', () => {
     it('should create a new project', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -705,7 +705,7 @@ describe('useTaskManagement', () => {
           name: 'Test Project',
           description: 'A test project',
           color: '#FF0000',
-          icon: '📁',
+          icon: '📁'
         });
       });
 
@@ -718,7 +718,7 @@ describe('useTaskManagement', () => {
   describe('selectedTask', () => {
     it('should set selected task', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -735,7 +735,7 @@ describe('useTaskManagement', () => {
 
     it('should clear selected task', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -759,7 +759,7 @@ describe('useTaskManagement', () => {
   describe('refreshTasks', () => {
     it('should refresh tasks', async () => {
       const { result } = renderHook(() => useTaskManagement());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });

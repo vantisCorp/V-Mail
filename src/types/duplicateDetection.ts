@@ -184,7 +184,7 @@ export const DEFAULT_DETECTION_CONFIG: DetectionConfig = {
   fromWeight: 0.2,
   maxTimeDifference: 168, // 7 days
   enableCache: true,
-  enableLearning: true,
+  enableLearning: true
 };
 
 // ============================================================================
@@ -199,7 +199,7 @@ export const FORWARD_INDICATORS = [
   'To:',
   'Subject:',
   ' forwarded message ',
-  ' begin forwarded message ',
+  ' begin forwarded message '
 ];
 
 /** Subject prefixes that should be ignored for comparison */
@@ -210,7 +210,7 @@ export const SUBJECT_PREFIXES = [
   'FWD:',
   'FW:',
   'Forward:',
-  'Reply:',
+  'Reply:'
 ];
 
 /** Signature patterns to ignore in body comparison */
@@ -221,7 +221,7 @@ export const SIGNATURE_PATTERNS = [
   /Regards,?/i,
   /Sincerely,?/i,
   /Thanks,?/i,
-  /Thank you,?/i,
+  /Thank you,?/i
 ];
 
 /** Footer patterns to ignore in body comparison */
@@ -229,7 +229,7 @@ export const FOOTER_PATTERNS = [
   /Confidentiality Notice:?/i,
   /This message contains privileged/i,
   /Disclaimer:?/i,
-  /If you received this in error/i,
+  /If you received this in error/i
 ];
 
 /** Thresholds for duplicate classification */
@@ -237,12 +237,12 @@ export const DUPLICATE_THRESHOLDS = {
   EXACT: 0.98,
   NEAR: 0.85,
   PARTIAL: 0.7,
-  THREAD: 0.5,
+  THREAD: 0.5
 } as const;
 
 /** Severity thresholds */
 export const SEVERITY_THRESHOLDS = {
   HIGH: 0.9,
   MEDIUM: 0.7,
-  LOW: 0.5,
+  LOW: 0.5
 } as const;

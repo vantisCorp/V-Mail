@@ -24,7 +24,7 @@ import {
   COMMON_PHRASES,
   EMAIL_TEMPLATES,
   COMMON_GRAMMAR_ERRORS,
-  STYLE_IMPROVEMENTS,
+  STYLE_IMPROVEMENTS
 } from '../types/predictiveTyping';
 
 // ============================================================================
@@ -46,7 +46,7 @@ export class LanguageModel {
       wordPairs: {},
       emailPatterns: {},
       subjectPatterns: {},
-      lastUpdated: new Date().toISOString(),
+      lastUpdated: new Date().toISOString()
     };
     this.userPatterns = new Map();
   }
@@ -121,10 +121,12 @@ export class LanguageModel {
         const priorityOrder = {
           [SuggestionPriority.HIGH]: 0,
           [SuggestionPriority.MEDIUM]: 1,
-          [SuggestionPriority.LOW]: 2,
+          [SuggestionPriority.LOW]: 2
         };
         const priorityDiff = priorityOrder[a.priority] - priorityOrder[b.priority];
-        if (priorityDiff !== 0) return priorityDiff;
+        if (priorityDiff !== 0) {
+return priorityDiff;
+}
         return b.confidence - a.confidence;
       })
       .slice(0, context.userPreferences?.maxSuggestions || 5);
@@ -136,7 +138,7 @@ export class LanguageModel {
       suggestions: sortedSuggestions,
       processingTime,
       modelVersion: this.modelVersion,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     // Cache result
@@ -185,7 +187,7 @@ export class LanguageModel {
         endIndex: cursorPosition,
         originalText: currentWord,
         displayText: suggestion.text,
-        isFullWord: suggestion.isFullWord,
+        isFullWord: suggestion.isFullWord
       });
     });
 
@@ -204,7 +206,7 @@ export class LanguageModel {
       'they', 'we', 'say', 'her', 'she', 'or', 'an', 'will', 'my', 'one',
       'all', 'would', 'there', 'their', 'what', 'so', 'up', 'out', 'if', 'about',
       'who', 'get', 'which', 'go', 'me', 'when', 'make', 'can', 'like', 'time',
-      'no', 'just', 'him', 'know', 'take', 'people', 'into', 'year', 'your', 'good',
+      'no', 'just', 'him', 'know', 'take', 'people', 'into', 'year', 'your', 'good'
     ];
 
     // Check for matches
@@ -213,7 +215,7 @@ export class LanguageModel {
         completions.push({
           text: word,
           confidence: 0.8 - (word.length - currentWord.length) * 0.05,
-          isFullWord: true,
+          isFullWord: true
         });
       }
     });
@@ -224,7 +226,7 @@ export class LanguageModel {
         completions.push({
           text: pattern,
           confidence: Math.min(0.95, 0.6 + frequency * 0.1),
-          isFullWord: true,
+          isFullWord: true
         });
       }
     });
@@ -258,7 +260,7 @@ export class LanguageModel {
             timestamp: new Date().toISOString(),
             category,
             phrase,
-            context: recentText,
+            context: recentText
           });
         }
       });
@@ -307,7 +309,7 @@ export class LanguageModel {
             originalText: match[0],
             correction: error.correction,
             explanation: error.explanation,
-            errorType: key,
+            errorType: key
           });
         }
       }
@@ -341,7 +343,7 @@ export class LanguageModel {
             originalText: match[0],
             improvedText: improvement.improvement === 'remove' ? '' : improvement.improvement,
             explanation: improvement.explanation,
-            styleType: key,
+            styleType: key
           });
         }
       }
@@ -374,7 +376,7 @@ export class LanguageModel {
           templateName: template.name,
           templateContent: template.content,
           category: template.category,
-          variables: this.extractTemplateVariables(template.content),
+          variables: this.extractTemplateVariables(template.content)
         });
       }
     });
@@ -420,7 +422,7 @@ export class LanguageModel {
       { email: 'jane.smith@example.com', name: 'Jane Smith', frequency: 8 },
       { email: 'bob.wilson@example.com', name: 'Bob Wilson', frequency: 5 },
       { email: 'alice.johnson@example.com', name: 'Alice Johnson', frequency: 3 },
-      { email: 'charlie.brown@example.com', name: 'Charlie Brown', frequency: 2 },
+      { email: 'charlie.brown@example.com', name: 'Charlie Brown', frequency: 2 }
     ];
 
     mockContacts.forEach(contact => {
@@ -436,7 +438,7 @@ export class LanguageModel {
           timestamp: new Date().toISOString(),
           email: contact.email,
           name: contact.name,
-          frequency: contact.frequency,
+          frequency: contact.frequency
         });
       }
     });
@@ -488,7 +490,7 @@ export class LanguageModel {
           timestamp: new Date().toISOString(),
           subject: `Re: ${keywords.slice(0, 3).join(', ')}`,
           category: 'response',
-          basedOn: 'content',
+          basedOn: 'content'
         });
       }
     }
@@ -497,7 +499,7 @@ export class LanguageModel {
     const defaultSubjects = [
       { subject: 'Update regarding our conversation', category: 'update' },
       { subject: 'Following up', category: 'follow-up' },
-      { subject: 'Question about', category: 'question' },
+      { subject: 'Question about', category: 'question' }
     ];
 
     defaultSubjects.forEach((ds, index) => {
@@ -511,7 +513,7 @@ export class LanguageModel {
         timestamp: new Date().toISOString(),
         subject: ds.subject,
         category: ds.category,
-        basedOn: 'history',
+        basedOn: 'history'
       });
     });
 
@@ -542,7 +544,7 @@ export class LanguageModel {
    */
   learnFromUser(text: string, acceptedSuggestion?: Suggestion): void {
     const words = text.split(/\s+/);
-    
+
     // Learn individual words
     words.forEach(word => {
       const lowerWord = word.toLowerCase();
@@ -567,7 +569,7 @@ export class LanguageModel {
   getTypingStatistics(text: string): TypingStatistics {
     const words = text.split(/\s+/).filter(w => w.length > 0);
     const characters = text.length;
-    
+
     const wordLengths = words.map(w => w.length);
     const averageWordLength = wordLengths.length > 0
       ? wordLengths.reduce((a, b) => a + b, 0) / wordLengths.length
@@ -587,7 +589,7 @@ export class LanguageModel {
       commonWords: wordCounts,
       commonPhrases: this.writingPattern.wordPairs,
       typingSpeed: 0, // Would be calculated over time
-      acceptanceRate: 0, // Would be calculated over time
+      acceptanceRate: 0 // Would be calculated over time
     };
   }
 

@@ -1,6 +1,6 @@
 /**
  * Email Delegation Types
- * 
+ *
  * Defines types for email delegation feature allowing users to grant
  * others permission to send emails on their behalf and manage their inbox.
  */
@@ -8,7 +8,7 @@
 /**
  * Delegation permission levels
  */
-export type DelegationPermission = 
+export type DelegationPermission =
   | 'send_as'        // Can send emails appearing to come from the owner
   | 'send_on_behalf' // Can send emails on behalf with "on behalf of" indicator
   | 'manage';        // Full inbox management (send, read, delete, organize)
@@ -16,7 +16,7 @@ export type DelegationPermission =
 /**
  * Status of a delegation
  */
-export type DelegationStatus = 
+export type DelegationStatus =
   | 'pending'    // Invitation sent, not yet accepted
   | 'active'     // Delegation is active
   | 'suspended'  // Temporarily suspended
@@ -26,7 +26,7 @@ export type DelegationStatus =
 /**
  * Types of activities in delegation
  */
-export type DelegationActivityType = 
+export type DelegationActivityType =
   | 'delegation_granted'
   | 'delegation_accepted'
   | 'delegation_revoked'
@@ -64,7 +64,7 @@ export interface Delegation {
 /**
  * Specific actions that can be delegated
  */
-export type DelegationAction = 
+export type DelegationAction =
   | 'send_email'
   | 'read_emails'
   | 'delete_emails'

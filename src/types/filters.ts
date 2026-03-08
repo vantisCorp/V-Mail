@@ -1,6 +1,6 @@
 // Email Filter Types
 
-export type FilterActionType = 
+export type FilterActionType =
   | 'move_to_folder'
   | 'mark_as_read'
   | 'mark_as_important'
@@ -10,7 +10,7 @@ export type FilterActionType =
   | 'label'
   | 'archive';
 
-export type FilterConditionField = 
+export type FilterConditionField =
   | 'from'
   | 'to'
   | 'subject'
@@ -20,7 +20,7 @@ export type FilterConditionField =
   | 'size_less'
   | 'priority';
 
-export type FilterOperator = 
+export type FilterOperator =
   | 'contains'
   | 'not_contains'
   | 'equals'

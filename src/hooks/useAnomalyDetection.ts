@@ -6,7 +6,7 @@ import {
   AnomalyDetectionConfig,
   AnomalyDetectionStatistics,
   DetectionStatus,
-  RiskLevel,
+  RiskLevel
 } from '../types/anomalyDetection';
 import { AnomalyDetectionService } from '../services/anomalyDetectionService';
 
@@ -42,7 +42,7 @@ export function useAnomalyDetection(initialConfig?: Partial<AnomalyDetectionConf
     maxAnalysisTime: 5000,
     enableDetailedLogging: false,
     cacheSize: 1000,
-    ...initialConfig,
+    ...initialConfig
   });
 
   const serviceRef = useRef<AnomalyDetectionService>(AnomalyDetectionService.getInstance(config));
@@ -69,7 +69,7 @@ export function useAnomalyDetection(initialConfig?: Partial<AnomalyDetectionConf
         timestamp: Date.now(),
         description: errorMessage,
         indicators: [],
-        recommendedActions: [],
+        recommendedActions: []
       };
       setResult(failedResult);
       return failedResult;
@@ -97,10 +97,18 @@ export function useAnomalyDetection(initialConfig?: Partial<AnomalyDetectionConf
   }, []);
 
   const getRiskLevel = useCallback((riskScore: number): RiskLevel => {
-    if (riskScore < 0.2) return RiskLevel.MINIMAL;
-    if (riskScore < 0.4) return RiskLevel.LOW;
-    if (riskScore < 0.6) return RiskLevel.MODERATE;
-    if (riskScore < 0.8) return RiskLevel.HIGH;
+    if (riskScore < 0.2) {
+return RiskLevel.MINIMAL;
+}
+    if (riskScore < 0.4) {
+return RiskLevel.LOW;
+}
+    if (riskScore < 0.6) {
+return RiskLevel.MODERATE;
+}
+    if (riskScore < 0.8) {
+return RiskLevel.HIGH;
+}
     return RiskLevel.SEVERE;
   }, []);
 
@@ -138,6 +146,6 @@ export function useAnomalyDetection(initialConfig?: Partial<AnomalyDetectionConf
     updateConfig,
     resetStatistics,
     clearCache,
-    clearError,
+    clearError
   };
 }

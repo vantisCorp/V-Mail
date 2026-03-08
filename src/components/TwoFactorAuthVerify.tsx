@@ -19,7 +19,7 @@ export const TwoFactorAuthVerify: React.FC<TwoFactorAuthVerifyProps> = ({
   username,
   onSuccess,
   onCancel,
-  onUseBackupCode,
+  onUseBackupCode
 }) => {
   const [method, setMethod] = useState<TwoFactorAuthMethod>('totp');
   const [code, setCode] = useState('');
@@ -127,7 +127,7 @@ export const TwoFactorAuthVerify: React.FC<TwoFactorAuthVerifyProps> = ({
                 border: 'none',
                 color: '#4CAF50',
                 cursor: 'pointer',
-                textDecoration: 'underline',
+                textDecoration: 'underline'
               }}
               onClick={onUseBackupCode}
             >

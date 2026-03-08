@@ -6,7 +6,7 @@ import type {
   SearchField,
   SearchMatchMode,
   SavedSearch,
-  SearchStats,
+  SearchStats
 } from '../types/search';
 
 const generateId = () => `search-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
@@ -16,19 +16,20 @@ const evaluateCondition = (email: Email, condition: SearchCondition, caseSensiti
   let fieldValue: string | boolean | Date;
 
   switch (condition.field) {
-    case 'all':
+    case 'all': {
       // Search in all text fields
       const query = caseSensitive ? condition.value : condition.value.toLowerCase();
       const subject = caseSensitive ? email.subject : email.subject.toLowerCase();
       const from = caseSensitive ? email.from : email.from.toLowerCase();
       const body = caseSensitive ? email.body : email.body.toLowerCase();
-      
+
       return (
         subject.includes(query) ||
         from.includes(query) ||
         body.includes(query)
       );
-      
+    }
+
     case 'from':
       fieldValue = email.from;
       break;
@@ -120,7 +121,7 @@ export const useAdvancedSearch = (emails: Email[]) => {
   const [advancedSearch, setAdvancedSearch] = useState({
     conditions: [] as SearchCondition[],
     matchMode: 'any' as SearchMatchMode,
-    caseSensitive: false,
+    caseSensitive: false
   });
   const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([]);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
@@ -154,7 +155,7 @@ export const useAdvancedSearch = (emails: Email[]) => {
   const addCondition = useCallback((condition: Omit<SearchCondition, 'id'>) => {
     setAdvancedSearch((prev) => ({
       ...prev,
-      conditions: [...prev.conditions, { ...condition, id: generateId() }],
+      conditions: [...prev.conditions, { ...condition, id: generateId() }]
     }));
   }, []);
 
@@ -163,14 +164,14 @@ export const useAdvancedSearch = (emails: Email[]) => {
       ...prev,
       conditions: prev.conditions.map((c) =>
         c.id === id ? { ...c, ...updates } : c
-      ),
+      )
     }));
   }, []);
 
   const removeCondition = useCallback((id: string) => {
     setAdvancedSearch((prev) => ({
       ...prev,
-      conditions: prev.conditions.filter((c) => c.id !== id),
+      conditions: prev.conditions.filter((c) => c.id !== id)
     }));
   }, []);
 
@@ -178,7 +179,7 @@ export const useAdvancedSearch = (emails: Email[]) => {
     setAdvancedSearch({
       conditions: [],
       matchMode: 'any',
-      caseSensitive: false,
+      caseSensitive: false
     });
     setSearchQuery('');
   }, []);
@@ -214,7 +215,7 @@ export const useAdvancedSearch = (emails: Email[]) => {
       conditions: advancedSearch.conditions,
       matchMode: advancedSearch.matchMode,
       createdAt: new Date().toISOString(),
-      lastUsed: new Date().toISOString(),
+      lastUsed: new Date().toISOString()
     };
 
     setSavedSearches((prev) => [...prev, savedSearch]);
@@ -225,10 +226,10 @@ export const useAdvancedSearch = (emails: Email[]) => {
     setAdvancedSearch({
       conditions: savedSearch.conditions,
       matchMode: savedSearch.matchMode,
-      caseSensitive: false,
+      caseSensitive: false
     });
     setSearchQuery('');
-    
+
     setSavedSearches((prev) =>
       prev.map((s) =>
         s.id === savedSearch.id
@@ -250,14 +251,14 @@ export const useAdvancedSearch = (emails: Email[]) => {
     setAdvancedSearch({
       conditions: [],
       matchMode: 'any',
-      caseSensitive: false,
+      caseSensitive: false
     });
   }, []);
 
   const stats: SearchStats = useMemo(() => ({
     totalSearches: recentSearches.length,
     savedSearches: savedSearches.length,
-    recentSearches,
+    recentSearches
   }), [recentSearches, savedSearches]);
 
   return {
@@ -287,6 +288,6 @@ export const useAdvancedSearch = (emails: Email[]) => {
     recentSearches,
 
     // Stats
-    stats,
+    stats
   };
 };

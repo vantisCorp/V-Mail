@@ -38,44 +38,44 @@ export enum Permission {
   EMAIL_ARCHIVE = 'email:archive',
   EMAIL_FORWARD = 'email:forward',
   EMAIL_REPLY = 'email:reply',
-  
+
   // Contact permissions
   CONTACTS_READ = 'contacts:read',
   CONTACTS_WRITE = 'contacts:write',
   CONTACTS_DELETE = 'contacts:delete',
   CONTACTS_IMPORT = 'contacts:import',
   CONTACTS_EXPORT = 'contacts:export',
-  
+
   // Calendar permissions
   CALENDAR_READ = 'calendar:read',
   CALENDAR_WRITE = 'calendar:write',
   CALENDAR_SHARE = 'calendar:share',
   CALENDAR_DELETE = 'calendar:delete',
-  
+
   // Settings permissions
   SETTINGS_READ = 'settings:read',
   SETTINGS_WRITE = 'settings:write',
   SETTINGS_MANAGE = 'settings:manage',
-  
+
   // Team permissions
   TEAM_READ = 'team:read',
   TEAM_MANAGE = 'team:manage',
   TEAM_INVITE = 'team:invite',
   TEAM_REMOVE = 'team:remove',
   TEAM_ASSIGN_ROLES = 'team:assign_roles',
-  
+
   // Admin permissions
   ADMIN_PANEL_ACCESS = 'admin:panel_access',
   ADMIN_USER_MANAGE = 'admin:user_manage',
   ADMIN_AUDIT_LOGS = 'admin:audit_logs',
   ADMIN_SYSTEM_CONFIG = 'admin:system_config',
   ADMIN_BILLING = 'admin:billing',
-  
+
   // Reports permissions
   REPORTS_VIEW = 'reports:view',
   REPORTS_EXPORT = 'reports:export',
   REPORTS_ANALYTICS = 'reports:analytics',
-  
+
   // Integration permissions
   INTEGRATIONS_READ = 'integrations:read',
   INTEGRATIONS_CONNECT = 'integrations:connect',

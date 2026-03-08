@@ -6,7 +6,7 @@ import {
   SearchFieldType,
   SearchOperator,
   SortOrder,
-  SuggestionType,
+  SuggestionType
 } from '../../src/types/enhancedSearch';
 
 describe('useEnhancedSearch', () => {
@@ -17,7 +17,7 @@ describe('useEnhancedSearch', () => {
   describe('Initialization and State', () => {
     it('should initialize with default state', () => {
       const { result } = renderHook(() => useEnhancedSearch());
-      
+
       expect(result.current.isLoading).toBe(false);
       expect(result.current.searchResults).toBeNull();
       expect(result.current.currentQuery).toBe('');
@@ -26,11 +26,11 @@ describe('useEnhancedSearch', () => {
 
     it('should load suggestions and saved searches', async () => {
       const { result } = renderHook(() => useEnhancedSearch());
-      
+
       await waitFor(() => {
         expect(result.current.suggestions.length).toBeGreaterThan(0);
       });
-      
+
       expect(result.current.savedSearches.length).toBeGreaterThan(0);
     });
   });
@@ -42,7 +42,7 @@ describe('useEnhancedSearch', () => {
       await act(async () => {
         await result.current.simpleSearch({
           text: 'project',
-          scope: SearchScope.ALL,
+          scope: SearchScope.ALL
         });
       });
 
@@ -57,7 +57,7 @@ describe('useEnhancedSearch', () => {
       await act(async () => {
         await result.current.simpleSearch({
           text: 'john.smith@company.com',
-          scope: SearchScope.ALL,
+          scope: SearchScope.ALL
         });
       });
 
@@ -71,7 +71,7 @@ describe('useEnhancedSearch', () => {
       await act(async () => {
         await result.current.simpleSearch({
           text: 'update',
-          scope: SearchScope.INBOX,
+          scope: SearchScope.INBOX
         });
       });
 
@@ -84,7 +84,7 @@ describe('useEnhancedSearch', () => {
       await act(async () => {
         await result.current.simpleSearch({
           text: 'nonexistentuniqueword123',
-          scope: SearchScope.ALL,
+          scope: SearchScope.ALL
         });
       });
 
@@ -105,12 +105,12 @@ describe('useEnhancedSearch', () => {
             {
               field: SearchFieldType.FROM,
               operator: SearchOperator.CONTAINS,
-              value: 'john',
-            },
+              value: 'john'
+            }
           ],
           sortOrder: SortOrder.DATE_DESC,
           page: 1,
-          pageSize: 20,
+          pageSize: 20
         });
       });
 
@@ -129,7 +129,7 @@ describe('useEnhancedSearch', () => {
           hasAttachments: true,
           sortOrder: SortOrder.DATE_DESC,
           page: 1,
-          pageSize: 20,
+          pageSize: 20
         });
       });
 
@@ -150,7 +150,7 @@ describe('useEnhancedSearch', () => {
           isUnread: true,
           sortOrder: SortOrder.DATE_DESC,
           page: 1,
-          pageSize: 20,
+          pageSize: 20
         });
       });
 
@@ -171,7 +171,7 @@ describe('useEnhancedSearch', () => {
           isStarred: true,
           sortOrder: SortOrder.DATE_DESC,
           page: 1,
-          pageSize: 20,
+          pageSize: 20
         });
       });
 
@@ -192,7 +192,7 @@ describe('useEnhancedSearch', () => {
           labels: ['Work'],
           sortOrder: SortOrder.DATE_DESC,
           page: 1,
-          pageSize: 20,
+          pageSize: 20
         });
       });
 
@@ -212,7 +212,7 @@ describe('useEnhancedSearch', () => {
           filters: [],
           sortOrder: SortOrder.DATE_DESC,
           page: 1,
-          pageSize: 20,
+          pageSize: 20
         });
       });
 
@@ -236,7 +236,7 @@ describe('useEnhancedSearch', () => {
           filters: [],
           sortOrder: SortOrder.DATE_DESC,
           page: 1,
-          pageSize: 2,
+          pageSize: 2
         });
       });
 
@@ -372,9 +372,9 @@ describe('useEnhancedSearch', () => {
             text: 'test',
             scope: SearchScope.ALL,
             filters: [],
-            sortOrder: SortOrder.DATE_DESC,
+            sortOrder: SortOrder.DATE_DESC
           },
-          notificationEnabled: false,
+          notificationEnabled: false
         });
       });
 
@@ -401,7 +401,7 @@ describe('useEnhancedSearch', () => {
       await act(async () => {
         result.current.updateSavedSearch(searchToUpdate.id, {
           name: 'Updated Name',
-          isPinned: true,
+          isPinned: true
         });
       });
 
@@ -580,7 +580,7 @@ describe('useEnhancedSearch', () => {
         expandSynonyms: false,
         includeRelated: false,
         minRelevanceScore: 60,
-        contentUnderstanding: false,
+        contentUnderstanding: false
       };
 
       act(() => {

@@ -1,6 +1,6 @@
 /**
  * Shared Folders Types
- * 
+ *
  * Defines types for folder sharing and collaboration features.
  * Supports granular permissions, sharing with users and teams,
  * and comprehensive activity tracking.
@@ -9,7 +9,7 @@
 /**
  * Permission levels for shared folders
  */
-export type FolderPermission = 
+export type FolderPermission =
   | 'read'      // Can view emails only
   | 'write'     // Can view, compose, move, delete emails
   | 'admin';    // Full control including sharing management
@@ -17,7 +17,7 @@ export type FolderPermission =
 /**
  * Status of a share invitation
  */
-export type ShareStatus = 
+export type ShareStatus =
   | 'pending'    // Invitation sent, not yet accepted
   | 'accepted'   // Invitation accepted, active access
   | 'declined'   // Invitation declined
@@ -26,14 +26,14 @@ export type ShareStatus =
 /**
  * Type of share target
  */
-export type ShareTargetType = 
+export type ShareTargetType =
   | 'user'       // Individual user
   | 'team';      // Team/group
 
 /**
  * Types of activities in shared folders
  */
-export type SharedFolderActivityType = 
+export type SharedFolderActivityType =
   | 'shared'
   | 'unshared'
   | 'permission_changed'

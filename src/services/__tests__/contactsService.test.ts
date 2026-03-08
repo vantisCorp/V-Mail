@@ -4,7 +4,7 @@ import { ContactsService } from '../contactsService';
 import {
   ContactProvider,
   ContactAccount,
-  CreateContactPayload,
+  CreateContactPayload
 } from '../../types/contacts';
 
 describe('ContactsService', () => {
@@ -13,7 +13,7 @@ describe('ContactsService', () => {
   beforeEach(() => {
     // Clear localStorage before each test
     localStorage.clear();
-    
+
     // Reset singleton and get fresh instance
     ContactsService.resetInstance();
     contactsService = ContactsService.getInstance();
@@ -35,7 +35,7 @@ describe('ContactsService', () => {
         isPrimary: true,
         syncEnabled: true,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
 
       await contactsService.addAccount(account);
@@ -60,7 +60,7 @@ describe('ContactsService', () => {
         isPrimary: true,
         syncEnabled: true,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
 
       await contactsService.addAccount(account);
@@ -85,7 +85,7 @@ describe('ContactsService', () => {
         isPrimary: true,
         syncEnabled: true,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
 
       await contactsService.addAccount(account);
@@ -110,17 +110,17 @@ describe('ContactsService', () => {
             id: 'email-1',
             address: 'john.doe@example.com',
             type: 'work',
-            isPrimary: true,
-          },
+            isPrimary: true
+          }
         ],
         phones: [
           {
             id: 'phone-1',
             number: '+1 555-123-4567',
             type: 'mobile',
-            isPrimary: true,
-          },
-        ],
+            isPrimary: true
+          }
+        ]
       };
 
       const contact = await contactsService.createContact(payload);
@@ -143,7 +143,7 @@ describe('ContactsService', () => {
       const payload: CreateContactPayload = {
         firstName: 'Jane',
         lastName: 'Smith',
-        displayName: 'Jane Smith',
+        displayName: 'Jane Smith'
       };
 
       const createdContact = await contactsService.createContact(payload);
@@ -161,9 +161,9 @@ describe('ContactsService', () => {
           {
             id: 'email-1',
             address: 'bob.johnson@example.com',
-            type: 'work',
-          },
-        ],
+            type: 'work'
+          }
+        ]
       };
 
       await contactsService.createContact(payload);
@@ -177,14 +177,14 @@ describe('ContactsService', () => {
       const payload: CreateContactPayload = {
         firstName: 'Alice',
         lastName: 'Williams',
-        displayName: 'Alice Williams',
+        displayName: 'Alice Williams'
       };
 
       const contact = await contactsService.createContact(payload);
 
       const updatedContact = await contactsService.updateContact({
         id: contact.id,
-        displayName: 'Alice M. Williams',
+        displayName: 'Alice M. Williams'
       });
 
       expect(updatedContact.displayName).toBe('Alice M. Williams');
@@ -194,7 +194,7 @@ describe('ContactsService', () => {
       const payload: CreateContactPayload = {
         firstName: 'Charlie',
         lastName: 'Brown',
-        displayName: 'Charlie Brown',
+        displayName: 'Charlie Brown'
       };
 
       const contact = await contactsService.createContact(payload);
@@ -223,21 +223,21 @@ describe('ContactsService', () => {
           lastName: 'Doe',
           displayName: 'John Doe',
           emails: [{ id: 'e1', address: 'john@example.com', type: 'work' }],
-          starred: true,
+          starred: true
         },
         {
           firstName: 'Jane',
           lastName: 'Smith',
           displayName: 'Jane Smith',
           emails: [{ id: 'e2', address: 'jane@example.com', type: 'work' }],
-          favorite: true,
+          favorite: true
         },
         {
           firstName: 'Bob',
           lastName: 'Johnson',
           displayName: 'Bob Johnson',
-          phones: [{ id: 'p1', number: '+1 555-123-4567', type: 'mobile' }],
-        },
+          phones: [{ id: 'p1', number: '+1 555-123-4567', type: 'mobile' }]
+        }
       ];
 
       for (const contact of contacts) {
@@ -247,7 +247,7 @@ describe('ContactsService', () => {
 
     test('should filter contacts by query', () => {
       const filtered = contactsService.getContacts({
-        query: 'John',
+        query: 'John'
       });
 
       expect(filtered.length).toBeGreaterThan(0);
@@ -256,7 +256,7 @@ describe('ContactsService', () => {
 
     test('should filter contacts by starred', () => {
       const filtered = contactsService.getContacts({
-        starred: true,
+        starred: true
       });
 
       expect(filtered.length).toBe(1);
@@ -265,7 +265,7 @@ describe('ContactsService', () => {
 
     test('should filter contacts by favorite', () => {
       const filtered = contactsService.getContacts({
-        favorite: true,
+        favorite: true
       });
 
       expect(filtered.length).toBe(1);
@@ -274,7 +274,7 @@ describe('ContactsService', () => {
 
     test('should filter contacts by has email', () => {
       const filtered = contactsService.getContacts({
-        hasEmail: true,
+        hasEmail: true
       });
 
       expect(filtered.length).toBe(2);
@@ -282,7 +282,7 @@ describe('ContactsService', () => {
 
     test('should filter contacts by has phone', () => {
       const filtered = contactsService.getContacts({
-        hasPhone: true,
+        hasPhone: true
       });
 
       expect(filtered.length).toBe(1);
@@ -295,7 +295,7 @@ describe('ContactsService', () => {
       const contacts: CreateContactPayload[] = [
         { firstName: 'Charlie', lastName: 'Brown', displayName: 'Charlie Brown' },
         { firstName: 'Alice', lastName: 'Williams', displayName: 'Alice Williams' },
-        { firstName: 'Bob', lastName: 'Johnson', displayName: 'Bob Johnson' },
+        { firstName: 'Bob', lastName: 'Johnson', displayName: 'Bob Johnson' }
       ];
 
       for (const contact of contacts) {
@@ -334,14 +334,14 @@ describe('ContactsService', () => {
           lastName: 'Doe',
           displayName: 'John Doe',
           emails: [{ id: 'e1', address: 'john.doe@example.com', type: 'work' }],
-          organization: { name: 'Acme Corp' },
+          organization: { name: 'Acme Corp' }
         },
         {
           firstName: 'Jane',
           lastName: 'Smith',
           displayName: 'Jane Smith',
-          emails: [{ id: 'e2', address: 'jane.smith@example.com', type: 'work' }],
-        },
+          emails: [{ id: 'e2', address: 'jane.smith@example.com', type: 'work' }]
+        }
       ];
 
       for (const contact of contacts) {
@@ -386,7 +386,7 @@ describe('ContactsService', () => {
         id: 'email-1',
         from: { email: 'sender@example.com', name: 'Test Sender' },
         to: [{ email: 'recipient@example.com' }],
-        body: 'Hello, this is a test email.',
+        body: 'Hello, this is a test email.'
       };
 
       const options = {
@@ -400,7 +400,7 @@ describe('ContactsService', () => {
         autoDetectFields: true,
         createGroups: false,
         mergeWithExisting: false,
-        mergeStrategy: 'merge' as const,
+        mergeStrategy: 'merge' as const
       };
 
       const contact = await contactsService.createContactFromEmail(email, options);
@@ -417,14 +417,14 @@ describe('ContactsService', () => {
         firstName: 'Existing',
         lastName: 'Contact',
         displayName: 'Existing Contact',
-        emails: [{ id: 'e1', address: 'existing@example.com', type: 'work' }],
+        emails: [{ id: 'e1', address: 'existing@example.com', type: 'work' }]
       };
 
       await contactsService.createContact(existingPayload);
 
       const email = {
         from: { email: 'existing@example.com', name: 'Existing Contact' },
-        body: 'Email with phone number: +1 555-999-8888',
+        body: 'Email with phone number: +1 555-999-8888'
       };
 
       const options = {
@@ -438,7 +438,7 @@ describe('ContactsService', () => {
         autoDetectFields: true,
         createGroups: false,
         mergeWithExisting: true,
-        mergeStrategy: 'merge' as const,
+        mergeStrategy: 'merge' as const
       };
 
       const contact = await contactsService.createContactFromEmail(email, options);
@@ -476,7 +476,7 @@ describe('ContactsService', () => {
       const group = await contactsService.createGroup('Original Name');
       const updatedGroup = await contactsService.updateGroup(group.id, {
         name: 'Updated Name',
-        description: 'Updated description',
+        description: 'Updated description'
       });
 
       expect(updatedGroup.name).toBe('Updated Name');
@@ -496,7 +496,7 @@ describe('ContactsService', () => {
       const contact = await contactsService.createContact({
         firstName: 'John',
         lastName: 'Doe',
-        displayName: 'John Doe',
+        displayName: 'John Doe'
       });
 
       await contactsService.addContactToGroup(contact.id, group.id);
@@ -513,7 +513,7 @@ describe('ContactsService', () => {
       const contact = await contactsService.createContact({
         firstName: 'Jane',
         lastName: 'Smith',
-        displayName: 'Jane Smith',
+        displayName: 'Jane Smith'
       });
 
       await contactsService.addContactToGroup(contact.id, group.id);
@@ -532,7 +532,7 @@ describe('ContactsService', () => {
       const contacts: CreateContactPayload[] = [
         { firstName: 'John', lastName: 'Doe', displayName: 'John Doe', starred: true },
         { firstName: 'Jane', lastName: 'Smith', displayName: 'Jane Smith', favorite: true },
-        { firstName: 'Bob', lastName: 'Johnson', displayName: 'Bob Johnson' },
+        { firstName: 'Bob', lastName: 'Johnson', displayName: 'Bob Johnson' }
       ];
 
       for (const contact of contacts) {
@@ -557,14 +557,14 @@ describe('ContactsService', () => {
           firstName: 'John',
           lastName: 'Doe',
           displayName: 'John Doe',
-          emails: [{ id: 'e1', address: 'john@example.com', type: 'work' }],
+          emails: [{ id: 'e1', address: 'john@example.com', type: 'work' }]
         },
         {
           firstName: 'Johnny',
           lastName: 'Doe',
           displayName: 'Johnny Doe',
-          emails: [{ id: 'e2', address: 'john@example.com', type: 'work' }],
-        },
+          emails: [{ id: 'e2', address: 'john@example.com', type: 'work' }]
+        }
       ];
 
       for (const contact of contacts) {
@@ -583,13 +583,13 @@ describe('ContactsService', () => {
         {
           firstName: 'Jane',
           lastName: 'Smith',
-          displayName: 'Jane Smith',
+          displayName: 'Jane Smith'
         },
         {
           firstName: 'Jane',
           lastName: 'Smith',
-          displayName: 'Jane Smith',
-        },
+          displayName: 'Jane Smith'
+        }
       ];
 
       for (const contact of contacts) {
@@ -609,14 +609,14 @@ describe('ContactsService', () => {
         firstName: 'John',
         lastName: 'Doe',
         displayName: 'John Doe',
-        emails: [{ id: 'e1', address: 'john@example.com', type: 'work' }],
+        emails: [{ id: 'e1', address: 'john@example.com', type: 'work' }]
       });
 
       const contact2 = await contactsService.createContact({
         firstName: 'Johnny',
         lastName: 'Doe',
         displayName: 'Johnny Doe',
-        phones: [{ id: 'p1', number: '+1 555-123-4567', type: 'mobile' }],
+        phones: [{ id: 'p1', number: '+1 555-123-4567', type: 'mobile' }]
       });
 
       const mergedContact = await contactsService.mergeContacts(contact1.id, [contact2.id]);
@@ -634,7 +634,7 @@ describe('ContactsService', () => {
     test('should update preferences', () => {
       const updates = {
         defaultView: 'grid' as const,
-        showAvatar: false,
+        showAvatar: false
       };
 
       contactsService.updatePreferences(updates);

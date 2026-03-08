@@ -21,12 +21,12 @@ import {
   ContactStatus,
   DealStage,
   SyncStatus,
-  FieldType,
+  FieldType
 } from '../types/crmIntegration';
 
 /**
  * CRM Integration Hook
- * 
+ *
  * Provides functionality for integrating with CRM platforms including:
  * - Account connection management
  * - Contact synchronization
@@ -37,7 +37,7 @@ import {
 
 const currentUser = {
   id: 'user-1',
-  name: 'Current User',
+  name: 'Current User'
 };
 
 // Mock data generators
@@ -53,7 +53,7 @@ const generateMockAccounts = (): CRMAccount[] => {
       lastSyncAt: '2025-01-20T10:30:00Z',
       syncFrequency: 30,
       createdAt: '2025-01-01T00:00:00Z',
-      updatedAt: '2025-01-20T10:30:00Z',
+      updatedAt: '2025-01-20T10:30:00Z'
     },
     {
       id: 'acc-2',
@@ -65,8 +65,8 @@ const generateMockAccounts = (): CRMAccount[] => {
       lastSyncAt: '2025-01-20T09:15:00Z',
       syncFrequency: 60,
       createdAt: '2025-01-05T00:00:00Z',
-      updatedAt: '2025-01-20T09:15:00Z',
-    },
+      updatedAt: '2025-01-20T09:15:00Z'
+    }
   ];
 };
 
@@ -88,7 +88,7 @@ const generateMockContacts = (): CRMContact[] => {
       customFields: {},
       createdAt: '2024-06-15T00:00:00Z',
       updatedAt: '2025-01-18T14:00:00Z',
-      syncedAt: '2025-01-20T10:30:00Z',
+      syncedAt: '2025-01-20T10:30:00Z'
     },
     {
       id: 'con-2',
@@ -106,7 +106,7 @@ const generateMockContacts = (): CRMContact[] => {
       customFields: {},
       createdAt: '2024-08-20T00:00:00Z',
       updatedAt: '2025-01-15T09:30:00Z',
-      syncedAt: '2025-01-20T10:30:00Z',
+      syncedAt: '2025-01-20T10:30:00Z'
     },
     {
       id: 'con-3',
@@ -123,8 +123,8 @@ const generateMockContacts = (): CRMContact[] => {
       customFields: {},
       createdAt: '2024-11-10T00:00:00Z',
       updatedAt: '2024-11-10T00:00:00Z',
-      syncedAt: '2025-01-20T09:15:00Z',
-    },
+      syncedAt: '2025-01-20T09:15:00Z'
+    }
   ];
 };
 
@@ -146,7 +146,7 @@ const generateMockDeals = (): CRMDeal[] => {
       customFields: {},
       createdAt: '2025-01-10T00:00:00Z',
       updatedAt: '2025-01-19T11:00:00Z',
-      syncedAt: '2025-01-20T10:30:00Z',
+      syncedAt: '2025-01-20T10:30:00Z'
     },
     {
       id: 'deal-2',
@@ -164,7 +164,7 @@ const generateMockDeals = (): CRMDeal[] => {
       customFields: {},
       createdAt: '2025-01-05T00:00:00Z',
       updatedAt: '2025-01-18T14:00:00Z',
-      syncedAt: '2025-01-20T10:30:00Z',
+      syncedAt: '2025-01-20T10:30:00Z'
     },
     {
       id: 'deal-3',
@@ -182,8 +182,8 @@ const generateMockDeals = (): CRMDeal[] => {
       customFields: {},
       createdAt: '2025-01-12T00:00:00Z',
       updatedAt: '2025-01-12T00:00:00Z',
-      syncedAt: '2025-01-20T09:15:00Z',
-    },
+      syncedAt: '2025-01-20T09:15:00Z'
+    }
   ];
 };
 
@@ -220,7 +220,7 @@ export const useCrmIntegration = () => {
       isConnected: true,
       syncFrequency: payload.syncFrequency || 30,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     setAccounts(prev => [...prev, newAccount]);
@@ -241,7 +241,9 @@ export const useCrmIntegration = () => {
     accountId: string
   ): Promise<boolean> => {
     const account = accounts.find(a => a.id === accountId);
-    if (!account) return false;
+    if (!account) {
+return false;
+}
 
     setAccounts(prev => prev.map(acc => {
       if (acc.id === accountId) {
@@ -273,7 +275,7 @@ export const useCrmIntegration = () => {
       status: payload.status || ContactStatus.PROSPECT,
       customFields: payload.customFields || {},
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     setContacts(prev => [...prev, newContact]);
@@ -291,7 +293,7 @@ export const useCrmIntegration = () => {
         updatedContact = {
           ...contact,
           ...payload,
-          updatedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
         };
         return updatedContact;
       }
@@ -335,7 +337,7 @@ export const useCrmIntegration = () => {
       description: payload.description,
       customFields: payload.customFields || {},
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     setDeals(prev => [...prev, newDeal]);
@@ -353,7 +355,7 @@ export const useCrmIntegration = () => {
         updatedDeal = {
           ...deal,
           ...payload,
-          updatedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
         };
         return updatedDeal;
       }
@@ -403,7 +405,7 @@ export const useCrmIntegration = () => {
       dealId,
       activityType: 'email_sent',
       synced: true,
-      syncedAt: new Date().toISOString(),
+      syncedAt: new Date().toISOString()
     };
 
     setEmailActivities(prev => [...prev, activity]);
@@ -420,13 +422,13 @@ export const useCrmIntegration = () => {
         matched: true,
         contact,
         confidence: 100,
-        matchReasons: ['Email address matched exactly'],
+        matchReasons: ['Email address matched exactly']
       };
     }
 
     // Try partial match by domain
     const domain = email.split('@')[1];
-    const partialMatch = contacts.find(c => 
+    const partialMatch = contacts.find(c =>
       c.email.toLowerCase().endsWith(domain.toLowerCase())
     );
 
@@ -434,14 +436,14 @@ export const useCrmIntegration = () => {
       return {
         matched: false,
         confidence: 30,
-        matchReasons: ['Domain matched with existing contact'],
+        matchReasons: ['Domain matched with existing contact']
       };
     }
 
     return {
       matched: false,
       confidence: 0,
-      matchReasons: [],
+      matchReasons: []
     };
   }, [contacts, getContactByEmail]);
 
@@ -451,7 +453,9 @@ export const useCrmIntegration = () => {
     provider?: CRMProvider
   ): Promise<CRMContact | null> => {
     const existingContact = getContactByEmail(email);
-    if (existingContact) return existingContact;
+    if (existingContact) {
+return existingContact;
+}
 
     // Parse name
     let firstName = '';
@@ -468,7 +472,7 @@ export const useCrmIntegration = () => {
       firstName: firstName || 'Unknown',
       lastName: lastName || 'Contact',
       email,
-      status: ContactStatus.LEAD,
+      status: ContactStatus.LEAD
     });
   }, [accounts, getContactByEmail, createContact]);
 
@@ -476,7 +480,7 @@ export const useCrmIntegration = () => {
   const lookupContact = useCallback((
     email: string
   ): ContactLookupResult => {
-    const matchingContacts = contacts.filter(c => 
+    const matchingContacts = contacts.filter(c =>
       c.email.toLowerCase().includes(email.toLowerCase())
     );
 
@@ -486,27 +490,35 @@ export const useCrmIntegration = () => {
       found: matchingContacts.length > 0,
       contacts: matchingContacts,
       email,
-      providers,
+      providers
     };
   }, [contacts]);
 
   // Filtering
   const getFilteredContacts = useCallback((filter: ContactFilter): CRMContact[] => {
     return contacts.filter(contact => {
-      if (filter.provider && contact.provider !== filter.provider) return false;
+      if (filter.provider && contact.provider !== filter.provider) {
+return false;
+}
       if (filter.accountId) {
         // In real implementation, would check account association
       }
-      if (filter.status && contact.status !== filter.status) return false;
-      if (filter.company && !contact.company?.toLowerCase().includes(filter.company.toLowerCase())) return false;
-      
+      if (filter.status && contact.status !== filter.status) {
+return false;
+}
+      if (filter.company && !contact.company?.toLowerCase().includes(filter.company.toLowerCase())) {
+return false;
+}
+
       if (filter.searchQuery) {
         const query = filter.searchQuery.toLowerCase();
         const matchFirstName = contact.firstName.toLowerCase().includes(query);
         const matchLastName = contact.lastName.toLowerCase().includes(query);
         const matchEmail = contact.email.toLowerCase().includes(query);
         const matchCompany = contact.company?.toLowerCase().includes(query);
-        if (!matchFirstName && !matchLastName && !matchEmail && !matchCompany) return false;
+        if (!matchFirstName && !matchLastName && !matchEmail && !matchCompany) {
+return false;
+}
       }
 
       return true;
@@ -515,11 +527,21 @@ export const useCrmIntegration = () => {
 
   const getFilteredDeals = useCallback((filter: DealFilter): CRMDeal[] => {
     return deals.filter(deal => {
-      if (filter.provider && deal.provider !== filter.provider) return false;
-      if (filter.stage && deal.stage !== filter.stage) return false;
-      if (filter.contactId && deal.contactId !== filter.contactId) return false;
-      if (filter.minValue !== undefined && deal.value < filter.minValue) return false;
-      if (filter.maxValue !== undefined && deal.value > filter.maxValue) return false;
+      if (filter.provider && deal.provider !== filter.provider) {
+return false;
+}
+      if (filter.stage && deal.stage !== filter.stage) {
+return false;
+}
+      if (filter.contactId && deal.contactId !== filter.contactId) {
+return false;
+}
+      if (filter.minValue !== undefined && deal.value < filter.minValue) {
+return false;
+}
+      if (filter.maxValue !== undefined && deal.value > filter.maxValue) {
+return false;
+}
 
       return true;
     });
@@ -527,7 +549,7 @@ export const useCrmIntegration = () => {
 
   // Statistics
   const getStatistics = useCallback((accountId?: string): CRMStatistics[] => {
-    const relevantAccounts = accountId 
+    const relevantAccounts = accountId
       ? accounts.filter(a => a.id === accountId)
       : accounts;
 
@@ -536,7 +558,7 @@ export const useCrmIntegration = () => {
       const accountDeals = deals.filter(d => d.provider === account.provider);
 
       const wonDeals = accountDeals.filter(d => d.stage === DealStage.WON);
-      const openDeals = accountDeals.filter(d => 
+      const openDeals = accountDeals.filter(d =>
         d.stage !== DealStage.WON && d.stage !== DealStage.LOST
       );
 
@@ -547,7 +569,7 @@ export const useCrmIntegration = () => {
             id: contact.id,
             name: `${contact.firstName} ${contact.lastName}`,
             company: contact.company || '',
-            dealCount: contactDeals.length,
+            dealCount: contactDeals.length
           };
         })
         .sort((a, b) => b.dealCount - a.dealCount)
@@ -565,7 +587,7 @@ export const useCrmIntegration = () => {
         openValue: openDeals.reduce((sum, d) => sum + d.value, 0),
         lastSyncAt: account.lastSyncAt,
         syncSuccessRate: 98.5,
-        topContacts,
+        topContacts
       };
     });
   }, [accounts, contacts, deals]);
@@ -575,7 +597,9 @@ export const useCrmIntegration = () => {
     accountId: string
   ): Promise<SyncJob> => {
     const account = accounts.find(a => a.id === accountId);
-    if (!account) throw new Error('Account not found');
+    if (!account) {
+throw new Error('Account not found');
+}
 
     const job: SyncJob = {
       id: `job-${Date.now()}`,
@@ -587,7 +611,7 @@ export const useCrmIntegration = () => {
       completedAt: new Date().toISOString(),
       recordsProcessed: contacts.length,
       recordsSucceeded: contacts.length,
-      recordsFailed: 0,
+      recordsFailed: 0
     };
 
     setSyncJobs(prev => [...prev, job]);
@@ -605,7 +629,9 @@ export const useCrmIntegration = () => {
     accountId: string
   ): Promise<SyncJob> => {
     const account = accounts.find(a => a.id === accountId);
-    if (!account) throw new Error('Account not found');
+    if (!account) {
+throw new Error('Account not found');
+}
 
     const job: SyncJob = {
       id: `job-${Date.now()}`,
@@ -617,7 +643,7 @@ export const useCrmIntegration = () => {
       completedAt: new Date().toISOString(),
       recordsProcessed: deals.length,
       recordsSucceeded: deals.length,
-      recordsFailed: 0,
+      recordsFailed: 0
     };
 
     setSyncJobs(prev => [...prev, job]);
@@ -628,7 +654,9 @@ export const useCrmIntegration = () => {
     accountId: string
   ): Promise<SyncJob> => {
     const account = accounts.find(a => a.id === accountId);
-    if (!account) throw new Error('Account not found');
+    if (!account) {
+throw new Error('Account not found');
+}
 
     const totalRecords = contacts.length + deals.length;
     const job: SyncJob = {
@@ -641,7 +669,7 @@ export const useCrmIntegration = () => {
       completedAt: new Date().toISOString(),
       recordsProcessed: totalRecords,
       recordsSucceeded: totalRecords,
-      recordsFailed: 0,
+      recordsFailed: 0
     };
 
     setSyncJobs(prev => [...prev, job]);
@@ -705,6 +733,6 @@ export const useCrmIntegration = () => {
     // Sync
     syncContacts,
     syncDeals,
-    syncAll,
+    syncAll
   };
 };

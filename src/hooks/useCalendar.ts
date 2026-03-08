@@ -21,7 +21,7 @@ import {
   FreeBusyResponse,
   CalendarSyncStatus,
   EventAttendee,
-  RecurrenceRule,
+  RecurrenceRule
 } from '../types/calendar';
 
 // Generate unique ID
@@ -43,7 +43,7 @@ const generateMockAccounts = (): CalendarAccount[] => {
       isActive: true,
       isPrimary: true,
       createdAt: '2024-01-01T00:00:00Z',
-      updatedAt: '2024-01-01T00:00:00Z',
+      updatedAt: '2024-01-01T00:00:00Z'
     },
     {
       id: 'account-2',
@@ -58,8 +58,8 @@ const generateMockAccounts = (): CalendarAccount[] => {
       isActive: true,
       isPrimary: false,
       createdAt: '2024-01-15T00:00:00Z',
-      updatedAt: '2024-01-15T00:00:00Z',
-    },
+      updatedAt: '2024-01-15T00:00:00Z'
+    }
   ];
 };
 
@@ -80,7 +80,7 @@ const generateMockCalendars = (): Calendar[] => {
       color: '#4285F4',
       backgroundColor: '#4285F4',
       foregroundColor: '#ffffff',
-      accessRole: 'owner',
+      accessRole: 'owner'
     },
     {
       id: 'calendar-2',
@@ -96,7 +96,7 @@ const generateMockCalendars = (): Calendar[] => {
       color: '#EA4335',
       backgroundColor: '#EA4335',
       foregroundColor: '#ffffff',
-      accessRole: 'writer',
+      accessRole: 'writer'
     },
     {
       id: 'calendar-3',
@@ -111,8 +111,8 @@ const generateMockCalendars = (): Calendar[] => {
       color: '#0078D4',
       backgroundColor: '#0078D4',
       foregroundColor: '#ffffff',
-      accessRole: 'owner',
-    },
+      accessRole: 'owner'
+    }
   ];
 };
 
@@ -120,7 +120,7 @@ const generateMockCalendars = (): Calendar[] => {
 const generateMockEvents = (): CalendarEvent[] => {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  
+
   return [
     {
       id: 'event-1',
@@ -133,24 +133,24 @@ const generateMockEvents = (): CalendarEvent[] => {
       visibility: EventVisibility.DEFAULT,
       start: {
         dateTime: new Date(today.getTime() + 9 * 60 * 60 * 1000).toISOString(),
-        timeZone: 'America/New_York',
+        timeZone: 'America/New_York'
       },
       end: {
         dateTime: new Date(today.getTime() + 9 * 60 * 60 * 1000 + 30 * 60 * 1000).toISOString(),
-        timeZone: 'America/New_York',
+        timeZone: 'America/New_York'
       },
       attendees: [
         { email: 'team@company.com', displayName: 'Team', responseStatus: 'accepted' },
-        { email: 'user@example.com', displayName: 'User', responseStatus: 'accepted' },
+        { email: 'user@example.com', displayName: 'User', responseStatus: 'accepted' }
       ],
       reminders: [
-        { method: 'popup', minutes: 10 },
+        { method: 'popup', minutes: 10 }
       ],
       created: new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString(),
       updated: new Date(today.getTime() - 1 * 24 * 60 * 60 * 1000).toISOString(),
       creator: { email: 'john.doe@gmail.com', displayName: 'John Doe' },
       organizer: { email: 'john.doe@gmail.com', displayName: 'John Doe' },
-      hangoutLink: 'https://meet.google.com/abc-defg-hij',
+      hangoutLink: 'https://meet.google.com/abc-defg-hij'
     },
     {
       id: 'event-2',
@@ -163,22 +163,22 @@ const generateMockEvents = (): CalendarEvent[] => {
       visibility: EventVisibility.DEFAULT,
       start: {
         dateTime: new Date(today.getTime() + 14 * 60 * 60 * 1000).toISOString(),
-        timeZone: 'America/New_York',
+        timeZone: 'America/New_York'
       },
       end: {
         dateTime: new Date(today.getTime() + 15 * 60 * 60 * 1000).toISOString(),
-        timeZone: 'America/New_York',
+        timeZone: 'America/New_York'
       },
       attendees: [
         { email: 'manager@company.com', displayName: 'Manager', responseStatus: 'accepted' },
-        { email: 'stakeholder@company.com', displayName: 'Stakeholder', responseStatus: 'tentative' },
+        { email: 'stakeholder@company.com', displayName: 'Stakeholder', responseStatus: 'tentative' }
       ],
       reminders: [
         { method: 'email', minutes: 60 },
-        { method: 'popup', minutes: 15 },
+        { method: 'popup', minutes: 15 }
       ],
       created: new Date(today.getTime() - 14 * 24 * 60 * 60 * 1000).toISOString(),
-      updated: new Date(today.getTime() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+      updated: new Date(today.getTime() - 2 * 24 * 60 * 60 * 1000).toISOString()
     },
     {
       id: 'event-3',
@@ -191,20 +191,20 @@ const generateMockEvents = (): CalendarEvent[] => {
       visibility: EventVisibility.PRIVATE,
       start: {
         dateTime: new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000 + 10 * 60 * 60 * 1000).toISOString(),
-        timeZone: 'America/New_York',
+        timeZone: 'America/New_York'
       },
       end: {
         dateTime: new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000 + 11 * 60 * 60 * 1000).toISOString(),
-        timeZone: 'America/New_York',
+        timeZone: 'America/New_York'
       },
       attendees: [
-        { email: 'client@external.com', displayName: 'Client', responseStatus: 'needsAction' },
+        { email: 'client@external.com', displayName: 'Client', responseStatus: 'needsAction' }
       ],
       reminders: [
-        { method: 'popup', minutes: 30 },
+        { method: 'popup', minutes: 30 }
       ],
       created: new Date(today.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-      updated: new Date(today.getTime() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+      updated: new Date(today.getTime() - 1 * 24 * 60 * 60 * 1000).toISOString()
     },
     {
       id: 'event-4',
@@ -216,17 +216,17 @@ const generateMockEvents = (): CalendarEvent[] => {
       status: EventStatus.CONFIRMED,
       visibility: EventVisibility.PUBLIC,
       start: {
-        date: new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        date: new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
       },
       end: {
-        date: new Date(today.getTime() + 8 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        date: new Date(today.getTime() + 8 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
       },
       reminders: [
-        { method: 'email', minutes: 1440 }, // 1 day before
+        { method: 'email', minutes: 1440 } // 1 day before
       ],
       created: new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-      updated: new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    },
+      updated: new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString()
+    }
   ];
 };
 
@@ -242,7 +242,7 @@ export const useCalendar = () => {
   const [syncStatus, setSyncStatus] = useState<CalendarSyncStatus>({
     lastSyncAt: '',
     isSyncing: false,
-    syncErrors: [],
+    syncErrors: []
   });
 
   // Load mock data on mount
@@ -256,7 +256,7 @@ export const useCalendar = () => {
       setSyncStatus({
         lastSyncAt: new Date().toISOString(),
         isSyncing: false,
-        syncErrors: [],
+        syncErrors: []
       });
       setIsLoading(false);
     };
@@ -278,15 +278,15 @@ export const useCalendar = () => {
       accessToken: 'mock-token',
       refreshToken: 'mock-refresh-token',
       expiresAt: new Date(Date.now() + 3600000).toISOString(),
-      scopes: provider === CalendarProvider.GOOGLE 
+      scopes: provider === CalendarProvider.GOOGLE
         ? ['https://www.googleapis.com/auth/calendar']
         : ['Calendars.ReadWrite'],
       isActive: true,
       isPrimary: accounts.length === 0,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
-    
+
     setAccounts(prev => [...prev, newAccount]);
     return newAccount;
   }, [accounts.length]);
@@ -308,7 +308,7 @@ export const useCalendar = () => {
           ...account,
           accessToken: 'new-mock-token',
           expiresAt: new Date(Date.now() + 3600000).toISOString(),
-          updatedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
         };
       }
       return account;
@@ -319,7 +319,7 @@ export const useCalendar = () => {
   // Event CRUD Operations
   const createEvent = useCallback(async (payload: CreateEventPayload): Promise<CalendarEvent | null> => {
     const calendar = calendars.find(c => c.calendarId === payload.calendarId);
-    
+
     const newEvent: CalendarEvent = {
       id: generateId(),
       provider: calendar?.provider || CalendarProvider.GOOGLE,
@@ -335,16 +335,16 @@ export const useCalendar = () => {
       attendees: payload.attendees?.map(a => ({
         email: a.email,
         displayName: a.displayName,
-        responseStatus: 'needsAction' as const,
+        responseStatus: 'needsAction' as const
       })),
-      reminders: payload.reminders?.useDefault 
+      reminders: payload.reminders?.useDefault
         ? [{ method: 'popup', minutes: 30 }]
         : payload.reminders?.overrides,
       created: new Date().toISOString(),
       updated: new Date().toISOString(),
-      conferenceData: payload.conferenceData,
+      conferenceData: payload.conferenceData
     };
-    
+
     setEvents(prev => [...prev, newEvent]);
     return newEvent;
   }, [calendars]);
@@ -364,10 +364,10 @@ export const useCalendar = () => {
             ...a,
             responseStatus: a.responseStatus || 'needsAction' as const
           })) || found.attendees,
-          reminders: payload.reminders?.useDefault 
+          reminders: payload.reminders?.useDefault
             ? [{ method: 'popup' as const, minutes: 30 }]
             : payload.reminders?.overrides || found.reminders,
-          updated: new Date().toISOString(),
+          updated: new Date().toISOString()
         };
         return prev.map(e => e.id === eventId ? updatedEvent! : e);
       }
@@ -401,28 +401,28 @@ export const useCalendar = () => {
     // Extract event details from email
     let summary = 'Event from Email';
     let description = '';
-    let location = '';
+    const location = '';
     const attendees: EventAttendee[] = [];
     let eventDate = new Date();
-    
+
     // Extract title from subject
     if (options.extractTitleFromSubject && emailData.subject) {
       summary = emailData.subject;
     }
-    
+
     // Extract description from body
     if (options.extractDescriptionFromBody && emailData.body) {
       description = emailData.body;
     }
-    
+
     // Extract date from body (simplified - would use NLP in production)
     if (options.extractDateFromBody && emailData.body) {
       const datePatterns = [
         /(\d{1,2}\/\d{1,2}\/\d{4})/,
         /(\d{4}-\d{2}-\d{2})/,
-        /(tomorrow|next week|monday|tuesday|wednesday|thursday|friday|saturday|sunday)/i,
+        /(tomorrow|next week|monday|tuesday|wednesday|thursday|friday|saturday|sunday)/i
       ];
-      
+
       for (const pattern of datePatterns) {
         const match = emailData.body.match(pattern);
         if (match) {
@@ -434,7 +434,7 @@ export const useCalendar = () => {
         }
       }
     }
-    
+
     // Extract attendees from body
     if (options.extractAttendeesFromBody && emailData.body) {
       const emailPattern = /[\w.-]+@[\w.-]+\.\w+/g;
@@ -443,36 +443,36 @@ export const useCalendar = () => {
         if (!attendees.find(a => a.email === email)) {
           attendees.push({
             email,
-            responseStatus: 'needsAction',
+            responseStatus: 'needsAction'
           });
         }
       });
     }
-    
+
     // Auto-add email sender and recipients
     if (options.autoAddAttendees) {
       attendees.push({
         email: emailData.from,
-        responseStatus: 'needsAction',
+        responseStatus: 'needsAction'
       });
       if (emailData.to) {
         emailData.to.forEach(toEmail => {
           if (!attendees.find(a => a.email === toEmail)) {
             attendees.push({
               email: toEmail,
-              responseStatus: 'needsAction',
+              responseStatus: 'needsAction'
             });
           }
         });
       }
     }
-    
+
     // Create event
     const startDate = eventDate;
     const endDate = new Date(startDate.getTime() + options.defaultDuration * 60 * 1000);
-    
+
     const calendar = calendars.find(c => c.primary);
-    
+
     const newEvent: CalendarEvent = {
       id: generateId(),
       provider: calendar?.provider || CalendarProvider.GOOGLE,
@@ -484,19 +484,19 @@ export const useCalendar = () => {
       visibility: EventVisibility.PRIVATE,
       start: {
         dateTime: startDate.toISOString(),
-        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
       },
       end: {
         dateTime: endDate.toISOString(),
-        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
       },
       attendees: [...new Map(attendees.map(a => [a.email, a])).values()],
       reminders: [{ method: 'popup', minutes: options.defaultReminder }],
       sourceEmailId: emailId,
       created: new Date().toISOString(),
-      updated: new Date().toISOString(),
+      updated: new Date().toISOString()
     };
-    
+
     setEvents(prev => [...prev, newEvent]);
     return newEvent;
   }, [calendars]);
@@ -504,7 +504,7 @@ export const useCalendar = () => {
   // Event Filtering
   const getFilteredEvents = useCallback((filter?: EventFilterOptions): CalendarEvent[] => {
     let filtered = [...events];
-    
+
     if (filter?.timeMin) {
       const timeMin = new Date(filter.timeMin);
       filtered = filtered.filter(e => {
@@ -512,7 +512,7 @@ export const useCalendar = () => {
         return start >= timeMin;
       });
     }
-    
+
     if (filter?.timeMax) {
       const timeMax = new Date(filter.timeMax);
       filtered = filtered.filter(e => {
@@ -520,20 +520,20 @@ export const useCalendar = () => {
         return start <= timeMax;
       });
     }
-    
+
     if (filter?.status) {
       filtered = filtered.filter(e => e.status === filter.status);
     }
-    
+
     if (filter?.q) {
       const query = filter.q.toLowerCase();
-      filtered = filtered.filter(e => 
+      filtered = filtered.filter(e =>
         e.summary.toLowerCase().includes(query) ||
         e.description?.toLowerCase().includes(query) ||
         e.location?.toLowerCase().includes(query)
       );
     }
-    
+
     if (filter?.calendarIds && filter.calendarIds.length > 0) {
       // Map calendar IDs to events
       const calendarMap = new Map(calendars.map(c => [c.calendarId, c.id]));
@@ -542,7 +542,7 @@ export const useCalendar = () => {
         return calendar && filter.calendarIds!.includes(calendar.calendarId);
       });
     }
-    
+
     if (filter?.orderBy === 'startTime') {
       filtered.sort((a, b) => {
         const aStart = a.start.dateTime ? new Date(a.start.dateTime).getTime() : new Date(a.start.date!).getTime();
@@ -550,11 +550,11 @@ export const useCalendar = () => {
         return aStart - bStart;
       });
     }
-    
+
     if (filter?.maxResults) {
       filtered = filtered.slice(0, filter.maxResults);
     }
-    
+
     return filtered;
   }, [events, calendars]);
 
@@ -564,63 +564,66 @@ export const useCalendar = () => {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const weekFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
     const monthFromNow = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
-    
+
     let upcomingEvents = 0;
     let pastEvents = 0;
     let todayEvents = 0;
     let thisWeekEvents = 0;
     let thisMonthEvents = 0;
-    
+
     const eventsByStatus: Record<EventStatus, number> = {
       [EventStatus.CONFIRMED]: 0,
       [EventStatus.TENTATIVE]: 0,
-      [EventStatus.CANCELLED]: 0,
+      [EventStatus.CANCELLED]: 0
     };
-    
+
     const eventsByCalendar: Record<string, number> = {};
-    
+
     events.forEach(event => {
       const start = event.start.dateTime ? new Date(event.start.dateTime) : new Date(event.start.date!);
-      
-      if (start > now) upcomingEvents++;
-      else pastEvents++;
-      
+
+      if (start > now) {
+upcomingEvents++;
+} else {
+pastEvents++;
+}
+
       if (start >= today && start < new Date(today.getTime() + 24 * 60 * 60 * 1000)) {
         todayEvents++;
       }
-      
+
       if (start >= today && start < weekFromNow) {
         thisWeekEvents++;
       }
-      
+
       if (start >= today && start < monthFromNow) {
         thisMonthEvents++;
       }
-      
+
       eventsByStatus[event.status]++;
-      
+
       const calendar = calendars.find(c => c.provider === event.provider);
       if (calendar) {
         eventsByCalendar[calendar.id] = (eventsByCalendar[calendar.id] || 0) + 1;
       }
     });
-    
+
     // Find busiest day
     const eventsByDate: Record<string, number> = {};
     events.forEach(event => {
-      const date = event.start.dateTime 
+      const date = event.start.dateTime
         ? new Date(event.start.dateTime).toDateString()
         : event.start.date!;
       eventsByDate[date] = (eventsByDate[date] || 0) + 1;
     });
-    
+
     const busiestDay = Object.entries(eventsByDate)
       .sort((a, b) => b[1] - a[1])[0]?.[0] || '';
-    
+
     // Find free slots
     const freeSlots: CalendarStatistics['freeSlots'] = [];
     // Simplified - would calculate actual free slots based on events
-    
+
     return {
       totalEvents: events.length,
       upcomingEvents,
@@ -632,7 +635,7 @@ export const useCalendar = () => {
       eventsByCalendar,
       averageEventsPerDay: events.length / 30, // Simplified
       busiestDay,
-      freeSlots,
+      freeSlots
     };
   }, [events, calendars]);
 
@@ -642,22 +645,22 @@ export const useCalendar = () => {
     return {
       timeMin: query.timeMin,
       timeMax: query.timeMax,
-      calendars: {},
+      calendars: {}
     };
   }, []);
 
   // Sync Functions
   const syncAllCalendars = useCallback(async (): Promise<boolean> => {
     setSyncStatus(prev => ({ ...prev, isSyncing: true }));
-    
+
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     setSyncStatus({
       lastSyncAt: new Date().toISOString(),
       isSyncing: false,
-      syncErrors: [],
+      syncErrors: []
     });
-    
+
     return true;
   }, []);
 
@@ -676,20 +679,20 @@ export const useCalendar = () => {
     const newAttendee: EventAttendee = {
       email,
       displayName,
-      responseStatus: 'needsAction',
+      responseStatus: 'needsAction'
     };
-    
+
     setEvents(prev => prev.map(event => {
       if (event.id === eventId) {
         return {
           ...event,
           attendees: [...(event.attendees || []), newAttendee],
-          updated: new Date().toISOString(),
+          updated: new Date().toISOString()
         };
       }
       return event;
     }));
-    
+
     return newAttendee;
   }, []);
 
@@ -699,12 +702,12 @@ export const useCalendar = () => {
         return {
           ...event,
           attendees: event.attendees?.filter(a => a.email !== email) || [],
-          updated: new Date().toISOString(),
+          updated: new Date().toISOString()
         };
       }
       return event;
     }));
-    
+
     return true;
   }, []);
 
@@ -717,15 +720,15 @@ export const useCalendar = () => {
       if (event.id === eventId) {
         return {
           ...event,
-          attendees: event.attendees?.map(a => 
+          attendees: event.attendees?.map(a =>
             a.email === email ? { ...a, responseStatus: status } : a
           ),
-          updated: new Date().toISOString(),
+          updated: new Date().toISOString()
         };
       }
       return event;
     }));
-    
+
     return true;
   }, []);
 
@@ -733,15 +736,15 @@ export const useCalendar = () => {
   const getEventsForDate = useCallback((date: Date): CalendarEvent[] => {
     const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     const endOfDay = new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000);
-    
+
     return events.filter(event => {
-      const eventStart = event.start.dateTime 
+      const eventStart = event.start.dateTime
         ? new Date(event.start.dateTime)
         : new Date(event.start.date!);
       const eventEnd = event.end.dateTime
         ? new Date(event.end.dateTime)
         : new Date(event.end.date!);
-      
+
       return eventStart < endOfDay && eventEnd > startOfDay;
     });
   }, [events]);
@@ -751,15 +754,15 @@ export const useCalendar = () => {
     const startOfWeek = new Date(date);
     startOfWeek.setDate(date.getDate() - date.getDay());
     startOfWeek.setHours(0, 0, 0, 0);
-    
+
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(startOfWeek.getDate() + 7);
-    
+
     return events.filter(event => {
-      const eventStart = event.start.dateTime 
+      const eventStart = event.start.dateTime
         ? new Date(event.start.dateTime)
         : new Date(event.start.date!);
-      
+
       return eventStart >= startOfWeek && eventStart < endOfWeek;
     });
   }, [events]);
@@ -768,12 +771,12 @@ export const useCalendar = () => {
   const getEventsForMonth = useCallback((date: Date): CalendarEvent[] => {
     const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
     const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    
+
     return events.filter(event => {
-      const eventStart = event.start.dateTime 
+      const eventStart = event.start.dateTime
         ? new Date(event.start.dateTime)
         : new Date(event.start.date!);
-      
+
       return eventStart >= startOfMonth && eventStart <= endOfMonth;
     });
   }, [events]);
@@ -788,45 +791,45 @@ export const useCalendar = () => {
     selectedDate,
     viewMode,
     syncStatus,
-    
+
     // Setters
     setSelectedEvent,
     setSelectedDate,
     setViewMode,
-    
+
     // Account Management
     connectCalendar,
     disconnectCalendar,
     refreshAccountToken,
-    
+
     // Event CRUD
     createEvent,
     updateEvent,
     deleteEvent,
     getEventById,
-    
+
     // Email Integration
     convertEmailToEvent,
-    
+
     // Filtering
     getFilteredEvents,
     getEventsForDate,
     getEventsForWeek,
     getEventsForMonth,
-    
+
     // Statistics
     getStatistics,
-    
+
     // Free/Busy
     queryFreeBusy,
-    
+
     // Sync
     syncAllCalendars,
     syncCalendar,
-    
+
     // Attendee Management
     addAttendee,
     removeAttendee,
-    updateAttendeeStatus,
+    updateAttendeeStatus
   };
 };

@@ -6,7 +6,7 @@ import {
   TranslationQuality,
   TranslationStatus,
   TranslationSource,
-  SupportedLanguage,
+  SupportedLanguage
 } from '../../src/types/emailTranslation';
 import { TranslationService } from '../../src/services/translationService';
 
@@ -38,7 +38,7 @@ describe('useEmailTranslation', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     mockService = {
       translateEmail: vi.fn(),
       translateText: vi.fn(),
@@ -56,8 +56,8 @@ describe('useEmailTranslation', () => {
         averageProcessingTime: 0,
         languageDistribution: {},
         toneDistribution: {},
-        lastReset: Date.now(),
-      }),
+        lastReset: Date.now()
+      })
     };
 
     // Set up the mock constructor to return our mock service instance
@@ -81,7 +81,7 @@ describe('useEmailTranslation', () => {
     it('should initialize with custom config', () => {
       const customConfig = {
         defaultTargetLanguage: SupportedLanguage.SPANISH,
-        quality: TranslationQuality.STANDARD,
+        quality: TranslationQuality.STANDARD
       };
       const { result } = renderHook(() => useEmailTranslation(customConfig));
 
@@ -116,7 +116,7 @@ describe('useEmailTranslation', () => {
         source: TranslationSource.API,
         cacheHit: false,
         segments: [],
-        metadata: {},
+        metadata: {}
       };
 
       const mockResult = {
@@ -124,7 +124,7 @@ describe('useEmailTranslation', () => {
         detectedLanguage: SupportedLanguage.ENGLISH,
         detectedTone: TranslationTone.NEUTRAL,
         toneConfidence: 0.8,
-        languageConfidence: 0.95,
+        languageConfidence: 0.95
       };
 
       mockService.translateEmail.mockResolvedValue(mockResult);
@@ -137,7 +137,7 @@ describe('useEmailTranslation', () => {
         body: 'Hello World',
         sender: 'test@example.com',
         recipient: 'recipient@example.com',
-        targetLanguage: SupportedLanguage.SPANISH,
+        targetLanguage: SupportedLanguage.SPANISH
       };
 
       await act(async () => {
@@ -160,7 +160,7 @@ describe('useEmailTranslation', () => {
         body: 'Hello World',
         sender: 'test@example.com',
         recipient: 'recipient@example.com',
-        targetLanguage: SupportedLanguage.SPANISH,
+        targetLanguage: SupportedLanguage.SPANISH
       };
 
       await act(async () => {
@@ -189,12 +189,12 @@ describe('useEmailTranslation', () => {
             source: TranslationSource.API,
             cacheHit: false,
             segments: [],
-            metadata: {},
+            metadata: {}
           },
           detectedLanguage: SupportedLanguage.ENGLISH,
           detectedTone: TranslationTone.NEUTRAL,
           toneConfidence: 0.8,
-          languageConfidence: 0.95,
+          languageConfidence: 0.95
         }), 100))
       );
 
@@ -206,7 +206,7 @@ describe('useEmailTranslation', () => {
         body: 'Hello',
         sender: 'test@example.com',
         recipient: 'recipient@example.com',
-        targetLanguage: SupportedLanguage.SPANISH,
+        targetLanguage: SupportedLanguage.SPANISH
       };
 
       act(() => {
@@ -237,7 +237,7 @@ describe('useEmailTranslation', () => {
         source: TranslationSource.API,
         cacheHit: false,
         segments: [],
-        metadata: {},
+        metadata: {}
       };
 
       mockService.translateText.mockResolvedValue(mockTranslation);
@@ -282,7 +282,7 @@ describe('useEmailTranslation', () => {
         source: TranslationSource.API,
         cacheHit: false,
         segments: [],
-        metadata: {},
+        metadata: {}
       };
 
       mockService.translateText.mockResolvedValue(mockTranslation);
@@ -352,7 +352,7 @@ describe('useEmailTranslation', () => {
       act(() => {
         result.current.updateConfig({
           defaultTargetLanguage: SupportedLanguage.FRENCH,
-          quality: TranslationQuality.STANDARD,
+          quality: TranslationQuality.STANDARD
         });
       });
 
@@ -364,7 +364,7 @@ describe('useEmailTranslation', () => {
       const { result } = renderHook(() => useEmailTranslation());
 
       const newConfig = {
-        defaultTargetLanguage: SupportedLanguage.FRENCH,
+        defaultTargetLanguage: SupportedLanguage.FRENCH
       };
 
       act(() => {
@@ -386,7 +386,7 @@ describe('useEmailTranslation', () => {
         averageProcessingTime: 0,
         languageDistribution: {},
         toneDistribution: {},
-        lastReset: Date.now(),
+        lastReset: Date.now()
       });
 
       const { result } = renderHook(() => useEmailTranslation());
@@ -413,7 +413,7 @@ describe('useEmailTranslation', () => {
         body: 'Hello',
         sender: 'test@example.com',
         recipient: 'recipient@example.com',
-        targetLanguage: SupportedLanguage.SPANISH,
+        targetLanguage: SupportedLanguage.SPANISH
       };
 
       await act(async () => {
@@ -446,7 +446,7 @@ describe('useEmailTranslation', () => {
         source: TranslationSource.API,
         cacheHit: false,
         segments: [],
-        metadata: {},
+        metadata: {}
       });
 
       mockService.translateText
@@ -481,7 +481,7 @@ describe('useEmailTranslation', () => {
         source: TranslationSource.API,
         cacheHit: false,
         segments: [],
-        metadata: {},
+        metadata: {}
       };
 
       mockService.translateText.mockResolvedValue(mockTranslation);
@@ -491,7 +491,7 @@ describe('useEmailTranslation', () => {
       act(() => {
         result.current.updateConfig({
           defaultTone: TranslationTone.PROFESSIONAL,
-          quality: TranslationQuality.STANDARD,
+          quality: TranslationQuality.STANDARD
         });
       });
 
@@ -518,7 +518,7 @@ describe('useEmailTranslation', () => {
         source: TranslationSource.API,
         cacheHit: false,
         segments: [],
-        metadata: {},
+        metadata: {}
       };
 
       mockService.translateText.mockResolvedValue(mockTranslation);

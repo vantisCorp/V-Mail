@@ -5,8 +5,8 @@ import { useAutoReply } from '../../src/hooks/useAutoReply';
 // Mock useNotifications
 vi.mock('../../src/hooks/useNotifications', () => ({
   useNotifications: () => ({
-    addNotification: vi.fn(),
-  }),
+    addNotification: vi.fn()
+  })
 }));
 
 describe('useAutoReply', () => {
@@ -34,7 +34,7 @@ describe('useAutoReply', () => {
           subject: 'Test Rule',
           body: 'This is a test',
           delayMinutes: 0,
-          schedule: { enabled: false },
+          schedule: { enabled: false }
         });
       });
 
@@ -52,7 +52,7 @@ describe('useAutoReply', () => {
           subject: 'Rule 1',
           body: 'Body 1',
           delayMinutes: 0,
-          schedule: { enabled: false },
+          schedule: { enabled: false }
         });
       });
 
@@ -63,7 +63,7 @@ describe('useAutoReply', () => {
           subject: 'Rule 2',
           body: 'Body 2',
           delayMinutes: 0,
-          schedule: { enabled: false },
+          schedule: { enabled: false }
         });
       });
 
@@ -79,7 +79,7 @@ describe('useAutoReply', () => {
       act(() => {
         result.current.updateRule(ruleId, {
           ...result.current.rules[0],
-          subject: 'Updated Subject',
+          subject: 'Updated Subject'
         });
       });
 
@@ -99,7 +99,7 @@ describe('useAutoReply', () => {
           subject: 'To Delete',
           body: 'Delete me',
           delayMinutes: 0,
-          schedule: { enabled: false },
+          schedule: { enabled: false }
         });
       });
 
@@ -138,7 +138,7 @@ describe('useAutoReply', () => {
         result.current.updateRule(result.current.rules[0].id, {
           ...result.current.rules[0],
           enabled: true,
-          subject: 'All Emails',
+          subject: 'All Emails'
         });
       });
 
@@ -164,7 +164,7 @@ describe('useAutoReply', () => {
           subject: 'Sender Rule',
           body: 'Reply to sender',
           delayMinutes: 0,
-          schedule: { enabled: false },
+          schedule: { enabled: false }
         });
       });
 
@@ -190,7 +190,7 @@ describe('useAutoReply', () => {
           subject: 'Subject Rule',
           body: 'Reply to urgent',
           delayMinutes: 0,
-          schedule: { enabled: false },
+          schedule: { enabled: false }
         });
       });
 
@@ -216,7 +216,7 @@ describe('useAutoReply', () => {
           subject: 'Keywords Rule',
           body: 'Reply to keywords',
           delayMinutes: 0,
-          schedule: { enabled: false },
+          schedule: { enabled: false }
         });
       });
 
@@ -242,7 +242,7 @@ describe('useAutoReply', () => {
           subject: 'Disabled Rule',
           body: 'Disabled reply',
           delayMinutes: 0,
-          schedule: { enabled: false },
+          schedule: { enabled: false }
         });
       });
 
@@ -268,7 +268,7 @@ describe('useAutoReply', () => {
           subject: 'Sender Rule',
           body: 'Reply to sender',
           delayMinutes: 0,
-          schedule: { enabled: false },
+          schedule: { enabled: false }
         });
       });
 
@@ -294,7 +294,7 @@ describe('useAutoReply', () => {
           subject: 'Keywords Rule',
           body: 'Reply to keywords',
           delayMinutes: 0,
-          schedule: { enabled: false },
+          schedule: { enabled: false }
         });
       });
 
@@ -328,8 +328,8 @@ describe('useAutoReply', () => {
           delayMinutes: 0,
           schedule: {
             enabled: true,
-            startDate: '2099-01-01', // Future date
-          },
+            startDate: '2099-01-01' // Future date
+          }
         });
       });
 

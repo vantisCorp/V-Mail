@@ -91,24 +91,24 @@ export interface FilePreview {
   mimeType: string;
   status: PreviewStatus;
   securityStatus: SecurityStatus;
-  
+
   // URLs for different quality levels
   thumbnailUrl?: string;
   previewUrl?: string;
   originalUrl: string;
-  
+
   // Metadata
   metadata: FilePreviewMetadata;
-  
+
   // Thumbnails
   thumbnails: FileThumbnail[];
-  
+
   // Preview content (for text-based files)
   textContent?: string;
-  
+
   // Error information
   error?: string;
-  
+
   // Timestamps
   createdAt: string;
   updatedAt: string;

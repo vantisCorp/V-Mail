@@ -18,7 +18,7 @@ const createMockEmail = (overrides: Partial<Email> = {}): Email => ({
   isRead: false,
   isStarred: false,
   folderId: 'inbox',
-  ...overrides,
+  ...overrides
 });
 
 describe('useEmailThreading', () => {
@@ -50,8 +50,8 @@ describe('useEmailThreading', () => {
           id: '2',
           messageId: 'msg2',
           subject: 'Re: Test Subject',
-          inReplyTo: 'msg1',
-        }),
+          inReplyTo: 'msg1'
+        })
       ];
 
       const { result } = renderHook(() => useEmailThreading(emails));
@@ -81,7 +81,7 @@ describe('useEmailThreading', () => {
       const emails = [
         createMockEmail({ id: '1', messageId: 'msg1', subject: 'Subject 1' }),
         createMockEmail({ id: '2', messageId: 'msg2', subject: 'Subject 2' }),
-        createMockEmail({ id: '3', messageId: 'msg3', subject: 'Subject 3' }),
+        createMockEmail({ id: '3', messageId: 'msg3', subject: 'Subject 3' })
       ];
 
       const { result } = renderHook(() => useEmailThreading(emails));
@@ -166,7 +166,7 @@ describe('useEmailThreading', () => {
     it('should navigate to next thread', async () => {
       const emails = [
         createMockEmail({ id: '1', messageId: 'msg1', subject: 'Subject 1' }),
-        createMockEmail({ id: '2', messageId: 'msg2', subject: 'Subject 2' }),
+        createMockEmail({ id: '2', messageId: 'msg2', subject: 'Subject 2' })
       ];
 
       const { result } = renderHook(() => useEmailThreading(emails));
@@ -189,7 +189,7 @@ describe('useEmailThreading', () => {
     it('should navigate to previous thread', async () => {
       const emails = [
         createMockEmail({ id: '1', messageId: 'msg1', subject: 'Subject 1' }),
-        createMockEmail({ id: '2', messageId: 'msg2', subject: 'Subject 2' }),
+        createMockEmail({ id: '2', messageId: 'msg2', subject: 'Subject 2' })
       ];
 
       const { result } = renderHook(() => useEmailThreading(emails));
@@ -354,7 +354,7 @@ describe('useEmailThreading', () => {
     it('should update filter', async () => {
       const emails = [
         createMockEmail({ id: '1', messageId: 'msg1', subject: 'Important Email' }),
-        createMockEmail({ id: '2', messageId: 'msg2', subject: 'Regular Email' }),
+        createMockEmail({ id: '2', messageId: 'msg2', subject: 'Regular Email' })
       ];
 
       const { result } = renderHook(() => useEmailThreading(emails));
@@ -392,7 +392,7 @@ describe('useEmailThreading', () => {
     it('should calculate thread statistics', async () => {
       const emails = [
         createMockEmail({ id: '1', messageId: 'msg1', subject: 'Subject 1' }),
-        createMockEmail({ id: '2', messageId: 'msg2', subject: 'Subject 2' }),
+        createMockEmail({ id: '2', messageId: 'msg2', subject: 'Subject 2' })
       ];
 
       const { result } = renderHook(() => useEmailThreading(emails));

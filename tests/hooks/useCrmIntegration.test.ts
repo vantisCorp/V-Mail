@@ -5,7 +5,7 @@ import {
   CRMProvider,
   ContactStatus,
   DealStage,
-  SyncStatus,
+  SyncStatus
 } from '../../src/types/crmIntegration';
 
 describe('useCrmIntegration', () => {
@@ -16,7 +16,7 @@ describe('useCrmIntegration', () => {
   describe('Initialization and State', () => {
     it('should initialize with empty state and loading', () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       expect(result.current.isLoading).toBe(true);
       expect(result.current.accounts).toEqual([]);
       expect(result.current.contacts).toEqual([]);
@@ -25,11 +25,11 @@ describe('useCrmIntegration', () => {
 
     it('should load accounts, contacts, and deals after initialization', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
-      
+
       expect(result.current.accounts.length).toBeGreaterThan(0);
       expect(result.current.contacts.length).toBeGreaterThan(0);
       expect(result.current.deals.length).toBeGreaterThan(0);
@@ -37,11 +37,11 @@ describe('useCrmIntegration', () => {
 
     it('should initialize selectedAccount as null', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
-      
+
       expect(result.current.selectedAccount).toBeNull();
     });
   });
@@ -49,7 +49,7 @@ describe('useCrmIntegration', () => {
   describe('Account Management', () => {
     it('should connect a new CRM account', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -59,7 +59,7 @@ describe('useCrmIntegration', () => {
           provider: CRMProvider.PIPEDRIVE,
           name: 'Pipedrive Account',
           email: 'pipedrive@company.com',
-          syncFrequency: 45,
+          syncFrequency: 45
         });
       });
 
@@ -71,7 +71,7 @@ describe('useCrmIntegration', () => {
 
     it('should disconnect an account', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -91,7 +91,7 @@ describe('useCrmIntegration', () => {
 
     it('should refresh account token', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -109,7 +109,7 @@ describe('useCrmIntegration', () => {
 
     it('should get account by ID', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -126,7 +126,7 @@ describe('useCrmIntegration', () => {
   describe('Contact Management', () => {
     it('should create a new contact', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -139,7 +139,7 @@ describe('useCrmIntegration', () => {
           lastName: 'User',
           email: 'test@example.com',
           company: 'Test Corp',
-          status: ContactStatus.LEAD,
+          status: ContactStatus.LEAD
         });
       });
 
@@ -151,7 +151,7 @@ describe('useCrmIntegration', () => {
 
     it('should update an existing contact', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -162,7 +162,7 @@ describe('useCrmIntegration', () => {
       await act(async () => {
         await result.current.updateContact(contactToUpdate.id, {
           company: 'Updated Company',
-          title: 'Updated Title',
+          title: 'Updated Title'
         });
       });
 
@@ -174,7 +174,7 @@ describe('useCrmIntegration', () => {
 
     it('should delete a contact', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -192,7 +192,7 @@ describe('useCrmIntegration', () => {
 
     it('should get contact by ID', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -207,7 +207,7 @@ describe('useCrmIntegration', () => {
 
     it('should get contact by email', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -224,7 +224,7 @@ describe('useCrmIntegration', () => {
   describe('Deal Management', () => {
     it('should create a new deal', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -237,7 +237,7 @@ describe('useCrmIntegration', () => {
           dealName: 'Test Deal',
           value: 10000,
           currency: 'USD',
-          stage: DealStage.QUALIFIED,
+          stage: DealStage.QUALIFIED
         });
       });
 
@@ -249,23 +249,23 @@ describe('useCrmIntegration', () => {
 
     it('should update an existing deal', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
 
       const dealToUpdate = result.current.deals[0];
       const originalStage = dealToUpdate.stage;
-      
+
       // Update to a different stage than the original
-      const newStage = originalStage === DealStage.NEGOTIATION 
-        ? DealStage.PROPOSAL 
+      const newStage = originalStage === DealStage.NEGOTIATION
+        ? DealStage.PROPOSAL
         : DealStage.NEGOTIATION;
 
       await act(async () => {
         await result.current.updateDeal(dealToUpdate.id, {
           stage: newStage,
-          probability: 85,
+          probability: 85
         });
       });
 
@@ -277,7 +277,7 @@ describe('useCrmIntegration', () => {
 
     it('should delete a deal', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -295,7 +295,7 @@ describe('useCrmIntegration', () => {
 
     it('should get deal by ID', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -312,7 +312,7 @@ describe('useCrmIntegration', () => {
   describe('Email to CRM', () => {
     it('should log email to CRM', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -326,7 +326,7 @@ describe('useCrmIntegration', () => {
             from: 'sender@example.com',
             fromName: 'Sender Name',
             to: ['recipient@example.com'],
-            sentAt: new Date().toISOString(),
+            sentAt: new Date().toISOString()
           },
           CRMProvider.SALESFORCE,
           result.current.contacts[0].id
@@ -341,7 +341,7 @@ describe('useCrmIntegration', () => {
 
     it('should match email to existing contact', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -357,7 +357,7 @@ describe('useCrmIntegration', () => {
 
     it('should not match email to non-existent contact', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -371,7 +371,7 @@ describe('useCrmIntegration', () => {
 
     it('should create contact from email if not exists', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -393,7 +393,7 @@ describe('useCrmIntegration', () => {
 
     it('should return existing contact when creating from email if exists', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -414,7 +414,7 @@ describe('useCrmIntegration', () => {
   describe('Contact Lookup', () => {
     it('should lookup contact by email', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -430,7 +430,7 @@ describe('useCrmIntegration', () => {
 
     it('should return not found for non-existent email', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -445,13 +445,13 @@ describe('useCrmIntegration', () => {
   describe('Filtering', () => {
     it('should filter contacts by status', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
 
       const filtered = result.current.getFilteredContacts({
-        status: ContactStatus.CUSTOMER,
+        status: ContactStatus.CUSTOMER
       });
 
       filtered.forEach(contact => {
@@ -461,13 +461,13 @@ describe('useCrmIntegration', () => {
 
     it('should filter contacts by search query', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
 
       const filtered = result.current.getFilteredContacts({
-        searchQuery: 'john',
+        searchQuery: 'john'
       });
 
       filtered.forEach(contact => {
@@ -481,13 +481,13 @@ describe('useCrmIntegration', () => {
 
     it('should filter deals by stage', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
 
       const filtered = result.current.getFilteredDeals({
-        stage: DealStage.NEGOTIATION,
+        stage: DealStage.NEGOTIATION
       });
 
       filtered.forEach(deal => {
@@ -497,14 +497,14 @@ describe('useCrmIntegration', () => {
 
     it('should filter deals by value range', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
 
       const filtered = result.current.getFilteredDeals({
         minValue: 20000,
-        maxValue: 60000,
+        maxValue: 60000
       });
 
       filtered.forEach(deal => {
@@ -517,7 +517,7 @@ describe('useCrmIntegration', () => {
   describe('Statistics', () => {
     it('should get statistics for all accounts', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -535,7 +535,7 @@ describe('useCrmIntegration', () => {
 
     it('should get statistics for specific account', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -552,7 +552,7 @@ describe('useCrmIntegration', () => {
   describe('Sync Operations', () => {
     it('should sync contacts', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -571,7 +571,7 @@ describe('useCrmIntegration', () => {
 
     it('should sync deals', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -589,7 +589,7 @@ describe('useCrmIntegration', () => {
 
     it('should sync all data', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -609,7 +609,7 @@ describe('useCrmIntegration', () => {
   describe('State Management', () => {
     it('should set selected account', async () => {
       const { result } = renderHook(() => useCrmIntegration());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });

@@ -155,20 +155,20 @@ export interface Contact {
   id: string;
   provider: ContactProvider;
   providerContactId: string;
-  
+
   // Basic info
   firstName?: string;
   lastName?: string;
   middleName?: string;
   prefix?: string; // e.g., Mr., Mrs., Dr.
   suffix?: string; // e.g., Jr., Sr., III
-  
+
   // Display info
   displayName: string;
   nickname?: string;
   phoneticFirstName?: string;
   phoneticLastName?: string;
-  
+
   // Contact details
   emails: EmailContact[];
   phones: PhoneContact[];
@@ -176,38 +176,38 @@ export interface Contact {
   websites: WebsiteContact[];
   socials: SocialContact[];
   customFields: CustomField[];
-  
+
   // Additional info
   organization?: ContactOrganization;
   birthday?: string; // ISO date format
   anniversary?: string; // ISO date format
   notes?: ContactNote[];
-  
+
   // Photo
   photo?: ContactPhoto;
-  
+
   // Groups
   groupIds: string[];
   tags: string[];
-  
+
   // Email integration
   emailFrequency?: number; // emails per month
   lastEmailDate?: string;
   emailCount?: number;
-  
+
   // Metadata
   starred?: boolean;
   favorite?: boolean;
   hidden?: boolean;
   isPrimary?: boolean;
-  
+
   // Sync info
   version?: number;
   etag?: string;
   createdAt: string;
   updatedAt: string;
   deleted?: boolean;
-  
+
   // User fields
   userFields?: Record<string, any>;
 }
@@ -427,6 +427,7 @@ export interface CreateContactPayload {
   groupIds?: string[];
   tags?: string[];
   starred?: boolean;
+  favorite?: boolean;
 }
 
 /**

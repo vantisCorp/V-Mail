@@ -82,11 +82,11 @@ export interface EmailSignature {
   position: SignaturePosition;
   isDefault: boolean;
   isActive: boolean;
-  
+
   // Content
   htmlContent: string;
   plainTextContent: string;
-  
+
   // Personal info
   fullName: string;
   firstName?: string;
@@ -94,13 +94,13 @@ export interface EmailSignature {
   title?: string;
   company?: string;
   department?: string;
-  
+
   // Contact info
   contactInfo: SignatureContactInfo;
-  
+
   // Social links
   socialLinks: SignatureSocialLink[];
-  
+
   // Branding
   logoUrl?: string;
   photoUrl?: string;
@@ -108,20 +108,20 @@ export interface EmailSignature {
   primaryColor?: string;
   secondaryColor?: string;
   fontFamily?: string;
-  
+
   // Template reference
   templateId?: string;
-  
+
   // Provider association
   provider?: SignatureProvider;
   providerAccountId?: string;
-  
+
   // Settings
   autoInsert: boolean;
   insertForNew: boolean;
   insertForReply: boolean;
   insertForForward: boolean;
-  
+
   // Metadata
   tags: string[];
   createdAt: string;
@@ -139,36 +139,36 @@ export interface CreateSignaturePayload {
   type: SignatureType;
   position?: SignaturePosition;
   isDefault?: boolean;
-  
+
   htmlContent: string;
   plainTextContent: string;
-  
+
   fullName: string;
   firstName?: string;
   lastName?: string;
   title?: string;
   company?: string;
   department?: string;
-  
+
   contactInfo?: Partial<SignatureContactInfo>;
   socialLinks?: Omit<SignatureSocialLink, 'id'>[];
-  
+
   logoUrl?: string;
   photoUrl?: string;
   bannerUrl?: string;
   primaryColor?: string;
   secondaryColor?: string;
   fontFamily?: string;
-  
+
   templateId?: string;
   provider?: SignatureProvider;
   providerAccountId?: string;
-  
+
   autoInsert?: boolean;
   insertForNew?: boolean;
   insertForReply?: boolean;
   insertForForward?: boolean;
-  
+
   tags?: string[];
 }
 
@@ -182,33 +182,33 @@ export interface UpdateSignaturePayload {
   position?: SignaturePosition;
   isDefault?: boolean;
   isActive?: boolean;
-  
+
   htmlContent?: string;
   plainTextContent?: string;
-  
+
   fullName?: string;
   firstName?: string;
   lastName?: string;
   title?: string;
   company?: string;
   department?: string;
-  
+
   contactInfo?: Partial<SignatureContactInfo>;
   socialLinks?: SignatureSocialLink[];
-  
+
   logoUrl?: string;
   photoUrl?: string;
   bannerUrl?: string;
   primaryColor?: string;
   secondaryColor?: string;
   fontFamily?: string;
-  
+
   templateId?: string;
   autoInsert?: boolean;
   insertForNew?: boolean;
   insertForReply?: boolean;
   insertForForward?: boolean;
-  
+
   tags?: string[];
 }
 

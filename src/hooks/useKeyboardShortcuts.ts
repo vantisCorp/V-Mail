@@ -19,12 +19,12 @@ const DEFAULT_SHORTCUTS: Omit<KeyboardShortcut, 'action'>[] = [
   { id: 'navigate-sent', key: 's', modifiers: ['ctrl', 'shift'], description: 'Go to Sent', category: 'navigation' },
   { id: 'navigate-drafts', key: 'd', modifiers: ['ctrl'], description: 'Go to Drafts', category: 'navigation' },
   { id: 'navigate-trash', key: 't', modifiers: ['ctrl'], description: 'Go to Trash', category: 'navigation' },
-  
+
   // Compose
   { id: 'compose', key: 'n', modifiers: ['ctrl'], description: 'Compose new email', category: 'compose' },
   { id: 'send', key: 'Enter', modifiers: ['ctrl'], description: 'Send email', category: 'compose' },
   { id: 'save-draft', key: 's', modifiers: ['ctrl'], description: 'Save draft', category: 'compose' },
-  
+
   // Email Actions
   { id: 'reply', key: 'r', modifiers: [], description: 'Reply to email', category: 'email-actions' },
   { id: 'reply-all', key: 'r', modifiers: ['shift'], description: 'Reply all', category: 'email-actions' },
@@ -32,25 +32,25 @@ const DEFAULT_SHORTCUTS: Omit<KeyboardShortcut, 'action'>[] = [
   { id: 'delete', key: 'Delete', modifiers: [], description: 'Delete email', category: 'email-actions' },
   { id: 'star', key: 's', modifiers: [], description: 'Star/unstar email', category: 'email-actions' },
   { id: 'mark-read', key: 'm', modifiers: [], description: 'Mark as read/unread', category: 'email-actions' },
-  
+
   // Search
   { id: 'search', key: '/', modifiers: [], description: 'Focus search', category: 'search' },
   { id: 'advanced-search', key: '/', modifiers: ['ctrl', 'shift'], description: 'Open advanced search', category: 'search' },
-  
+
   // Folder
   { id: 'next-email', key: 'j', modifiers: [], description: 'Next email', category: 'folder' },
   { id: 'prev-email', key: 'k', modifiers: [], description: 'Previous email', category: 'folder' },
   { id: 'next-page', key: 'n', modifiers: [], description: 'Next page', category: 'folder' },
   { id: 'prev-page', key: 'p', modifiers: [], description: 'Previous page', category: 'folder' },
-  
+
   // Security
   { id: 'panic', key: 'p', modifiers: ['ctrl'], description: 'Panic mode', category: 'security' },
   { id: 'lock', key: 'l', modifiers: ['ctrl', 'shift'], description: 'Lock application', category: 'security' },
-  
+
   // General
   { id: 'help', key: '?', modifiers: ['shift'], description: 'Show keyboard shortcuts', category: 'general' },
   { id: 'escape', key: 'Escape', modifiers: [], description: 'Close/Cancel', category: 'general' },
-  { id: 'refresh', key: 'F5', modifiers: [], description: 'Refresh', category: 'general' },
+  { id: 'refresh', key: 'F5', modifiers: [], description: 'Refresh', category: 'general' }
 ];
 
 const CATEGORY_TITLES: Record<KeyboardShortcutCategory, string> = {
@@ -60,7 +60,7 @@ const CATEGORY_TITLES: Record<KeyboardShortcutCategory, string> = {
   'search': 'Search',
   'folder': 'Folder Navigation',
   'security': 'Security',
-  'general': 'General',
+  'general': 'General'
 };
 
 export const useKeyboardShortcuts = (
@@ -76,7 +76,7 @@ export const useKeyboardShortcuts = (
     const initialShortcuts: KeyboardShortcut[] = DEFAULT_SHORTCUTS.map(shortcut => ({
       ...shortcut,
       action: () => onAction?.(shortcut.id),
-      enabled: true,
+      enabled: true
     }));
     setShortcuts(initialShortcuts);
   }, [onAction]);
@@ -121,7 +121,9 @@ export const useKeyboardShortcuts = (
 
   // Handle keyboard events
   useEffect(() => {
-    if (!isEnabled) return;
+    if (!isEnabled) {
+return;
+}
 
     const handleKeyDown = (event: globalThis.KeyboardEvent) => {
       // Update pressed keys
@@ -173,7 +175,7 @@ export const useKeyboardShortcuts = (
       'search': [],
       'folder': [],
       'security': [],
-      'general': [],
+      'general': []
     };
 
     shortcuts.forEach(shortcut => {
@@ -185,7 +187,7 @@ export const useKeyboardShortcuts = (
       .map(([category, groupShortcuts]) => ({
         category: category as KeyboardShortcutCategory,
         title: CATEGORY_TITLES[category as KeyboardShortcutCategory],
-        shortcuts: groupShortcuts,
+        shortcuts: groupShortcuts
       }));
   }, [shortcuts]);
 
@@ -198,6 +200,6 @@ export const useKeyboardShortcuts = (
     unregisterShortcut,
     pressedKeys,
     showHelp,
-    setShowHelp,
+    setShowHelp
   };
 };

@@ -15,7 +15,7 @@ import {
   ThreadFilter,
   ThreadNavigation,
   ThreadAction,
-  ThreadStats,
+  ThreadStats
 } from '../types/emailThreading';
 
 const DEFAULT_PREFERENCES: ThreadPreferences = {
@@ -26,7 +26,7 @@ const DEFAULT_PREFERENCES: ThreadPreferences = {
   showAvatars: true,
   showPreview: true,
   maxPreviewLength: 100,
-  autoMarkRead: false,
+  autoMarkRead: false
 };
 
 export const useEmailThreading = (emails: Email[]) => {
@@ -40,7 +40,7 @@ export const useEmailThreading = (emails: Email[]) => {
   // Group emails into threads
   useEffect(() => {
     setLoading(true);
-    
+
     // Simulate async operation
     setTimeout(() => {
       const groupedThreads = ThreadAlgorithm.groupEmailsIntoThreads(emails);
@@ -71,18 +71,18 @@ export const useEmailThreading = (emails: Email[]) => {
         previousThreadId: null,
         nextThreadId: null,
         canGoBack: false,
-        canGoForward: false,
+        canGoForward: false
       };
     }
 
     const currentIndex = filteredThreads.findIndex((t) => t.id === selectedThreadId);
-    
+
     return {
       currentThreadId: selectedThreadId,
       previousThreadId: currentIndex > 0 ? filteredThreads[currentIndex - 1].id : null,
       nextThreadId: currentIndex < filteredThreads.length - 1 ? filteredThreads[currentIndex + 1].id : null,
       canGoBack: currentIndex > 0,
-      canGoForward: currentIndex < filteredThreads.length - 1,
+      canGoForward: currentIndex < filteredThreads.length - 1
     };
   }, [selectedThreadId, filteredThreads]);
 
@@ -149,7 +149,7 @@ export const useEmailThreading = (emails: Email[]) => {
           return {
             ...thread,
             unreadCount: 0,
-            messages: thread.messages.map((email) => ({ ...email, isRead: true })),
+            messages: thread.messages.map((email) => ({ ...email, isRead: true }))
           };
         }
         return thread;
@@ -165,7 +165,7 @@ export const useEmailThreading = (emails: Email[]) => {
           return {
             ...thread,
             unreadCount: thread.messages.length,
-            messages: thread.messages.map((email) => ({ ...email, isRead: false })),
+            messages: thread.messages.map((email) => ({ ...email, isRead: false }))
           };
         }
         return thread;
@@ -193,12 +193,12 @@ export const useEmailThreading = (emails: Email[]) => {
               ...thread,
               messages: thread.messages.map((email) =>
                 email.id === emailId ? { ...email, isStarred: true } : email
-              ),
+              )
             };
           } else {
             return {
               ...thread,
-              messages: thread.messages.map((email) => ({ ...email, isStarred: true })),
+              messages: thread.messages.map((email) => ({ ...email, isStarred: true }))
             };
           }
         }
@@ -217,12 +217,12 @@ export const useEmailThreading = (emails: Email[]) => {
               ...thread,
               messages: thread.messages.map((email) =>
                 email.id === emailId ? { ...email, isStarred: false } : email
-              ),
+              )
             };
           } else {
             return {
               ...thread,
-              messages: thread.messages.map((email) => ({ ...email, isStarred: false })),
+              messages: thread.messages.map((email) => ({ ...email, isStarred: false }))
             };
           }
         }
@@ -323,6 +323,6 @@ export const useEmailThreading = (emails: Email[]) => {
 
     // Helpers
     isThreadExpanded,
-    getThreadById,
+    getThreadById
   };
 };

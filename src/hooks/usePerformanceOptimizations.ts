@@ -1,6 +1,6 @@
 /**
  * Performance Optimizations Hook
- * 
+ *
  * Provides comprehensive performance monitoring and optimization features:
  * - Performance metrics tracking
  * - Caching mechanisms
@@ -35,7 +35,7 @@ import {
   DatabaseOptimization,
   RenderingOptimization,
   PerformanceConfiguration,
-  PerformanceAlert,
+  PerformanceAlert
 } from '../types/performance';
 
 /**
@@ -47,29 +47,29 @@ const DEFAULT_THRESHOLDS: PerformanceThreshold[] = [
     warningThreshold: 16,
     errorThreshold: 100,
     criticalThreshold: 500,
-    unit: 'ms',
+    unit: 'ms'
   },
   {
     metricType: MetricType.API_CALL,
     warningThreshold: 200,
     errorThreshold: 1000,
     criticalThreshold: 5000,
-    unit: 'ms',
+    unit: 'ms'
   },
   {
     metricType: MetricType.MEMORY_USAGE,
     warningThreshold: 100 * 1024 * 1024, // 100MB
     errorThreshold: 200 * 1024 * 1024, // 200MB
     criticalThreshold: 500 * 1024 * 1024, // 500MB
-    unit: 'bytes',
+    unit: 'bytes'
   },
   {
     metricType: MetricType.NETWORK_LATENCY,
     warningThreshold: 100,
     errorThreshold: 500,
     criticalThreshold: 2000,
-    unit: 'ms',
-  },
+    unit: 'ms'
+  }
 ];
 
 /**
@@ -81,7 +81,7 @@ const DEFAULT_CACHE_CONFIG: CacheConfiguration = {
   strategy: CacheStrategy.LRU,
   ttl: 3600000, // 1 hour
   enableCompression: true,
-  enablePersistence: false,
+  enablePersistence: false
 };
 
 /**
@@ -91,7 +91,7 @@ const DEFAULT_LAZY_LOAD_CONFIG: LazyLoadConfig = {
   enabled: true,
   threshold: 200,
   rootMargin: '100px',
-  triggerOnce: true,
+  triggerOnce: true
 };
 
 /**
@@ -102,7 +102,7 @@ const DEFAULT_VIRTUAL_SCROLL_CONFIG: VirtualScrollConfig = {
   itemHeight: 50,
   overscanCount: 5,
   windowSize: 20,
-  dynamicHeights: false,
+  dynamicHeights: false
 };
 
 /**
@@ -113,7 +113,7 @@ const DEFAULT_MONITORING_CONFIG: PerformanceMonitoringConfig = {
   sampleRate: 1.0,
   thresholds: DEFAULT_THRESHOLDS,
   enableRealtimeMonitoring: true,
-  enableDetailedMetrics: true,
+  enableDetailedMetrics: true
 };
 
 /**
@@ -141,7 +141,7 @@ class CacheManager {
       evictions: 0,
       averageAccessTime: 0,
       oldestEntry: '',
-      newestEntry: '',
+      newestEntry: ''
     };
   }
 
@@ -155,7 +155,7 @@ class CacheManager {
       accessCount: 0,
       size: this.calculateSize(value),
       ttl: ttl || this.config.ttl,
-      tags: this.config.tags,
+      tags: this.config.tags
     };
 
     // Check if we need to evict entries
@@ -168,7 +168,7 @@ class CacheManager {
 
   get<T>(key: string): T | null {
     const entry = this.cache.get(key);
-    
+
     if (!entry) {
       this.updateStats('miss');
       return null;
@@ -191,8 +191,10 @@ class CacheManager {
 
   has(key: string): boolean {
     const entry = this.cache.get(key);
-    if (!entry) return false;
-    
+    if (!entry) {
+return false;
+}
+
     if (entry.ttl && Date.now() - parseInt(entry.timestamp) > entry.ttl) {
       this.cache.delete(key);
       return false;
@@ -212,7 +214,7 @@ class CacheManager {
 
   private evictIfNeeded(): void {
     const totalSize = Array.from(this.cache.values()).reduce((sum, entry) => sum + entry.size, 0);
-    
+
     if (totalSize > this.config.maxSize || this.cache.size > this.config.maxEntries) {
       switch (this.config.strategy) {
         case CacheStrategy.LRU:
@@ -237,7 +239,7 @@ class CacheManager {
   private evictLRU(): void {
     const entries = Array.from(this.cache.entries());
     entries.sort((a, b) => parseInt(a[1].lastAccessed) - parseInt(b[1].lastAccessed));
-    
+
     const entriesToEvict = Math.ceil(this.cache.size * 0.1);
     for (let i = 0; i < entriesToEvict; i++) {
       this.cache.delete(entries[i][0]);
@@ -248,7 +250,7 @@ class CacheManager {
   private evictLFU(): void {
     const entries = Array.from(this.cache.entries());
     entries.sort((a, b) => a[1].accessCount - b[1].accessCount);
-    
+
     const entriesToEvict = Math.ceil(this.cache.size * 0.1);
     for (let i = 0; i < entriesToEvict; i++) {
       this.cache.delete(entries[i][0]);
@@ -259,7 +261,7 @@ class CacheManager {
   private evictFIFO(): void {
     const entries = Array.from(this.cache.entries());
     entries.sort((a, b) => parseInt(a[1].timestamp) - parseInt(b[1].timestamp));
-    
+
     const entriesToEvict = Math.ceil(this.cache.size * 0.1);
     for (let i = 0; i < entriesToEvict; i++) {
       this.cache.delete(entries[i][0]);
@@ -270,7 +272,7 @@ class CacheManager {
   private evictLIFO(): void {
     const entries = Array.from(this.cache.entries());
     entries.sort((a, b) => parseInt(b[1].timestamp) - parseInt(a[1].timestamp));
-    
+
     const entriesToEvict = Math.ceil(this.cache.size * 0.1);
     for (let i = 0; i < entriesToEvict; i++) {
       this.cache.delete(entries[i][0]);
@@ -294,17 +296,17 @@ class CacheManager {
 
   private updateStats(action: 'set' | 'hit' | 'miss', entry?: CacheEntry): void {
     const totalRequests = this.stats.hits + this.stats.misses;
-    
+
     if (action === 'set' && entry) {
       this.stats.totalEntries = this.cache.size;
       this.stats.totalSize = Array.from(this.cache.values()).reduce((sum, e) => sum + e.size, 0);
-      
+
       const entries = Array.from(this.cache.values());
       if (entries.length > 0) {
-        const oldest = entries.reduce((min, e) => 
+        const oldest = entries.reduce((min, e) =>
           parseInt(e.timestamp) < parseInt(min.timestamp) ? e : min
         );
-        const newest = entries.reduce((max, e) => 
+        const newest = entries.reduce((max, e) =>
           parseInt(e.timestamp) > parseInt(max.timestamp) ? e : max
         );
         this.stats.oldestEntry = oldest.key;
@@ -363,11 +365,13 @@ export const usePerformanceOptimizations = () => {
     component?: string,
     route?: string
   ) => {
-    if (!isEnabled || !monitoringConfig.enabled) return;
+    if (!isEnabled || !monitoringConfig.enabled) {
+return;
+}
 
     // Find threshold for metric type
     const threshold = monitoringConfig.thresholds.find(t => t.metricType === type);
-    
+
     let severity: PerformanceSeverity = PerformanceSeverity.INFO;
     if (threshold) {
       if (value >= threshold.criticalThreshold) {
@@ -389,7 +393,7 @@ export const usePerformanceOptimizations = () => {
       timestamp: new Date().toISOString(),
       metadata,
       component,
-      route,
+      route
     };
 
     setMetrics(prev => [...prev, metric]);
@@ -402,7 +406,7 @@ export const usePerformanceOptimizations = () => {
         metric,
         message: `${metric.name} exceeded threshold: ${value}${threshold?.unit}`,
         timestamp: new Date().toISOString(),
-        acknowledged: false,
+        acknowledged: false
       };
       setAlerts(prev => [...prev, alert]);
     }
@@ -425,8 +429,8 @@ export const usePerformanceOptimizations = () => {
         warnings: metrics.filter(m => m.severity === PerformanceSeverity.WARNING).length,
         averageRenderTime: calculateAverage(metrics, MetricType.RENDER_TIME),
         averageApiTime: calculateAverage(metrics, MetricType.API_CALL),
-        cacheHitRate: calculateCacheHitRate(metrics),
-      },
+        cacheHitRate: calculateCacheHitRate(metrics)
+      }
     };
 
     setSnapshots(prev => [...prev, snapshot].slice(-100)); // Keep last 100 snapshots
@@ -463,9 +467,9 @@ export const usePerformanceOptimizations = () => {
         evictions: 0,
         averageAccessTime: 0,
         oldestEntry: '',
-        newestEntry: '',
+        newestEntry: ''
       };
-    },
+    }
   }), [cacheConfig]);
 
   /**
@@ -478,7 +482,7 @@ export const usePerformanceOptimizations = () => {
     const startTime = performance.now();
     renderFn();
     const endTime = performance.now();
-    
+
     return recordMetric(
       MetricType.RENDER_TIME,
       endTime - startTime,
@@ -498,7 +502,7 @@ export const usePerformanceOptimizations = () => {
     try {
       const result = await apiCall();
       const endTime = performance.now();
-      
+
       recordMetric(
         MetricType.API_CALL,
         endTime - startTime,
@@ -506,11 +510,11 @@ export const usePerformanceOptimizations = () => {
         undefined,
         apiName
       );
-      
+
       return result;
     } catch (error) {
       const endTime = performance.now();
-      
+
       recordMetric(
         MetricType.API_CALL,
         endTime - startTime,
@@ -518,7 +522,7 @@ export const usePerformanceOptimizations = () => {
         undefined,
         apiName
       );
-      
+
       throw error;
     }
   }, [recordMetric]);
@@ -533,12 +537,12 @@ export const usePerformanceOptimizations = () => {
   ): T => {
     return ((...args: Parameters<T>) => {
       const cacheKey = `${key}-${JSON.stringify(args)}`;
-      
+
       const cached = cache.get<ReturnType<T>>(cacheKey);
       if (cached !== null) {
         return cached;
       }
-      
+
       const result = fn(...args);
       cache.set(cacheKey, result, ttl);
       return result;
@@ -557,7 +561,7 @@ export const usePerformanceOptimizations = () => {
    * Acknowledge alert
    */
   const acknowledgeAlert = useCallback((alertId: string) => {
-    setAlerts(prev => prev.map(a => 
+    setAlerts(prev => prev.map(a =>
       a.id === alertId ? { ...a, acknowledged: true } : a
     ));
   }, []);
@@ -568,7 +572,7 @@ export const usePerformanceOptimizations = () => {
   const generateReport = useCallback((
     period: { start: string; end: string }
   ): PerformanceReport => {
-    const periodSnapshots = snapshots.filter(s => 
+    const periodSnapshots = snapshots.filter(s =>
       new Date(s.timestamp) >= new Date(period.start) &&
       new Date(s.timestamp) <= new Date(period.end)
     );
@@ -585,9 +589,9 @@ export const usePerformanceOptimizations = () => {
         cacheHitRate: calculateCacheHitRateFromSnapshots(periodSnapshots),
         memoryUsage: metrics.find(m => m.type === MetricType.MEMORY_USAGE)?.value || 0,
         totalErrors: periodSnapshots.reduce((sum, s) => sum + s.summary.errors, 0),
-        totalWarnings: periodSnapshots.reduce((sum, s) => sum + s.summary.warnings, 0),
+        totalWarnings: periodSnapshots.reduce((sum, s) => sum + s.summary.warnings, 0)
       },
-      recommendations: generateRecommendations(metrics),
+      recommendations: generateRecommendations(metrics)
     };
   }, [snapshots, metrics]);
 
@@ -624,7 +628,7 @@ export const usePerformanceOptimizations = () => {
     setCacheConfig,
     setLazyLoadConfig,
     setVirtualScrollConfig,
-    setMonitoringConfig,
+    setMonitoringConfig
   };
 };
 
@@ -633,7 +637,9 @@ export const usePerformanceOptimizations = () => {
  */
 function calculateAverage(metrics: PerformanceMetric[], type: MetricType): number {
   const filtered = metrics.filter(m => m.type === type);
-  if (filtered.length === 0) return 0;
+  if (filtered.length === 0) {
+return 0;
+}
   return filtered.reduce((sum, m) => sum + m.value, 0) / filtered.length;
 }
 
@@ -645,7 +651,7 @@ function calculateCacheHitRate(metrics: PerformanceMetric[]): number {
 }
 
 function calculateAverageFromSnapshots(snapshots: PerformanceSnapshot[], type: MetricType): number {
-  const values = snapshots.flatMap(s => 
+  const values = snapshots.flatMap(s =>
     s.metrics.filter(m => m.type === type).map(m => m.value)
   );
   return values.length > 0 ? values.reduce((sum, v) => sum + v, 0) / values.length : 0;
@@ -656,11 +662,13 @@ function calculatePercentileFromSnapshots(
   type: MetricType,
   percentile: number
 ): number {
-  const values = snapshots.flatMap(s => 
+  const values = snapshots.flatMap(s =>
     s.metrics.filter(m => m.type === type).map(m => m.value)
   ).sort((a, b) => a - b);
-  
-  if (values.length === 0) return 0;
+
+  if (values.length === 0) {
+return 0;
+}
   const index = Math.ceil((percentile / 100) * values.length) - 1;
   return values[index];
 }
@@ -678,7 +686,7 @@ function generateRecommendations(metrics: PerformanceMetric[]): Array<{
   effort: string;
 }> {
   const recommendations: any[] = [];
-  
+
   const avgRenderTime = calculateAverage(metrics, MetricType.RENDER_TIME);
   const avgApiTime = calculateAverage(metrics, MetricType.API_CALL);
   const cacheHitRate = calculateCacheHitRate(metrics);
@@ -689,7 +697,7 @@ function generateRecommendations(metrics: PerformanceMetric[]): Array<{
       category: 'Rendering',
       description: `Average render time (${avgRenderTime.toFixed(2)}ms) exceeds recommended threshold`,
       impact: 'High',
-      effort: 'Medium',
+      effort: 'Medium'
     });
   }
 
@@ -699,7 +707,7 @@ function generateRecommendations(metrics: PerformanceMetric[]): Array<{
       category: 'API',
       description: `Average API call time (${avgApiTime.toFixed(2)}ms) exceeds recommended threshold`,
       impact: 'High',
-      effort: 'Low',
+      effort: 'Low'
     });
   }
 
@@ -709,7 +717,7 @@ function generateRecommendations(metrics: PerformanceMetric[]): Array<{
       category: 'Caching',
       description: `Cache hit rate (${cacheHitRate.toFixed(2)}%) is below optimal`,
       impact: 'Medium',
-      effort: 'Low',
+      effort: 'Low'
     });
   }
 

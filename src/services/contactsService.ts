@@ -18,7 +18,7 @@ import {
   ContactPreferences,
   CreateContactPayload,
   UpdateContactPayload,
-  ContactProvider,
+  ContactProvider
 } from '../types/contacts';
 
 /**
@@ -37,7 +37,7 @@ export class ContactsService {
       defaultView: 'list',
       sortOptions: {
         field: 'displayName',
-        order: 'asc',
+        order: 'asc'
       },
       displayFields: ['displayName', 'email', 'phone'],
       showAvatar: true,
@@ -49,7 +49,7 @@ export class ContactsService {
       enableAutoMerge: false,
       mergeThreshold: 0.8,
       duplicateCheckEnabled: true,
-      emailTrackingEnabled: true,
+      emailTrackingEnabled: true
     };
     this.loadFromStorage();
   }
@@ -82,7 +82,7 @@ export class ContactsService {
       defaultView: 'list',
       sortOptions: {
         field: 'displayName',
-        order: 'asc',
+        order: 'asc'
       },
       displayFields: ['displayName', 'email', 'phone'],
       showAvatar: true,
@@ -94,7 +94,7 @@ export class ContactsService {
       enableAutoMerge: false,
       mergeThreshold: 0.8,
       duplicateCheckEnabled: true,
-      emailTrackingEnabled: true,
+      emailTrackingEnabled: true
     };
   }
 
@@ -182,7 +182,7 @@ export class ContactsService {
   public async addAccount(account: ContactAccount): Promise<void> {
     this.accounts.set(account.id, account);
     this.saveToStorage();
-    
+
     // Load contacts for this account
     await this.loadContactsForAccount(account.id);
   }
@@ -200,7 +200,7 @@ export class ContactsService {
     const contactsToRemove = Array.from(this.contacts.values()).filter(
       (contact) => contact.provider === account.provider
     );
-    
+
     contactsToRemove.forEach((contact) => {
       this.contacts.delete(contact.id);
     });
@@ -221,7 +221,7 @@ export class ContactsService {
     // This would call the actual provider API
     // For now, we'll simulate loading contacts
     const contacts = await this.fetchContactsFromProvider(account);
-    
+
     contacts.forEach((contact) => {
       this.contacts.set(contact.id, contact);
     });
@@ -237,7 +237,7 @@ export class ContactsService {
   ): Promise<Contact[]> {
     // This would make actual API calls to Google People API or Microsoft Graph
     // For demonstration, we'll return mock data
-    
+
     if (account.provider === ContactProvider.GOOGLE) {
       return [
         {
@@ -252,16 +252,16 @@ export class ContactsService {
               id: 'email-1',
               address: 'john.doe@example.com',
               type: 'work',
-              isPrimary: true,
-            },
+              isPrimary: true
+            }
           ],
           phones: [
             {
               id: 'phone-1',
               number: '+1 555-123-4567',
               type: 'mobile',
-              isPrimary: true,
-            },
+              isPrimary: true
+            }
           ],
           addresses: [],
           websites: [],
@@ -270,8 +270,8 @@ export class ContactsService {
           groupIds: [],
           tags: [],
           createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
+          updatedAt: new Date().toISOString()
+        }
       ];
     }
 
@@ -421,7 +421,7 @@ export class ContactsService {
       favorite: payload.favorite || false,
       hidden: false,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     // Add to contacts map
@@ -457,19 +457,45 @@ export class ContactsService {
     }
 
     // Update contact fields
-    if (payload.firstName !== undefined) contact.firstName = payload.firstName;
-    if (payload.lastName !== undefined) contact.lastName = payload.lastName;
-    if (payload.displayName !== undefined) contact.displayName = payload.displayName;
-    if (payload.emails !== undefined) contact.emails = payload.emails;
-    if (payload.phones !== undefined) contact.phones = payload.phones;
-    if (payload.addresses !== undefined) contact.addresses = payload.addresses;
-    if (payload.websites !== undefined) contact.websites = payload.websites;
-    if (payload.socials !== undefined) contact.socials = payload.socials;
-    if (payload.customFields !== undefined) contact.customFields = payload.customFields;
-    if (payload.organization !== undefined) contact.organization = payload.organization;
-    if (payload.birthday !== undefined) contact.birthday = payload.birthday;
-    if (payload.notes !== undefined) contact.notes = payload.notes;
-    if (payload.photo !== undefined) contact.photo = payload.photo;
+    if (payload.firstName !== undefined) {
+contact.firstName = payload.firstName;
+}
+    if (payload.lastName !== undefined) {
+contact.lastName = payload.lastName;
+}
+    if (payload.displayName !== undefined) {
+contact.displayName = payload.displayName;
+}
+    if (payload.emails !== undefined) {
+contact.emails = payload.emails;
+}
+    if (payload.phones !== undefined) {
+contact.phones = payload.phones;
+}
+    if (payload.addresses !== undefined) {
+contact.addresses = payload.addresses;
+}
+    if (payload.websites !== undefined) {
+contact.websites = payload.websites;
+}
+    if (payload.socials !== undefined) {
+contact.socials = payload.socials;
+}
+    if (payload.customFields !== undefined) {
+contact.customFields = payload.customFields;
+}
+    if (payload.organization !== undefined) {
+contact.organization = payload.organization;
+}
+    if (payload.birthday !== undefined) {
+contact.birthday = payload.birthday;
+}
+    if (payload.notes !== undefined) {
+contact.notes = payload.notes;
+}
+    if (payload.photo !== undefined) {
+contact.photo = payload.photo;
+}
     if (payload.groupIds !== undefined) {
       // Remove from old groups
       contact.groupIds.forEach((oldGroupId) => {
@@ -497,9 +523,15 @@ export class ContactsService {
 
       contact.groupIds = payload.groupIds;
     }
-    if (payload.tags !== undefined) contact.tags = payload.tags;
-    if (payload.starred !== undefined) contact.starred = payload.starred;
-    if (payload.favorite !== undefined) contact.favorite = payload.favorite;
+    if (payload.tags !== undefined) {
+contact.tags = payload.tags;
+}
+    if (payload.starred !== undefined) {
+contact.starred = payload.starred;
+}
+    if (payload.favorite !== undefined) {
+contact.favorite = payload.favorite;
+}
 
     contact.updatedAt = new Date().toISOString();
     if (contact.version !== undefined) {
@@ -588,7 +620,7 @@ export class ContactsService {
         results.push({
           contact,
           relevanceScore,
-          matchedFields: [...new Set(matchedFields)],
+          matchedFields: [...new Set(matchedFields)]
         });
       }
     });
@@ -607,10 +639,10 @@ export class ContactsService {
     options: EmailToContactOptions
   ): Promise<Contact> {
     const extractedData = this.extractContactDataFromEmail(email, options);
-    
+
     // Check if contact already exists
     let existingContact: Contact | undefined;
-    
+
     if (extractedData.emails && extractedData.emails.length > 0) {
       existingContact = this.getContactByEmail(extractedData.emails[0].address);
     }
@@ -619,7 +651,7 @@ export class ContactsService {
       // Merge with existing contact
       const mergedPayload: UpdateContactPayload = {
         id: existingContact.id,
-        version: existingContact.version,
+        version: existingContact.version
       };
 
       if (options.mergeStrategy === 'merge') {
@@ -635,9 +667,15 @@ export class ContactsService {
         mergedPayload.emails = [...existingContact.emails, ...(extractedData.emails || [])];
         mergedPayload.phones = [...existingContact.phones, ...(extractedData.phones || [])];
       } else if (options.mergeStrategy === 'replace') {
-        if (extractedData.firstName) mergedPayload.firstName = extractedData.firstName;
-        if (extractedData.lastName) mergedPayload.lastName = extractedData.lastName;
-        if (extractedData.organization) mergedPayload.organization = extractedData.organization;
+        if (extractedData.firstName) {
+mergedPayload.firstName = extractedData.firstName;
+}
+        if (extractedData.lastName) {
+mergedPayload.lastName = extractedData.lastName;
+}
+        if (extractedData.organization) {
+mergedPayload.organization = extractedData.organization;
+}
         mergedPayload.emails = extractedData.emails || [];
         mergedPayload.phones = extractedData.phones || [];
       }
@@ -653,7 +691,7 @@ export class ContactsService {
         phones: extractedData.phones,
         organization: extractedData.organization,
         groupIds: [],
-        tags: [],
+        tags: []
       };
 
       const contact = await this.createContact(payload);
@@ -677,7 +715,7 @@ export class ContactsService {
   ): Partial<CreateContactPayload> {
     const result: Partial<CreateContactPayload> = {
       emails: [],
-      phones: [],
+      phones: []
     };
 
     // Extract from sender
@@ -692,7 +730,7 @@ export class ContactsService {
         result.emails!.push({
           id: this.generateFieldId(),
           address: email.from.email,
-          type: 'work',
+          type: 'work'
         });
       }
     }
@@ -704,7 +742,7 @@ export class ContactsService {
           result.emails!.push({
             id: this.generateFieldId(),
             address: recipient.email,
-            type: 'work',
+            type: 'work'
           });
         }
       });
@@ -717,7 +755,7 @@ export class ContactsService {
           result.emails!.push({
             id: this.generateFieldId(),
             address: recipient.email,
-            type: 'work',
+            type: 'work'
           });
         }
       });
@@ -734,7 +772,7 @@ export class ContactsService {
             result.phones!.push({
               id: this.generateFieldId(),
               number: phone.trim(),
-              type: 'work',
+              type: 'work'
             });
           }
         });
@@ -771,7 +809,7 @@ export class ContactsService {
       [ContactProvider.GOOGLE]: 0,
       [ContactProvider.OUTLOOK]: 0,
       [ContactProvider.ICLOUD]: 0,
-      [ContactProvider.LOCAL]: 0,
+      [ContactProvider.LOCAL]: 0
     };
     contacts.forEach((contact) => {
       contactsByProvider[contact.provider]++;
@@ -786,7 +824,7 @@ export class ContactsService {
       .slice(0, 10)
       .map((contact) => ({
         contactId: contact.id,
-        emailCount: contact.emailCount || 0,
+        emailCount: contact.emailCount || 0
       }));
 
     const now = new Date();
@@ -812,7 +850,7 @@ export class ContactsService {
       mostContactedContacts,
       recentlyAddedContacts,
       recentlyUpdatedContacts,
-      duplicateContacts,
+      duplicateContacts
     };
   }
 
@@ -849,7 +887,7 @@ export class ContactsService {
           duplicateContacts: others,
           matchScore: 1.0, // Perfect match on email
           matchedFields: ['email'],
-          suggestedMerge: this.suggestMerge(primaryContact, others),
+          suggestedMerge: this.suggestMerge(primaryContact, others)
         });
       }
     });
@@ -883,7 +921,7 @@ export class ContactsService {
             duplicateContacts: others,
             matchScore: 0.7, // Lower score for name-only match
             matchedFields: ['displayName'],
-            suggestedMerge: this.suggestMerge(primaryContact, others),
+            suggestedMerge: this.suggestMerge(primaryContact, others)
           });
         }
       }
@@ -908,7 +946,7 @@ export class ContactsService {
       addresses: [...primary.addresses],
       websites: [...primary.websites],
       socials: [...primary.socials],
-      customFields: [...primary.customFields],
+      customFields: [...primary.customFields]
     };
 
     // Merge additional fields from duplicates
@@ -956,7 +994,7 @@ export class ContactsService {
     const payload: UpdateContactPayload = {
       id: primaryContactId,
       ...mergedData,
-      version: primaryContact.version,
+      version: primaryContact.version
     };
 
     const updatedContact = await this.updateContact(payload);
@@ -998,7 +1036,7 @@ export class ContactsService {
       color,
       contactIds: [],
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     this.groups.set(group.id, group);
@@ -1023,9 +1061,15 @@ export class ContactsService {
       throw new Error('Group not found');
     }
 
-    if (updates.name) group.name = updates.name;
-    if (updates.description !== undefined) group.description = updates.description;
-    if (updates.color !== undefined) group.color = updates.color;
+    if (updates.name) {
+group.name = updates.name;
+}
+    if (updates.description !== undefined) {
+group.description = updates.description;
+}
+    if (updates.color !== undefined) {
+group.color = updates.color;
+}
     group.updatedAt = new Date().toISOString();
 
     this.groups.set(groupId, group);
@@ -1137,11 +1181,11 @@ export class ContactsService {
       contactsAdded: 0,
       contactsUpdated: 0,
       contactsDeleted: 0,
-      contactsSkipped: 0,
+      contactsSkipped: 0
     };
 
     const targetAccountId = accountId || this.accounts.values().next().value?.id;
-    
+
     if (!targetAccountId) {
       throw new Error('No account found to sync');
     }
@@ -1151,9 +1195,9 @@ export class ContactsService {
     try {
       // This would make actual API calls to sync with provider
       // For demonstration, we'll simulate sync
-      
+
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      
+
       syncStatus.contactsAdded = 0;
       syncStatus.contactsUpdated = 0;
       syncStatus.contactsDeleted = 0;
@@ -1164,7 +1208,7 @@ export class ContactsService {
       syncStatus.syncErrors.push({
         contactId: '',
         error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
       syncStatus.isSyncing = false;
     }

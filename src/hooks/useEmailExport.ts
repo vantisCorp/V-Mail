@@ -11,7 +11,7 @@ import type {
   ExportResult,
   ExportRequest,
   ExportHistory,
-  ExportStatistics,
+  ExportStatistics
 } from '../types/emailExport';
 
 export function useEmailExport() {
@@ -27,7 +27,7 @@ export function useEmailExport() {
     formatBreakdown: { pdf: 0, eml: 0, msg: 0, json: 0 },
     scopeBreakdown: { single: 0, multiple: 0, thread: 0, folder: 0 },
     successfulExports: 0,
-    failedExports: 0,
+    failedExports: 0
   });
 
   // Load history and queue on mount
@@ -125,7 +125,7 @@ export function useEmailExport() {
         emails,
         options,
         status: 'pending',
-        createdAt: Date.now(),
+        createdAt: Date.now()
       };
 
       await EmailExportService.queueExport(request);
@@ -206,6 +206,6 @@ export function useEmailExport() {
     // Queries
     getRecentExports,
     getExportsByFormat,
-    isExportInProgress,
+    isExportInProgress
   };
 }

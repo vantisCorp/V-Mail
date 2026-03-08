@@ -12,7 +12,7 @@ const DEFAULT_COLORS = [
   '#06b6d4', // cyan
   '#3b82f6', // blue
   '#8b5cf6', // violet
-  '#ec4899', // pink
+  '#ec4899' // pink
 ];
 
 export const useLabels = () => {
@@ -21,14 +21,14 @@ export const useLabels = () => {
   const [labeledEmails, setLabeledEmails] = useState<LabeledEmail[]>([]);
   const [stats, setStats] = useState<LabelStats>({
     totalLabels: 0,
-    totalLabeledEmails: 0,
+    totalLabeledEmails: 0
   });
 
   const updateStats = useCallback((newLabels: Label[], newLabeledEmails: LabeledEmail[]) => {
     const uniqueEmails = new Set(newLabeledEmails.map(le => le.emailId));
     setStats({
       totalLabels: newLabels.length,
-      totalLabeledEmails: uniqueEmails.size,
+      totalLabeledEmails: uniqueEmails.size
     });
   }, []);
 
@@ -43,7 +43,7 @@ export const useLabels = () => {
         ...label,
         id: generateId(),
         color: label.color || getRandomColor(),
-        createdAt: now,
+        createdAt: now
       };
       setLabels((prevLabels) => {
         const newLabels = [...prevLabels, newLabel];
@@ -87,12 +87,14 @@ export const useLabels = () => {
       const exists = labeledEmails.find(
         (le) => le.emailId === emailId && le.labelId === labelId
       );
-      if (exists) return;
+      if (exists) {
+return;
+}
 
       const newLabeledEmail: LabeledEmail = {
         emailId,
         labelId,
-        appliedAt: new Date().toISOString(),
+        appliedAt: new Date().toISOString()
       };
       setLabeledEmails((prev) => {
         const newLabeledEmails = [...prev, newLabeledEmail];
@@ -152,13 +154,15 @@ export const useLabels = () => {
   const duplicateLabel = useCallback(
     (id: string) => {
       const label = labels.find((l) => l.id === id);
-      if (!label) return;
+      if (!label) {
+return;
+}
 
       const newLabel: Label = {
         ...label,
         id: generateId(),
         name: `${label.name} (Copy)`,
-        createdAt: new Date().toISOString(),
+        createdAt: new Date().toISOString()
       };
       setLabels((prev) => {
         const newLabels = [...prev, newLabel];
@@ -182,6 +186,6 @@ export const useLabels = () => {
     toggleLabelOnEmail,
     getEmailLabels,
     getLabelEmails,
-    duplicateLabel,
+    duplicateLabel
   };
 };

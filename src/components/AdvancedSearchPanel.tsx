@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { 
-  SearchCondition, 
-  SearchField, 
-  SearchOperator, 
+import {
+  SearchCondition,
+  SearchField,
+  SearchOperator,
   SearchMatchMode,
-  SavedSearch 
+  SavedSearch
 } from '../types/search';
 
 interface AdvancedSearchPanelProps {
@@ -36,7 +36,7 @@ const SEARCH_FIELDS: { value: SearchField; label: string }[] = [
   { value: 'has_attachment', label: 'Has Attachment' },
   { value: 'is_read', label: 'Read Status' },
   { value: 'is_starred', label: 'Starred Status' },
-  { value: 'has_label', label: 'Has Label' },
+  { value: 'has_label', label: 'Has Label' }
 ];
 
 const SEARCH_OPERATORS: { value: SearchOperator; label: string }[] = [
@@ -48,7 +48,7 @@ const SEARCH_OPERATORS: { value: SearchOperator; label: string }[] = [
   { value: 'ends_with', label: 'Ends With' },
   { value: 'before', label: 'Before' },
   { value: 'after', label: 'After' },
-  { value: 'between', label: 'Between' },
+  { value: 'between', label: 'Between' }
 ];
 
 export const AdvancedSearchPanel: React.FC<AdvancedSearchPanelProps> = ({
@@ -67,13 +67,15 @@ export const AdvancedSearchPanel: React.FC<AdvancedSearchPanelProps> = ({
   onToggleCaseSensitive,
   onSaveSearch,
   onLoadSavedSearch,
-  onDeleteSavedSearch,
+  onDeleteSavedSearch
 }) => {
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [searchName, setSearchName] = useState('');
   const [activeTab, setActiveTab] = useState<'builder' | 'saved' | 'recent'>('builder');
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+return null;
+}
 
   const handleSaveSearch = () => {
     if (searchName.trim()) {
@@ -122,19 +124,19 @@ export const AdvancedSearchPanel: React.FC<AdvancedSearchPanelProps> = ({
         </div>
 
         <div className="advanced-search-tabs">
-          <button 
+          <button
             className={`tab-btn ${activeTab === 'builder' ? 'active' : ''}`}
             onClick={() => setActiveTab('builder')}
           >
             🔍 Builder
           </button>
-          <button 
+          <button
             className={`tab-btn ${activeTab === 'saved' ? 'active' : ''}`}
             onClick={() => setActiveTab('saved')}
           >
             💾 Saved ({savedSearches.length})
           </button>
-          <button 
+          <button
             className={`tab-btn ${activeTab === 'recent' ? 'active' : ''}`}
             onClick={() => setActiveTab('recent')}
           >
@@ -189,7 +191,7 @@ export const AdvancedSearchPanel: React.FC<AdvancedSearchPanelProps> = ({
                       <span className="condition-number">{index + 1}</span>
                       <select
                         value={condition.field}
-                        onChange={(e) => onUpdateCondition(condition.id, { 
+                        onChange={(e) => onUpdateCondition(condition.id, {
                           field: e.target.value as SearchField,
                           operator: 'contains' // Reset operator when field changes
                         })}
@@ -203,8 +205,8 @@ export const AdvancedSearchPanel: React.FC<AdvancedSearchPanelProps> = ({
                       </select>
                       <select
                         value={condition.operator}
-                        onChange={(e) => onUpdateCondition(condition.id, { 
-                          operator: e.target.value as SearchOperator 
+                        onChange={(e) => onUpdateCondition(condition.id, {
+                          operator: e.target.value as SearchOperator
                         })}
                         className="operator-select"
                       >
@@ -220,8 +222,8 @@ export const AdvancedSearchPanel: React.FC<AdvancedSearchPanelProps> = ({
                       <input
                         type="text"
                         value={condition.value}
-                        onChange={(e) => onUpdateCondition(condition.id, { 
-                          value: e.target.value 
+                        onChange={(e) => onUpdateCondition(condition.id, {
+                          value: e.target.value
                         })}
                         placeholder={getOperatorPlaceholder(condition.operator, condition.field)}
                         className="value-input"
@@ -268,8 +270,8 @@ export const AdvancedSearchPanel: React.FC<AdvancedSearchPanelProps> = ({
                     <button className="cancel-btn" onClick={() => setShowSaveDialog(false)}>
                       Cancel
                     </button>
-                    <button 
-                      className="confirm-save-btn" 
+                    <button
+                      className="confirm-save-btn"
                       onClick={handleSaveSearch}
                       disabled={!searchName.trim()}
                     >
@@ -303,13 +305,13 @@ export const AdvancedSearchPanel: React.FC<AdvancedSearchPanelProps> = ({
                       )}
                     </div>
                     <div className="saved-search-actions">
-                      <button 
+                      <button
                         className="load-search-btn"
                         onClick={() => onLoadSavedSearch(search)}
                       >
                         Load
                       </button>
-                      <button 
+                      <button
                         className="delete-search-btn"
                         onClick={() => onDeleteSavedSearch(search.id)}
                       >

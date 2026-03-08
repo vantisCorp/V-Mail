@@ -23,7 +23,7 @@ export class SMSService {
     this.smsCodes.set(phoneNumber, {
       code,
       expiresAt,
-      attempts: 0,
+      attempts: 0
     });
 
     // In production, send SMS via SMS provider API
@@ -42,7 +42,7 @@ export class SMSService {
     if (!storedData) {
       return {
         success: false,
-        message: 'No code sent to this phone number',
+        message: 'No code sent to this phone number'
       };
     }
 
@@ -51,7 +51,7 @@ export class SMSService {
       this.smsCodes.delete(phoneNumber);
       return {
         success: false,
-        message: 'Code has expired',
+        message: 'Code has expired'
       };
     }
 
@@ -60,7 +60,7 @@ export class SMSService {
       this.smsCodes.delete(phoneNumber);
       return {
         success: false,
-        message: 'Maximum attempts exceeded',
+        message: 'Maximum attempts exceeded'
       };
     }
 
@@ -72,7 +72,7 @@ export class SMSService {
       this.smsCodes.delete(phoneNumber);
       return {
         success: true,
-        message: 'Code verified successfully',
+        message: 'Code verified successfully'
       };
     }
 
@@ -82,7 +82,7 @@ export class SMSService {
     return {
       success: false,
       message: 'Invalid code',
-      remainingAttempts,
+      remainingAttempts
     };
   }
 
@@ -95,7 +95,7 @@ export class SMSService {
     return {
       method: 'sms',
       phoneNumber,
-      isVerified: false,
+      isVerified: false
     };
   }
 
@@ -114,11 +114,11 @@ export class SMSService {
   static formatPhoneNumber(phoneNumber: string): string {
     // Simple formatting - in production, use libphonenumber-js
     const cleaned = phoneNumber.replace(/\D/g, '');
-    
+
     if (cleaned.length === 10) {
       return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6)}`;
     }
-    
+
     return phoneNumber;
   }
 

@@ -24,7 +24,7 @@ export const CacheSettings: React.FC = () => {
     clearCache,
     clearByPattern,
     addInvalidationRule,
-    removeInvalidationRule,
+    removeInvalidationRule
   } = useCacheManager();
 
   const cacheService = CacheService.getInstance();
@@ -52,7 +52,7 @@ export const CacheSettings: React.FC = () => {
       maxSize: 50 * 1024 * 1024, // 50MB fixed for now
       cleanupInterval: cleanupInterval * 1000,
       enableCompression,
-      enableMetrics,
+      enableMetrics
     };
 
     cacheService.updateConfig(newConfig);

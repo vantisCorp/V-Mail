@@ -1,6 +1,6 @@
 /**
  * useTeamAccounts Hook for V-Mail v1.2.0
- * 
+ *
  * Comprehensive hook for team account management operations.
  */
 
@@ -21,7 +21,7 @@ import type {
   TeamMemberFilter,
   TeamActivityFilter,
   TeamMemberRole,
-  TeamMemberStatus,
+  TeamMemberStatus
 } from '../types/teamAccounts';
 
 // Mock data for development
@@ -29,7 +29,7 @@ const generateMockTeamAccount = (): TeamAccount => {
   const now = new Date();
   const teamId = 'team-1';
   const ownerId = 'user-owner';
-  
+
   const mockMembers: TeamMember[] = [
     {
       id: 'member-1',
@@ -44,7 +44,7 @@ const generateMockTeamAccount = (): TeamAccount => {
       lastActiveAt: now,
       permissions: ['all'],
       department: 'Executive',
-      jobTitle: 'CEO',
+      jobTitle: 'CEO'
     },
     {
       id: 'member-2',
@@ -59,7 +59,7 @@ const generateMockTeamAccount = (): TeamAccount => {
       lastActiveAt: new Date(now.getTime() - 2 * 60 * 60 * 1000),
       permissions: ['manage_members', 'manage_settings', 'view_reports'],
       department: 'IT',
-      jobTitle: 'IT Manager',
+      jobTitle: 'IT Manager'
     },
     {
       id: 'member-3',
@@ -74,7 +74,7 @@ const generateMockTeamAccount = (): TeamAccount => {
       lastActiveAt: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
       permissions: ['manage_members', 'view_reports'],
       department: 'Operations',
-      jobTitle: 'Operations Manager',
+      jobTitle: 'Operations Manager'
     },
     {
       id: 'member-4',
@@ -89,7 +89,7 @@ const generateMockTeamAccount = (): TeamAccount => {
       lastActiveAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
       permissions: ['send_emails', 'create_folders'],
       department: 'Sales',
-      jobTitle: 'Sales Representative',
+      jobTitle: 'Sales Representative'
     },
     {
       id: 'member-5',
@@ -104,8 +104,8 @@ const generateMockTeamAccount = (): TeamAccount => {
       lastActiveAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
       permissions: ['view_emails'],
       department: 'Finance',
-      jobTitle: 'Finance Analyst',
-    },
+      jobTitle: 'Finance Analyst'
+    }
   ];
 
   return {
@@ -137,26 +137,26 @@ const generateMockTeamAccount = (): TeamAccount => {
         requireLowercase: true,
         requireNumbers: true,
         requireSpecialChars: false,
-        passwordExpiry: 90,
+        passwordExpiry: 90
       },
       sessionPolicy: {
         maxDuration: 24,
         idleTimeout: 30,
-        concurrentSessions: 3,
+        concurrentSessions: 3
       },
       retentionPolicy: {
         emailRetentionDays: 365,
         trashRetentionDays: 30,
-        archiveAfterDays: 180,
+        archiveAfterDays: 180
       },
       notificationSettings: {
         emailNotifications: true,
         securityAlerts: true,
         weeklyReports: true,
-        memberActivity: false,
+        memberActivity: false
       },
       updatedAt: now,
-      updatedBy: ownerId,
+      updatedBy: ownerId
     },
     billing: {
       id: 'billing-1',
@@ -177,7 +177,7 @@ const generateMockTeamAccount = (): TeamAccount => {
         last4: '4242',
         brand: 'visa',
         expiryMonth: 12,
-        expiryYear: 2025,
+        expiryYear: 2025
       },
       billingContact: {
         name: 'John Owner',
@@ -187,11 +187,11 @@ const generateMockTeamAccount = (): TeamAccount => {
         city: 'San Francisco',
         state: 'CA',
         zip: '94105',
-        country: 'USA',
+        country: 'USA'
       },
       invoices: [],
       createdAt: new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000),
-      updatedAt: now,
+      updatedAt: now
     },
     stats: {
       teamId,
@@ -207,15 +207,15 @@ const generateMockTeamAccount = (): TeamAccount => {
       sharedFolders: 8,
       activeDelegations: 3,
       createdAt: new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000),
-      updatedAt: now,
-    },
+      updatedAt: now
+    }
   };
 };
 
 const generateMockActivities = (): TeamActivity[] => {
   const now = new Date();
   const teamId = 'team-1';
-  
+
   return [
     {
       id: 'activity-1',
@@ -224,7 +224,7 @@ const generateMockActivities = (): TeamActivity[] => {
       member: {} as TeamMember,
       action: 'member_invited',
       details: 'Invited charlie@example.com to join the team',
-      timestamp: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000),
+      timestamp: new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000)
     },
     {
       id: 'activity-2',
@@ -233,7 +233,7 @@ const generateMockActivities = (): TeamActivity[] => {
       member: {} as TeamMember,
       action: 'settings_updated',
       details: 'Updated team security settings',
-      timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000),
+      timestamp: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000)
     },
     {
       id: 'activity-3',
@@ -242,7 +242,7 @@ const generateMockActivities = (): TeamActivity[] => {
       member: {} as TeamMember,
       action: 'folder_shared',
       details: 'Shared "Marketing Materials" folder with 3 members',
-      timestamp: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000),
+      timestamp: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000)
     },
     {
       id: 'activity-4',
@@ -251,7 +251,7 @@ const generateMockActivities = (): TeamActivity[] => {
       member: {} as TeamMember,
       action: 'email_delegated',
       details: 'Delegated email access to Jane Admin',
-      timestamp: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000),
+      timestamp: new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000)
     },
     {
       id: 'activity-5',
@@ -260,8 +260,8 @@ const generateMockActivities = (): TeamActivity[] => {
       member: {} as TeamMember,
       action: 'member_role_changed',
       details: 'Changed Bob Manager\'s role from member to manager',
-      timestamp: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
-    },
+      timestamp: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+    }
   ];
 };
 
@@ -273,13 +273,13 @@ export interface UseTeamAccountsReturn {
   activities: TeamActivity[];
   isLoading: boolean;
   error: string | null;
-  
+
   // Team Account Actions
   createTeamAccount: (payload: CreateTeamAccountPayload) => Promise<TeamAccount | null>;
   updateTeamAccount: (teamId: string, payload: UpdateTeamAccountPayload) => Promise<TeamAccount | null>;
   deleteTeamAccount: (teamId: string) => Promise<boolean>;
   regenerateInviteLink: (teamId: string) => Promise<string | null>;
-  
+
   // Member Actions
   inviteMember: (payload: InviteMemberPayload) => Promise<TeamInvitation | null>;
   acceptInvitation: (invitationId: string) => Promise<boolean>;
@@ -289,19 +289,19 @@ export interface UseTeamAccountsReturn {
   changeMemberRole: (memberId: string, role: TeamMemberRole) => Promise<boolean>;
   suspendMember: (memberId: string) => Promise<boolean>;
   reactivateMember: (memberId: string) => Promise<boolean>;
-  
+
   // Settings Actions
   updateSettings: (teamId: string, settings: Partial<TeamSettings>) => Promise<TeamSettings | null>;
   updatePasswordPolicy: (teamId: string, policy: Partial<TeamSettings['passwordPolicy']>) => Promise<boolean>;
   updateSessionPolicy: (teamId: string, policy: Partial<TeamSettings['sessionPolicy']>) => Promise<boolean>;
   updateRetentionPolicy: (teamId: string, policy: Partial<TeamSettings['retentionPolicy']>) => Promise<boolean>;
-  
+
   // Billing Actions
   updatePlan: (teamId: string, plan: TeamBilling['plan']) => Promise<TeamBilling | null>;
   updatePaymentMethod: (teamId: string, paymentMethod: TeamBilling['paymentMethod']) => Promise<boolean>;
   updateBillingContact: (teamId: string, contact: Partial<TeamBilling['billingContact']>) => Promise<boolean>;
   getInvoices: (teamId: string) => Promise<TeamBilling['invoices']>;
-  
+
   // Utility Functions
   getMembersByRole: (role: TeamMemberRole) => TeamMember[];
   getMembersByStatus: (status: TeamMemberStatus) => TeamMember[];
@@ -311,7 +311,7 @@ export interface UseTeamAccountsReturn {
   getFilteredMembers: (filter: TeamMemberFilter) => TeamMember[];
   getFilteredActivities: (filter: TeamActivityFilter) => TeamActivity[];
   getStats: (teamId: string) => TeamStats | null;
-  
+
   // Refresh Functions
   refreshTeamAccount: () => Promise<void>;
   refreshMembers: () => Promise<void>;
@@ -325,7 +325,7 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const [activities, setActivities] = useState<TeamActivity[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const { addNotification } = useNotifications();
 
   // Load initial data
@@ -352,7 +352,7 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
             lastActiveAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
             permissions: ['manage_members', 'manage_settings', 'view_reports'],
             department: 'IT',
-            jobTitle: 'IT Manager',
+            jobTitle: 'IT Manager'
           },
           {
             id: 'member-3',
@@ -367,7 +367,7 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
             lastActiveAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
             permissions: ['manage_members', 'view_reports'],
             department: 'Operations',
-            jobTitle: 'Operations Manager',
+            jobTitle: 'Operations Manager'
           },
           {
             id: 'member-4',
@@ -382,7 +382,7 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
             lastActiveAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
             permissions: ['send_emails', 'create_folders'],
             department: 'Sales',
-            jobTitle: 'Sales Representative',
+            jobTitle: 'Sales Representative'
           },
           {
             id: 'member-5',
@@ -397,8 +397,8 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
             lastActiveAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
             permissions: ['view_emails'],
             department: 'Finance',
-            jobTitle: 'Finance Analyst',
-          },
+            jobTitle: 'Finance Analyst'
+          }
         ]);
         setActivities(generateMockActivities());
       } catch (err) {
@@ -417,10 +417,10 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const createTeamAccount = useCallback(async (payload: CreateTeamAccountPayload): Promise<TeamAccount | null> => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       const newTeam: TeamAccount = {
         id: `team-${Date.now()}`,
         name: payload.name,
@@ -440,18 +440,18 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
           name: 'Team Owner',
           joinedAt: new Date(),
           lastActiveAt: new Date(),
-          permissions: ['all'],
+          permissions: ['all']
         },
         createdAt: new Date(),
         updatedAt: new Date(),
         settings: {} as TeamSettings,
         billing: {} as TeamBilling,
-        stats: {} as TeamStats,
+        stats: {} as TeamStats
       };
-      
+
       setTeamAccount(newTeam);
       addNotification('success', `Team "${payload.name}" has been created successfully.`);
-      
+
       return newTeam;
     } catch (err) {
       setError('Failed to create team account');
@@ -465,21 +465,23 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const updateTeamAccount = useCallback(async (teamId: string, payload: UpdateTeamAccountPayload): Promise<TeamAccount | null> => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       setTeamAccount(prev => {
-        if (!prev) return null;
+        if (!prev) {
+return null;
+}
         return {
           ...prev,
           ...payload,
-          updatedAt: new Date(),
+          updatedAt: new Date()
         };
       });
-      
+
       addNotification('success', 'Team account has been updated successfully.');
-      
+
       return teamAccount;
     } catch (err) {
       setError('Failed to update team account');
@@ -493,17 +495,17 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const deleteTeamAccount = useCallback(async (teamId: string): Promise<boolean> => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       setTeamAccount(null);
       setMembers([]);
       setInvitations([]);
       setActivities([]);
-      
+
       addNotification('success', 'Team account has been deleted successfully.');
-      
+
       return true;
     } catch (err) {
       setError('Failed to delete team account');
@@ -518,9 +520,9 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
     try {
       await new Promise(resolve => setTimeout(resolve, 300));
       const newLink = `https://vmail.app/invite/${teamId}/${Date.now().toString(36)}`;
-      
+
       addNotification('success', 'New invite link has been generated.');
-      
+
       return newLink;
     } catch (err) {
       addNotification('error', 'Failed to generate invite link.');
@@ -532,10 +534,10 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const inviteMember = useCallback(async (payload: InviteMemberPayload): Promise<TeamInvitation | null> => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       const invitation: TeamInvitation = {
         id: `invitation-${Date.now()}`,
         teamId: teamAccount?.id || '',
@@ -546,13 +548,13 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
         status: 'pending',
         invitedAt: new Date(),
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        message: payload.message,
+        message: payload.message
       };
-      
+
       setInvitations(prev => [...prev, invitation]);
-      
+
       addNotification('success', `Invitation has been sent to ${payload.email}.`);
-      
+
       return invitation;
     } catch (err) {
       setError('Failed to send invitation');
@@ -566,15 +568,15 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const acceptInvitation = useCallback(async (invitationId: string): Promise<boolean> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
-      setInvitations(prev => prev.map(inv => 
-        inv.id === invitationId 
+
+      setInvitations(prev => prev.map(inv =>
+        inv.id === invitationId
           ? { ...inv, status: 'active' as TeamMemberStatus, acceptedAt: new Date() }
           : inv
       ));
-      
+
       addNotification('success', 'You have joined the team successfully.');
-      
+
       return true;
     } catch (err) {
       addNotification('error', 'Failed to accept invitation.');
@@ -585,11 +587,11 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const declineInvitation = useCallback(async (invitationId: string): Promise<boolean> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 300));
-      
+
       setInvitations(prev => prev.filter(inv => inv.id !== invitationId));
-      
+
       addNotification('info', 'The invitation has been declined.');
-      
+
       return true;
     } catch (err) {
       addNotification('error', 'Failed to decline invitation.');
@@ -600,11 +602,11 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const removeMember = useCallback(async (memberId: string): Promise<boolean> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       setMembers(prev => prev.filter(m => m.id !== memberId));
-      
+
       addNotification('success', 'Member has been removed from the team.');
-      
+
       return true;
     } catch (err) {
       addNotification('error', 'Failed to remove member.');
@@ -615,9 +617,9 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const updateMember = useCallback(async (memberId: string, payload: UpdateMemberPayload): Promise<TeamMember | null> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       let updatedMember: TeamMember | null = null;
-      
+
       setMembers(prev => prev.map(m => {
         if (m.id === memberId) {
           updatedMember = { ...m, ...payload };
@@ -625,9 +627,9 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
         }
         return m;
       }));
-      
+
       addNotification('success', 'Member information has been updated.');
-      
+
       return updatedMember;
     } catch (err) {
       addNotification('error', 'Failed to update member.');
@@ -638,13 +640,13 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const changeMemberRole = useCallback(async (memberId: string, role: TeamMemberRole): Promise<boolean> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
-      setMembers(prev => prev.map(m => 
+
+      setMembers(prev => prev.map(m =>
         m.id === memberId ? { ...m, role } : m
       ));
-      
+
       addNotification('success', `Member role has been changed to ${role}.`);
-      
+
       return true;
     } catch (err) {
       addNotification('error', 'Failed to change member role.');
@@ -655,13 +657,13 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const suspendMember = useCallback(async (memberId: string): Promise<boolean> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
-      setMembers(prev => prev.map(m => 
+
+      setMembers(prev => prev.map(m =>
         m.id === memberId ? { ...m, status: 'suspended' as TeamMemberStatus } : m
       ));
-      
+
       addNotification('warning', 'Member has been suspended.');
-      
+
       return true;
     } catch (err) {
       addNotification('error', 'Failed to suspend member.');
@@ -672,13 +674,13 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const reactivateMember = useCallback(async (memberId: string): Promise<boolean> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
-      setMembers(prev => prev.map(m => 
+
+      setMembers(prev => prev.map(m =>
         m.id === memberId ? { ...m, status: 'active' as TeamMemberStatus } : m
       ));
-      
+
       addNotification('success', 'Member has been reactivated.');
-      
+
       return true;
     } catch (err) {
       addNotification('error', 'Failed to reactivate member.');
@@ -690,20 +692,22 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const updateSettings = useCallback(async (teamId: string, settings: Partial<TeamSettings>): Promise<TeamSettings | null> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       let updatedSettings: TeamSettings | null = null;
-      
+
       setTeamAccount(prev => {
-        if (!prev) return null;
+        if (!prev) {
+return null;
+}
         updatedSettings = { ...prev.settings, ...settings, updatedAt: new Date() };
         return {
           ...prev,
-          settings: updatedSettings!,
+          settings: updatedSettings!
         };
       });
-      
+
       addNotification('success', 'Team settings have been updated.');
-      
+
       return updatedSettings;
     } catch (err) {
       addNotification('error', 'Failed to update team settings.');
@@ -714,20 +718,22 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const updatePasswordPolicy = useCallback(async (teamId: string, policy: Partial<TeamSettings['passwordPolicy']>): Promise<boolean> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 300));
-      
+
       setTeamAccount(prev => {
-        if (!prev) return null;
+        if (!prev) {
+return null;
+}
         return {
           ...prev,
           settings: {
             ...prev.settings,
-            passwordPolicy: { ...prev.settings.passwordPolicy, ...policy },
-          },
+            passwordPolicy: { ...prev.settings.passwordPolicy, ...policy }
+          }
         };
       });
-      
+
       addNotification('success', 'Password policy has been updated.');
-      
+
       return true;
     } catch (err) {
       addNotification('error', 'Failed to update password policy.');
@@ -738,20 +744,22 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const updateSessionPolicy = useCallback(async (teamId: string, policy: Partial<TeamSettings['sessionPolicy']>): Promise<boolean> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 300));
-      
+
       setTeamAccount(prev => {
-        if (!prev) return null;
+        if (!prev) {
+return null;
+}
         return {
           ...prev,
           settings: {
             ...prev.settings,
-            sessionPolicy: { ...prev.settings.sessionPolicy, ...policy },
-          },
+            sessionPolicy: { ...prev.settings.sessionPolicy, ...policy }
+          }
         };
       });
-      
+
       addNotification('success', 'Session policy has been updated.');
-      
+
       return true;
     } catch (err) {
       addNotification('error', 'Failed to update session policy.');
@@ -762,20 +770,22 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const updateRetentionPolicy = useCallback(async (teamId: string, policy: Partial<TeamSettings['retentionPolicy']>): Promise<boolean> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 300));
-      
+
       setTeamAccount(prev => {
-        if (!prev) return null;
+        if (!prev) {
+return null;
+}
         return {
           ...prev,
           settings: {
             ...prev.settings,
-            retentionPolicy: { ...prev.settings.retentionPolicy, ...policy },
-          },
+            retentionPolicy: { ...prev.settings.retentionPolicy, ...policy }
+          }
         };
       });
-      
+
       addNotification('success', 'Retention policy has been updated.');
-      
+
       return true;
     } catch (err) {
       addNotification('error', 'Failed to update retention policy.');
@@ -787,34 +797,36 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const updatePlan = useCallback(async (teamId: string, plan: TeamBilling['plan']): Promise<TeamBilling | null> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       let updatedBilling: TeamBilling | null = null;
-      
+
       setTeamAccount(prev => {
-        if (!prev) return null;
+        if (!prev) {
+return null;
+}
         const planLimits: Record<TeamBilling['plan'], { members: number; storage: number; amount: number }> = {
           free: { members: 3, storage: 5, amount: 0 },
           starter: { members: 10, storage: 25, amount: 29 },
           professional: { members: 50, storage: 100, amount: 99 },
-          enterprise: { members: 999999, storage: 1000, amount: 299 },
+          enterprise: { members: 999999, storage: 1000, amount: 299 }
         };
-        
+
         updatedBilling = {
           ...prev.billing,
           plan,
           memberLimit: planLimits[plan].members,
           storageLimit: planLimits[plan].storage,
-          amount: planLimits[plan].amount,
+          amount: planLimits[plan].amount
         };
-        
+
         return {
           ...prev,
-          billing: updatedBilling!,
+          billing: updatedBilling!
         };
       });
-      
+
       addNotification('success', `Your plan has been changed to ${plan}.`);
-      
+
       return updatedBilling;
     } catch (err) {
       addNotification('error', 'Failed to update plan.');
@@ -825,20 +837,22 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const updatePaymentMethod = useCallback(async (teamId: string, paymentMethod: TeamBilling['paymentMethod']): Promise<boolean> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       setTeamAccount(prev => {
-        if (!prev) return null;
+        if (!prev) {
+return null;
+}
         return {
           ...prev,
           billing: {
             ...prev.billing,
-            paymentMethod,
-          },
+            paymentMethod
+          }
         };
       });
-      
+
       addNotification('success', 'Payment method has been updated.');
-      
+
       return true;
     } catch (err) {
       addNotification('error', 'Failed to update payment method.');
@@ -849,23 +863,25 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   const updateBillingContact = useCallback(async (teamId: string, contact: Partial<TeamBilling['billingContact']>): Promise<boolean> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 300));
-      
+
       setTeamAccount(prev => {
-        if (!prev) return null;
+        if (!prev) {
+return null;
+}
         return {
           ...prev,
           billing: {
             ...prev.billing,
             billingContact: {
               ...prev.billing.billingContact,
-              ...contact,
-            },
-          },
+              ...contact
+            }
+          }
         };
       });
-      
+
       addNotification('success', 'Billing contact has been updated.');
-      
+
       return true;
     } catch (err) {
       addNotification('error', 'Failed to update billing contact.');
@@ -893,14 +909,18 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
 
   const hasPermission = useCallback((memberId: string, permission: string): boolean => {
     const member = members.find(m => m.id === memberId);
-    if (!member) return false;
+    if (!member) {
+return false;
+}
     return member.permissions.includes('all') || member.permissions.includes(permission);
   }, [members]);
 
   const canPerformAction = useCallback((memberId: string, action: string): boolean => {
     const member = members.find(m => m.id === memberId);
-    if (!member) return false;
-    
+    if (!member) {
+return false;
+}
+
     const actionPermissions: Record<string, TeamMemberRole[]> = {
       'manage_team': ['owner', 'admin'],
       'manage_members': ['owner', 'admin', 'manager'],
@@ -908,39 +928,41 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
       'view_reports': ['owner', 'admin', 'manager'],
       'send_emails': ['owner', 'admin', 'manager', 'member'],
       'create_folders': ['owner', 'admin', 'manager', 'member'],
-      'view_emails': ['owner', 'admin', 'manager', 'member', 'viewer'],
+      'view_emails': ['owner', 'admin', 'manager', 'member', 'viewer']
     };
-    
+
     const requiredRoles = actionPermissions[action];
-    if (!requiredRoles) return false;
-    
+    if (!requiredRoles) {
+return false;
+}
+
     return requiredRoles.includes(member.role);
   }, [members]);
 
   const getFilteredMembers = useCallback((filter: TeamMemberFilter): TeamMember[] => {
     let result = [...members];
-    
+
     if (filter.status && filter.status.length > 0) {
       result = result.filter(m => filter.status!.includes(m.status));
     }
-    
+
     if (filter.role && filter.role.length > 0) {
       result = result.filter(m => filter.role!.includes(m.role));
     }
-    
+
     if (filter.department && filter.department.length > 0) {
       result = result.filter(m => m.department && filter.department!.includes(m.department));
     }
-    
+
     if (filter.search) {
       const searchLower = filter.search.toLowerCase();
-      result = result.filter(m => 
+      result = result.filter(m =>
         m.name.toLowerCase().includes(searchLower) ||
         m.email.toLowerCase().includes(searchLower) ||
         (m.department && m.department.toLowerCase().includes(searchLower))
       );
     }
-    
+
     if (filter.sortBy) {
       result.sort((a, b) => {
         let comparison = 0;
@@ -964,37 +986,37 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
         return filter.sortOrder === 'desc' ? -comparison : comparison;
       });
     }
-    
+
     return result;
   }, [members]);
 
   const getFilteredActivities = useCallback((filter: TeamActivityFilter): TeamActivity[] => {
     let result = [...activities];
-    
+
     if (filter.action && filter.action.length > 0) {
       result = result.filter(a => filter.action!.includes(a.action));
     }
-    
+
     if (filter.memberId && filter.memberId.length > 0) {
       result = result.filter(a => filter.memberId!.includes(a.memberId));
     }
-    
+
     if (filter.dateFrom) {
       result = result.filter(a => new Date(a.timestamp) >= filter.dateFrom!);
     }
-    
+
     if (filter.dateTo) {
       result = result.filter(a => new Date(a.timestamp) <= filter.dateTo!);
     }
-    
+
     if (filter.search) {
       const searchLower = filter.search.toLowerCase();
-      result = result.filter(a => 
+      result = result.filter(a =>
         a.action.toLowerCase().includes(searchLower) ||
         a.details.toLowerCase().includes(searchLower)
       );
     }
-    
+
     if (filter.sortBy) {
       result.sort((a, b) => {
         let comparison = 0;
@@ -1009,7 +1031,7 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
         return filter.sortOrder === 'desc' ? -comparison : comparison;
       });
     }
-    
+
     return result;
   }, [activities]);
 
@@ -1043,12 +1065,12 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
     activities,
     isLoading,
     error,
-    
+
     createTeamAccount,
     updateTeamAccount,
     deleteTeamAccount,
     regenerateInviteLink,
-    
+
     inviteMember,
     acceptInvitation,
     declineInvitation,
@@ -1057,17 +1079,17 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
     changeMemberRole,
     suspendMember,
     reactivateMember,
-    
+
     updateSettings,
     updatePasswordPolicy,
     updateSessionPolicy,
     updateRetentionPolicy,
-    
+
     updatePlan,
     updatePaymentMethod,
     updateBillingContact,
     getInvoices,
-    
+
     getMembersByRole,
     getMembersByStatus,
     getMember,
@@ -1076,9 +1098,9 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
     getFilteredMembers,
     getFilteredActivities,
     getStats,
-    
+
     refreshTeamAccount,
     refreshMembers,
-    refreshActivities,
+    refreshActivities
   };
 }

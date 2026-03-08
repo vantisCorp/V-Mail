@@ -17,8 +17,8 @@ vi.mock('../../services/emailExportService', () => ({
     getExportStatistics: vi.fn(),
     downloadFile: vi.fn(),
     loadQueue: vi.fn(),
-    saveQueue: vi.fn(),
-  },
+    saveQueue: vi.fn()
+  }
 }));
 
 describe('useEmailExport', () => {
@@ -34,7 +34,7 @@ describe('useEmailExport', () => {
       attachments: [],
       folder: 'inbox',
       read: true,
-      starred: false,
+      starred: false
     },
     {
       id: 'email-2',
@@ -47,15 +47,15 @@ describe('useEmailExport', () => {
       attachments: [],
       folder: 'inbox',
       read: false,
-      starred: false,
-    },
+      starred: false
+    }
   ];
 
   const defaultOptions: ExportOptions = {
     format: 'pdf' as ExportFormat,
     includeAttachments: true,
     includeHeaders: true,
-    filename: 'test-export',
+    filename: 'test-export'
   };
 
   beforeEach(() => {
@@ -70,7 +70,7 @@ describe('useEmailExport', () => {
       totalEmailsExported: 0,
       averageExportTime: 0,
       totalFileSize: 0,
-      formatBreakdown: {},
+      formatBreakdown: {}
     });
     (EmailExportService.loadQueue as vi.Mock).mockImplementation(() => {});
   });
@@ -91,7 +91,7 @@ describe('useEmailExport', () => {
         totalEmailsExported: 0,
         averageExportTime: 0,
         totalFileSize: 0,
-        formatBreakdown: {},
+        formatBreakdown: {}
       });
     });
   });
@@ -103,7 +103,7 @@ describe('useEmailExport', () => {
         format: 'pdf',
         emailCount: 1,
         downloadUrl: 'mock-url',
-        fileSize: 1024,
+        fileSize: 1024
       };
 
       (EmailExportService.exportSingleEmail as vi.Mock).mockResolvedValue(mockResult);
@@ -150,7 +150,7 @@ describe('useEmailExport', () => {
         format: 'pdf',
         emailCount: 2,
         downloadUrl: 'mock-url',
-        fileSize: 2048,
+        fileSize: 2048
       };
 
       (EmailExportService.exportMultipleEmails as vi.Mock).mockImplementation(
@@ -237,8 +237,8 @@ describe('useEmailExport', () => {
           emails: mockEmails,
           options: defaultOptions,
           status: 'pending',
-          createdAt: Date.now(),
-        },
+          createdAt: Date.now()
+        }
       ];
 
       (EmailExportService.getExportQueue as vi.Mock).mockReturnValue(mockQueue);
@@ -267,8 +267,8 @@ describe('useEmailExport', () => {
           format: 'pdf' as ExportFormat,
           emailCount: 1,
           timestamp: Date.now(),
-          fileSize: 1024,
-        },
+          fileSize: 1024
+        }
       ];
 
       (EmailExportService.getExportHistory as vi.Mock).mockReturnValue(mockHistory);
@@ -297,7 +297,7 @@ describe('useEmailExport', () => {
         totalEmailsExported: 25,
         averageExportTime: 2.5,
         totalFileSize: 10240,
-        formatBreakdown: { pdf: 8, json: 2 },
+        formatBreakdown: { pdf: 8, json: 2 }
       };
 
       (EmailExportService.getExportStatistics as vi.Mock).mockReturnValue(mockStats);
@@ -313,19 +313,19 @@ describe('useEmailExport', () => {
         format: 'pdf',
         emailCount: 2,
         downloadUrl: 'mock-url',
-        fileSize: 2048,
+        fileSize: 2048
       };
 
       (EmailExportService.exportMultipleEmails as vi.Mock).mockResolvedValue(mockResult);
       (EmailExportService.getExportHistory as vi.Mock).mockReturnValue([
-        { id: 'hist-1', format: 'pdf', emailCount: 2, timestamp: Date.now(), fileSize: 2048 },
+        { id: 'hist-1', format: 'pdf', emailCount: 2, timestamp: Date.now(), fileSize: 2048 }
       ]);
       (EmailExportService.getExportStatistics as vi.Mock).mockReturnValue({
         totalExports: 1,
         totalEmailsExported: 2,
         averageExportTime: 1,
         totalFileSize: 2048,
-        formatBreakdown: { pdf: 1 },
+        formatBreakdown: { pdf: 1 }
       });
 
       const { result } = renderHook(() => useEmailExport());

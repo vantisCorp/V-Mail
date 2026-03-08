@@ -16,7 +16,7 @@ import {
   CalendarIntegrationOptions,
   CalendarProvider,
   EventStatus,
-  EventVisibility,
+  EventVisibility
 } from '../types/calendar';
 
 /**
@@ -39,7 +39,7 @@ export class CalendarService {
       backgroundSync: true,
       notifyOnNewEvents: true,
       notifyOnEventUpdates: true,
-      notifyOnEventReminders: true,
+      notifyOnEventReminders: true
     };
     this.loadFromStorage();
   }
@@ -126,7 +126,7 @@ export class CalendarService {
   public async addAccount(account: CalendarAccount): Promise<void> {
     this.accounts.set(account.id, account);
     this.saveToStorage();
-    
+
     // Load calendars for this account
     await this.loadCalendarsForAccount(account.id);
   }
@@ -144,7 +144,7 @@ export class CalendarService {
     const calendarsToRemove = Array.from(this.calendars.values()).filter(
       (cal) => cal.accountId === accountId
     );
-    
+
     calendarsToRemove.forEach((calendar) => {
       this.calendars.delete(calendar.id);
       this.events.delete(calendar.id);
@@ -180,7 +180,7 @@ export class CalendarService {
     // This would call the actual provider API
     // For now, we'll simulate loading calendars
     const calendars = await this.fetchCalendarsFromProvider(account);
-    
+
     calendars.forEach((calendar) => {
       this.calendars.set(calendar.id, calendar);
     });
@@ -196,7 +196,7 @@ export class CalendarService {
   ): Promise<Calendar[]> {
     // This would make actual API calls to Google Calendar or Microsoft Graph
     // For demonstration, we'll return mock data
-    
+
     if (account.provider === CalendarProvider.GOOGLE) {
       return [
         {
@@ -211,8 +211,8 @@ export class CalendarService {
           selected: true,
           hidden: false,
           color: '#3788d8',
-          accessRole: 'owner',
-        },
+          accessRole: 'owner'
+        }
       ];
     }
 
@@ -298,16 +298,16 @@ export class CalendarService {
         displayName: attendee.displayName,
         responseStatus: 'needsAction',
         optional: false,
-        isSelf: false,
+        isSelf: false
       })),
       reminders: payload.reminders?.overrides?.map((reminder) => ({
         method: reminder.method,
-        minutes: reminder.minutes,
+        minutes: reminder.minutes
       })),
       created: new Date().toISOString(),
       updated: new Date().toISOString(),
       colorId: payload.colorId,
-      conferenceData: payload.conferenceData,
+      conferenceData: payload.conferenceData
     };
 
     // Add to events map
@@ -332,29 +332,43 @@ export class CalendarService {
       const eventIndex = events.findIndex((e) => e.id === eventId);
       if (eventIndex !== -1) {
         const event = events[eventIndex];
-        
+
         // Update event fields
-        if (payload.summary) event.summary = payload.summary;
-        if (payload.description) event.description = payload.description;
-        if (payload.location) event.location = payload.location;
-        if (payload.start) event.start = payload.start;
-        if (payload.end) event.end = payload.end;
-        if (payload.status) event.status = payload.status;
+        if (payload.summary) {
+event.summary = payload.summary;
+}
+        if (payload.description) {
+event.description = payload.description;
+}
+        if (payload.location) {
+event.location = payload.location;
+}
+        if (payload.start) {
+event.start = payload.start;
+}
+        if (payload.end) {
+event.end = payload.end;
+}
+        if (payload.status) {
+event.status = payload.status;
+}
         if (payload.attendees) {
           event.attendees = payload.attendees.map((attendee) => ({
             ...attendee,
             responseStatus: attendee.responseStatus as any || 'needsAction',
             optional: false,
-            isSelf: false,
+            isSelf: false
           }));
         }
         if (payload.reminders) {
           event.reminders = payload.reminders.overrides?.map((reminder) => ({
             method: reminder.method,
-            minutes: reminder.minutes,
+            minutes: reminder.minutes
           }));
         }
-        if (payload.visibility) event.visibility = payload.visibility;
+        if (payload.visibility) {
+event.visibility = payload.visibility;
+}
 
         event.updated = new Date().toISOString();
 
@@ -400,13 +414,13 @@ export class CalendarService {
       const calendarEvents = await this.getEvents(calendarId, {
         timeMin: start.toISOString(),
         timeMax: end.toISOString(),
-        singleEvents: true,
+        singleEvents: true
       });
       events.push(...calendarEvents);
     }
 
-    return events.sort((a, b) => 
-      new Date(a.start.dateTime || a.start.date!).getTime() - 
+    return events.sort((a, b) =>
+      new Date(a.start.dateTime || a.start.date!).getTime() -
       new Date(b.start.dateTime || b.start.date!).getTime()
     );
   }
@@ -424,7 +438,7 @@ export class CalendarService {
     }
 
     // Extract event details from email
-    const summary = options.extractTitleFromSubject 
+    const summary = options.extractTitleFromSubject
       ? email.subject || 'Meeting'
       : 'Meeting';
 
@@ -452,17 +466,17 @@ export class CalendarService {
       if (email.from && email.from.email) {
         attendees.push({
           email: email.from.email,
-          displayName: email.from.name,
+          displayName: email.from.name
         });
       }
-      
+
       // Add recipients as attendees
       if (email.to) {
         email.to.forEach((recipient: any) => {
           if (recipient.email) {
             attendees.push({
               email: recipient.email,
-              displayName: recipient.name,
+              displayName: recipient.name
             });
           }
         });
@@ -482,14 +496,14 @@ export class CalendarService {
         overrides: [
           {
             method: 'email',
-            minutes: options.defaultReminder,
-          },
-        ],
-      },
+            minutes: options.defaultReminder
+          }
+        ]
+      }
     };
 
     const event = await this.createEvent(payload);
-    
+
     // Link event to email
     event.sourceEmailId = email.id;
 
@@ -518,7 +532,7 @@ export class CalendarService {
           );
           return {
             start: { dateTime: extractedDate.toISOString() },
-            end: { dateTime: endOfMeeting.toISOString() },
+            end: { dateTime: endOfMeeting.toISOString() }
           };
         }
       } catch (error) {
@@ -528,7 +542,7 @@ export class CalendarService {
 
     return {
       start: { dateTime: startDate.toISOString() },
-      end: { dateTime: endDate.toISOString() },
+      end: { dateTime: endDate.toISOString() }
     };
   }
 
@@ -541,10 +555,10 @@ export class CalendarService {
     const eventsByStatus = {
       confirmed: 0,
       tentative: 0,
-      cancelled: 0,
+      cancelled: 0
     };
 
-    const calendarsToQuery = calendarId 
+    const calendarsToQuery = calendarId
       ? [calendarId]
       : Array.from(this.calendars.keys());
 
@@ -556,9 +570,9 @@ export class CalendarService {
     for (const calId of calendarsToQuery) {
       const events = this.events.get(calId) || [];
       allEvents.push(...events);
-      
+
       eventsByCalendar[calId] = events.length;
-      
+
       events.forEach((event) => {
         if (event.status) {
           eventsByStatus[event.status as keyof typeof eventsByStatus]++;
@@ -596,7 +610,7 @@ export class CalendarService {
       eventsByCalendar,
       averageEventsPerDay: allEvents.length / 30, // Approximate
       busiestDay: 'Monday', // Would calculate based on actual data
-      freeSlots: [], // Would calculate based on actual data
+      freeSlots: [] // Would calculate based on actual data
     };
   }
 
@@ -612,7 +626,7 @@ export class CalendarService {
         .filter((e) => e.status === 'confirmed')
         .map((e) => ({
           start: e.start.dateTime || e.start.date!,
-          end: e.end.dateTime || e.end.date!,
+          end: e.end.dateTime || e.end.date!
         }));
 
       calendars[item.id] = { busy };
@@ -621,7 +635,7 @@ export class CalendarService {
     return {
       timeMin: query.timeMin,
       timeMax: query.timeMax,
-      calendars,
+      calendars
     };
   }
 
@@ -642,7 +656,7 @@ export class CalendarService {
     const syncStatus: CalendarSyncStatus = {
       lastSyncAt: new Date().toISOString(),
       isSyncing: true,
-      syncErrors: [],
+      syncErrors: []
     };
 
     this.syncStatus.set(calendarId, syncStatus);
@@ -650,16 +664,16 @@ export class CalendarService {
     try {
       // This would make actual API calls to sync with provider
       // For demonstration, we'll simulate sync
-      
+
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      
+
       syncStatus.lastSyncAt = new Date().toISOString();
       syncStatus.isSyncing = false;
     } catch (error) {
       syncStatus.syncErrors.push({
         calendarId,
         error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
       syncStatus.isSyncing = false;
     }

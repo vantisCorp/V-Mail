@@ -20,7 +20,7 @@ import {
   ArchiveContent,
   ArchiveFileEntry,
   DocumentContent,
-  DocumentPage,
+  DocumentPage
 } from '../types/filePreview';
 
 const PREVIEW_CACHE_KEY = 'v-mail-preview-cache';
@@ -37,31 +37,31 @@ const MIME_TYPE_MAPPINGS: Record<string, PreviewFileType> = {
   'image/svg+xml': PreviewFileType.IMAGE,
   'image/bmp': PreviewFileType.IMAGE,
   'image/tiff': PreviewFileType.IMAGE,
-  
+
   // PDFs
   'application/pdf': PreviewFileType.PDF,
-  
+
   // Videos
   'video/mp4': PreviewFileType.VIDEO,
   'video/webm': PreviewFileType.VIDEO,
   'video/ogg': PreviewFileType.VIDEO,
   'video/quicktime': PreviewFileType.VIDEO,
   'video/x-msvideo': PreviewFileType.VIDEO,
-  
+
   // Audio
   'audio/mpeg': PreviewFileType.AUDIO,
   'audio/mp3': PreviewFileType.AUDIO,
   'audio/wav': PreviewFileType.AUDIO,
   'audio/ogg': PreviewFileType.AUDIO,
   'audio/aac': PreviewFileType.AUDIO,
-  
+
   // Text
   'text/plain': PreviewFileType.TEXT,
   'text/html': PreviewFileType.TEXT,
   'text/css': PreviewFileType.TEXT,
   'text/csv': PreviewFileType.TEXT,
   'text/markdown': PreviewFileType.TEXT,
-  
+
   // Documents
   'application/msword': PreviewFileType.DOCUMENT,
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document': PreviewFileType.DOCUMENT,
@@ -70,19 +70,19 @@ const MIME_TYPE_MAPPINGS: Record<string, PreviewFileType> = {
   'application/vnd.ms-powerpoint': PreviewFileType.DOCUMENT,
   'application/vnd.openxmlformats-officedocument.presentationml.presentation': PreviewFileType.DOCUMENT,
   'application/rtf': PreviewFileType.DOCUMENT,
-  
+
   // Archives
   'application/zip': PreviewFileType.ARCHIVE,
   'application/x-rar-compressed': PreviewFileType.ARCHIVE,
   'application/x-7z-compressed': PreviewFileType.ARCHIVE,
   'application/x-tar': PreviewFileType.ARCHIVE,
   'application/gzip': PreviewFileType.ARCHIVE,
-  
+
   // Code
   'application/json': PreviewFileType.CODE,
   'application/xml': PreviewFileType.CODE,
   'application/javascript': PreviewFileType.CODE,
-  'application/typescript': PreviewFileType.CODE,
+  'application/typescript': PreviewFileType.CODE
 };
 
 // File extension mappings
@@ -95,24 +95,24 @@ const EXTENSION_MAPPINGS: Record<string, PreviewFileType> = {
   '.webp': PreviewFileType.IMAGE,
   '.svg': PreviewFileType.IMAGE,
   '.bmp': PreviewFileType.IMAGE,
-  
+
   // PDFs
   '.pdf': PreviewFileType.PDF,
-  
+
   // Videos
   '.mp4': PreviewFileType.VIDEO,
   '.webm': PreviewFileType.VIDEO,
   '.mov': PreviewFileType.VIDEO,
   '.avi': PreviewFileType.VIDEO,
   '.mkv': PreviewFileType.VIDEO,
-  
+
   // Audio
   '.mp3': PreviewFileType.AUDIO,
   '.wav': PreviewFileType.AUDIO,
   '.ogg': PreviewFileType.AUDIO,
   '.aac': PreviewFileType.AUDIO,
   '.flac': PreviewFileType.AUDIO,
-  
+
   // Documents
   '.doc': PreviewFileType.DOCUMENT,
   '.docx': PreviewFileType.DOCUMENT,
@@ -121,14 +121,14 @@ const EXTENSION_MAPPINGS: Record<string, PreviewFileType> = {
   '.ppt': PreviewFileType.DOCUMENT,
   '.pptx': PreviewFileType.DOCUMENT,
   '.rtf': PreviewFileType.DOCUMENT,
-  
+
   // Archives
   '.zip': PreviewFileType.ARCHIVE,
   '.rar': PreviewFileType.ARCHIVE,
   '.7z': PreviewFileType.ARCHIVE,
   '.tar': PreviewFileType.ARCHIVE,
   '.gz': PreviewFileType.ARCHIVE,
-  
+
   // Code
   '.js': PreviewFileType.CODE,
   '.ts': PreviewFileType.CODE,
@@ -143,7 +143,7 @@ const EXTENSION_MAPPINGS: Record<string, PreviewFileType> = {
   '.json': PreviewFileType.CODE,
   '.xml': PreviewFileType.CODE,
   '.md': PreviewFileType.TEXT,
-  '.txt': PreviewFileType.TEXT,
+  '.txt': PreviewFileType.TEXT
 };
 
 /**
@@ -167,7 +167,7 @@ export class FilePreviewService {
     previewsByType: {} as Record<PreviewFileType, number>,
     thumbnailsGenerated: 0,
     securityScansPerformed: 0,
-    securityIssues: 0,
+    securityIssues: 0
   };
 
   constructor() {
@@ -182,7 +182,7 @@ export class FilePreviewService {
     if (MIME_TYPE_MAPPINGS[mimeType.toLowerCase()]) {
       return MIME_TYPE_MAPPINGS[mimeType.toLowerCase()];
     }
-    
+
     // Try file extension
     if (fileName) {
       const ext = '.' + fileName.split('.').pop()?.toLowerCase();
@@ -190,7 +190,7 @@ export class FilePreviewService {
         return EXTENSION_MAPPINGS[ext];
       }
     }
-    
+
     return PreviewFileType.UNKNOWN;
   }
 
@@ -208,7 +208,7 @@ export class FilePreviewService {
   async createPreview(payload: CreatePreviewPayload): Promise<FilePreview> {
     const startTime = Date.now();
     const fileType = this.getFileType(payload.mimeType, payload.fileName);
-    
+
     const preview: FilePreview = {
       id: generateId(),
       fileId: payload.fileId,
@@ -221,45 +221,45 @@ export class FilePreviewService {
       metadata: {
         size: payload.fileData instanceof Blob ? payload.fileData.size : payload.fileData.byteLength,
         mimeType: payload.mimeType,
-        lastModified: new Date().toISOString(),
+        lastModified: new Date().toISOString()
       },
       thumbnails: [],
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     this.cache.set(preview.id, preview);
-    
+
     try {
       // Generate metadata
       await this.generateMetadata(preview, payload.fileData);
-      
+
       // Generate thumbnails if requested
       if (payload.generateThumbnails && fileType === PreviewFileType.IMAGE) {
         await this.generateThumbnails(preview, payload.fileData);
       }
-      
+
       // Perform security scan if requested
       if (payload.performSecurityScan) {
         await this.performSecurityScan(preview);
       }
-      
+
       preview.status = PreviewStatus.READY;
     } catch (error) {
       preview.status = PreviewStatus.ERROR;
       preview.error = error instanceof Error ? error.message : 'Unknown error';
     }
-    
+
     preview.updatedAt = new Date().toISOString();
-    
+
     // Update stats
     this.stats.totalPreviews++;
     this.stats.cachedPreviews = this.cache.size;
     this.stats.averageLoadTime = (this.stats.averageLoadTime + (Date.now() - startTime)) / 2;
     this.stats.previewsByType[fileType] = (this.stats.previewsByType[fileType] || 0) + 1;
-    
+
     this.saveCacheToStorage();
-    
+
     return preview;
   }
 
@@ -268,7 +268,7 @@ export class FilePreviewService {
    */
   private async generateMetadata(preview: FilePreview, fileData: ArrayBuffer | Blob): Promise<void> {
     const blob = fileData instanceof ArrayBuffer ? new Blob([fileData]) : fileData;
-    
+
     switch (preview.fileType) {
       case PreviewFileType.IMAGE:
         await this.generateImageMetadata(preview, blob);
@@ -369,11 +369,11 @@ export class FilePreviewService {
 
     const blob = fileData instanceof ArrayBuffer ? new Blob([fileData]) : fileData;
     const thumbnails: FileThumbnail[] = [];
-    
+
     const sizes = [
       { quality: PreviewQuality.THUMBNAIL, width: 100, height: 100 },
       { quality: PreviewQuality.LOW, width: 400, height: 400 },
-      { quality: PreviewQuality.MEDIUM, width: 800, height: 800 },
+      { quality: PreviewQuality.MEDIUM, width: 800, height: 800 }
     ];
 
     for (const size of sizes) {
@@ -404,7 +404,7 @@ export class FilePreviewService {
       img.onload = () => {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
-        
+
         if (!ctx) {
           reject(new Error('Could not get canvas context'));
           return;
@@ -413,7 +413,7 @@ export class FilePreviewService {
         // Calculate dimensions maintaining aspect ratio
         let { width, height } = options;
         const aspectRatio = img.naturalWidth / img.naturalHeight;
-        
+
         if (width / height > aspectRatio) {
           width = height * aspectRatio;
         } else {
@@ -441,7 +441,7 @@ export class FilePreviewService {
             width,
             height,
             size: thumbnailBlob.size,
-            generatedAt: new Date().toISOString(),
+            generatedAt: new Date().toISOString()
           };
 
           resolve(thumbnail);
@@ -457,23 +457,23 @@ export class FilePreviewService {
    */
   async performSecurityScan(preview: FilePreview): Promise<SecurityScanResult> {
     this.stats.securityScansPerformed++;
-    
+
     // In a real implementation, this would call an actual security scanning service
     // For now, we'll do basic checks
-    
+
     const result: SecurityScanResult = {
       fileId: preview.fileId,
       status: SecurityStatus.SAFE,
       threats: [],
       scannedAt: new Date().toISOString(),
       scanDuration: 100,
-      scannerVersion: '1.0.0',
+      scannerVersion: '1.0.0'
     };
 
     // Check for suspicious file extensions
     const suspiciousExtensions = ['.exe', '.bat', '.cmd', '.scr', '.pif', '.com'];
     const ext = '.' + preview.fileName.split('.').pop()?.toLowerCase();
-    
+
     if (suspiciousExtensions.includes(ext)) {
       result.status = SecurityStatus.SUSPICIOUS;
       result.threats.push({
@@ -481,7 +481,7 @@ export class FilePreviewService {
         type: 'suspicious',
         name: 'Suspicious file type',
         severity: 'medium',
-        description: `The file extension "${ext}" is commonly associated with executable files.`,
+        description: `The file extension "${ext}" is commonly associated with executable files.`
       });
       this.stats.securityIssues++;
     }
@@ -522,7 +522,9 @@ export class FilePreviewService {
    */
   getPreviewUrl(previewId: string, options?: PreviewOptions): string | null {
     const preview = this.getPreview(previewId);
-    if (!preview) return null;
+    if (!preview) {
+return null;
+}
 
     if (options?.quality === PreviewQuality.THUMBNAIL) {
       const thumb = this.getThumbnail(previewId, PreviewQuality.THUMBNAIL);
@@ -537,7 +539,9 @@ export class FilePreviewService {
    */
   deletePreview(previewId: string): boolean {
     const preview = this.cache.get(previewId);
-    if (!preview) return false;
+    if (!preview) {
+return false;
+}
 
     // Revoke object URLs
     if (preview.originalUrl) {
@@ -559,7 +563,7 @@ export class FilePreviewService {
     this.cache.delete(previewId);
     this.stats.cachedPreviews = this.cache.size;
     this.saveCacheToStorage();
-    
+
     return true;
   }
 
@@ -624,7 +628,7 @@ export class FilePreviewService {
       files: [],
       totalFiles: 0,
       totalSize: 0,
-      compressedSize: blob.size,
+      compressedSize: blob.size
     };
   }
 
@@ -636,7 +640,7 @@ export class FilePreviewService {
       PreviewFileType.DOCUMENT,
       PreviewFileType.SPREADSHEET,
       PreviewFileType.ARCHIVE,
-      PreviewFileType.UNKNOWN,
+      PreviewFileType.UNKNOWN
     ].includes(fileType);
   }
 
@@ -650,7 +654,7 @@ export class FilePreviewService {
       PreviewFileType.VIDEO,
       PreviewFileType.AUDIO,
       PreviewFileType.TEXT,
-      PreviewFileType.CODE,
+      PreviewFileType.CODE
     ];
   }
 
@@ -668,9 +672,9 @@ export class FilePreviewService {
       [PreviewFileType.SPREADSHEET]: 50 * 1024 * 1024, // 50MB
       [PreviewFileType.ARCHIVE]: 200 * 1024 * 1024, // 200MB
       [PreviewFileType.CODE]: 5 * 1024 * 1024, // 5MB
-      [PreviewFileType.UNKNOWN]: 10 * 1024 * 1024, // 10MB
+      [PreviewFileType.UNKNOWN]: 10 * 1024 * 1024 // 10MB
     };
-    
+
     return limits[fileType] || 10 * 1024 * 1024;
   }
 }

@@ -1,6 +1,6 @@
 /**
  * AI-Powered Email Categorization Types
- * 
+ *
  * Provides type definitions for automatic email classification using machine learning.
  */
 
@@ -195,7 +195,7 @@ export const SYSTEM_CATEGORIES: CategoryInfo[] = [
     icon: 'briefcase',
     color: '#3b82f6',
     isSystem: true,
-    priority: 1,
+    priority: 1
   },
   {
     id: EmailCategory.PERSONAL,
@@ -204,7 +204,7 @@ export const SYSTEM_CATEGORIES: CategoryInfo[] = [
     icon: 'user',
     color: '#22c55e',
     isSystem: true,
-    priority: 2,
+    priority: 2
   },
   {
     id: EmailCategory.PROMOTIONS,
@@ -213,7 +213,7 @@ export const SYSTEM_CATEGORIES: CategoryInfo[] = [
     icon: 'tag',
     color: '#f59e0b',
     isSystem: true,
-    priority: 3,
+    priority: 3
   },
   {
     id: EmailCategory.SOCIAL,
@@ -222,7 +222,7 @@ export const SYSTEM_CATEGORIES: CategoryInfo[] = [
     icon: 'users',
     color: '#ec4899',
     isSystem: true,
-    priority: 4,
+    priority: 4
   },
   {
     id: EmailCategory.UPDATES,
@@ -231,7 +231,7 @@ export const SYSTEM_CATEGORIES: CategoryInfo[] = [
     icon: 'bell',
     color: '#8b5cf6',
     isSystem: true,
-    priority: 5,
+    priority: 5
   },
   {
     id: EmailCategory.FINANCE,
@@ -240,7 +240,7 @@ export const SYSTEM_CATEGORIES: CategoryInfo[] = [
     icon: 'credit-card',
     color: '#10b981',
     isSystem: true,
-    priority: 6,
+    priority: 6
   },
   {
     id: EmailCategory.TRAVEL,
@@ -249,7 +249,7 @@ export const SYSTEM_CATEGORIES: CategoryInfo[] = [
     icon: 'plane',
     color: '#06b6d4',
     isSystem: true,
-    priority: 7,
+    priority: 7
   },
   {
     id: EmailCategory.SHOPPING,
@@ -258,7 +258,7 @@ export const SYSTEM_CATEGORIES: CategoryInfo[] = [
     icon: 'shopping-cart',
     color: '#f97316',
     isSystem: true,
-    priority: 8,
+    priority: 8
   },
   {
     id: EmailCategory.NEWS,
@@ -267,7 +267,7 @@ export const SYSTEM_CATEGORIES: CategoryInfo[] = [
     icon: 'newspaper',
     color: '#6366f1',
     isSystem: true,
-    priority: 9,
+    priority: 9
   },
   {
     id: EmailCategory.FORUMS,
@@ -276,7 +276,7 @@ export const SYSTEM_CATEGORIES: CategoryInfo[] = [
     icon: 'message-circle',
     color: '#84cc16',
     isSystem: true,
-    priority: 10,
+    priority: 10
   },
   {
     id: EmailCategory.IMPORTANT,
@@ -285,7 +285,7 @@ export const SYSTEM_CATEGORIES: CategoryInfo[] = [
     icon: 'alert-circle',
     color: '#ef4444',
     isSystem: true,
-    priority: 0,
+    priority: 0
   },
   {
     id: EmailCategory.SPAM,
@@ -294,8 +294,8 @@ export const SYSTEM_CATEGORIES: CategoryInfo[] = [
     icon: 'shield-off',
     color: '#6b7280',
     isSystem: true,
-    priority: 11,
-  },
+    priority: 11
+  }
 ];
 
 /**
@@ -308,5 +308,5 @@ export const DEFAULT_CATEGORIZATION_CONFIG: CategorizationModelConfig = {
   maxAlternatives: 3,
   enableAutoTraining: true,
   trainingBatchSize: 100,
-  processingMode: 'local',
+  processingMode: 'local'
 };

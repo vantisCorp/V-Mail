@@ -15,7 +15,7 @@ interface TwoFactorAuthProps {
 
 export const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({
   username = 'user@example.com',
-  onSetupComplete,
+  onSetupComplete
 }) => {
   const {
     state,
@@ -28,7 +28,7 @@ export const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({
     addTrustedDevice,
     removeTrustedDevice,
     getTimeRemaining,
-    cancelSetup,
+    cancelSetup
   } = useTwoFactorAuth(username);
 
   const [selectedMethod, setSelectedMethod] = useState<TwoFactorAuthMethod | null>(null);
@@ -60,7 +60,7 @@ export const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({
       {
         method: selectedMethod || state.settings.defaultMethod,
         code: verificationCode,
-        backupCode: phoneNumber,
+        backupCode: phoneNumber
       },
       state.setupData?.secret,
       state.setupData?.backupCodes
@@ -89,7 +89,7 @@ export const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({
       name: 'Current Device',
       deviceInfo: navigator.userAgent,
       lastUsed: new Date(),
-      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
     };
     addTrustedDevice(device);
   };

@@ -12,7 +12,7 @@ import type {
   CacheEvent,
   CacheInvalidationRule,
   CachePrewarmConfig,
-  CacheConfig,
+  CacheConfig
 } from '../types/caching';
 
 interface UseCacheOptions {
@@ -64,7 +64,7 @@ export function useCache<T = any>(options: UseCacheOptions) {
         setIsLoading(true);
         const optionsWithCache: CacheOptions = {
           ttl: options.cacheTime,
-          ...cacheOptions,
+          ...cacheOptions
         };
         await cacheService.current.set(options.key, value, optionsWithCache);
         setData(value);
@@ -100,7 +100,7 @@ export function useCache<T = any>(options: UseCacheOptions) {
     isStale,
     set,
     invalidate,
-    refresh,
+    refresh
   };
 }
 
@@ -170,7 +170,7 @@ export function useCacheManager() {
     clearByPattern,
     addInvalidationRule,
     removeInvalidationRule,
-    prewarmCache,
+    prewarmCache
   };
 }
 
@@ -227,6 +227,6 @@ export function useCachedFetch<T = any>(
     ...cache,
     error: cache.error || fetchError,
     fetch,
-    isFetching,
+    isFetching
   };
 }

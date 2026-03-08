@@ -9,7 +9,7 @@ import {
   AttachmentStats,
   ActivityStats,
   EmailStatistics,
-  StatisticsTimeRange,
+  StatisticsTimeRange
 } from '../types/statistics';
 
 interface UseEmailStatisticsReturn {
@@ -38,7 +38,7 @@ const getHour = (date: Date): number => {
 export const useEmailStatistics = (emails: Email[]): UseEmailStatisticsReturn => {
   const [timeRange, setTimeRange] = useState<StatisticsTimeRange>({
     start: new Date(0), // Beginning of time
-    end: new Date(), // Now
+    end: new Date() // Now
   });
 
   const filteredEmails = useMemo(() => {
@@ -57,7 +57,7 @@ export const useEmailStatistics = (emails: Email[]): UseEmailStatisticsReturn =>
       withAttachments: filteredEmails.filter(e => e.hasAttachments).length,
       encrypted: filteredEmails.filter(e => e.encrypted).length,
       phantom: filteredEmails.filter(e => e.phantomAlias).length,
-      selfDestruct: filteredEmails.filter(e => e.selfDestruct).length,
+      selfDestruct: filteredEmails.filter(e => e.selfDestruct).length
     };
   }, [filteredEmails]);
 
@@ -68,12 +68,14 @@ export const useEmailStatistics = (emails: Email[]): UseEmailStatisticsReturn =>
       const folderId = email.folder?.id || 'unknown';
       const folderName = email.folder?.name || 'Unknown';
       const existing = folderMap.get(folderId) || { count: 0, unread: 0, size: 0, name: folderName };
-      
+
       existing.count += 1;
-      if (!email.read) existing.unread += 1;
+      if (!email.read) {
+existing.unread += 1;
+}
       // Estimate email size (simplified)
       existing.size += email.body.length + email.subject.length;
-      
+
       folderMap.set(folderId, existing);
     });
 
@@ -82,7 +84,7 @@ export const useEmailStatistics = (emails: Email[]): UseEmailStatisticsReturn =>
       folderName: stats.name,
       count: stats.count,
       unreadCount: stats.unread,
-      size: stats.size,
+      size: stats.size
     }));
   }, [filteredEmails]);
 
@@ -98,7 +100,7 @@ export const useEmailStatistics = (emails: Email[]): UseEmailStatisticsReturn =>
       today: filteredEmails.filter(e => new Date(e.date) >= startOfToday).length,
       thisWeek: filteredEmails.filter(e => new Date(e.date) >= startOfWeek).length,
       thisMonth: filteredEmails.filter(e => new Date(e.date) >= startOfMonth).length,
-      thisYear: filteredEmails.filter(e => new Date(e.date) >= startOfYear).length,
+      thisYear: filteredEmails.filter(e => new Date(e.date) >= startOfYear).length
     };
   }, [filteredEmails]);
 
@@ -120,7 +122,7 @@ export const useEmailStatistics = (emails: Email[]): UseEmailStatisticsReturn =>
         email,
         count: stats.count,
         lastReceived: stats.lastReceived,
-        name: stats.name,
+        name: stats.name
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
@@ -144,7 +146,7 @@ export const useEmailStatistics = (emails: Email[]): UseEmailStatisticsReturn =>
         email,
         count: stats.count,
         lastSent: stats.lastSent,
-        name: stats.name,
+        name: stats.name
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
@@ -160,7 +162,7 @@ export const useEmailStatistics = (emails: Email[]): UseEmailStatisticsReturn =>
         email.attachments.forEach(attachment => {
           count += 1;
           totalSize += attachment.size;
-          
+
           const extension = attachment.name.split('.').pop()?.toLowerCase() || 'unknown';
           byType[extension] = (byType[extension] || 0) + 1;
         });
@@ -187,7 +189,7 @@ export const useEmailStatistics = (emails: Email[]): UseEmailStatisticsReturn =>
 
     const mostActiveDay = Object.entries(dayCount)
       .sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A';
-    
+
     const mostActiveHour = Object.entries(hourCount)
       .sort((a, b) => b[1] - a[1])[0]?.[0] || 0;
 
@@ -200,7 +202,7 @@ export const useEmailStatistics = (emails: Email[]): UseEmailStatisticsReturn =>
       emailsDeleted: filteredEmails.filter(e => e.folder?.id === 'trash').length,
       averageDailyEmails: Math.round(averageDailyEmails * 10) / 10,
       mostActiveDay,
-      mostActiveHour: parseInt(String(mostActiveHour)),
+      mostActiveHour: parseInt(String(mostActiveHour))
     };
   }, [filteredEmails, timeRange]);
 
@@ -217,8 +219,8 @@ export const useEmailStatistics = (emails: Email[]): UseEmailStatisticsReturn =>
     search: {
       totalSearches: 0,
       savedSearches: 0,
-      recentSearches: [],
-    },
+      recentSearches: []
+    }
   }), [emailStats, folderStats, timeStats, topSenders, topRecipients, attachmentStats, activityStats]);
 
   const setTimeRangeCallback = useCallback((range: StatisticsTimeRange) => {
@@ -234,6 +236,6 @@ export const useEmailStatistics = (emails: Email[]): UseEmailStatisticsReturn =>
     statistics,
     timeRange,
     setTimeRange: setTimeRangeCallback,
-    refreshStats,
+    refreshStats
   };
 };

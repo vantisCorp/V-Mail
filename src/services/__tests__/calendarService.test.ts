@@ -5,7 +5,7 @@ import {
   CalendarProvider,
   EventStatus,
   CalendarAccount,
-  CreateEventPayload,
+  CreateEventPayload
 } from '../../types/calendar';
 
 describe('CalendarService', () => {
@@ -14,7 +14,7 @@ describe('CalendarService', () => {
   beforeEach(() => {
     // Clear localStorage before each test
     localStorage.clear();
-    
+
     // Get fresh instance
     calendarService = CalendarService.getInstance();
   });
@@ -34,7 +34,7 @@ describe('CalendarService', () => {
         isActive: true,
         isPrimary: true,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
 
       await calendarService.addAccount(account);
@@ -58,7 +58,7 @@ describe('CalendarService', () => {
         isActive: true,
         isPrimary: true,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
 
       await calendarService.addAccount(account);
@@ -82,7 +82,7 @@ describe('CalendarService', () => {
         isActive: true,
         isPrimary: true,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
 
       await calendarService.addAccount(account);
@@ -111,7 +111,7 @@ describe('CalendarService', () => {
         isActive: true,
         isPrimary: true,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
 
       await calendarService.addAccount(account);
@@ -125,7 +125,7 @@ describe('CalendarService', () => {
     test('should get calendar by ID', async () => {
       const calendars = calendarService.getCalendars();
       const firstCalendar = calendars[0];
-      
+
       if (firstCalendar) {
         const retrievedCalendar = calendarService.getCalendar(firstCalendar.id);
         expect(retrievedCalendar).toEqual(firstCalendar);
@@ -148,7 +148,7 @@ describe('CalendarService', () => {
         isActive: true,
         isPrimary: true,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
 
       await calendarService.addAccount(account);
@@ -164,11 +164,11 @@ describe('CalendarService', () => {
         description: 'Test Description',
         location: 'Test Location',
         start: {
-          dateTime: new Date(Date.now() + 3600000).toISOString(),
+          dateTime: new Date(Date.now() + 3600000).toISOString()
         },
         end: {
-          dateTime: new Date(Date.now() + 7200000).toISOString(),
-        },
+          dateTime: new Date(Date.now() + 7200000).toISOString()
+        }
       };
 
       const event = await calendarService.createEvent(payload);
@@ -188,11 +188,11 @@ describe('CalendarService', () => {
         calendarId,
         summary: 'Test Event',
         start: {
-          dateTime: new Date(Date.now() + 3600000).toISOString(),
+          dateTime: new Date(Date.now() + 3600000).toISOString()
         },
         end: {
-          dateTime: new Date(Date.now() + 7200000).toISOString(),
-        },
+          dateTime: new Date(Date.now() + 7200000).toISOString()
+        }
       };
 
       await calendarService.createEvent(payload);
@@ -210,18 +210,18 @@ describe('CalendarService', () => {
         calendarId,
         summary: 'Test Event',
         start: {
-          dateTime: new Date(Date.now() + 3600000).toISOString(),
+          dateTime: new Date(Date.now() + 3600000).toISOString()
         },
         end: {
-          dateTime: new Date(Date.now() + 7200000).toISOString(),
-        },
+          dateTime: new Date(Date.now() + 7200000).toISOString()
+        }
       };
 
       const event = await calendarService.createEvent(createPayload);
 
       const updatedEvent = await calendarService.updateEvent(event.id, {
         eventId: event.id,
-        summary: 'Updated Event',
+        summary: 'Updated Event'
       });
 
       expect(updatedEvent.summary).toBe('Updated Event');
@@ -235,11 +235,11 @@ describe('CalendarService', () => {
         calendarId,
         summary: 'Test Event',
         start: {
-          dateTime: new Date(Date.now() + 3600000).toISOString(),
+          dateTime: new Date(Date.now() + 3600000).toISOString()
         },
         end: {
-          dateTime: new Date(Date.now() + 7200000).toISOString(),
-        },
+          dateTime: new Date(Date.now() + 7200000).toISOString()
+        }
       };
 
       const event = await calendarService.createEvent(payload);
@@ -276,7 +276,7 @@ describe('CalendarService', () => {
         isActive: true,
         isPrimary: true,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
 
       await calendarService.addAccount(account);
@@ -290,33 +290,33 @@ describe('CalendarService', () => {
         calendarId,
         summary: 'Confirmed Event',
         start: {
-          dateTime: new Date(Date.now() + 3600000).toISOString(),
+          dateTime: new Date(Date.now() + 3600000).toISOString()
         },
         end: {
-          dateTime: new Date(Date.now() + 7200000).toISOString(),
-        },
+          dateTime: new Date(Date.now() + 7200000).toISOString()
+        }
       };
 
       const payload2: CreateEventPayload = {
         calendarId,
         summary: 'Cancelled Event',
         start: {
-          dateTime: new Date(Date.now() + 3600000).toISOString(),
+          dateTime: new Date(Date.now() + 3600000).toISOString()
         },
         end: {
-          dateTime: new Date(Date.now() + 7200000).toISOString(),
-        },
+          dateTime: new Date(Date.now() + 7200000).toISOString()
+        }
       };
 
       await calendarService.createEvent(payload1);
       const cancelledEvent = await calendarService.createEvent(payload2);
       await calendarService.updateEvent(cancelledEvent.id, {
         eventId: cancelledEvent.id,
-        status: EventStatus.CANCELLED,
+        status: EventStatus.CANCELLED
       });
 
       const confirmedEvents = await calendarService.getEvents(calendarId, {
-        status: EventStatus.CONFIRMED,
+        status: EventStatus.CONFIRMED
       });
 
       expect(confirmedEvents.every((e) => e.status === EventStatus.CONFIRMED)).toBe(true);
@@ -330,29 +330,29 @@ describe('CalendarService', () => {
         calendarId,
         summary: 'Meeting with Team',
         start: {
-          dateTime: new Date(Date.now() + 3600000).toISOString(),
+          dateTime: new Date(Date.now() + 3600000).toISOString()
         },
         end: {
-          dateTime: new Date(Date.now() + 7200000).toISOString(),
-        },
+          dateTime: new Date(Date.now() + 7200000).toISOString()
+        }
       };
 
       const payload2: CreateEventPayload = {
         calendarId,
         summary: 'Lunch with Client',
         start: {
-          dateTime: new Date(Date.now() + 3600000).toISOString(),
+          dateTime: new Date(Date.now() + 3600000).toISOString()
         },
         end: {
-          dateTime: new Date(Date.now() + 7200000).toISOString(),
-        },
+          dateTime: new Date(Date.now() + 7200000).toISOString()
+        }
       };
 
       await calendarService.createEvent(payload1);
       await calendarService.createEvent(payload2);
 
       const events = await calendarService.getEvents(calendarId, {
-        q: 'Meeting',
+        q: 'Meeting'
       });
 
       expect(events.every((e) => e.summary.includes('Meeting'))).toBe(true);
@@ -369,18 +369,18 @@ describe('CalendarService', () => {
         calendarId,
         summary: 'Future Event',
         start: {
-          dateTime: tomorrow.toISOString(),
+          dateTime: tomorrow.toISOString()
         },
         end: {
-          dateTime: new Date(tomorrow.getTime() + 3600000).toISOString(),
-        },
+          dateTime: new Date(tomorrow.getTime() + 3600000).toISOString()
+        }
       };
 
       await calendarService.createEvent(payload);
 
       const events = await calendarService.getEvents(calendarId, {
         timeMin: now.toISOString(),
-        timeMax: new Date(now.getTime() + 48 * 60 * 60 * 1000).toISOString(),
+        timeMax: new Date(now.getTime() + 48 * 60 * 60 * 1000).toISOString()
       });
 
       expect(events.length).toBeGreaterThan(0);
@@ -402,7 +402,7 @@ describe('CalendarService', () => {
         isActive: true,
         isPrimary: true,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
 
       await calendarService.addAccount(account);
@@ -438,7 +438,7 @@ describe('CalendarService', () => {
         isActive: true,
         isPrimary: true,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
 
       await calendarService.addAccount(account);
@@ -451,7 +451,7 @@ describe('CalendarService', () => {
         from: { email: 'sender@example.com', name: 'Sender' },
         to: [{ email: 'recipient@example.com' }],
         body: 'Meeting tomorrow at 10 AM',
-        textBody: 'Meeting tomorrow at 10 AM',
+        textBody: 'Meeting tomorrow at 10 AM'
       };
 
       const options = {
@@ -463,7 +463,7 @@ describe('CalendarService', () => {
         defaultDuration: 60,
         defaultReminder: 15,
         autoAddAttendees: true,
-        includeAttachments: false,
+        includeAttachments: false
       };
 
       const event = await calendarService.createEventFromEmail(email, options);
@@ -478,7 +478,7 @@ describe('CalendarService', () => {
     test('should update integration options', () => {
       const newOptions = {
         syncInterval: 600000,
-        autoSync: false,
+        autoSync: false
       };
 
       calendarService.updateOptions(newOptions);

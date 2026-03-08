@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import {
-  useSmartSuggestions,
+  useSmartSuggestions
 } from '../../src/hooks/useSmartSuggestions';
 import {
   SuggestionType,
@@ -10,7 +10,7 @@ import {
   QuickActionType,
   FollowUpAction,
   RecipientType,
-  SuggestionPriority,
+  SuggestionPriority
 } from '../../src/types/smartSuggestions';
 
 const mockEmailContext: SuggestionContext = {
@@ -21,7 +21,7 @@ const mockEmailContext: SuggestionContext = {
   content: 'Hi Jane, would you be available for a meeting tomorrow at 2 PM to discuss the project? Let me know your availability.',
   attachments: [],
   threadLength: 1,
-  timestamp: new Date(),
+  timestamp: new Date()
 };
 
 const mockFollowUpContext: SuggestionContext = {
@@ -32,7 +32,7 @@ const mockFollowUpContext: SuggestionContext = {
   content: 'I will follow up with you next week regarding the project status. Please prepare the documentation.',
   attachments: [],
   threadLength: 3,
-  timestamp: new Date(),
+  timestamp: new Date()
 };
 
 const mockAttachmentContext: SuggestionContext = {
@@ -42,7 +42,7 @@ const mockAttachmentContext: SuggestionContext = {
   recipients: ['me@company.com'],
   content: 'Please find attached the invoice for last month\'s services. Kindly review and process payment.',
   attachments: ['invoice.pdf'],
-  timestamp: new Date(),
+  timestamp: new Date()
 };
 
 const mockPromoContext: SuggestionContext = {
@@ -51,7 +51,7 @@ const mockPromoContext: SuggestionContext = {
   sender: 'lottery@spam.com',
   recipients: ['me@company.com'],
   content: 'Congratulations! You have won a FREE prize! Click here to claim your lottery winnings NOW!',
-  timestamp: new Date(),
+  timestamp: new Date()
 };
 
 describe('useSmartSuggestions Hook', () => {
@@ -83,7 +83,7 @@ describe('useSmartSuggestions Hook', () => {
   describe('generateSuggestions', () => {
     it('should generate suggestions for a valid email context', async () => {
       let suggestionResult;
-      
+
       await act(async () => {
         suggestionResult = await result.current.generateSuggestions(mockEmailContext);
       });
@@ -107,7 +107,7 @@ describe('useSmartSuggestions Hook', () => {
     it('should use cached suggestions on subsequent calls', async () => {
       let firstResult;
       let secondResult;
-      
+
       await act(async () => {
         firstResult = await result.current.generateSuggestions(mockEmailContext);
       });
@@ -121,7 +121,7 @@ describe('useSmartSuggestions Hook', () => {
 
     it('should generate suggestions with correct metadata', async () => {
       let suggestionResult;
-      
+
       await act(async () => {
         suggestionResult = await result.current.generateSuggestions(mockEmailContext);
       });
@@ -156,7 +156,7 @@ describe('useSmartSuggestions Hook', () => {
       });
 
       const replySuggestions = result.current.getReplySuggestions('email-123');
-      
+
       replySuggestions.forEach(suggestion => {
         expect(Object.values(ReplyCategory)).toContain(suggestion.category);
       });
@@ -214,7 +214,7 @@ describe('useSmartSuggestions Hook', () => {
       });
 
       const actionSuggestions = result.current.getQuickActionSuggestions('email-123');
-      
+
       actionSuggestions.forEach(suggestion => {
         expect(Object.values(SuggestionPriority)).toContain(suggestion.priority);
       });
@@ -255,7 +255,7 @@ describe('useSmartSuggestions Hook', () => {
       const longThreadContext: SuggestionContext = {
         ...mockEmailContext,
         emailId: 'long-thread',
-        threadLength: 5,
+        threadLength: 5
       };
 
       await act(async () => {
@@ -272,7 +272,7 @@ describe('useSmartSuggestions Hook', () => {
       const attachmentContext: SuggestionContext = {
         ...mockEmailContext,
         emailId: 'attachment-email',
-        content: 'Please find attached the invoice for your review.',
+        content: 'Please find attached the invoice for your review.'
       };
 
       await act(async () => {
@@ -280,7 +280,7 @@ describe('useSmartSuggestions Hook', () => {
       });
 
       const attachmentSuggestions = result.current.getAttachmentSuggestions('attachment-email');
-      
+
       attachmentSuggestions.forEach(suggestion => {
         expect(suggestion.type).toBe(SuggestionType.ATTACHMENT);
         expect(suggestion.fileName).toBeDefined();
@@ -303,7 +303,7 @@ describe('useSmartSuggestions Hook', () => {
       const teamContext: SuggestionContext = {
         ...mockEmailContext,
         emailId: 'team-email',
-        content: 'I need to discuss this with my manager and the team.',
+        content: 'I need to discuss this with my manager and the team.'
       };
 
       await act(async () => {
@@ -311,7 +311,7 @@ describe('useSmartSuggestions Hook', () => {
       });
 
       const recipientSuggestions = result.current.getRecipientSuggestions('team-email');
-      
+
       recipientSuggestions.forEach(suggestion => {
         expect(suggestion.type).toBe(SuggestionType.RECIPIENT);
         expect(Object.values(RecipientType)).toContain(suggestion.recipientType);
@@ -327,7 +327,7 @@ describe('useSmartSuggestions Hook', () => {
         ...mockEmailContext,
         emailId: 'project-email',
         subject: 'Project Update',
-        content: 'Here is the latest update on the project milestone.',
+        content: 'Here is the latest update on the project milestone.'
       };
 
       await act(async () => {
@@ -335,7 +335,7 @@ describe('useSmartSuggestions Hook', () => {
       });
 
       const labelSuggestions = result.current.getLabelSuggestions('project-email');
-      
+
       labelSuggestions.forEach(suggestion => {
         expect(suggestion.type).toBe(SuggestionType.LABEL);
         expect(suggestion.label).toBeDefined();
@@ -462,7 +462,7 @@ describe('useSmartSuggestions Hook', () => {
             accepted: true,
             timestamp: new Date(),
             rating: 4,
-            comment: 'Great suggestion!',
+            comment: 'Great suggestion!'
           });
         });
 
@@ -560,7 +560,7 @@ describe('useSmartSuggestions Hook', () => {
   describe('performance', () => {
     it('should generate suggestions within 100ms', async () => {
       const start = performance.now();
-      
+
       await act(async () => {
         await result.current.generateSuggestions(mockEmailContext);
       });
@@ -572,11 +572,11 @@ describe('useSmartSuggestions Hook', () => {
     it('should batch process efficiently', async () => {
       const contexts = Array.from({ length: 10 }, (_, i) => ({
         ...mockEmailContext,
-        emailId: `email-${i}`,
+        emailId: `email-${i}`
       }));
 
       const start = performance.now();
-      
+
       await act(async () => {
         await result.current.batchGenerateSuggestions(contexts);
       });

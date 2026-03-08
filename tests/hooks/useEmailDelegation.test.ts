@@ -6,8 +6,8 @@ import type { DelegationPermission } from '../../src/types/delegation';
 // Mock the useNotifications hook
 vi.mock('../../src/hooks/useNotifications', () => ({
   useNotifications: () => ({
-    addNotification: vi.fn(),
-  }),
+    addNotification: vi.fn()
+  })
 }));
 
 describe('useEmailDelegation', () => {
@@ -34,7 +34,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: 'user-2',
-          permission: 'send_on_behalf',
+          permission: 'send_on_behalf'
         },
         currentUserId,
         currentUserName,
@@ -60,7 +60,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: 'user-2',
-          permission: 'send_on_behalf',
+          permission: 'send_on_behalf'
         },
         'user-1',
         'John Doe',
@@ -75,7 +75,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: 'user-2',
-          permission: 'send_as',
+          permission: 'send_as'
         },
         'user-1',
         'John Doe',
@@ -97,7 +97,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: delegateId,
-          permission: 'send_on_behalf',
+          permission: 'send_on_behalf'
         },
         ownerId,
         'John Doe',
@@ -126,7 +126,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: 'user-2',
-          permission: 'send_on_behalf',
+          permission: 'send_on_behalf'
         },
         currentUserId,
         'John Doe',
@@ -153,7 +153,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: 'user-2',
-          permission: 'send_on_behalf',
+          permission: 'send_on_behalf'
         },
         currentUserId,
         'John Doe',
@@ -194,7 +194,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: 'user-2',
-          permission: 'send_on_behalf',
+          permission: 'send_on_behalf'
         },
         currentUserId,
         'John Doe',
@@ -224,7 +224,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: 'user-2',
-          permission: 'send_on_behalf',
+          permission: 'send_on_behalf'
         },
         'user-1',
         'John Doe',
@@ -252,7 +252,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: 'user-2',
-          permission: 'send_on_behalf',
+          permission: 'send_on_behalf'
         },
         ownerId,
         'John Doe',
@@ -276,7 +276,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: delegateId,
-          permission: 'send_on_behalf',
+          permission: 'send_on_behalf'
         },
         'user-1',
         'John Doe',
@@ -307,7 +307,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: delegateId,
-          permission: 'send_on_behalf',
+          permission: 'send_on_behalf'
         },
         ownerId,
         'John Doe',
@@ -343,7 +343,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: delegateId,
-          permission: 'manage',
+          permission: 'manage'
         },
         ownerId,
         'John Doe',
@@ -372,7 +372,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: 'user-2',
-          permission: 'send_on_behalf',
+          permission: 'send_on_behalf'
         },
         'user-1',
         'John Doe',
@@ -384,7 +384,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'bob@example.com',
           delegateName: 'Bob Johnson',
           delegateId: 'user-3',
-          permission: 'manage',
+          permission: 'manage'
         },
         'user-1',
         'John Doe',
@@ -409,7 +409,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: 'user-2',
-          permission: 'send_on_behalf',
+          permission: 'send_on_behalf'
         },
         'user-1',
         'John Doe',
@@ -421,7 +421,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'bob@example.com',
           delegateName: 'Bob Johnson',
           delegateId: 'user-3',
-          permission: 'manage',
+          permission: 'manage'
         },
         'user-1',
         'John Doe',
@@ -431,7 +431,7 @@ describe('useEmailDelegation', () => {
 
     const sorted = result.current.getFilteredDelegations(undefined, {
       field: 'delegateName',
-      order: 'asc',
+      order: 'asc'
     });
 
     expect(sorted[0].delegateName).toBe('Bob Johnson');
@@ -447,7 +447,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: 'user-2',
-          permission: 'send_on_behalf',
+          permission: 'send_on_behalf'
         },
         'user-1',
         'John Doe',
@@ -476,7 +476,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: 'user-2',
-          permission: 'send_on_behalf',
+          permission: 'send_on_behalf'
         },
         'user-1',
         'John Doe',
@@ -498,7 +498,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: 'user-2',
-          permission: 'send_on_behalf',
+          permission: 'send_on_behalf'
         },
         'user-1',
         'John Doe',
@@ -521,7 +521,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'jane@example.com',
           delegateName: 'Jane Smith',
           delegateId: 'user-2',
-          permission: 'send_as',
+          permission: 'send_as'
         },
         'user-1',
         'John Doe',
@@ -538,7 +538,7 @@ describe('useEmailDelegation', () => {
           delegateEmail: 'bob@example.com',
           delegateName: 'Bob Johnson',
           delegateId: 'user-3',
-          permission: 'manage',
+          permission: 'manage'
         },
         'user-1',
         'John Doe',

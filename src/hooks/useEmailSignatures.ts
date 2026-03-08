@@ -11,7 +11,7 @@ import {
   SignatureFilterOptions,
   SignaturePreviewOptions,
   SignatureStats,
-  SignatureUsageLog,
+  SignatureUsageLog
 } from '../types/emailSignatures';
 
 const STORAGE_KEY = 'v-mail-signatures';
@@ -30,7 +30,7 @@ const DEFAULT_TEMPLATES: SignatureTemplate[] = [
       <tr><td style="padding-bottom: 5px;"><strong>{{fullName}}</strong></td></tr>
       <tr><td style="color: #666;">{{title}} | {{company}}</td></tr>
       <tr><td style="padding-top: 10px;">
-        <a href="tel:{{phone}}">{{phone}}</a> | 
+        <a href="tel:{{phone}}">{{phone}}</a> |
         <a href="mailto:{{email}}">{{email}}</a>
       </td></tr>
     </table>`,
@@ -38,7 +38,7 @@ const DEFAULT_TEMPLATES: SignatureTemplate[] = [
     variables: ['fullName', 'title', 'company', 'phone', 'email'],
     isPremium: false,
     createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z'
   },
   {
     id: 'tpl-minimal-1',
@@ -54,7 +54,7 @@ const DEFAULT_TEMPLATES: SignatureTemplate[] = [
     variables: ['fullName', 'title', 'email'],
     isPremium: false,
     createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z'
   },
   {
     id: 'tpl-corporate-1',
@@ -82,7 +82,7 @@ const DEFAULT_TEMPLATES: SignatureTemplate[] = [
     variables: ['fullName', 'title', 'department', 'company', 'phone', 'mobile', 'email', 'website', 'logoUrl'],
     isPremium: true,
     createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z'
   },
   {
     id: 'tpl-creative-1',
@@ -101,8 +101,8 @@ const DEFAULT_TEMPLATES: SignatureTemplate[] = [
     variables: ['fullName', 'title', 'company', 'email', 'primaryColor'],
     isPremium: false,
     createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
-  },
+    updatedAt: '2024-01-01T00:00:00Z'
+  }
 ];
 
 /**
@@ -131,7 +131,7 @@ export function useEmailSignatures() {
         if (stored) {
           setSignatures(JSON.parse(stored));
         }
-        
+
         const storedLogs = localStorage.getItem(`${STORAGE_KEY}-logs`);
         if (storedLogs) {
           setUsageLogs(JSON.parse(storedLogs));
@@ -142,7 +142,7 @@ export function useEmailSignatures() {
       }
       setIsLoading(false);
     };
-    
+
     loadData();
   }, []);
 
@@ -199,11 +199,11 @@ export function useEmailSignatures() {
         fax: payload.contactInfo?.fax,
         email: payload.contactInfo?.email,
         website: payload.contactInfo?.website,
-        address: payload.contactInfo?.address,
+        address: payload.contactInfo?.address
       },
       socialLinks: (payload.socialLinks || []).map((link, index) => ({
         id: `social-${index}`,
-        ...link,
+        ...link
       })),
       logoUrl: payload.logoUrl,
       photoUrl: payload.photoUrl,
@@ -221,7 +221,7 @@ export function useEmailSignatures() {
       tags: payload.tags || [],
       createdAt: now,
       updatedAt: now,
-      usageCount: 0,
+      usageCount: 0
     };
 
     // If this is set as default, remove default from others
@@ -241,15 +241,17 @@ export function useEmailSignatures() {
   // Update an existing signature
   const updateSignature = useCallback(async (id: string, payload: UpdateSignaturePayload): Promise<EmailSignature | null> => {
     let updatedSignature: EmailSignature | null = null;
-    
+
     saveSignatures(prev => {
       const index = prev.findIndex(s => s.id === id);
-      if (index === -1) return prev;
+      if (index === -1) {
+return prev;
+}
 
       const updated: EmailSignature = {
         ...prev[index],
         ...payload,
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
       updatedSignature = updated;
 
@@ -271,7 +273,7 @@ export function useEmailSignatures() {
   // Delete a signature
   const deleteSignature = useCallback(async (id: string): Promise<boolean> => {
     let deleted = false;
-    
+
     saveSignatures(prev => {
       const filtered = prev.filter(s => s.id !== id);
       if (filtered.length !== prev.length) {
@@ -279,52 +281,58 @@ export function useEmailSignatures() {
       }
       return filtered;
     });
-    
+
     return deleted;
   }, [saveSignatures]);
 
   // Set default signature
   const setDefaultSignature = useCallback(async (id: string): Promise<boolean> => {
     let found = false;
-    
+
     saveSignatures(prev => {
       const signature = prev.find(s => s.id === id);
-      if (!signature) return prev;
+      if (!signature) {
+return prev;
+}
       found = true;
 
       return prev.map(s => ({
         ...s,
-        isDefault: s.id === id,
+        isDefault: s.id === id
       }));
     });
-    
+
     return found;
   }, [saveSignatures]);
 
   // Toggle signature active state
   const toggleSignatureActive = useCallback(async (id: string, active?: boolean): Promise<boolean> => {
     let found = false;
-    
+
     saveSignatures(prev => {
       const signature = prev.find(s => s.id === id);
-      if (!signature) return prev;
+      if (!signature) {
+return prev;
+}
       found = true;
 
       return prev.map(s =>
         s.id === id ? { ...s, isActive: active !== undefined ? active : !s.isActive, updatedAt: new Date().toISOString() } : s
       );
     });
-    
+
     return found;
   }, [saveSignatures]);
 
   // Duplicate a signature
   const duplicateSignature = useCallback(async (id: string): Promise<EmailSignature | null> => {
     let duplicated: EmailSignature | null = null;
-    
+
     saveSignatures(prev => {
       const signature = prev.find(s => s.id === id);
-      if (!signature) return prev;
+      if (!signature) {
+return prev;
+}
 
       const now = new Date().toISOString();
       duplicated = {
@@ -334,12 +342,12 @@ export function useEmailSignatures() {
         isDefault: false,
         createdAt: now,
         updatedAt: now,
-        usageCount: 0,
+        usageCount: 0
       };
 
       return [...prev, duplicated!];
     });
-    
+
     return duplicated;
   }, [saveSignatures]);
 
@@ -400,9 +408,9 @@ export function useEmailSignatures() {
   // Render signature with variables replaced
   const renderSignature = useCallback((signature: EmailSignature, format: 'html' | 'plain' = 'html'): string => {
     const template = format === 'html' ? signature.htmlContent : signature.plainTextContent;
-    
+
     let rendered = template;
-    
+
     // Replace variables
     rendered = rendered.replace(/\{\{fullName\}\}/g, signature.fullName);
     rendered = rendered.replace(/\{\{firstName\}\}/g, signature.firstName || '');
@@ -419,20 +427,24 @@ export function useEmailSignatures() {
     rendered = rendered.replace(/\{\{photoUrl\}\}/g, signature.photoUrl || '');
     rendered = rendered.replace(/\{\{primaryColor\}\}/g, signature.primaryColor || '#0066cc');
     rendered = rendered.replace(/\{\{secondaryColor\}\}/g, signature.secondaryColor || '#666666');
-    
+
     return rendered;
   }, []);
 
   // Render signature by ID
   const renderSignatureById = useCallback((signatureId: string, format: 'html' | 'plain' = 'html'): string => {
     const signature = signatures.find(s => s.id === signatureId);
-    if (!signature) return '';
-    
+    if (!signature) {
+return '';
+}
+
     const template = format === 'html' ? signature.htmlContent : signature.plainTextContent;
-    if (!template) return '';
-    
+    if (!template) {
+return '';
+}
+
     let rendered = template;
-    
+
     // Replace variables
     rendered = rendered.replace(/{{fullName}}/g, signature.fullName || '');
     rendered = rendered.replace(/{{firstName}}/g, signature.firstName || '');
@@ -449,30 +461,32 @@ export function useEmailSignatures() {
     rendered = rendered.replace(/{{photoUrl}}/g, signature.photoUrl || '');
     rendered = rendered.replace(/{{primaryColor}}/g, signature.primaryColor || '#0066cc');
     rendered = rendered.replace(/{{secondaryColor}}/g, signature.secondaryColor || '#666666');
-    
+
     return rendered;
   }, [signatures]);
 
   // Preview signature with custom data
   const previewSignature = useCallback((template: string, data: Record<string, string>): string => {
     let rendered = template;
-    
+
     // Replace all provided variables
     Object.keys(data).forEach(key => {
       const regex = new RegExp(`{{${key}}}`, 'g');
       rendered = rendered.replace(regex, data[key] || '');
     });
-    
+
     return rendered;
   }, []);
 
   // Log signature usage
   const logUsage = useCallback((signatureId: string, emailId: string, emailType: 'new' | 'reply' | 'forward', recipientEmail: string): void => {
     const now = new Date().toISOString();
-    
+
     // Find the signature first to get its name
     const signature = signatures.find(s => s.id === signatureId);
-    if (!signature) return;
+    if (!signature) {
+return;
+}
 
     // Update usage count
     saveSignatures(prev => prev.map(s =>
@@ -489,7 +503,7 @@ export function useEmailSignatures() {
       emailId,
       emailType,
       recipientEmail,
-      usedAt: now,
+      usedAt: now
     };
     saveUsageLogs(prev => [log, ...prev].slice(0, 100)); // Keep last 100 logs
   }, [signatures, saveSignatures, saveUsageLogs]);
@@ -498,7 +512,7 @@ export function useEmailSignatures() {
   const getStats = useCallback((): SignatureStats => {
     const active = signatures.filter(s => s.isActive);
     const defaultSig = signatures.find(s => s.isDefault);
-    
+
     const usageByProvider: Record<string, number> = {};
     signatures.forEach(s => {
       const provider = s.provider || 'custom';
@@ -513,7 +527,7 @@ export function useEmailSignatures() {
       .map(log => ({
         signatureId: log.signatureId,
         signatureName: log.signatureName,
-        usedAt: log.usedAt,
+        usedAt: log.usedAt
       }));
 
     return {
@@ -523,7 +537,7 @@ export function useEmailSignatures() {
       totalUsage,
       usageByProvider,
       mostUsedSignature: mostUsed?.id,
-      recentlyUsed,
+      recentlyUsed
     };
   }, [signatures, usageLogs]);
 
@@ -540,7 +554,9 @@ export function useEmailSignatures() {
   // Create signature from template
   const createFromTemplate = useCallback(async (templateId: string, data: Partial<CreateSignaturePayload>): Promise<EmailSignature | null> => {
     const template = templates.find(t => t.id === templateId);
-    if (!template) return null;
+    if (!template) {
+return null;
+}
 
     const payload: CreateSignaturePayload = {
       name: data.name || template.name,
@@ -553,7 +569,7 @@ export function useEmailSignatures() {
       company: data.company,
       contactInfo: data.contactInfo,
       templateId,
-      ...data,
+      ...data
     };
 
     return createSignature(payload);
@@ -562,15 +578,17 @@ export function useEmailSignatures() {
   // Add social link to signature
   const addSocialLink = useCallback(async (signatureId: string, link: Omit<SignatureSocialLink, 'id'>): Promise<boolean> => {
     let found = false;
-    
+
     saveSignatures(prev => {
       const signature = prev.find(s => s.id === signatureId);
-      if (!signature) return prev;
+      if (!signature) {
+return prev;
+}
       found = true;
 
       const newLink: SignatureSocialLink = {
         id: `social-${Date.now()}`,
-        ...link,
+        ...link
       };
 
       return prev.map(s =>
@@ -579,17 +597,19 @@ export function useEmailSignatures() {
           : s
       );
     });
-    
+
     return found;
   }, [saveSignatures]);
 
   // Remove social link from signature
   const removeSocialLink = useCallback(async (signatureId: string, linkId: string): Promise<boolean> => {
     let found = false;
-    
+
     saveSignatures(prev => {
       const signature = prev.find(s => s.id === signatureId);
-      if (!signature) return prev;
+      if (!signature) {
+return prev;
+}
       found = true;
 
       return prev.map(s =>
@@ -598,7 +618,7 @@ export function useEmailSignatures() {
           : s
       );
     });
-    
+
     return found;
   }, [saveSignatures]);
 
@@ -612,8 +632,10 @@ export function useEmailSignatures() {
     try {
       const imported: EmailSignature[] = JSON.parse(jsonData);
       const valid = imported.filter(s => s.id && s.name && s.fullName);
-      
-      if (valid.length === 0) return 0;
+
+      if (valid.length === 0) {
+return 0;
+}
 
       // Generate new IDs to avoid conflicts
       const withNewIds = valid.map(s => ({
@@ -621,7 +643,7 @@ export function useEmailSignatures() {
         id: generateId(),
         isDefault: false,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       }));
 
       saveSignatures(prev => [...prev, ...withNewIds]);
@@ -685,6 +707,6 @@ export function useEmailSignatures() {
     // Import/Export
     exportSignatures,
     importSignatures,
-    clearAllSignatures,
+    clearAllSignatures
   };
 }

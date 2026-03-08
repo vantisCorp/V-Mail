@@ -292,24 +292,24 @@ export const DEFAULT_PREDICTIVE_TYPING_CONFIG: PredictiveTypingConfig = {
     name: 'smart-compose',
     version: '1.0.0',
     maxTokens: 100,
-    temperature: 0.7,
+    temperature: 0.7
   },
   performance: {
     cacheEnabled: true,
     cacheSize: 1000,
-    debounceMs: 150,
+    debounceMs: 150
   },
   learning: {
     enabled: true,
     persistenceEnabled: true,
-    minSamples: 5,
+    minSamples: 5
   },
   suggestions: {
     maxCompletions: 5,
     maxPhrases: 3,
     maxCorrections: 2,
-    minConfidence: 0.3,
-  },
+    minConfidence: 0.3
+  }
 };
 
 // ============================================================================
@@ -324,7 +324,7 @@ export const DEFAULT_USER_PREFERENCES: UserPreferences = {
   enableStyle: false,
   enableTemplates: true,
   learningRate: 0.1,
-  language: 'en',
+  language: 'en'
 };
 
 // ============================================================================
@@ -337,21 +337,21 @@ export const COMMON_PHRASES = {
     'Hi {name},',
     'Hello {name},',
     'Good morning,',
-    'Good afternoon,',
+    'Good afternoon,'
   ],
   openings: [
     'I hope this email finds you well.',
     'I am writing to regarding...',
     'Following up on our previous conversation...',
     'Thank you for your email.',
-    'I wanted to reach out to you regarding...',
+    'I wanted to reach out to you regarding...'
   ],
   transitions: [
     'Furthermore,',
     'In addition,',
     'Moving on to the next point,',
     'With regards to the above,',
-    'Additionally,',
+    'Additionally,'
   ],
   closings: [
     'Best regards,',
@@ -359,14 +359,14 @@ export const COMMON_PHRASES = {
     'Best,',
     'Thank you,',
     'Looking forward to hearing from you,',
-    'Regards,',
+    'Regards,'
   ],
   actions: [
     'Please let me know if you have any questions.',
     'Feel free to contact me if you need any clarification.',
     'I will get back to you as soon as possible.',
-    'Please confirm receipt of this email.',
-  ],
+    'Please confirm receipt of this email.'
+  ]
 };
 
 export const EMAIL_TEMPLATES = {
@@ -374,32 +374,32 @@ export const EMAIL_TEMPLATES = {
     id: 'template-meeting',
     name: 'Meeting Request',
     category: 'scheduling',
-    content: 'Dear {name},\n\nI would like to request a meeting to discuss {topic}.\n\nPlease let me know your availability for the following dates:\n- {date1}\n- {date2}\n- {date3}\n\nBest regards,\n{sender}',
+    content: 'Dear {name},\n\nI would like to request a meeting to discuss {topic}.\n\nPlease let me know your availability for the following dates:\n- {date1}\n- {date2}\n- {date3}\n\nBest regards,\n{sender}'
   },
   follow_up: {
     id: 'template-follow-up',
     name: 'Follow Up',
     category: 'follow-up',
-    content: 'Hi {name},\n\nI wanted to follow up on our previous conversation regarding {topic}.\n\nHave you had a chance to review the materials I sent?\n\nPlease let me know if you need any additional information.\n\nBest,\n{sender}',
+    content: 'Hi {name},\n\nI wanted to follow up on our previous conversation regarding {topic}.\n\nHave you had a chance to review the materials I sent?\n\nPlease let me know if you need any additional information.\n\nBest,\n{sender}'
   },
   introduction: {
     id: 'template-introduction',
     name: 'Introduction',
     category: 'introduction',
-    content: 'Dear {name},\n\nI would like to introduce myself. My name is {sender} and I am the {role} at {company}.\n\nI am reaching out to you regarding {reason}.\n\nI look forward to connecting with you.\n\nBest regards,\n{sender}',
+    content: 'Dear {name},\n\nI would like to introduce myself. My name is {sender} and I am the {role} at {company}.\n\nI am reaching out to you regarding {reason}.\n\nI look forward to connecting with you.\n\nBest regards,\n{sender}'
   },
   thank_you: {
     id: 'template-thank-you',
     name: 'Thank You',
     category: 'thank-you',
-    content: 'Dear {name},\n\nThank you very much for {action}.\n\nI truly appreciate your help and support.\n\nPlease let me know if there is anything I can do to return the favor.\n\nBest regards,\n{sender}',
+    content: 'Dear {name},\n\nThank you very much for {action}.\n\nI truly appreciate your help and support.\n\nPlease let me know if there is anything I can do to return the favor.\n\nBest regards,\n{sender}'
   },
   apology: {
     id: 'template-apology',
     name: 'Apology',
     category: 'apology',
-    content: 'Dear {name},\n\nI would like to sincerely apologize for {issue}.\n\nI understand that this has caused inconvenience and I take full responsibility.\n\nI will ensure that this does not happen again in the future.\n\nPlease accept my sincerest apologies.\n\nSincerely,\n{sender}',
-  },
+    content: 'Dear {name},\n\nI would like to sincerely apologize for {issue}.\n\nI understand that this has caused inconvenience and I take full responsibility.\n\nI will ensure that this does not happen again in the future.\n\nPlease accept my sincerest apologies.\n\nSincerely,\n{sender}'
+  }
 };
 
 // ============================================================================
@@ -410,54 +410,54 @@ export const COMMON_GRAMMAR_ERRORS = {
   its: {
     pattern: /\bits\b/gi,
     correction: 'it\'s',
-    explanation: 'Use "it\'s" as a contraction for "it is" or "it has"',
+    explanation: 'Use "it\'s" as a contraction for "it is" or "it has"'
   },
   your: {
     pattern: /\byour\b/gi,
     correction: 'you\'re',
-    explanation: 'Use "you\'re" as a contraction for "you are"',
+    explanation: 'Use "you\'re" as a contraction for "you are"'
   },
   their: {
     pattern: /\btheir\b/gi,
     correction: 'they\'re',
-    explanation: 'Use "they\'re" as a contraction for "they are"',
+    explanation: 'Use "they\'re" as a contraction for "they are"'
   },
   then: {
     pattern: /\bthen\b/gi,
     correction: 'than',
-    explanation: 'Use "than" for comparisons, "then" for time',
+    explanation: 'Use "than" for comparisons, "then" for time'
   },
   could: {
     pattern: /\bcould of\b/gi,
     correction: 'could have',
-    explanation: 'The correct phrase is "could have", not "could of"',
+    explanation: 'The correct phrase is "could have", not "could of"'
   },
   should: {
     pattern: /\bshould of\b/gi,
     correction: 'should have',
-    explanation: 'The correct phrase is "should have", not "should of"',
+    explanation: 'The correct phrase is "should have", not "should of"'
   },
   would: {
     pattern: /\bwould of\b/gi,
     correction: 'would have',
-    explanation: 'The correct phrase is "would have", not "would of"',
-  },
+    explanation: 'The correct phrase is "would have", not "would of"'
+  }
 };
 
 export const STYLE_IMPROVEMENTS = {
   wordy: {
     pattern: /\b(in order to)\b/gi,
     improvement: 'to',
-    explanation: 'Simplify by removing unnecessary words',
+    explanation: 'Simplify by removing unnecessary words'
   },
   passive: {
     pattern: /\b(was|were) (written|sent|done|made|created)\b/gi,
     improvement: 'active voice suggestion',
-    explanation: 'Consider using active voice for clearer communication',
+    explanation: 'Consider using active voice for clearer communication'
   },
   filler: {
     pattern: /\b(basically|actually|literally|really)\b/gi,
     improvement: 'remove',
-    explanation: 'Remove filler words for more professional writing',
-  },
+    explanation: 'Remove filler words for more professional writing'
+  }
 };

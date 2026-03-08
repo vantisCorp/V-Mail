@@ -4,7 +4,7 @@ import type {
   FolderPermission,
   ShareTargetType,
   SharedFolder,
-  SharedFolderParticipant,
+  SharedFolderParticipant
 } from '../types/sharedFolders';
 
 interface SharedFoldersSettingsProps {
@@ -20,15 +20,15 @@ const PermissionBadge: React.FC<{ permission: FolderPermission }> = ({ permissio
   const colors = {
     read: 'bg-blue-500/20 text-blue-400',
     write: 'bg-yellow-500/20 text-yellow-400',
-    admin: 'bg-red-500/20 text-red-400',
+    admin: 'bg-red-500/20 text-red-400'
   };
-  
+
   const labels = {
     read: 'Read Only',
     write: 'Read/Write',
-    admin: 'Admin',
+    admin: 'Admin'
   };
-  
+
   return (
     <span className={`px-2 py-1 rounded text-xs font-medium ${colors[permission]}`}>
       {labels[permission]}
@@ -41,9 +41,9 @@ const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
     pending: 'bg-yellow-500/20 text-yellow-400',
     accepted: 'bg-green-500/20 text-green-400',
     declined: 'bg-red-500/20 text-red-400',
-    revoked: 'bg-gray-500/20 text-gray-400',
+    revoked: 'bg-gray-500/20 text-gray-400'
   };
-  
+
   return (
     <span className={`px-2 py-1 rounded text-xs font-medium capitalize ${colors[status as keyof typeof colors]}`}>
       {status}
@@ -80,12 +80,16 @@ const ShareDialog: React.FC<{
   const [targetEmail, setTargetEmail] = useState('');
   const [permission, setPermission] = useState<FolderPermission>('read');
   const [message, setMessage] = useState('');
-  
-  if (!isOpen) return null;
-  
+
+  if (!isOpen) {
+return null;
+}
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!targetId || !targetName) return;
+    if (!targetId || !targetName) {
+return;
+}
     onShare(targetType, targetId, targetName, targetEmail, permission, message || undefined);
     // Reset form
     setTargetId('');
@@ -95,7 +99,7 @@ const ShareDialog: React.FC<{
     setMessage('');
     onClose();
   };
-  
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-gray-800 rounded-lg p-6 w-full max-w-md shadow-xl">
@@ -113,7 +117,7 @@ const ShareDialog: React.FC<{
                 <option value="team">Team</option>
               </select>
             </div>
-            
+
             <div>
               <label className="block text-sm text-gray-400 mb-1">
                 {targetType === 'user' ? 'User ID' : 'Team ID'}
@@ -127,7 +131,7 @@ const ShareDialog: React.FC<{
                 required
               />
             </div>
-            
+
             <div>
               <label className="block text-sm text-gray-400 mb-1">Name</label>
               <input
@@ -139,7 +143,7 @@ const ShareDialog: React.FC<{
                 required
               />
             </div>
-            
+
             {targetType === 'user' && (
               <div>
                 <label className="block text-sm text-gray-400 mb-1">Email (optional)</label>
@@ -152,12 +156,12 @@ const ShareDialog: React.FC<{
                 />
               </div>
             )}
-            
+
             <div>
               <label className="block text-sm text-gray-400 mb-1">Permission</label>
               <PermissionSelect value={permission} onChange={setPermission} />
             </div>
-            
+
             <div>
               <label className="block text-sm text-gray-400 mb-1">Message (optional)</label>
               <textarea
@@ -169,7 +173,7 @@ const ShareDialog: React.FC<{
               />
             </div>
           </div>
-          
+
           <div className="flex justify-end gap-3 mt-6">
             <button
               type="button"
@@ -211,7 +215,7 @@ const ParticipantRow: React.FC<{
       </div>
       <StatusBadge status={participant.status} />
     </div>
-    
+
     <div className="flex items-center gap-2">
       {isOwner && participant.status === 'accepted' && (
         <PermissionSelect
@@ -241,7 +245,7 @@ const FolderCard: React.FC<{
   onRemove: (participantId: string) => void;
 }> = ({ folder, isOwner, onShare, onUpdatePermission, onRevoke, onRemove }) => {
   const [expanded, setExpanded] = useState(false);
-  
+
   return (
     <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
       <div
@@ -260,7 +264,7 @@ const FolderCard: React.FC<{
             </div>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-2">
           {isOwner && (
             <button
@@ -276,7 +280,7 @@ const FolderCard: React.FC<{
           <span className="text-gray-500">{expanded ? '▼' : '▶'}</span>
         </div>
       </div>
-      
+
       {expanded && (
         <div className="border-t border-gray-700 p-4">
           <div className="text-sm text-gray-400 mb-3">Participants</div>
@@ -295,7 +299,7 @@ const FolderCard: React.FC<{
               <div className="text-gray-500 text-sm py-2">No participants yet</div>
             )}
           </div>
-          
+
           <div className="mt-4 pt-4 border-t border-gray-700">
             <div className="text-xs text-gray-500">
               <div>Owner: {folder.ownerName}</div>
@@ -315,7 +319,7 @@ export const SharedFoldersSettings: React.FC<SharedFoldersSettingsProps> = ({
   currentUserId,
   currentUserName,
   currentUserEmail,
-  onClose,
+  onClose
 }) => {
   const {
     sharedFolders,
@@ -329,17 +333,17 @@ export const SharedFoldersSettings: React.FC<SharedFoldersSettingsProps> = ({
     declineInvitation,
     revokeAccess,
     getFoldersOwnedByUser,
-    getFoldersSharedWithUser,
+    getFoldersSharedWithUser
   } = useSharedFolders();
-  
+
   const [activeTab, setActiveTab] = useState<TabType>('my-shares');
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   const myFolders = useMemo(() => getFoldersOwnedByUser(currentUserId), [getFoldersOwnedByUser, currentUserId]);
   const sharedWithMe = useMemo(() => getFoldersSharedWithUser(currentUserId), [getFoldersSharedWithUser, currentUserId]);
-  
+
   const handleShare = (
     targetType: ShareTargetType,
     targetId: string,
@@ -348,8 +352,10 @@ export const SharedFoldersSettings: React.FC<SharedFoldersSettingsProps> = ({
     permission: FolderPermission,
     message?: string
   ) => {
-    if (!selectedFolderId) return;
-    
+    if (!selectedFolderId) {
+return;
+}
+
     shareFolder(
       {
         folderId: selectedFolderId,
@@ -358,13 +364,13 @@ export const SharedFoldersSettings: React.FC<SharedFoldersSettingsProps> = ({
         targetName,
         targetEmail,
         permission,
-        message,
+        message
       },
       currentUserId,
       currentUserName
     );
   };
-  
+
   const handleUpdatePermission = (folderId: string, participantId: string, permission: FolderPermission) => {
     updatePermission(
       { folderId, participantId, newPermission: permission },
@@ -372,22 +378,22 @@ export const SharedFoldersSettings: React.FC<SharedFoldersSettingsProps> = ({
       currentUserName
     );
   };
-  
+
   const handleRevoke = (folderId: string, participantId: string) => {
     revokeAccess(folderId, participantId, currentUserId, currentUserName);
   };
-  
+
   const handleRemove = (folderId: string, participantId: string) => {
     unshareFolder(folderId, participantId, currentUserId, currentUserName);
   };
-  
+
   const tabs: { id: TabType; label: string; count?: number }[] = [
     { id: 'my-shares', label: 'My Shared Folders', count: myFolders.length },
     { id: 'shared-with-me', label: 'Shared with Me', count: sharedWithMe.length },
     { id: 'invitations', label: 'Invitations', count: invitations.filter(i => i.status === 'pending').length },
-    { id: 'activity', label: 'Activity' },
+    { id: 'activity', label: 'Activity' }
   ];
-  
+
   return (
     <div className="shared-folders-settings">
       <div className="flex items-center justify-between mb-6">
@@ -401,7 +407,7 @@ export const SharedFoldersSettings: React.FC<SharedFoldersSettingsProps> = ({
           </button>
         )}
       </div>
-      
+
       {/* Stats */}
       <div className="grid grid-cols-4 gap-4 mb-6">
         <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
@@ -421,7 +427,7 @@ export const SharedFoldersSettings: React.FC<SharedFoldersSettingsProps> = ({
           <div className="text-sm text-gray-400">Active Shares</div>
         </div>
       </div>
-      
+
       {/* Tabs */}
       <div className="flex border-b border-gray-700 mb-6">
         {tabs.map((tab) => (
@@ -443,7 +449,7 @@ export const SharedFoldersSettings: React.FC<SharedFoldersSettingsProps> = ({
           </button>
         ))}
       </div>
-      
+
       {/* Search */}
       <div className="mb-4">
         <input
@@ -454,7 +460,7 @@ export const SharedFoldersSettings: React.FC<SharedFoldersSettingsProps> = ({
           className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-gray-200 placeholder-gray-500 focus:outline-none focus:border-blue-500"
         />
       </div>
-      
+
       {/* Content */}
       <div className="space-y-4">
         {activeTab === 'my-shares' && (
@@ -486,7 +492,7 @@ export const SharedFoldersSettings: React.FC<SharedFoldersSettingsProps> = ({
             )}
           </>
         )}
-        
+
         {activeTab === 'shared-with-me' && (
           <>
             {sharedWithMe
@@ -510,7 +516,7 @@ export const SharedFoldersSettings: React.FC<SharedFoldersSettingsProps> = ({
             )}
           </>
         )}
-        
+
         {activeTab === 'invitations' && (
           <>
             {invitations
@@ -557,7 +563,7 @@ export const SharedFoldersSettings: React.FC<SharedFoldersSettingsProps> = ({
             )}
           </>
         )}
-        
+
         {activeTab === 'activity' && (
           <>
             {activities.slice(0, 20).map((activity) => (
@@ -583,7 +589,7 @@ export const SharedFoldersSettings: React.FC<SharedFoldersSettingsProps> = ({
           </>
         )}
       </div>
-      
+
       {/* Share Dialog */}
       <ShareDialog
         isOpen={shareDialogOpen}

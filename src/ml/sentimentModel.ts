@@ -1,7 +1,7 @@
 /**
  * Sentiment Analysis ML Model
  * Part of v1.4.0 AI-Powered Intelligence
- * 
+ *
  * Provides sentiment, emotion, and tone analysis for email content.
  */
 
@@ -26,7 +26,7 @@ import {
   CASUAL_WORDS,
   AGGRESSIVE_WORDS,
   EMOTION_WORDS,
-  REPLY_TONE_EXAMPLES,
+  REPLY_TONE_EXAMPLES
 } from '../types/sentimentAnalysis';
 
 /**
@@ -89,7 +89,7 @@ export class SentimentModel {
       tone: tones,
       timestamp: new Date().toISOString(),
       processingTime,
-      modelVersion: this.modelVersion,
+      modelVersion: this.modelVersion
     };
 
     // Cache the result
@@ -148,7 +148,7 @@ export class SentimentModel {
 
     // Calculate score from -1 to 1
     const rawScore = (positiveCount - negativeCount) / Math.max(total, 1);
-    
+
     // Apply intensity scaling
     const intensity = Math.min(1, total / 10); // Max intensity at 10 sentiment words
     const scaledScore = rawScore * (0.5 + intensity * 0.5);
@@ -160,8 +160,12 @@ export class SentimentModel {
    * Determine sentiment category from score
    */
   private determineSentiment(score: SentimentScore): Sentiment {
-    if (score > 0.1) return Sentiment.POSITIVE;
-    if (score < -0.1) return Sentiment.NEGATIVE;
+    if (score > 0.1) {
+return Sentiment.POSITIVE;
+}
+    if (score < -0.1) {
+return Sentiment.NEGATIVE;
+}
     return Sentiment.NEUTRAL;
   }
 
@@ -177,7 +181,7 @@ export class SentimentModel {
       w => POSITIVE_WORDS.includes(w) || NEGATIVE_WORDS.includes(w)
     );
     const wordRatio = Math.min(1, sentimentWords.length / 5);
-    
+
     // Combine factors
     confidence = (confidence * 0.7) + (wordRatio * 0.3);
 
@@ -216,11 +220,11 @@ export class SentimentModel {
       if (data.count > 0) {
         const score = data.count / words.length;
         const confidence = Math.min(0.95, data.count / Math.max(data.total, 1) + 0.3);
-        
+
         results.push({
           emotion,
           score: Math.min(1, score * 10), // Scale up for visibility
-          confidence,
+          confidence
         });
       }
     });
@@ -248,7 +252,7 @@ export class SentimentModel {
       tones.push({
         tone: Tone.FORMAL,
         score: Math.min(1, formalCount / 10),
-        confidence: Math.min(0.9, 0.5 + formalCount * 0.1),
+        confidence: Math.min(0.9, 0.5 + formalCount * 0.1)
       });
     }
 
@@ -258,7 +262,7 @@ export class SentimentModel {
       tones.push({
         tone: Tone.CASUAL,
         score: Math.min(1, casualCount / 10),
-        confidence: Math.min(0.9, 0.5 + casualCount * 0.1),
+        confidence: Math.min(0.9, 0.5 + casualCount * 0.1)
       });
     }
 
@@ -268,7 +272,7 @@ export class SentimentModel {
       tones.push({
         tone: Tone.URGENT,
         score: Math.min(1, urgentCount / 5),
-        confidence: Math.min(0.95, 0.6 + urgentCount * 0.15),
+        confidence: Math.min(0.95, 0.6 + urgentCount * 0.15)
       });
     }
 
@@ -278,7 +282,7 @@ export class SentimentModel {
       tones.push({
         tone: Tone.AGGRESSIVE,
         score: Math.min(1, aggressiveCount / 8),
-        confidence: Math.min(0.85, 0.5 + aggressiveCount * 0.1),
+        confidence: Math.min(0.85, 0.5 + aggressiveCount * 0.1)
       });
     }
 
@@ -289,7 +293,7 @@ export class SentimentModel {
       tones.push({
         tone: Tone.POLITE,
         score: Math.min(1, politeCount / 5),
-        confidence: Math.min(0.9, 0.5 + politeCount * 0.15),
+        confidence: Math.min(0.9, 0.5 + politeCount * 0.15)
       });
     }
 
@@ -298,7 +302,7 @@ export class SentimentModel {
       tones.push({
         tone: Tone.PROFESSIONAL,
         score: 0.7,
-        confidence: 0.75,
+        confidence: 0.75
       });
     }
 
@@ -307,7 +311,7 @@ export class SentimentModel {
       tones.push({
         tone: Tone.FRIENDLY,
         score: 0.7,
-        confidence: 0.7,
+        confidence: 0.7
       });
     }
 
@@ -366,7 +370,7 @@ export class SentimentModel {
       recommendedTone,
       confidence: 0.75,
       reason,
-      example,
+      example
     };
   }
 
@@ -415,7 +419,7 @@ export class SentimentModel {
       dominantEmotion,
       interpretation,
       recommendations,
-      warnings: warnings.length > 0 ? warnings : undefined,
+      warnings: warnings.length > 0 ? warnings : undefined
     };
   }
 
@@ -513,7 +517,7 @@ export function analyzeSentiment(
     body: text,
     sender: '',
     recipients: [],
-    timestamp: new Date(),
+    timestamp: new Date()
   };
   return model.analyze(context);
 }

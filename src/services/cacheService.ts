@@ -15,7 +15,7 @@ import type {
   CacheStats,
   CacheAdapter,
   CacheInvalidationRule,
-  CachePrewarmConfig,
+  CachePrewarmConfig
 } from '../types/caching';
 
 class CacheService {
@@ -32,7 +32,7 @@ class CacheService {
     missRate: 0,
     averageAccessTime: 0,
     totalSize: 0,
-    entries: 0,
+    entries: 0
   };
   private eventListeners: Array<(event: CacheEvent) => void> = [];
   private invalidationRules: CacheInvalidationRule[] = [];
@@ -49,7 +49,7 @@ class CacheService {
       cleanupInterval: 60000, // 1 minute
       enableCompression: false,
       enableMetrics: true,
-      ...config,
+      ...config
     };
 
     this.initializeAdapters();
@@ -75,7 +75,9 @@ class CacheService {
     this.adapters.set('memory', {
       get: async (key) => {
         const entry = this.cache.get(key);
-        if (!entry) return null;
+        if (!entry) {
+return null;
+}
         if (Date.now() > entry.expiresAt) {
           this.cache.delete(key);
           return null;
@@ -94,14 +96,16 @@ class CacheService {
       },
       has: async (key) => this.cache.has(key),
       keys: async () => Array.from(this.cache.keys()),
-      size: async () => this.cache.size,
+      size: async () => this.cache.size
     });
 
     // LocalStorage adapter
     this.adapters.set('localStorage', {
       get: async (key) => {
         const data = localStorage.getItem(`cache_${key}`);
-        if (!data) return null;
+        if (!data) {
+return null;
+}
         try {
           const entry = JSON.parse(data) as CacheEntry;
           if (Date.now() > entry.expiresAt) {
@@ -131,14 +135,16 @@ class CacheService {
           .filter((k) => k.startsWith('cache_'))
           .map((k) => k.replace('cache_', '')),
       size: async () =>
-        Object.keys(localStorage).filter((k) => k.startsWith('cache_')).length,
+        Object.keys(localStorage).filter((k) => k.startsWith('cache_')).length
     });
 
     // SessionStorage adapter
     this.adapters.set('sessionStorage', {
       get: async (key) => {
         const data = sessionStorage.getItem(`cache_${key}`);
-        if (!data) return null;
+        if (!data) {
+return null;
+}
         try {
           const entry = JSON.parse(data) as CacheEntry;
           if (Date.now() > entry.expiresAt) {
@@ -168,7 +174,7 @@ class CacheService {
           .filter((k) => k.startsWith('cache_'))
           .map((k) => k.replace('cache_', '')),
       size: async () =>
-        Object.keys(sessionStorage).filter((k) => k.startsWith('cache_')).length,
+        Object.keys(sessionStorage).filter((k) => k.startsWith('cache_')).length
     });
   }
 
@@ -194,7 +200,7 @@ class CacheService {
       hits: 0,
       lastAccessed: now,
       tags: options?.tags || [],
-      metadata: options?.version ? { version: options.version } : undefined,
+      metadata: options?.version ? { version: options.version } : undefined
     };
   }
 
@@ -253,7 +259,7 @@ class CacheService {
       type: 'set',
       key,
       timestamp: Date.now(),
-      size: JSON.stringify(value).length,
+      size: JSON.stringify(value).length
     });
   }
 
@@ -342,11 +348,15 @@ class CacheService {
     );
 
     const adapter = this.adapters.get(this.config.strategy);
-    if (!adapter) return;
+    if (!adapter) {
+return;
+}
 
     let evicted = 0;
     for (const entry of entries) {
-      if (await this.size() <= targetSize) break;
+      if (await this.size() <= targetSize) {
+break;
+}
 
       await adapter.delete(entry.key);
       this.metrics.evictions++;
@@ -354,7 +364,7 @@ class CacheService {
         type: 'evict',
         key: entry.key,
         timestamp: Date.now(),
-        size: entry.size,
+        size: entry.size
       });
       evicted++;
     }
@@ -474,7 +484,9 @@ class CacheService {
     const keys = await this.keys();
     const adapter = this.adapters.get(this.config.strategy);
 
-    if (!adapter) return;
+    if (!adapter) {
+return;
+}
 
     for (const key of keys) {
       const entry = this.cache.get(key);
@@ -491,7 +503,9 @@ class CacheService {
     const keys = await this.keys();
     const adapter = this.adapters.get(this.config.strategy);
 
-    if (!adapter) return;
+    if (!adapter) {
+return;
+}
 
     for (const key of keys) {
       if (pattern.test(key)) {
@@ -537,7 +551,9 @@ class CacheService {
     const now = Date.now();
     const adapter = this.adapters.get(this.config.strategy);
 
-    if (!adapter) return;
+    if (!adapter) {
+return;
+}
 
     for (const key of keys) {
       const entry = this.cache.get(key);
@@ -558,7 +574,9 @@ class CacheService {
    * Prewarm cache
    */
   async prewarm(config: CachePrewarmConfig, dataFetcher: (key: string) => Promise<any>): Promise<void> {
-    if (!config.enabled) return;
+    if (!config.enabled) {
+return;
+}
 
     for (let i = 0; i < config.keys.length; i++) {
       const key = config.keys[i];

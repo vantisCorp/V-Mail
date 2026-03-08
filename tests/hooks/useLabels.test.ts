@@ -6,8 +6,8 @@ import type { Label } from '../../src/types/labels';
 // Mock the useNotifications hook
 vi.mock('../../src/hooks/useNotifications', () => ({
   useNotifications: () => ({
-    addNotification: vi.fn(),
-  }),
+    addNotification: vi.fn()
+  })
 }));
 
 describe('useLabels', () => {
@@ -18,7 +18,7 @@ describe('useLabels', () => {
     expect(result.current.labeledEmails).toEqual([]);
     expect(result.current.stats).toEqual({
       totalLabels: 0,
-      totalLabeledEmails: 0,
+      totalLabeledEmails: 0
     });
   });
 
@@ -28,7 +28,7 @@ describe('useLabels', () => {
     const newLabel = {
       name: 'Important',
       color: '#ef4444',
-      description: 'Important emails',
+      description: 'Important emails'
     };
 
     act(() => {
@@ -49,7 +49,7 @@ describe('useLabels', () => {
       result.current.addLabel({
         name: 'Random Color',
         color: '',
-        description: 'Test',
+        description: 'Test'
       });
     });
 
@@ -64,7 +64,7 @@ describe('useLabels', () => {
       result.current.addLabel({
         name: 'Original',
         color: '#ef4444',
-        description: 'Original description',
+        description: 'Original description'
       });
     });
 
@@ -85,7 +85,7 @@ describe('useLabels', () => {
     act(() => {
       result.current.addLabel({
         name: 'To Delete',
-        color: '#ef4444',
+        color: '#ef4444'
       });
     });
 
@@ -104,7 +104,7 @@ describe('useLabels', () => {
     act(() => {
       result.current.addLabel({
         name: 'Test Label',
-        color: '#ef4444',
+        color: '#ef4444'
       });
     });
 
@@ -130,7 +130,7 @@ describe('useLabels', () => {
     act(() => {
       result.current.addLabel({
         name: 'Work',
-        color: '#3b82f6',
+        color: '#3b82f6'
       });
     });
 
@@ -152,7 +152,7 @@ describe('useLabels', () => {
     act(() => {
       result.current.addLabel({
         name: 'Duplicate',
-        color: '#ef4444',
+        color: '#ef4444'
       });
     });
 
@@ -176,7 +176,7 @@ describe('useLabels', () => {
     act(() => {
       result.current.addLabel({
         name: 'Remove Me',
-        color: '#ef4444',
+        color: '#ef4444'
       });
     });
 
@@ -201,7 +201,7 @@ describe('useLabels', () => {
     act(() => {
       result.current.addLabel({
         name: 'Toggle',
-        color: '#ef4444',
+        color: '#ef4444'
       });
     });
 
@@ -235,11 +235,11 @@ describe('useLabels', () => {
     act(() => {
       result.current.addLabel({
         name: 'Label 1',
-        color: '#ef4444',
+        color: '#ef4444'
       });
       result.current.addLabel({
         name: 'Label 2',
-        color: '#22c55e',
+        color: '#22c55e'
       });
     });
 
@@ -264,7 +264,7 @@ describe('useLabels', () => {
     act(() => {
       result.current.addLabel({
         name: 'Shared Label',
-        color: '#ef4444',
+        color: '#ef4444'
       });
     });
 
@@ -290,11 +290,11 @@ describe('useLabels', () => {
     act(() => {
       result.current.addLabel({
         name: 'Label 1',
-        color: '#ef4444',
+        color: '#ef4444'
       });
       result.current.addLabel({
         name: 'Label 2',
-        color: '#22c55e',
+        color: '#22c55e'
       });
     });
 
@@ -317,7 +317,7 @@ describe('useLabels', () => {
       result.current.addLabel({
         name: 'Original',
         color: '#ef4444',
-        description: 'Original description',
+        description: 'Original description'
       });
     });
 

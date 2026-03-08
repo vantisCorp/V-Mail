@@ -11,7 +11,7 @@ import {
   OrganizationConfig,
   OrganizationStatistics,
   UserAction,
-  DEFAULT_ORGANIZATION_CONFIG,
+  DEFAULT_ORGANIZATION_CONFIG
 } from '../types/smartFolders';
 
 export interface UseSmartFoldersReturn {
@@ -53,7 +53,7 @@ export const useSmartFolders = (initialConfig?: Partial<OrganizationConfig>): Us
   const [cache, setCache] = useState<Map<string, any>>(new Map());
   const [config, setConfig] = useState<OrganizationConfig>({
     ...DEFAULT_ORGANIZATION_CONFIG,
-    ...initialConfig,
+    ...initialConfig
   });
   const [statistics, setStatistics] = useState<OrganizationStatistics>({
     totalEmailsProcessed: 0,
@@ -71,19 +71,19 @@ export const useSmartFolders = (initialConfig?: Partial<OrganizationConfig>): Us
       [FolderCategory.SHOPPING]: 0,
       [FolderCategory.NEWSLETTERS]: 0,
       [FolderCategory.SYSTEM]: 0,
-      [FolderCategory.OTHER]: 0,
+      [FolderCategory.OTHER]: 0
     },
     foldersByType: {
       [FolderType.AUTO]: 0,
       [FolderType.MANUAL]: 0,
       [FolderType.SYSTEM]: 0,
-      [FolderType.TEMPORARY]: 0,
+      [FolderType.TEMPORARY]: 0
     },
     accuracy: 0,
     totalProcessingTime: 0,
     averageProcessingTime: 0,
     cacheHits: 0,
-    cacheMisses: 0,
+    cacheMisses: 0
   });
 
   // Initialize model if needed
@@ -118,7 +118,7 @@ export const useSmartFolders = (initialConfig?: Partial<OrganizationConfig>): Us
       setSuggestions(results);
       setStatistics(prev => ({
         ...prev,
-        totalFoldersSuggested: prev.totalFoldersSuggested + results.length,
+        totalFoldersSuggested: prev.totalFoldersSuggested + results.length
       }));
 
       return results;
@@ -169,7 +169,7 @@ export const useSmartFolders = (initialConfig?: Partial<OrganizationConfig>): Us
       setStatistics(prev => ({
         ...prev,
         totalRoutings: prev.totalRoutings + results.length,
-        averageConfidence: results.length > 0 ? totalConfidence / results.length : 0,
+        averageConfidence: results.length > 0 ? totalConfidence / results.length : 0
       }));
 
       return results;
@@ -194,7 +194,7 @@ export const useSmartFolders = (initialConfig?: Partial<OrganizationConfig>): Us
     setFolders(prev => [...prev, newFolder]);
     setStatistics(prev => ({
       ...prev,
-      totalFoldersCreated: prev.totalFoldersCreated + 1,
+      totalFoldersCreated: prev.totalFoldersCreated + 1
     }));
 
     return newFolder;
@@ -258,19 +258,19 @@ export const useSmartFolders = (initialConfig?: Partial<OrganizationConfig>): Us
         [FolderCategory.SHOPPING]: 0,
         [FolderCategory.NEWSLETTERS]: 0,
         [FolderCategory.SYSTEM]: 0,
-        [FolderCategory.OTHER]: 0,
+        [FolderCategory.OTHER]: 0
       },
       foldersByType: {
         [FolderType.AUTO]: 0,
         [FolderType.MANUAL]: 0,
         [FolderType.SYSTEM]: 0,
-        [FolderType.TEMPORARY]: 0,
+        [FolderType.TEMPORARY]: 0
       },
       accuracy: 0,
       totalProcessingTime: 0,
       averageProcessingTime: 0,
       cacheHits: 0,
-      cacheMisses: 0,
+      cacheMisses: 0
     });
   }, []);
 
@@ -292,6 +292,6 @@ export const useSmartFolders = (initialConfig?: Partial<OrganizationConfig>): Us
     updateConfig,
     clearCache,
     clearError,
-    reset,
+    reset
   };
 };

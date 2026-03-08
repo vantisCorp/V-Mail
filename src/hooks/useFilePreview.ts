@@ -17,7 +17,7 @@ import {
   SecurityScanResult,
   PreviewStats,
   CreatePreviewPayload,
-  PreviewFilterOptions,
+  PreviewFilterOptions
 } from '../types/filePreview';
 import { filePreviewService } from '../services/filePreviewService';
 
@@ -27,38 +27,38 @@ interface UseFilePreviewReturn {
   previews: FilePreview[];
   currentPreview: FilePreview | null;
   error: string | null;
-  
+
   // Preview operations
   createPreview: (payload: CreatePreviewPayload) => Promise<FilePreview | null>;
   getPreview: (previewId: string) => FilePreview | null;
   getPreviewByFileId: (fileId: string) => FilePreview | null;
   deletePreview: (previewId: string) => Promise<boolean>;
   clearAllPreviews: () => Promise<void>;
-  
+
   // Thumbnail operations
   getThumbnail: (previewId: string, quality?: PreviewQuality) => FileThumbnail | null;
   getThumbnailUrl: (previewId: string, quality?: PreviewQuality) => string | null;
-  
+
   // URL operations
   getPreviewUrl: (previewId: string, options?: PreviewOptions) => string | null;
   downloadFile: (previewId: string, fileName?: string) => Promise<void>;
-  
+
   // Security operations
   performSecurityScan: (previewId: string) => Promise<SecurityScanResult | null>;
-  
+
   // File type utilities
   getFileType: (mimeType: string, fileName?: string) => PreviewFileType;
   isPreviewable: (mimeType: string, fileName?: string) => boolean;
   needsDownloadForPreview: (fileType: PreviewFileType) => boolean;
   getMaxFileSizeForPreview: (fileType: PreviewFileType) => number;
   getSupportedFileTypes: () => PreviewFileType[];
-  
+
   // Filtering
   filterPreviews: (options: PreviewFilterOptions) => FilePreview[];
-  
+
   // Statistics
   getStats: () => PreviewStats;
-  
+
   // Current preview management
   setCurrentPreview: (preview: FilePreview | null) => void;
   previewFile: (fileId: string, fileData?: ArrayBuffer | Blob) => Promise<FilePreview | null>;
@@ -191,7 +191,9 @@ export function useFilePreview(): UseFilePreviewReturn {
    */
   const performSecurityScan = useCallback(async (previewId: string): Promise<SecurityScanResult | null> => {
     const preview = getPreview(previewId);
-    if (!preview) return null;
+    if (!preview) {
+return null;
+}
 
     return filePreviewService.performSecurityScan(preview);
   }, [getPreview]);
@@ -293,7 +295,7 @@ export function useFilePreview(): UseFilePreviewReturn {
         mimeType: 'application/octet-stream',
         fileData,
         generateThumbnails: true,
-        performSecurityScan: true,
+        performSecurityScan: true
       });
 
       setPreviews(prev => [...prev, preview]);
@@ -348,6 +350,6 @@ export function useFilePreview(): UseFilePreviewReturn {
 
     // Current preview management
     setCurrentPreview,
-    previewFile,
+    previewFile
   };
 }

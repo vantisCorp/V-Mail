@@ -13,7 +13,7 @@ describe('SMSService', () => {
     it('should generate a 6-digit code', () => {
       const phoneNumber = '+1234567890';
       const code = SMSService.generateSMSCode(phoneNumber);
-      
+
       expect(code).toBeDefined();
       expect(code.length).toBe(6);
       expect(/^\d+$/.test(code)).toBe(true);
@@ -23,7 +23,7 @@ describe('SMSService', () => {
       const phoneNumber = '+1234567890';
       const code1 = SMSService.generateSMSCode(phoneNumber);
       const code2 = SMSService.generateSMSCode(phoneNumber);
-      
+
       expect(code1).not.toBe(code2);
     });
 
@@ -31,7 +31,7 @@ describe('SMSService', () => {
       const phoneNumber = '+1234567890';
       const code = SMSService.generateSMSCode(phoneNumber);
       const storedCode = SMSService.getStoredCode(phoneNumber);
-      
+
       expect(storedCode).toBe(code);
     });
   });
@@ -40,9 +40,9 @@ describe('SMSService', () => {
     it('should verify a valid SMS code', () => {
       const phoneNumber = '+1234567890';
       const code = SMSService.generateSMSCode(phoneNumber);
-      
+
       const result = SMSService.verifySMSCode(phoneNumber, code);
-      
+
       expect(result.success).toBe(true);
       expect(result.message).toBe('Code verified successfully');
     });
@@ -51,9 +51,9 @@ describe('SMSService', () => {
       const phoneNumber = '+1234567890';
       SMSService.generateSMSCode(phoneNumber);
       const invalidCode = '000000';
-      
+
       const result = SMSService.verifySMSCode(phoneNumber, invalidCode);
-      
+
       expect(result.success).toBe(false);
       expect(result.message).toBe('Invalid code');
       expect(result.remainingAttempts).toBe(2);
@@ -62,9 +62,9 @@ describe('SMSService', () => {
     it('should reject code for non-existent phone number', () => {
       const phoneNumber = '+1234567890';
       const code = '000000';
-      
+
       const result = SMSService.verifySMSCode(phoneNumber, code);
-      
+
       expect(result.success).toBe(false);
       expect(result.message).toBe('No code sent to this phone number');
     });
@@ -72,7 +72,7 @@ describe('SMSService', () => {
     it('should reject expired code', () => {
       const phoneNumber = '+1234567890';
       SMSService.generateSMSCode(phoneNumber);
-      
+
       // Manually expire the code by setting expiresAt in the past
       // This would require modifying the service to allow this in tests
       // For now, we'll skip this test
@@ -82,15 +82,15 @@ describe('SMSService', () => {
     it('should reject after maximum attempts', () => {
       const phoneNumber = '+1234567890';
       const code = SMSService.generateSMSCode(phoneNumber);
-      
+
       // Make 3 invalid attempts
       SMSService.verifySMSCode(phoneNumber, '000000');
       SMSService.verifySMSCode(phoneNumber, '111111');
       SMSService.verifySMSCode(phoneNumber, '222222');
-      
+
       // Even the correct code should be rejected now
       const result = SMSService.verifySMSCode(phoneNumber, code);
-      
+
       expect(result.success).toBe(false);
       expect(result.message).toBe('Maximum attempts exceeded');
     });
@@ -114,7 +114,7 @@ describe('SMSService', () => {
     it('should generate SMS setup data', async () => {
       const phoneNumber = '+1234567890';
       const setupData = await SMSService.generateSetupData(phoneNumber);
-      
+
       expect(setupData).toBeDefined();
       expect(setupData.method).toBe('sms');
       expect(setupData.phoneNumber).toBe(phoneNumber);
@@ -165,11 +165,11 @@ describe('SMSService', () => {
     it('should clear all stored SMS codes', () => {
       const phoneNumber = '+1234567890';
       SMSService.generateSMSCode(phoneNumber);
-      
+
       expect(SMSService.getStoredCode(phoneNumber)).toBeDefined();
-      
+
       SMSService.clearAllCodes();
-      
+
       expect(SMSService.getStoredCode(phoneNumber)).toBeUndefined();
     });
   });
@@ -179,13 +179,13 @@ describe('SMSService', () => {
       const phoneNumber = '+1234567890';
       const code = SMSService.generateSMSCode(phoneNumber);
       const storedCode = SMSService.getStoredCode(phoneNumber);
-      
+
       expect(storedCode).toBe(code);
     });
 
     it('should return undefined for non-existent phone number', () => {
       const storedCode = SMSService.getStoredCode('+9999999999');
-      
+
       expect(storedCode).toBeUndefined();
     });
   });

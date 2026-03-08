@@ -32,7 +32,7 @@ describe('CacheService', () => {
       CacheService.reset();
       const customCache = CacheService.getInstance({
         strategy: 'localStorage',
-        maxEntries: 500,
+        maxEntries: 500
       });
       const config = customCache.getConfig();
       expect(config.strategy).toBe('localStorage');
@@ -202,51 +202,55 @@ describe('CacheService', () => {
       })();
     });
 
-    it('should emit miss event', (done) => {
-      const handler = (event: CacheEvent) => {
-        if (event.type === 'miss') {
-          expect(event.key).toBe('non-existent');
-          cacheService.off(handler);
-          done();
-        }
-      };
-      cacheService.on(handler);
+    it('should emit miss event', async () => {
+      const eventPromise = new Promise<CacheEvent>((resolve) => {
+        const handler = (event: CacheEvent) => {
+          if (event.type === 'miss') {
+            cacheService.off(handler);
+            resolve(event);
+          }
+        };
+        cacheService.on(handler);
+      });
 
-      (async () => {
-        await cacheService.get('non-existent');
-      })();
+      await cacheService.get('non-existent');
+      const event = await eventPromise;
+      expect(event.key).toBe('non-existent');
     });
 
-    it('should emit set event', (done) => {
-      const handler = (event: CacheEvent) => {
-        if (event.type === 'set') {
-          expect(event.key).toBe('test-key');
-          expect(event.size).toBeGreaterThan(0);
-          cacheService.off(handler);
-          done();
-        }
-      };
-      cacheService.on(handler);
+    it('should emit set event', async () => {
+      const eventPromise = new Promise<CacheEvent>((resolve) => {
+        const handler = (event: CacheEvent) => {
+          if (event.type === 'set') {
+            cacheService.off(handler);
+            resolve(event);
+          }
+        };
+        cacheService.on(handler);
+      });
 
-      (async () => {
-        await cacheService.set('test-key', 'test-value');
-      })();
+      await cacheService.set('test-key', 'test-value');
+      const event = await eventPromise;
+      expect(event.key).toBe('test-key');
+      expect(event.size).toBeGreaterThan(0);
     });
 
-    it('should emit delete event', (done) => {
-      const handler = (event: CacheEvent) => {
-        if (event.type === 'delete') {
-          expect(event.key).toBe('test-key');
-          cacheService.off(handler);
-          done();
-        }
-      };
-      cacheService.on(handler);
+    it('should emit delete event', async () => {
+      await cacheService.set('test-key', 'test-value');
 
-      (async () => {
-        await cacheService.set('test-key', 'test-value');
-        await cacheService.delete('test-key');
-      })();
+      const eventPromise = new Promise<CacheEvent>((resolve) => {
+        const handler = (event: CacheEvent) => {
+          if (event.type === 'delete') {
+            cacheService.off(handler);
+            resolve(event);
+          }
+        };
+        cacheService.on(handler);
+      });
+
+      await cacheService.delete('test-key');
+      const event = await eventPromise;
+      expect(event.key).toBe('test-key');
     });
   });
 
@@ -260,7 +264,7 @@ describe('CacheService', () => {
         type: 'tag',
         condition: 'email',
         action: 'delete',
-        tags: ['email'],
+        tags: ['email']
       });
 
       await cacheService.applyInvalidationRules();
@@ -282,7 +286,7 @@ describe('CacheService', () => {
       cacheService.addInvalidationRule({
         type: 'pattern',
         condition: /^email_/,
-        action: 'delete',
+        action: 'delete'
       });
 
       await cacheService.applyInvalidationRules();
@@ -306,7 +310,7 @@ describe('CacheService', () => {
       await cacheService.prewarm(
         {
           enabled: true,
-          keys: ['key1', 'key2', 'key3'],
+          keys: ['key1', 'key2', 'key3']
         },
         dataFetcher
       );
@@ -325,7 +329,7 @@ describe('CacheService', () => {
     it('should update configuration', () => {
       cacheService.updateConfig({
         maxEntries: 500,
-        cleanupInterval: 30000,
+        cleanupInterval: 30000
       });
 
       const config = cacheService.getConfig();

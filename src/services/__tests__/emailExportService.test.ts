@@ -10,7 +10,7 @@ global.URL.revokeObjectURL = vi.fn();
 const mockLink = {
   href: '',
   download: '',
-  click: vi.fn(),
+  click: vi.fn()
 };
 vi.spyOn(document, 'createElement').mockReturnValue(mockLink as any);
 vi.spyOn(document.body, 'appendChild').mockImplementation(() => mockLink as any);
@@ -20,8 +20,8 @@ vi.spyOn(document.body, 'removeChild').mockImplementation(() => mockLink as any)
 vi.mock('../../services/emailService', () => ({
   EmailService: {
     getEmailById: vi.fn(),
-    getAttachments: vi.fn(),
-  },
+    getAttachments: vi.fn()
+  }
 }));
 
 describe('EmailExportService', () => {
@@ -38,14 +38,14 @@ describe('EmailExportService', () => {
     attachments: [],
     folder: 'inbox',
     read: true,
-    starred: false,
+    starred: false
   };
 
   const defaultOptions: ExportOptions = {
     format: 'pdf' as ExportFormat,
     includeAttachments: true,
     includeHeaders: true,
-    filename: 'test-export',
+    filename: 'test-export'
   };
 
   beforeEach(() => {
@@ -85,7 +85,7 @@ describe('EmailExportService', () => {
     it('should handle export errors gracefully', async () => {
       // Test with an email that will cause an error - missing required fields
       const invalidEmail = { id: 'invalid' } as Email;
-      
+
       const result: ExportResult = await EmailExportService.exportSingleEmail(invalidEmail, defaultOptions);
 
       // The service handles errors gracefully by catching exceptions
@@ -101,7 +101,7 @@ describe('EmailExportService', () => {
       const emails: Email[] = [
         mockEmail,
         { ...mockEmail, id: 'test-email-2', subject: 'Email 2' },
-        { ...mockEmail, id: 'test-email-3', subject: 'Email 3' },
+        { ...mockEmail, id: 'test-email-3', subject: 'Email 3' }
       ];
 
       const progressUpdates: ExportProgress[] = [];
@@ -127,11 +127,11 @@ describe('EmailExportService', () => {
       const emails: Email[] = [];
       const options: ExportOptions = {
         ...defaultOptions,
-        continueOnError: false,
+        continueOnError: false
       };
 
       const result: ExportResult = await EmailExportService.exportMultipleEmails(emails, options);
-      
+
       // Empty array should cause an error
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
@@ -186,7 +186,7 @@ describe('EmailExportService', () => {
         emails: [mockEmail],
         options: defaultOptions,
         status: 'pending',
-        createdAt: Date.now(),
+        createdAt: Date.now()
       };
 
       await EmailExportService.queueExport(request1);
@@ -206,12 +206,12 @@ describe('EmailExportService', () => {
         emails: [mockEmail],
         options: defaultOptions,
         status: 'pending',
-        createdAt: Date.now(),
+        createdAt: Date.now()
       };
 
       // Directly add to queue and then process
       EmailExportService['exportQueue'].push(request1);
-      
+
       // Process the queue
       await EmailExportService.processQueue();
 

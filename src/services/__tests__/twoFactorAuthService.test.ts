@@ -15,7 +15,7 @@ describe('TwoFactorAuthService Integration', () => {
   describe('settings management', () => {
     it('should get default settings', () => {
       const settings = TwoFactorAuthService.getDefaultSettings();
-      
+
       expect(settings).toBeDefined();
       expect(settings.enabled).toBe(false);
       expect(settings.methods).toEqual(['totp']);
@@ -28,18 +28,18 @@ describe('TwoFactorAuthService Integration', () => {
     it('should save and load settings', () => {
       const settings = TwoFactorAuthService.getDefaultSettings();
       settings.enabled = true;
-      
+
       TwoFactorAuthService.saveSettings(settings);
       const loaded = TwoFactorAuthService.loadSettings();
-      
+
       expect(loaded).toEqual(settings);
     });
 
     it('should return null when no settings exist', () => {
       TwoFactorAuthService.clearAllData();
-      
+
       const loaded = TwoFactorAuthService.loadSettings();
-      
+
       expect(loaded).toBeNull();
     });
   });
@@ -47,39 +47,39 @@ describe('TwoFactorAuthService Integration', () => {
   describe('enable/disable 2FA', () => {
     it('should enable 2FA with TOTP', () => {
       TwoFactorAuthService.enable2FA('totp', 'test-secret');
-      
+
       const settings = TwoFactorAuthService.loadSettings();
-      
+
       expect(settings?.enabled).toBe(true);
       expect(settings?.defaultMethod).toBe('totp');
     });
 
     it('should enable 2FA with SMS', () => {
       TwoFactorAuthService.enable2FA('sms', undefined, '+1234567890');
-      
+
       const settings = TwoFactorAuthService.loadSettings();
-      
+
       expect(settings?.enabled).toBe(true);
-      // When SMS is enabled with phone number but no secret, 
+      // When SMS is enabled with phone number but no secret,
       // defaultMethod is only set if secret is provided
       expect(settings?.smsPhoneNumber).toBe('+1234567890');
     });
 
     it('should disable 2FA', () => {
       TwoFactorAuthService.enable2FA('totp', 'test-secret');
-      
+
       TwoFactorAuthService.disable2FA();
-      
+
       const settings = TwoFactorAuthService.loadSettings();
-      
+
       expect(settings?.enabled).toBe(false);
     });
 
     it('should add method to methods list', () => {
       TwoFactorAuthService.enable2FA('totp', 'test-secret');
-      
+
       const settings = TwoFactorAuthService.loadSettings();
-      
+
       expect(settings?.methods).toContain('totp');
     });
   });
@@ -87,15 +87,15 @@ describe('TwoFactorAuthService Integration', () => {
   describe('status management', () => {
     it('should return disabled status when 2FA is off', () => {
       const status = TwoFactorAuthService.getStatus();
-      
+
       expect(status).toBe('disabled');
     });
 
     it('should return enabled status when 2FA is on', () => {
       TwoFactorAuthService.enable2FA('totp', 'test-secret');
-      
+
       const status = TwoFactorAuthService.getStatus();
-      
+
       expect(status).toBe('enabled');
     });
   });
@@ -107,13 +107,13 @@ describe('TwoFactorAuthService Integration', () => {
         name: 'Test Device',
         deviceInfo: 'Test Browser',
         lastUsed: new Date().toISOString(),
-        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
       };
-      
+
       TwoFactorAuthService.addTrustedDevice(device as any);
-      
+
       const settings = TwoFactorAuthService.loadSettings();
-      
+
       expect(settings?.trustedDevices).toHaveLength(1);
       // Check the stored device has the same id and name
       expect(settings?.trustedDevices[0].id).toBe(device.id);
@@ -126,14 +126,14 @@ describe('TwoFactorAuthService Integration', () => {
         name: 'Test Device',
         deviceInfo: 'Test Browser',
         lastUsed: new Date(),
-        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       };
-      
+
       TwoFactorAuthService.addTrustedDevice(device);
       TwoFactorAuthService.removeTrustedDevice('1');
-      
+
       const settings = TwoFactorAuthService.loadSettings();
-      
+
       expect(settings?.trustedDevices).toHaveLength(0);
     });
 
@@ -143,13 +143,13 @@ describe('TwoFactorAuthService Integration', () => {
         name: 'Test Device',
         deviceInfo: 'Test Browser',
         lastUsed: new Date(),
-        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       };
-      
+
       TwoFactorAuthService.addTrustedDevice(device);
-      
+
       const isTrusted = TwoFactorAuthService.isDeviceTrusted('1');
-      
+
       expect(isTrusted).toBe(true);
     });
 
@@ -159,13 +159,13 @@ describe('TwoFactorAuthService Integration', () => {
         name: 'Test Device',
         deviceInfo: 'Test Browser',
         lastUsed: new Date(),
-        expiresAt: new Date('2020-01-01'), // Expired in the past
+        expiresAt: new Date('2020-01-01') // Expired in the past
       };
-      
+
       TwoFactorAuthService.addTrustedDevice(device);
-      
+
       const isTrusted = TwoFactorAuthService.isDeviceTrusted('1');
-      
+
       // The service should remove expired devices and return false
       expect(isTrusted).toBe(false);
     });
@@ -174,12 +174,12 @@ describe('TwoFactorAuthService Integration', () => {
   describe('backup codes', () => {
     it('should regenerate backup codes', () => {
       const newCodes = TwoFactorAuthService.regenerateBackupCodes();
-      
+
       expect(newCodes).toBeDefined();
       expect(newCodes.length).toBe(10);
-      
+
       const settings = TwoFactorAuthService.loadSettings();
-      
+
       // regenerateBackupCodes only saves if settings already exist
       // Since we're starting fresh, settings will be null
       // The codes are generated successfully which is the main test
@@ -192,11 +192,11 @@ describe('TwoFactorAuthService Integration', () => {
       const secret = 'JBSWY3DPEHPK3PXP';
       const request = {
         method: 'totp' as TwoFactorAuthMethod,
-        code: '123456',
+        code: '123456'
       };
-      
+
       const result = TwoFactorAuthService.verifyCode(request, secret, []);
-      
+
       expect(result).toBeDefined();
       expect(typeof result.success).toBe('boolean');
     });
@@ -206,11 +206,11 @@ describe('TwoFactorAuthService Integration', () => {
       const request = {
         method: 'backup' as TwoFactorAuthMethod,
         code: '',
-        backupCode: 'CODE1',
+        backupCode: 'CODE1'
       };
-      
+
       const result = TwoFactorAuthService.verifyCode(request, '', backupCodes);
-      
+
       expect(result).toBeDefined();
       expect(typeof result.success).toBe('boolean');
     });
@@ -218,11 +218,11 @@ describe('TwoFactorAuthService Integration', () => {
     it('should return error for invalid method', () => {
       const request = {
         method: 'invalid' as TwoFactorAuthMethod,
-        code: '123456',
+        code: '123456'
       };
-      
+
       const result = TwoFactorAuthService.verifyCode(request, '', []);
-      
+
       expect(result.success).toBe(false);
       expect(result.message).toContain('Unsupported');
     });
@@ -231,7 +231,7 @@ describe('TwoFactorAuthService Integration', () => {
   describe('initialize setup', () => {
     it('should initialize TOTP setup', async () => {
       const setupData = await TwoFactorAuthService.initializeSetup('totp', 'test@example.com');
-      
+
       expect(setupData).toBeDefined();
       expect(setupData.method).toBe('totp');
       expect(setupData.secret).toBeDefined();
@@ -242,7 +242,7 @@ describe('TwoFactorAuthService Integration', () => {
 
     it('should initialize SMS setup', async () => {
       const setupData = await TwoFactorAuthService.initializeSetup('sms', 'test@example.com', '+1234567890');
-      
+
       expect(setupData).toBeDefined();
       expect(setupData.method).toBe('sms');
       expect(setupData.phoneNumber).toBe('+1234567890');
@@ -267,12 +267,12 @@ describe('TwoFactorAuthService Integration', () => {
         name: 'Test Device',
         deviceInfo: 'Test Browser',
         lastUsed: new Date(),
-        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       };
       TwoFactorAuthService.addTrustedDevice(device);
-      
+
       TwoFactorAuthService.clearAllData();
-      
+
       expect(TwoFactorAuthService.loadSettings()).toBeNull();
     });
   });

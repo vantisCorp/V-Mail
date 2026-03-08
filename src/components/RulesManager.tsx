@@ -9,7 +9,7 @@ import {
   RuleCondition,
   RuleAction,
   RuleFilter,
-  RuleTemplate,
+  RuleTemplate
 } from '../types/emailRules';
 
 export const RulesManager: React.FC = () => {
@@ -25,7 +25,7 @@ export const RulesManager: React.FC = () => {
     toggleRuleStatus,
     testRule,
     getFilteredRules,
-    createRuleFromTemplate,
+    createRuleFromTemplate
   } = useEmailRules();
 
   // Local state
@@ -42,7 +42,7 @@ export const RulesManager: React.FC = () => {
     return getFilteredRules({
       type: filterType || undefined,
       status: filterStatus || undefined,
-      searchQuery: searchQuery || undefined,
+      searchQuery: searchQuery || undefined
     });
   }, [getFilteredRules, filterType, filterStatus, searchQuery]);
 
@@ -113,13 +113,13 @@ export const RulesManager: React.FC = () => {
       <div className="automation-header">
         <h1>Email Automation & Rules</h1>
         <div className="header-actions">
-          <button 
+          <button
             className="btn btn-secondary"
             onClick={() => setShowTemplateModal(true)}
           >
             <span>📋</span> From Template
           </button>
-          <button 
+          <button
             className="btn btn-primary"
             onClick={() => setShowCreateModal(true)}
           >
@@ -173,7 +173,7 @@ export const RulesManager: React.FC = () => {
             <div className="empty-icon">📭</div>
             <h3>No rules found</h3>
             <p>Create your first automation rule to get started.</p>
-            <button 
+            <button
               className="btn btn-primary"
               onClick={() => setShowCreateModal(true)}
             >
@@ -182,8 +182,8 @@ export const RulesManager: React.FC = () => {
           </div>
         ) : (
           filteredRules.map(rule => (
-            <div 
-              key={rule.id} 
+            <div
+              key={rule.id}
               className={`rule-card ${selectedRule?.id === rule.id ? 'selected' : ''}`}
               onClick={() => setSelectedRule(rule)}
             >
@@ -266,7 +266,7 @@ export const RulesManager: React.FC = () => {
         <div className="rule-details-panel">
           <div className="panel-header">
             <h2>{selectedRule.name}</h2>
-            <button 
+            <button
               className="btn-close"
               onClick={() => setSelectedRule(null)}
             >
@@ -315,7 +315,7 @@ export const RulesManager: React.FC = () => {
                 </div>
                 <div className="stat-item">
                   <span className="stat-value">
-                    {selectedRule.lastExecuted 
+                    {selectedRule.lastExecuted
                       ? new Date(selectedRule.lastExecuted).toLocaleDateString()
                       : 'Never'
                     }
@@ -326,13 +326,13 @@ export const RulesManager: React.FC = () => {
             </div>
           </div>
           <div className="panel-actions">
-            <button 
+            <button
               className="btn btn-secondary"
               onClick={() => handleEditRule(selectedRule)}
             >
               Edit Rule
             </button>
-            <button 
+            <button
               className="btn btn-primary"
               onClick={() => setShowTestModal(true)}
             >
@@ -354,7 +354,7 @@ export const RulesManager: React.FC = () => {
               await createRule({
                 ...ruleData,
                 type: ruleData.type || RuleType.CUSTOM,
-                priority: ruleData.priority || RulePriority.MEDIUM,
+                priority: ruleData.priority || RulePriority.MEDIUM
               });
             }
             handleCloseModal();
@@ -413,8 +413,8 @@ const RuleBuilderModal: React.FC<RuleBuilderModalProps> = ({ rule, onClose, onSa
         field: 'from' as any,
         operator: 'contains' as any,
         value: '',
-        caseSensitive: false,
-      },
+        caseSensitive: false
+      }
     ]);
   };
 
@@ -429,8 +429,8 @@ const RuleBuilderModal: React.FC<RuleBuilderModalProps> = ({ rule, onClose, onSa
         id: `act-${Date.now()}`,
         type: 'add_label' as any,
         parameters: {},
-        stopProcessing: false,
-      },
+        stopProcessing: false
+      }
     ]);
   };
 
@@ -439,7 +439,9 @@ const RuleBuilderModal: React.FC<RuleBuilderModalProps> = ({ rule, onClose, onSa
   };
 
   const handleSave = async () => {
-    if (!name.trim()) return;
+    if (!name.trim()) {
+return;
+}
     setIsSaving(true);
     await onSave({
       name,
@@ -448,7 +450,7 @@ const RuleBuilderModal: React.FC<RuleBuilderModalProps> = ({ rule, onClose, onSa
       priority,
       conditions,
       conditionLogic,
-      actions,
+      actions
     });
     setIsSaving(false);
   };
@@ -568,7 +570,7 @@ const RuleBuilderModal: React.FC<RuleBuilderModalProps> = ({ rule, onClose, onSa
                   }}
                   placeholder="Value"
                 />
-                <button 
+                <button
                   className="btn-icon danger"
                   onClick={() => handleRemoveCondition(condition.id)}
                 >
@@ -633,7 +635,7 @@ const RuleBuilderModal: React.FC<RuleBuilderModalProps> = ({ rule, onClose, onSa
                   />
                   Stop
                 </label>
-                <button 
+                <button
                   className="btn-icon danger"
                   onClick={() => handleRemoveAction(action.id)}
                 >
@@ -650,8 +652,8 @@ const RuleBuilderModal: React.FC<RuleBuilderModalProps> = ({ rule, onClose, onSa
           <button className="btn btn-secondary" onClick={onClose}>
             Cancel
           </button>
-          <button 
-            className="btn btn-primary" 
+          <button
+            className="btn btn-primary"
             onClick={handleSave}
             disabled={!name.trim() || isSaving}
           >
@@ -676,7 +678,9 @@ const TemplatePickerModal: React.FC<TemplatePickerModalProps> = ({ templates, on
   const [priority, setPriority] = useState<RulePriority>(RulePriority.MEDIUM);
 
   const handleSelect = async () => {
-    if (!selectedTemplate || !ruleName.trim()) return;
+    if (!selectedTemplate || !ruleName.trim()) {
+return;
+}
     await onSelect(selectedTemplate.id, ruleName, priority);
   };
 
@@ -760,7 +764,7 @@ const RuleTesterModal: React.FC<RuleTesterModalProps> = ({ rule, onClose, onTest
     to: 'me@company.com',
     subject: 'Test Subject',
     body: 'Test body content',
-    hasAttachments: false,
+    hasAttachments: false
   });
   const [testResult, setTestResult] = useState<any>(null);
 
@@ -776,7 +780,7 @@ const RuleTesterModal: React.FC<RuleTesterModalProps> = ({ rule, onClose, onTest
       isRead: false,
       isStarred: false,
       isArchived: false,
-      direction: 'incoming',
+      direction: 'incoming'
     });
     setTestResult(result);
   };

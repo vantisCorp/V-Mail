@@ -46,7 +46,7 @@ export const App: React.FC = () => {
 
   const { addNotification } = useNotifications();
   const { emails } = useEmails();
-  
+
   const {
     advancedSearch,
     savedSearches,
@@ -59,14 +59,14 @@ export const App: React.FC = () => {
     toggleCaseSensitive,
     saveSearch,
     loadSavedSearch,
-    deleteSavedSearch,
+    deleteSavedSearch
   } = useAdvancedSearch(emails);
 
   const {
     statistics,
     timeRange,
     setTimeRange,
-    refreshStats,
+    refreshStats
   } = useEmailStatistics(emails);
 
   const handleShortcutAction = useCallback((actionId: string) => {
@@ -101,7 +101,7 @@ export const App: React.FC = () => {
     isEnabled: shortcutsEnabled,
     setEnabled: setShortcutsEnabled,
     showHelp: showShortcutsHelp,
-    setShowHelp: setShowShortcutsHelp,
+    setShowHelp: setShowShortcutsHelp
   } = useKeyboardShortcuts(handleShortcutAction);
 
   useEffect(() => {

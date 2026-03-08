@@ -91,11 +91,11 @@ describe('useCalendar', () => {
           summary: 'Test Event',
           description: 'Test Description',
           start: {
-            dateTime: new Date(Date.now() + 3600000).toISOString(),
+            dateTime: new Date(Date.now() + 3600000).toISOString()
           },
           end: {
-            dateTime: new Date(Date.now() + 7200000).toISOString(),
-          },
+            dateTime: new Date(Date.now() + 7200000).toISOString()
+          }
         });
       });
 
@@ -117,17 +117,17 @@ describe('useCalendar', () => {
           calendarId: calendar.calendarId,
           summary: 'Original Event',
           start: {
-            dateTime: new Date(Date.now() + 3600000).toISOString(),
+            dateTime: new Date(Date.now() + 3600000).toISOString()
           },
           end: {
-            dateTime: new Date(Date.now() + 7200000).toISOString(),
-          },
+            dateTime: new Date(Date.now() + 7200000).toISOString()
+          }
         });
 
         if (event) {
           await result.current.updateEvent(event.id, {
             eventId: event.id,
-            summary: 'Updated Event',
+            summary: 'Updated Event'
           });
         }
       });
@@ -154,11 +154,11 @@ describe('useCalendar', () => {
           calendarId: calendar.calendarId,
           summary: 'Event to Delete',
           start: {
-            dateTime: new Date(Date.now() + 3600000).toISOString(),
+            dateTime: new Date(Date.now() + 3600000).toISOString()
           },
           end: {
-            dateTime: new Date(Date.now() + 7200000).toISOString(),
-          },
+            dateTime: new Date(Date.now() + 7200000).toISOString()
+          }
         });
 
         if (event) {
@@ -187,11 +187,11 @@ describe('useCalendar', () => {
           calendarId: calendar.calendarId,
           summary: 'Test Event',
           start: {
-            dateTime: new Date(Date.now() + 3600000).toISOString(),
+            dateTime: new Date(Date.now() + 3600000).toISOString()
           },
           end: {
-            dateTime: new Date(Date.now() + 7200000).toISOString(),
-          },
+            dateTime: new Date(Date.now() + 7200000).toISOString()
+          }
         });
 
         if (event) {
@@ -216,7 +216,7 @@ describe('useCalendar', () => {
         from: 'sender@example.com',
         body: 'Meeting details here',
         date: new Date().toISOString(),
-        to: ['recipient@example.com'],
+        to: ['recipient@example.com']
       };
 
       const options = {
@@ -228,7 +228,7 @@ describe('useCalendar', () => {
         defaultDuration: 60,
         defaultReminder: 15,
         autoAddAttendees: true,
-        includeAttachments: false,
+        includeAttachments: false
       };
 
       await act(async () => {
@@ -250,7 +250,7 @@ describe('useCalendar', () => {
       await waitFor(() => !result.current.isLoading);
 
       const confirmedEvents = result.current.getFilteredEvents({
-        status: EventStatus.CONFIRMED,
+        status: EventStatus.CONFIRMED
       });
 
       expect(confirmedEvents.every((e) => e.status === EventStatus.CONFIRMED)).toBe(true);
@@ -262,10 +262,10 @@ describe('useCalendar', () => {
       await waitFor(() => !result.current.isLoading);
 
       const searchResults = result.current.getFilteredEvents({
-        q: 'Meeting',
+        q: 'Meeting'
       });
 
-      expect(searchResults.every((e) => 
+      expect(searchResults.every((e) =>
         e.summary.toLowerCase().includes('meeting') ||
         e.description?.toLowerCase().includes('meeting')
       )).toBe(true);
@@ -281,7 +281,7 @@ describe('useCalendar', () => {
 
       const events = result.current.getFilteredEvents({
         timeMin: now.toISOString(),
-        timeMax: nextWeek.toISOString(),
+        timeMax: nextWeek.toISOString()
       });
 
       expect(events).toBeDefined();
@@ -354,7 +354,7 @@ describe('useCalendar', () => {
       const query = {
         timeMin: new Date().toISOString(),
         timeMax: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        items: [{ id: 'calendar-1' }],
+        items: [{ id: 'calendar-1' }]
       };
 
       const response = await act(async () => {
@@ -392,7 +392,7 @@ describe('useCalendar', () => {
       expect(result.current.calendars.length).toBeGreaterThan(0);
 
       const calendar = result.current.calendars[0];
-      
+
       await act(async () => {
         await result.current.syncCalendar(calendar.id);
       });
@@ -419,15 +419,15 @@ describe('useCalendar', () => {
           calendarId: calendar.calendarId,
           summary: 'Meeting with Attendees',
           start: {
-            dateTime: new Date(Date.now() + 3600000).toISOString(),
+            dateTime: new Date(Date.now() + 3600000).toISOString()
           },
           end: {
-            dateTime: new Date(Date.now() + 7200000).toISOString(),
+            dateTime: new Date(Date.now() + 7200000).toISOString()
           },
           attendees: [
             { email: 'attendee1@example.com' },
-            { email: 'attendee2@example.com' },
-          ],
+            { email: 'attendee2@example.com' }
+          ]
         });
         if (event) {
           eventId = event.id;
@@ -459,15 +459,15 @@ describe('useCalendar', () => {
           calendarId: calendar.calendarId,
           summary: 'Meeting with Attendees',
           start: {
-            dateTime: new Date(Date.now() + 3600000).toISOString(),
+            dateTime: new Date(Date.now() + 3600000).toISOString()
           },
           end: {
-            dateTime: new Date(Date.now() + 7200000).toISOString(),
+            dateTime: new Date(Date.now() + 7200000).toISOString()
           },
           attendees: [
             { email: 'attendee1@example.com' },
-            { email: 'attendee2@example.com' },
-          ],
+            { email: 'attendee2@example.com' }
+          ]
         });
         if (event) {
           eventId = event.id;
@@ -504,15 +504,15 @@ describe('useCalendar', () => {
           calendarId: calendar.calendarId,
           summary: 'Meeting with Attendees',
           start: {
-            dateTime: new Date(Date.now() + 3600000).toISOString(),
+            dateTime: new Date(Date.now() + 3600000).toISOString()
           },
           end: {
-            dateTime: new Date(Date.now() + 7200000).toISOString(),
+            dateTime: new Date(Date.now() + 7200000).toISOString()
           },
           attendees: [
             { email: 'attendee1@example.com' },
-            { email: 'attendee2@example.com' },
-          ],
+            { email: 'attendee2@example.com' }
+          ]
         });
         if (event) {
           eventId = event.id;
@@ -594,11 +594,11 @@ describe('useCalendar', () => {
             calendarId: '',
             summary: '',
             start: {
-              dateTime: '',
+              dateTime: ''
             },
             end: {
-              dateTime: '',
-            },
+              dateTime: ''
+            }
           });
         } catch (error) {
           expect(error).toBeDefined();

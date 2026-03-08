@@ -13,7 +13,7 @@ const mockPositiveContext = {
   body: 'I am absolutely thrilled with the excellent service! Thank you so much for your wonderful help and support. Great job!',
   sender: 'happy@user.com',
   recipients: ['test@example.com'],
-  timestamp: new Date(),
+  timestamp: new Date()
 };
 
 const mockNegativeContext = {
@@ -22,7 +22,7 @@ const mockNegativeContext = {
   body: 'I am extremely disappointed and frustrated with this terrible service. This is awful and I hate it.',
   sender: 'unhappy@user.com',
   recipients: ['test@example.com'],
-  timestamp: new Date(),
+  timestamp: new Date()
 };
 
 const mockUrgentContext = {
@@ -31,7 +31,7 @@ const mockUrgentContext = {
   body: 'URGENT! This is critical and requires immediate attention. Please respond ASAP. This is an emergency!',
   sender: 'urgent@company.com',
   recipients: ['test@example.com'],
-  timestamp: new Date(),
+  timestamp: new Date()
 };
 
 const mockFormalContext = {
@@ -40,7 +40,7 @@ const mockFormalContext = {
   body: 'Dear Sir or Madam, I am writing to respectfully and formally request your assistance regarding this matter. Furthermore, I would like to hereby confirm my interest. I look forward to your response. Sincerely, John Doe',
   sender: 'formal@business.com',
   recipients: ['test@example.com'],
-  timestamp: new Date(),
+  timestamp: new Date()
 };
 
 const mockCasualContext = {
@@ -49,7 +49,7 @@ const mockCasualContext = {
   body: 'Hey there! Just wanted to say hi and catch up. Let me know what you think! Cheers!',
   sender: 'friend@personal.com',
   recipients: ['test@example.com'],
-  timestamp: new Date(),
+  timestamp: new Date()
 };
 
 describe('useSentimentAnalysis', () => {
@@ -190,7 +190,7 @@ describe('useSentimentAnalysis', () => {
         results = await result.current.analyzeBatch([
           mockPositiveContext,
           mockNegativeContext,
-          mockUrgentContext,
+          mockUrgentContext
         ]);
       });
 
@@ -379,7 +379,7 @@ describe('useSentimentAnalysis', () => {
         results = await result.current.analyzeBatch([
           mockPositiveContext,
           mockNegativeContext,
-          mockPositiveContext,
+          mockPositiveContext
         ]);
       });
 
@@ -402,7 +402,7 @@ describe('useSentimentAnalysis', () => {
 
       const trend = result.current.getTrend([
         'email-positive-1',
-        'email-negative-1',
+        'email-negative-1'
       ]);
       expect(trend).toBeDefined();
       expect(trend.averageScore).toBeDefined();
@@ -454,7 +454,7 @@ describe('useSentimentAnalysis', () => {
         result.current.submitFeedback({
           emailId: 'email-positive-1',
           correctSentiment: Sentiment.POSITIVE,
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toISOString()
         });
       });
 
@@ -533,7 +533,7 @@ describe('useSentimentAnalysis', () => {
         body: `Test email content number ${i}. This is a positive message with good vibes.`,
         sender: `sender${i}@test.com`,
         recipients: ['test@example.com'],
-        timestamp: new Date(),
+        timestamp: new Date()
       }));
 
       const start = performance.now();
@@ -560,7 +560,7 @@ describe('useSentimentAnalysis', () => {
         body: '',
         sender: 'test@test.com',
         recipients: ['test@example.com'],
-        timestamp: new Date(),
+        timestamp: new Date()
       };
 
       let analysisResult;
@@ -581,7 +581,7 @@ describe('useSentimentAnalysis', () => {
         body: 'OK',
         sender: 'test@test.com',
         recipients: ['test@example.com'],
-        timestamp: new Date(),
+        timestamp: new Date()
       };
 
       let analysisResult;
@@ -602,7 +602,7 @@ describe('useSentimentAnalysis', () => {
         body: 'I love this product but hate the customer service. The quality is great but the delivery was terrible.',
         sender: 'test@test.com',
         recipients: ['test@example.com'],
-        timestamp: new Date(),
+        timestamp: new Date()
       };
 
       let analysisResult;

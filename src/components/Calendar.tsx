@@ -9,7 +9,7 @@ import {
   CalendarProvider,
   EventStatus,
   CalendarEvent,
-  CreateEventPayload,
+  CreateEventPayload
 } from '../types/calendar';
 
 interface CalendarProps {
@@ -46,7 +46,7 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
     getEventsForMonth,
     getStatistics,
     syncAllCalendars,
-    addAttendee,
+    addAttendee
   } = useCalendar();
 
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -60,7 +60,7 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
     startTime: '09:00',
     endDate: '',
     endTime: '10:00',
-    allDay: false,
+    allDay: false
   });
 
   // Get events based on view mode
@@ -118,14 +118,14 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
   // Handle date navigation
   const navigateDate = (direction: 'prev' | 'next' | 'today') => {
     const newDate = new Date(selectedDate);
-    
+
     if (direction === 'today') {
       setSelectedDate(new Date());
       return;
     }
-    
+
     const amount = direction === 'next' ? 1 : -1;
-    
+
     switch (viewMode) {
       case 'day':
         newDate.setDate(newDate.getDate() + amount);
@@ -137,7 +137,7 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
         newDate.setMonth(newDate.getMonth() + amount);
         break;
     }
-    
+
     setSelectedDate(newDate);
   };
 
@@ -146,11 +146,11 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
     const startDate = new Date(newEventForm.startDate);
     const [startHour, startMin] = newEventForm.startTime.split(':').map(Number);
     startDate.setHours(startHour, startMin, 0, 0);
-    
+
     const endDate = new Date(newEventForm.endDate || newEventForm.startDate);
     const [endHour, endMin] = newEventForm.endTime.split(':').map(Number);
     endDate.setHours(endHour, endMin, 0, 0);
-    
+
     const payload: CreateEventPayload = {
       calendarId: calendars.find(c => c.primary)?.calendarId || 'primary',
       summary: newEventForm.summary,
@@ -162,9 +162,9 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
       end: newEventForm.allDay
         ? { date: newEventForm.endDate || newEventForm.startDate }
         : { dateTime: endDate.toISOString(), timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone },
-      reminders: { useDefault: true },
+      reminders: { useDefault: true }
     };
-    
+
     await createEvent(payload);
     setShowCreateModal(false);
     setNewEventForm({
@@ -175,14 +175,16 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
       startTime: '09:00',
       endDate: '',
       endTime: '10:00',
-      allDay: false,
+      allDay: false
     });
   };
 
   // Handle convert email to event
   const handleConvertEmail = async () => {
-    if (!emailData) return;
-    
+    if (!emailData) {
+return;
+}
+
     await convertEmailToEvent('email-id', emailData, {
       extractTitleFromSubject: true,
       extractDescriptionFromBody: true,
@@ -192,9 +194,9 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
       defaultDuration: 60,
       defaultReminder: 15,
       autoAddAttendees: true,
-      includeAttachments: true,
+      includeAttachments: true
     });
-    
+
     setShowConvertModal(false);
   };
 
@@ -208,22 +210,22 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
   const renderWeekView = () => {
     const startOfWeek = new Date(selectedDate);
     startOfWeek.setDate(selectedDate.getDate() - selectedDate.getDay());
-    
+
     const days = Array.from({ length: 7 }, (_, i) => {
       const day = new Date(startOfWeek);
       day.setDate(startOfWeek.getDate() + i);
       return day;
     });
-    
+
     const hours = Array.from({ length: 24 }, (_, i) => i);
-    
+
     return (
       <div className="calendar-week-view">
         <div className="week-header">
           <div className="time-column-header"></div>
           {days.map((day, i) => (
-            <div 
-              key={i} 
+            <div
+              key={i}
               className={`day-header ${day.toDateString() === new Date().toDateString() ? 'today' : ''}`}
             >
               <div className="day-name">{day.toLocaleDateString('en-US', { weekday: 'short' })}</div>
@@ -251,10 +253,10 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
                   const startMin = new Date(event.start.dateTime!).getMinutes();
                   const endHour = new Date(event.end.dateTime!).getHours();
                   const endMin = new Date(event.end.dateTime!).getMinutes();
-                  
+
                   const top = (startHour - 6) * 60 + startMin;
                   const height = (endHour - startHour) * 60 + (endMin - startMin);
-                  
+
                   return (
                     <div
                       key={event.id}
@@ -262,7 +264,7 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
                       style={{
                         top: `${top}px`,
                         height: `${Math.max(height, 30)}px`,
-                        backgroundColor: getProviderColor(event.provider),
+                        backgroundColor: getProviderColor(event.provider)
                       }}
                       onClick={() => {
                         setSelectedEvent(event);
@@ -285,31 +287,31 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
   const renderMonthView = () => {
     const startOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
     const endOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
-    
+
     const startDay = startOfMonth.getDay();
     const totalDays = endOfMonth.getDate();
-    
+
     const weeks: Date[][] = [];
     let currentWeek: Date[] = [];
-    
+
     // Add days from previous month
     for (let i = 0; i < startDay; i++) {
       const day = new Date(startOfMonth);
       day.setDate(day.getDate() - (startDay - i));
       currentWeek.push(day);
     }
-    
+
     // Add days from current month
     for (let day = 1; day <= totalDays; day++) {
       const date = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), day);
       currentWeek.push(date);
-      
+
       if (currentWeek.length === 7) {
         weeks.push(currentWeek);
         currentWeek = [];
       }
     }
-    
+
     // Add days from next month
     if (currentWeek.length > 0) {
       while (currentWeek.length < 7) {
@@ -319,7 +321,7 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
       }
       weeks.push(currentWeek);
     }
-    
+
     return (
       <div className="calendar-month-view">
         <div className="month-header">
@@ -334,7 +336,7 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
                 const dayEvents = getEventsForDate(day);
                 const isCurrentMonth = day.getMonth() === selectedDate.getMonth();
                 const isToday = day.toDateString() === new Date().toDateString();
-                
+
                 return (
                   <div
                     key={dayIndex}
@@ -375,7 +377,7 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
   const renderDayView = () => {
     const hours = Array.from({ length: 24 }, (_, i) => i);
     const dayEvents = getEventsForDate(selectedDate);
-    
+
     return (
       <div className="calendar-day-view">
         <div className="day-header">
@@ -402,10 +404,10 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
                 const startMin = new Date(event.start.dateTime!).getMinutes();
                 const endHour = new Date(event.end.dateTime!).getHours();
                 const endMin = new Date(event.end.dateTime!).getMinutes();
-                
+
                 const top = (startHour - 6) * 60 + startMin;
                 const height = (endHour - startHour) * 60 + (endMin - startMin);
-                
+
                 return (
                   <div
                     key={event.id}
@@ -413,7 +415,7 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
                     style={{
                       top: `${top}px`,
                       height: `${Math.max(height, 30)}px`,
-                      backgroundColor: getProviderColor(event.provider),
+                      backgroundColor: getProviderColor(event.provider)
                     }}
                     onClick={() => {
                       setSelectedEvent(event);
@@ -481,7 +483,7 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
                 <div className="event-time">{formatEventTime(event)}</div>
                 {event.location && <div className="event-location">📍 {event.location}</div>}
                 <div className="event-meta">
-                  <span 
+                  <span
                     className="provider-badge"
                     style={{ backgroundColor: getProviderColor(event.provider) }}
                   >
@@ -504,8 +506,10 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
 
   // Render event detail panel
   const renderEventDetail = () => {
-    if (!selectedEvent) return null;
-    
+    if (!selectedEvent) {
+return null;
+}
+
     return (
       <div className="event-detail-panel">
         <div className="detail-header">
@@ -559,8 +563,10 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
 
   // Render connect modal
   const renderConnectModal = () => {
-    if (!showConnectModal) return null;
-    
+    if (!showConnectModal) {
+return null;
+}
+
     return (
       <div className="modal-overlay" onClick={() => setShowConnectModal(false)}>
         <div className="modal" onClick={e => e.stopPropagation()}>
@@ -591,8 +597,10 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
 
   // Render create modal
   const renderCreateModal = () => {
-    if (!showCreateModal) return null;
-    
+    if (!showCreateModal) {
+return null;
+}
+
     return (
       <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
         <div className="modal" onClick={e => e.stopPropagation()}>
@@ -737,14 +745,14 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
       <div className="calendar-accounts">
         {accounts.map(account => (
           <div key={account.id} className="account-chip">
-            <span 
+            <span
               className="provider-icon"
               style={{ backgroundColor: getProviderColor(account.provider) }}
             >
               {account.provider === CalendarProvider.GOOGLE ? 'G' : 'O'}
             </span>
             <span className="account-email">{account.email}</span>
-            <button 
+            <button
               className="disconnect-btn"
               onClick={() => disconnectCalendar(account.id)}
             >

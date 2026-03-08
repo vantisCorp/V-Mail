@@ -18,7 +18,7 @@ export class TOTPService {
    */
   static generateSecret(): string {
     return speakeasy.generateSecret({
-      length: this.SECRET_LENGTH,
+      length: this.SECRET_LENGTH
     }).base32;
   }
 
@@ -37,8 +37,8 @@ export class TOTPService {
         margin: 1,
         color: {
           dark: '#000000',
-          light: '#ffffff',
-        },
+          light: '#ffffff'
+        }
       }
     );
   }
@@ -52,7 +52,7 @@ export class TOTPService {
       encoding: 'base32',
       token,
       window: this.WINDOW,
-      time: Math.floor(Date.now() / 1000),
+      time: Math.floor(Date.now() / 1000)
     });
   }
 
@@ -65,11 +65,11 @@ export class TOTPService {
     attempts: number = 3
   ): TwoFactorAuthVerifyResponse {
     const isValid = this.verifyCode(secret, token);
-    
+
     return {
       success: isValid,
       message: isValid ? 'Code verified successfully' : 'Invalid code',
-      remainingAttempts: isValid ? undefined : Math.max(0, attempts - 1),
+      remainingAttempts: isValid ? undefined : Math.max(0, attempts - 1)
     };
   }
 
@@ -81,7 +81,7 @@ export class TOTPService {
     for (let i = 0; i < count; i++) {
       codes.push(
         speakeasy.generateSecret({
-          length: 4,
+          length: 4
         }).base32
       );
     }
@@ -93,11 +93,11 @@ export class TOTPService {
    */
   static verifyBackupCode(backupCodes: string[], code: string): { isValid: boolean; remainingCodes: string[] } {
     const codeIndex = backupCodes.indexOf(code);
-    
+
     if (codeIndex === -1) {
       return {
         isValid: false,
-        remainingCodes: backupCodes,
+        remainingCodes: backupCodes
       };
     }
 
@@ -107,7 +107,7 @@ export class TOTPService {
 
     return {
       isValid: true,
-      remainingCodes,
+      remainingCodes
     };
   }
 
@@ -127,7 +127,7 @@ export class TOTPService {
       secret,
       qrCodeUri,
       backupCodes,
-      isVerified: false,
+      isVerified: false
     };
   }
 
@@ -146,7 +146,7 @@ export class TOTPService {
     return speakeasy.totp({
       secret,
       encoding: 'base32',
-      time: Math.floor(Date.now() / 1000),
+      time: Math.floor(Date.now() / 1000)
     });
   }
 }

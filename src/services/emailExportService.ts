@@ -10,7 +10,7 @@ import type {
   ExportResult,
   ExportRequest,
   ExportHistory,
-  ExportStatistics,
+  ExportStatistics
 } from '../types/emailExport';
 
 class EmailExportService {
@@ -60,7 +60,7 @@ class EmailExportService {
         emailCount: 1,
         downloadUrl,
         fileSize: blob.size,
-        duration: Date.now() - startTime,
+        duration: Date.now() - startTime
       };
 
       this.addToHistory(result);
@@ -72,7 +72,7 @@ class EmailExportService {
         emailCount: 0,
         fileSize: 0,
         duration: Date.now() - startTime,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : 'Unknown error'
       };
 
       this.addToHistory(result);
@@ -108,7 +108,7 @@ class EmailExportService {
             totalEmails,
             percentage: Math.round(((i + 1) / totalEmails) * 100),
             status: 'processing',
-            currentEmailId: email.id,
+            currentEmailId: email.id
           };
 
           if (onProgress) {
@@ -117,7 +117,7 @@ class EmailExportService {
 
           await this.exportSingleEmail(email, {
             ...options,
-            filename: `${options.filename || 'email_export'}_${i + 1}`,
+            filename: `${options.filename || 'email_export'}_${i + 1}`
           });
 
           completedCount++;
@@ -137,7 +137,7 @@ class EmailExportService {
         emailCount: completedCount,
         fileSize: 0, // Total size not tracked for multiple exports
         duration: Date.now() - startTime,
-        errors: errors.length > 0 ? errors : undefined,
+        errors: errors.length > 0 ? errors : undefined
       };
 
       this.addToHistory(result);
@@ -150,7 +150,7 @@ class EmailExportService {
         fileSize: 0,
         duration: Date.now() - startTime,
         error: error instanceof Error ? error.message : 'Unknown error',
-        errors: errors.length > 0 ? errors : undefined,
+        errors: errors.length > 0 ? errors : undefined
       };
 
       this.addToHistory(result);
@@ -211,7 +211,7 @@ class EmailExportService {
       `Date: ${new Date(email.date).toUTCString()}`,
       'Content-Type: text/html; charset=utf-8',
       '',
-      email.body || email.plainBody || '',
+      email.body || email.plainBody || ''
     ].join('\n');
 
     return new Blob([emlContent], { type: 'message/rfc822' });
@@ -248,7 +248,7 @@ class EmailExportService {
       folder: email.folder,
       read: email.read,
       starred: email.starred,
-      exportedAt: new Date().toISOString(),
+      exportedAt: new Date().toISOString()
     };
 
     const jsonContent = JSON.stringify(data, null, 2);
@@ -337,7 +337,7 @@ class EmailExportService {
       timestamp: Date.now(),
       fileSize: result.fileSize,
       duration: result.duration,
-      success: result.success,
+      success: result.success
     };
     history.unshift(entry);
 
@@ -386,16 +386,16 @@ class EmailExportService {
         pdf: 0,
         eml: 0,
         msg: 0,
-        json: 0,
+        json: 0
       },
       scopeBreakdown: {
         single: 0,
         multiple: 0,
         thread: 0,
-        folder: 0,
+        folder: 0
       },
       successfulExports: history.filter((entry) => entry.success).length,
-      failedExports: history.filter((entry) => !entry.success).length,
+      failedExports: history.filter((entry) => !entry.success).length
     };
 
     // Calculate format breakdown

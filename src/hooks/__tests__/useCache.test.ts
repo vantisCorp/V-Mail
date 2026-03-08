@@ -233,7 +233,7 @@ describe('useCacheManager', () => {
         type: 'tag' as const,
         condition: 'email',
         action: 'delete' as const,
-        tags: ['email'],
+        tags: ['email']
       };
 
       act(() => {
@@ -251,7 +251,7 @@ describe('useCacheManager', () => {
         type: 'tag' as const,
         condition: 'email',
         action: 'delete' as const,
-        tags: ['email'],
+        tags: ['email']
       };
 
       act(() => {
@@ -276,7 +276,7 @@ describe('useCacheManager', () => {
         await result.current.prewarmCache(
           {
             enabled: true,
-            keys: ['key1', 'key2'],
+            keys: ['key1', 'key2']
           },
           dataFetcher
         );

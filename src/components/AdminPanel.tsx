@@ -1,6 +1,6 @@
 /**
  * AdminPanel Component for V-Mail v1.2.0
- * 
+ *
  * Comprehensive admin panel with tabs for:
  * - Dashboard (overview statistics and system health)
  * - Users (user management and bulk operations)
@@ -25,9 +25,9 @@ const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
     pending: 'status-pending',
     healthy: 'status-healthy',
     degraded: 'status-degraded',
-    outage: 'status-outage',
+    outage: 'status-outage'
   };
-  
+
   return (
     <span className={`status-badge ${statusColors[status] || ''}`}>
       {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -40,11 +40,11 @@ const RoleBadge: React.FC<{ role: string }> = ({ role }) => {
   const roleColors: Record<string, string> = {
     super_admin: 'role-super-admin',
     admin: 'role-admin',
-    support: 'role-support',
+    support: 'role-support'
   };
-  
+
   const roleName = role.replace('_', ' ');
-  
+
   return (
     <span className={`role-badge ${roleColors[role] || ''}`}>
       {roleName.charAt(0).toUpperCase() + roleName.slice(1)}
@@ -58,9 +58,9 @@ const SeverityBadge: React.FC<{ severity: string }> = ({ severity }) => {
     info: 'severity-info',
     warning: 'severity-warning',
     error: 'severity-error',
-    critical: 'severity-critical',
+    critical: 'severity-critical'
   };
-  
+
   return (
     <span className={`severity-badge ${severityColors[severity] || ''}`}>
       {severity.charAt(0).toUpperCase() + severity.slice(1)}
@@ -69,10 +69,10 @@ const SeverityBadge: React.FC<{ severity: string }> = ({ severity }) => {
 };
 
 // Stats card component
-const StatsCard: React.FC<{ 
-  title: string; 
-  value: string | number; 
-  subtitle?: string; 
+const StatsCard: React.FC<{
+  title: string;
+  value: string | number;
+  subtitle?: string;
   icon: string;
   trend?: number;
 }> = ({ title, value, subtitle, icon, trend }) => (
@@ -92,9 +92,9 @@ const StatsCard: React.FC<{
 );
 
 // Service health component
-const ServiceHealth: React.FC<{ 
-  service: string; 
-  status: string; 
+const ServiceHealth: React.FC<{
+  service: string;
+  status: string;
   responseTime: number;
   uptime: number;
 }> = ({ service, status, responseTime, uptime }) => (
@@ -123,15 +123,19 @@ const UserRow: React.FC<{
   onReactivate: () => void;
 }> = ({ user, onEdit, onDelete, onSuspend, onReactivate }) => {
   const formatDate = (date?: Date) => {
-    if (!date) return 'Never';
+    if (!date) {
+return 'Never';
+}
     return new Date(date).toLocaleDateString();
   };
-  
+
   const formatStorage = (gb: number) => {
-    if (gb < 1) return `${(gb * 1024).toFixed(1)} MB`;
+    if (gb < 1) {
+return `${(gb * 1024).toFixed(1)} MB`;
+}
     return `${gb.toFixed(2)} GB`;
   };
-  
+
   return (
     <div className="user-row">
       <div className="user-info">
@@ -147,12 +151,12 @@ const UserRow: React.FC<{
           <span className="user-email">{user.email}</span>
         </div>
       </div>
-      
+
       <div className="user-meta">
         <RoleBadge role={user.role} />
         <StatusBadge status={user.status} />
       </div>
-      
+
       <div className="user-stats">
         <span className="stat">
           <strong>{formatStorage(user.storageUsed)}</strong> Storage
@@ -161,12 +165,12 @@ const UserRow: React.FC<{
           <strong>{user.emailCount.toLocaleString()}</strong> Emails
         </span>
       </div>
-      
+
       <div className="user-dates">
         <span className="date">Joined: {formatDate(user.createdAt)}</span>
         <span className="date">Last login: {formatDate(user.lastLoginAt)}</span>
       </div>
-      
+
       <div className="user-actions">
         <button className="btn-icon" onClick={onEdit} title="Edit">✏️</button>
         {user.status === 'active' ? (
@@ -191,21 +195,27 @@ const AlertCard: React.FC<{
     security: '🔒',
     storage: '💾',
     billing: '💳',
-    system: '⚙️',
+    system: '⚙️'
   };
-  
+
   const timeAgo = (date: Date) => {
     const now = new Date();
     const diff = now.getTime() - new Date(date).getTime();
     const hours = Math.floor(diff / (60 * 60 * 1000));
     const days = Math.floor(diff / (24 * 60 * 60 * 1000));
-    
-    if (hours < 1) return 'Just now';
-    if (hours < 24) return `${hours}h ago`;
-    if (days === 1) return 'Yesterday';
+
+    if (hours < 1) {
+return 'Just now';
+}
+    if (hours < 24) {
+return `${hours}h ago`;
+}
+    if (days === 1) {
+return 'Yesterday';
+}
     return `${days} days ago`;
   };
-  
+
   return (
     <div className={`alert-card ${alert.isRead ? 'read' : 'unread'} ${alert.isResolved ? 'resolved' : ''}`}>
       <div className="alert-icon">{typeIcons[alert.type] || '📋'}</div>
@@ -240,7 +250,7 @@ export const AdminPanel: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [roleFilter, setRoleFilter] = useState<string>('all');
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
-  
+
   const {
     users,
     auditLogs,
@@ -260,63 +270,65 @@ export const AdminPanel: React.FC = () => {
     dismissAlert,
     updateSettings,
     getFilteredUsers,
-    searchUsers,
+    searchUsers
   } = useAdminPanel();
-  
+
   const filteredUsers = useMemo(() => {
     let result = searchQuery ? searchUsers(searchQuery) : users;
-    
+
     if (statusFilter !== 'all') {
       result = result.filter(u => u.status === statusFilter);
     }
-    
+
     if (roleFilter !== 'all') {
       result = result.filter(u => u.role === roleFilter);
     }
-    
+
     return result;
   }, [users, searchQuery, statusFilter, roleFilter, searchUsers]);
-  
+
   const handleCreateUser = async (payload: CreateUserPayload) => {
     await createUser(payload);
   };
-  
+
   const handleEditUser = async (userId: string, payload: UpdateUserPayload) => {
     await updateUser(userId, payload);
   };
-  
+
   const handleDeleteUser = async (userId: string) => {
     if (confirm('Are you sure you want to delete this user?')) {
       await deleteUser(userId);
     }
   };
-  
+
   const handleSuspendUser = async (userId: string) => {
     if (confirm('Are you sure you want to suspend this user?')) {
       await suspendUser(userId);
     }
   };
-  
+
   const handleReactivateUser = async (userId: string) => {
     await reactivateUser(userId);
   };
-  
+
   const handleBulkDelete = async () => {
-    if (selectedUsers.size === 0) return;
+    if (selectedUsers.size === 0) {
+return;
+}
     if (confirm(`Are you sure you want to delete ${selectedUsers.size} users?`)) {
       await bulkDeleteUsers(Array.from(selectedUsers));
       setSelectedUsers(new Set());
     }
   };
-  
+
   const handleResolveAlert = async (alertId: string) => {
     await resolveAlert(alertId);
   };
-  
+
   const handleDismissAlert = async (alertId: string) => {
     await dismissAlert(alertId);
   };
-  
+
   if (isLoading) {
     return (
       <div className="admin-panel-loading">
@@ -325,7 +337,7 @@ export const AdminPanel: React.FC = () => {
       </div>
     );
   }
-  
+
   if (error) {
     return (
       <div className="admin-panel-error">
@@ -335,7 +347,7 @@ export const AdminPanel: React.FC = () => {
       </div>
     );
   }
-  
+
   return (
     <div className="admin-panel">
       {/* Header */}
@@ -348,34 +360,34 @@ export const AdminPanel: React.FC = () => {
           <span className="version">v{systemStatus?.version || '1.2.0'}</span>
         </div>
       </div>
-      
+
       {/* Tabs */}
       <div className="admin-tabs">
-        <button 
+        <button
           className={`tab-btn ${activeTab === 'dashboard' ? 'active' : ''}`}
           onClick={() => setActiveTab('dashboard')}
         >
           Dashboard
         </button>
-        <button 
+        <button
           className={`tab-btn ${activeTab === 'users' ? 'active' : ''}`}
           onClick={() => setActiveTab('users')}
         >
           Users
         </button>
-        <button 
+        <button
           className={`tab-btn ${activeTab === 'audit-logs' ? 'active' : ''}`}
           onClick={() => setActiveTab('audit-logs')}
         >
           Audit Logs
         </button>
-        <button 
+        <button
           className={`tab-btn ${activeTab === 'settings' ? 'active' : ''}`}
           onClick={() => setActiveTab('settings')}
         >
           Settings
         </button>
-        <button 
+        <button
           className={`tab-btn ${activeTab === 'alerts' ? 'active' : ''}`}
           onClick={() => setActiveTab('alerts')}
         >
@@ -387,53 +399,53 @@ export const AdminPanel: React.FC = () => {
           )}
         </button>
       </div>
-      
+
       {/* Tab Content */}
       <div className="admin-content">
         {/* Dashboard Tab */}
         {activeTab === 'dashboard' && (
           <div className="tab-panel dashboard-panel">
             <h2>Dashboard Overview</h2>
-            
+
             {/* Stats Grid */}
             <div className="stats-grid">
-              <StatsCard 
-                title="Total Users" 
-                value={stats?.totalUsers || 0} 
+              <StatsCard
+                title="Total Users"
+                value={stats?.totalUsers || 0}
                 icon="👥"
                 trend={stats?.revenue.growth}
               />
-              <StatsCard 
-                title="Active Users" 
-                value={stats?.activeUsers || 0} 
+              <StatsCard
+                title="Active Users"
+                value={stats?.activeUsers || 0}
                 subtitle={`${stats?.suspendedUsers || 0} suspended`}
                 icon="✅"
               />
-              <StatsCard 
-                title="Total Teams" 
-                value={stats?.totalTeams || 0} 
+              <StatsCard
+                title="Total Teams"
+                value={stats?.totalTeams || 0}
                 subtitle={`${stats?.activeTeams || 0} active`}
                 icon="🏢"
               />
-              <StatsCard 
-                title="Storage Used" 
+              <StatsCard
+                title="Storage Used"
                 value={`${(stats?.storageUsed || 0).toFixed(0)} GB`}
                 subtitle={`of ${(stats?.totalStorage || 0).toFixed(0)} GB`}
                 icon="💾"
               />
-              <StatsCard 
-                title="Emails Today" 
-                value={stats?.emailsToday?.toLocaleString() || 0} 
+              <StatsCard
+                title="Emails Today"
+                value={stats?.emailsToday?.toLocaleString() || 0}
                 icon="✉️"
               />
-              <StatsCard 
-                title="Monthly Recurring Revenue" 
+              <StatsCard
+                title="Monthly Recurring Revenue"
                 value={`$${(stats?.revenue.mrr || 0).toLocaleString()}`}
                 icon="💰"
                 trend={stats?.revenue.growth}
               />
             </div>
-            
+
             {/* System Health */}
             <div className="system-health-section">
               <h3>System Health</h3>
@@ -449,7 +461,7 @@ export const AdminPanel: React.FC = () => {
                 ))}
               </div>
             </div>
-            
+
             {/* Recent Alerts */}
             <div className="recent-alerts-section">
               <h3>Recent Alerts</h3>
@@ -466,7 +478,7 @@ export const AdminPanel: React.FC = () => {
             </div>
           </div>
         )}
-        
+
         {/* Users Tab */}
         {activeTab === 'users' && (
           <div className="tab-panel users-panel">
@@ -480,9 +492,9 @@ export const AdminPanel: React.FC = () => {
                   className="search-input"
                 />
               </div>
-              
+
               <div className="filter-bar">
-                <select 
+                <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
                   className="filter-select"
@@ -493,8 +505,8 @@ export const AdminPanel: React.FC = () => {
                   <option value="pending">Pending</option>
                   <option value="deleted">Deleted</option>
                 </select>
-                
-                <select 
+
+                <select
                   value={roleFilter}
                   onChange={(e) => setRoleFilter(e.target.value)}
                   className="filter-select"
@@ -505,7 +517,7 @@ export const AdminPanel: React.FC = () => {
                   <option value="support">Support</option>
                 </select>
               </div>
-              
+
               <div className="action-bar">
                 <button className="btn-primary">+ Create User</button>
                 {selectedUsers.size > 0 && (
@@ -515,7 +527,7 @@ export const AdminPanel: React.FC = () => {
                 )}
               </div>
             </div>
-            
+
             <div className="users-table-header">
               <div className="user-header">User</div>
               <div className="meta-header">Role & Status</div>
@@ -523,7 +535,7 @@ export const AdminPanel: React.FC = () => {
               <div className="dates-header">Dates</div>
               <div className="actions-header">Actions</div>
             </div>
-            
+
             <div className="users-list">
               {filteredUsers.length === 0 ? (
                 <div className="empty-state">
@@ -544,7 +556,7 @@ export const AdminPanel: React.FC = () => {
             </div>
           </div>
         )}
-        
+
         {/* Audit Logs Tab */}
         {activeTab === 'audit-logs' && (
           <div className="tab-panel audit-logs-panel">
@@ -556,7 +568,7 @@ export const AdminPanel: React.FC = () => {
                 className="search-input"
               />
             </div>
-            
+
             <div className="audit-logs-list">
               {auditLogs.map(log => (
                 <div key={log.id} className="audit-log-entry">
@@ -579,101 +591,101 @@ export const AdminPanel: React.FC = () => {
             </div>
           </div>
         )}
-        
+
         {/* Settings Tab */}
         {activeTab === 'settings' && (
           <div className="tab-panel settings-panel">
             <h2>Admin Settings</h2>
-            
+
             <div className="settings-section">
               <h3>General Settings</h3>
               <div className="settings-form">
                 <div className="form-group">
                   <label>Max Users Per Team</label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     defaultValue={settings?.maxUsersPerTeam}
                     onChange={(e) => updateSettings({ maxUsersPerTeam: parseInt(e.target.value) })}
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label>Default Storage Limit (GB)</label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     defaultValue={settings?.defaultStorageLimit}
                     onChange={(e) => updateSettings({ defaultStorageLimit: parseInt(e.target.value) })}
                   />
                 </div>
               </div>
             </div>
-            
+
             <div className="settings-section">
               <h3>Security Settings</h3>
               <div className="settings-form">
                 <label className="toggle-item">
                   <span>Require Email Verification</span>
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     defaultChecked={settings?.requireEmailVerification}
                     onChange={(e) => updateSettings({ requireEmailVerification: e.target.checked })}
                   />
                 </label>
-                
+
                 <label className="toggle-item">
                   <span>Require Two-Factor Authentication</span>
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     defaultChecked={settings?.requireTwoFactor}
                     onChange={(e) => updateSettings({ requireTwoFactor: e.target.checked })}
                   />
                 </label>
-                
+
                 <div className="form-group">
                   <label>Max Login Attempts</label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     defaultValue={settings?.maxLoginAttempts}
                     onChange={(e) => updateSettings({ maxLoginAttempts: parseInt(e.target.value) })}
                   />
                 </div>
               </div>
             </div>
-            
+
             <div className="settings-section">
               <h3>Feature Flags</h3>
               <div className="settings-form">
                 <label className="toggle-item">
                   <span>Enable New User Registration</span>
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     defaultChecked={settings?.enableNewUserRegistration}
                     onChange={(e) => updateSettings({ enableNewUserRegistration: e.target.checked })}
                   />
                 </label>
-                
+
                 <label className="toggle-item">
                   <span>Enable Team Creation</span>
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     defaultChecked={settings?.enableTeamCreation}
                     onChange={(e) => updateSettings({ enableTeamCreation: e.target.checked })}
                   />
                 </label>
-                
+
                 <label className="toggle-item">
                   <span>Enable Public API</span>
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     defaultChecked={settings?.enablePublicApi}
                     onChange={(e) => updateSettings({ enablePublicApi: e.target.checked })}
                   />
                 </label>
-                
+
                 <label className="toggle-item">
                   <span>Enable Maintenance Mode</span>
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     defaultChecked={settings?.enableMaintenanceMode}
                     onChange={(e) => updateSettings({ enableMaintenanceMode: e.target.checked })}
                   />
@@ -682,12 +694,12 @@ export const AdminPanel: React.FC = () => {
             </div>
           </div>
         )}
-        
+
         {/* Alerts Tab */}
         {activeTab === 'alerts' && (
           <div className="tab-panel alerts-panel">
             <h2>System Alerts</h2>
-            
+
             <div className="alerts-list">
               {alerts.length === 0 ? (
                 <div className="empty-state">

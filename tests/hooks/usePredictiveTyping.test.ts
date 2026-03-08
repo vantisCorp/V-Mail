@@ -21,8 +21,8 @@ const mockBodyContext: WritingContext = {
     enableStyle: false,
     enableTemplates: true,
     learningRate: 0.1,
-    language: 'en',
-  },
+    language: 'en'
+  }
 };
 
 const mockSubjectContext: WritingContext = {
@@ -30,7 +30,7 @@ const mockSubjectContext: WritingContext = {
   cursorPosition: 8,
   field: 'subject',
   recipients: ['test@example.com'],
-  sender: 'user@example.com',
+  sender: 'user@example.com'
 };
 
 const mockToFieldContext: WritingContext = {
@@ -38,7 +38,7 @@ const mockToFieldContext: WritingContext = {
   cursorPosition: 4,
   field: 'to',
   recipients: [],
-  sender: 'user@example.com',
+  sender: 'user@example.com'
 };
 
 const mockLongTextContext: WritingContext = {
@@ -46,7 +46,7 @@ const mockLongTextContext: WritingContext = {
   cursorPosition: 50,
   field: 'body',
   recipients: ['test@example.com'],
-  sender: 'user@example.com',
+  sender: 'user@example.com'
 };
 
 const mockEmptyContext: WritingContext = {
@@ -54,7 +54,7 @@ const mockEmptyContext: WritingContext = {
   cursorPosition: 0,
   field: 'body',
   recipients: ['test@example.com'],
-  sender: 'user@example.com',
+  sender: 'user@example.com'
 };
 
 // ============================================================================
@@ -124,7 +124,7 @@ describe('usePredictiveTyping', () => {
 
       expect(suggestionsResult).toBeDefined();
       expect(suggestionsResult.suggestions).toBeDefined();
-      
+
       const emailSuggestions = suggestionsResult.suggestions.filter(
         s => s.type === SuggestionType.EMAIL
       );
@@ -138,7 +138,7 @@ describe('usePredictiveTyping', () => {
 
       expect(suggestionsResult).toBeDefined();
       expect(suggestionsResult.suggestions).toBeDefined();
-      
+
       const subjectSuggestions = suggestionsResult.suggestions.filter(
         s => s.type === SuggestionType.SUBJECT
       );
@@ -200,7 +200,7 @@ describe('usePredictiveTyping', () => {
       const contextWithBetterWord: WritingContext = {
         ...mockBodyContext,
         text: 'th',
-        cursorPosition: 2,
+        cursorPosition: 2
       };
 
       const suggestionsResult = result.current.getSuggestions(contextWithBetterWord);
@@ -229,7 +229,7 @@ describe('usePredictiveTyping', () => {
       const contextWithGrammar: WritingContext = {
         ...mockBodyContext,
         text: 'I think its going to be great',
-        cursorPosition: 25,
+        cursorPosition: 25
       };
 
       const suggestionsResult = result.current.getSuggestions(contextWithGrammar);
@@ -254,8 +254,8 @@ describe('usePredictiveTyping', () => {
           enableStyle: false,
           enableTemplates: true,
           learningRate: 0.1,
-          language: 'en',
-        },
+          language: 'en'
+        }
       };
 
       const suggestionsResult = result.current.getSuggestions(newEmailContext);
@@ -542,7 +542,7 @@ describe('usePredictiveTyping', () => {
         result.current.getSuggestions({
           ...mockBodyContext,
           text: `Test ${i} `,
-          cursorPosition: 6 + i * 6,
+          cursorPosition: 6 + i * 6
         });
       }
       const end = performance.now();
@@ -571,7 +571,7 @@ describe('usePredictiveTyping', () => {
       const shortContext: WritingContext = {
         ...mockBodyContext,
         text: 'Hi',
-        cursorPosition: 2,
+        cursorPosition: 2
       };
 
       const suggestionsResult = result.current.getSuggestions(shortContext);
@@ -587,7 +587,7 @@ describe('usePredictiveTyping', () => {
       const longContext: WritingContext = {
         ...mockBodyContext,
         text: longText,
-        cursorPosition: 5000,
+        cursorPosition: 5000
       };
 
       const suggestionsResult = result.current.getSuggestions(longContext);
@@ -602,7 +602,7 @@ describe('usePredictiveTyping', () => {
       const specialContext: WritingContext = {
         ...mockBodyContext,
         text: 'Hello @#$%^&*()_+ World!',
-        cursorPosition: 24,
+        cursorPosition: 24
       };
 
       const suggestionsResult = result.current.getSuggestions(specialContext);
@@ -616,7 +616,7 @@ describe('usePredictiveTyping', () => {
       const unicodeContext: WritingContext = {
         ...mockBodyContext,
         text: 'Hello 你好 World 🌍',
-        cursorPosition: 17,
+        cursorPosition: 17
       };
 
       const suggestionsResult = result.current.getSuggestions(unicodeContext);
@@ -631,8 +631,8 @@ describe('usePredictiveTyping', () => {
         ...mockBodyContext,
         userPreferences: {
           ...mockBodyContext.userPreferences!,
-          enabled: false,
-        },
+          enabled: false
+        }
       };
 
       const suggestionsResult = result.current.getSuggestions(disabledContext);
@@ -656,7 +656,7 @@ describe('usePredictiveTyping', () => {
       const learningContext: WritingContext = {
         ...mockBodyContext,
         text: uniqueWord.substring(0, 5),
-        cursorPosition: 5,
+        cursorPosition: 5
       };
 
       const suggestionsResult = result.current.getSuggestions(learningContext);
@@ -675,7 +675,7 @@ describe('usePredictiveTyping', () => {
       const context: WritingContext = {
         ...mockBodyContext,
         text: phrase.substring(0, 4),
-        cursorPosition: 4,
+        cursorPosition: 4
       };
 
       const suggestionsResult = result.current.getSuggestions(context);

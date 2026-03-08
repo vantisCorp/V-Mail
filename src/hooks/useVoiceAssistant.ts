@@ -9,7 +9,7 @@ import {
   VoiceLanguage,
   VoiceRecognitionStatus,
   SpeechSynthesisStatus,
-  DEFAULT_VOICE_CONFIG,
+  DEFAULT_VOICE_CONFIG
 } from '../types/voiceAssistant';
 import { VoiceAssistantService } from '../services/voiceAssistantService';
 
@@ -47,7 +47,7 @@ export function useVoiceAssistant(initialConfig?: Partial<VoiceAssistantConfig>)
   const [error, setError] = useState<string | null>(null);
   const [config, setConfig] = useState<VoiceAssistantConfig>({
     ...DEFAULT_VOICE_CONFIG,
-    ...initialConfig,
+    ...initialConfig
   });
   const [statistics, setStatistics] = useState<VoiceAssistantStatistics>({
     totalCommands: 0,
@@ -59,7 +59,7 @@ export function useVoiceAssistant(initialConfig?: Partial<VoiceAssistantConfig>)
     emailsRead: 0,
     commandsByType: {} as any,
     averageConfidence: 0,
-    lastReset: Date.now(),
+    lastReset: Date.now()
   });
 
   const serviceRef = useRef<VoiceAssistantService | null>(null);
@@ -180,7 +180,7 @@ export function useVoiceAssistant(initialConfig?: Partial<VoiceAssistantConfig>)
         type: VoiceCommandType.UNKNOWN,
         transcript,
         confidence: 0,
-        timestamp: Date.now(),
+        timestamp: Date.now()
       };
     }
   }, []);
@@ -235,6 +235,6 @@ export function useVoiceAssistant(initialConfig?: Partial<VoiceAssistantConfig>)
     getAvailableVoices,
     isConfirmation,
     isCancellation,
-    clearError,
+    clearError
   };
 }

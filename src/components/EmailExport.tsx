@@ -24,7 +24,7 @@ export const EmailExport: React.FC<EmailExportProps> = ({ emails, onClose }) => 
     queueExport,
     processQueue,
     clearExportHistory,
-    getRecentExports,
+    getRecentExports
   } = useEmailExport();
 
   const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
@@ -41,7 +41,7 @@ export const EmailExport: React.FC<EmailExportProps> = ({ emails, onClose }) => 
       includeHeaders,
       includeMetadata: true,
       filename: filename || undefined,
-      continueOnError: true,
+      continueOnError: true
     }),
     [format, includeAttachments, includeHeaders, filename]
   );

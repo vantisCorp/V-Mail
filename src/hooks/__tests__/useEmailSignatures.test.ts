@@ -9,7 +9,7 @@ import {
   SignatureType,
   SignaturePosition,
   SignatureProvider,
-  EmailSignature,
+  EmailSignature
 } from '../../types/emailSignatures';
 
 // Mock localStorage
@@ -25,7 +25,7 @@ const localStorageMock = (() => {
     }),
     clear: vi.fn(() => {
       store = {};
-    }),
+    })
   };
 })();
 
@@ -80,7 +80,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Test</p>',
           plainTextContent: 'Test',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
       });
 
@@ -113,9 +113,9 @@ describe('useEmailSignatures', () => {
           contactInfo: {
             phone: '+1234567890',
             email: 'john@acme.com',
-            website: 'https://acme.com',
+            website: 'https://acme.com'
           },
-          tags: ['work', 'professional'],
+          tags: ['work', 'professional']
         });
       });
 
@@ -142,7 +142,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Original</p>',
           plainTextContent: 'Original',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         signatureId = signature!.id;
       });
@@ -150,7 +150,7 @@ describe('useEmailSignatures', () => {
       await act(async () => {
         await result.current.updateSignature(signatureId, {
           name: 'Updated Name',
-          title: 'Senior Developer',
+          title: 'Senior Developer'
         });
       });
 
@@ -173,7 +173,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Delete me</p>',
           plainTextContent: 'Delete me',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         signatureId = signature!.id;
       });
@@ -202,7 +202,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Content</p>',
           plainTextContent: 'Content',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         signatureId = signature!.id;
       });
@@ -232,7 +232,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '',
           plainTextContent: '',
-          fullName: '',
+          fullName: ''
         });
       });
 
@@ -254,7 +254,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Work</p>',
           plainTextContent: 'Work',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         signatureId = signature!.id;
       });
@@ -284,7 +284,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Test</p>',
           plainTextContent: 'Test',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         signatureId = signature!.id;
       });
@@ -310,7 +310,7 @@ describe('useEmailSignatures', () => {
           htmlContent: '<p>Gmail</p>',
           plainTextContent: 'Gmail',
           fullName: 'John Doe',
-          provider: SignatureProvider.GMAIL,
+          provider: SignatureProvider.GMAIL
         });
         await result.current.createSignature({
           name: 'iCloud Signature',
@@ -318,7 +318,7 @@ describe('useEmailSignatures', () => {
           htmlContent: '<p>iCloud</p>',
           plainTextContent: 'iCloud',
           fullName: 'John Doe',
-          provider: SignatureProvider.ICLOUD,
+          provider: SignatureProvider.ICLOUD
         });
       });
 
@@ -343,7 +343,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Active</p>',
           plainTextContent: 'Active',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         firstId = sig1!.id;
 
@@ -352,7 +352,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Inactive</p>',
           plainTextContent: 'Inactive',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         secondId = sig2!.id;
       });
@@ -377,19 +377,19 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>HTML</p>',
           plainTextContent: 'HTML',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         await result.current.createSignature({
           name: 'Plain Sig',
           type: SignatureType.PLAIN_TEXT,
           htmlContent: '<p>Plain</p>',
           plainTextContent: 'Plain',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
       });
 
       const filtered = result.current.filterSignatures({
-        type: SignatureType.PLAIN_TEXT,
+        type: SignatureType.PLAIN_TEXT
       });
 
       expect(filtered.length).toBe(1);
@@ -406,19 +406,19 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Work</p>',
           plainTextContent: 'Work',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         await result.current.createSignature({
           name: 'Personal Signature',
           type: SignatureType.PLAIN_TEXT,
           htmlContent: '<p>Personal</p>',
           plainTextContent: 'Personal',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
       });
 
       const filtered = result.current.filterSignatures({
-        searchQuery: 'Work',
+        searchQuery: 'Work'
       });
 
       expect(filtered.length).toBe(1);
@@ -436,7 +436,7 @@ describe('useEmailSignatures', () => {
           htmlContent: '<p>Tagged</p>',
           plainTextContent: 'Tagged',
           fullName: 'John Doe',
-          tags: ['personal', 'important'],
+          tags: ['personal', 'important']
         });
         await result.current.createSignature({
           name: 'Other Signature',
@@ -444,12 +444,12 @@ describe('useEmailSignatures', () => {
           htmlContent: '<p>Other</p>',
           plainTextContent: 'Other',
           fullName: 'John Doe',
-          tags: ['work'],
+          tags: ['work']
         });
       });
 
       const filtered = result.current.filterSignatures({
-        tags: ['personal'],
+        tags: ['personal']
       });
 
       expect(filtered.length).toBe(1);
@@ -473,7 +473,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Test</p>',
           plainTextContent: 'Test',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         signatureId = signature!.id;
       });
@@ -501,7 +501,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>First</p>',
           plainTextContent: 'First',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         firstId = sig1!.id;
 
@@ -510,7 +510,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Second</p>',
           plainTextContent: 'Second',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         secondId = sig2!.id;
       });
@@ -549,7 +549,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Test</p>',
           plainTextContent: 'Test',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         signatureId = signature!.id;
       });
@@ -580,7 +580,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Hello {{fullName}}</p>',
           plainTextContent: 'Hello {{fullName}}',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         signatureId = signature!.id;
       });
@@ -604,7 +604,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.PLAIN_TEXT,
           htmlContent: '<p>Hello {{fullName}}</p>',
           plainTextContent: 'Hello {{fullName}}',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         signatureId = signature!.id;
       });
@@ -635,7 +635,7 @@ describe('useEmailSignatures', () => {
         '<p>{{fullName}} - {{title}}</p>',
         {
           fullName: 'Jane Doe',
-          title: 'Manager',
+          title: 'Manager'
         }
       );
 
@@ -660,7 +660,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Test</p>',
           plainTextContent: 'Test',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         signatureId = signature!.id;
       });
@@ -690,7 +690,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Test</p>',
           plainTextContent: 'Test',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         signatureId = signature!.id;
       });
@@ -699,7 +699,7 @@ describe('useEmailSignatures', () => {
       await act(async () => {
         await result.current.logUsage(signatureId, 'email-1', 'new', 'recipient1@example.com');
       });
-      
+
       await act(async () => {
         await result.current.logUsage(signatureId, 'email-2', 'reply', 'recipient2@example.com');
       });
@@ -727,7 +727,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Test</p>',
           plainTextContent: 'Test',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         signatureId = signature!.id;
       });
@@ -797,7 +797,7 @@ describe('useEmailSignatures', () => {
         await result.current.createFromTemplate(templateId, {
           fullName: 'Jane Smith',
           title: 'Engineer',
-          company: 'Tech Corp',
+          company: 'Tech Corp'
         });
       });
 
@@ -817,7 +817,7 @@ describe('useEmailSignatures', () => {
 
       await act(async () => {
         signature = await result.current.createFromTemplate('non-existent', {
-          fullName: 'Test',
+          fullName: 'Test'
         });
       });
 
@@ -841,7 +841,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Test</p>',
           plainTextContent: 'Test',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         signatureId = signature!.id;
       });
@@ -849,7 +849,7 @@ describe('useEmailSignatures', () => {
       await act(async () => {
         await result.current.addSocialLink(signatureId, {
           platform: 'linkedin',
-          url: 'https://linkedin.com/in/johndoe',
+          url: 'https://linkedin.com/in/johndoe'
         });
       });
 
@@ -872,7 +872,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Test</p>',
           plainTextContent: 'Test',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         signatureId = signature!.id;
       });
@@ -880,7 +880,7 @@ describe('useEmailSignatures', () => {
       await act(async () => {
         await result.current.addSocialLink(signatureId, {
           platform: 'linkedin',
-          url: 'https://linkedin.com/in/johndoe',
+          url: 'https://linkedin.com/in/johndoe'
         });
       });
 
@@ -888,7 +888,7 @@ describe('useEmailSignatures', () => {
       await waitFor(() => {
         expect(result.current.signatures[0].socialLinks.length).toBe(1);
       });
-      
+
       const linkId = result.current.signatures[0].socialLinks[0].id;
 
       await act(async () => {
@@ -907,7 +907,7 @@ describe('useEmailSignatures', () => {
 
       const success = await result.current.addSocialLink('non-existent', {
         platform: 'linkedin',
-        url: 'https://linkedin.com/in/johndoe',
+        url: 'https://linkedin.com/in/johndoe'
       });
 
       expect(success).toBe(false);
@@ -939,14 +939,14 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Test 1</p>',
           plainTextContent: 'Test 1',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         await result.current.createSignature({
           name: 'Test 2',
           type: SignatureType.HTML,
           htmlContent: '<p>Test 2</p>',
           plainTextContent: 'Test 2',
-          fullName: 'Jane Doe',
+          fullName: 'Jane Doe'
         });
       });
 
@@ -972,7 +972,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Imported</p>',
           plainTextContent: 'Imported',
-          fullName: 'Imported User',
+          fullName: 'Imported User'
         },
         {
           id: 'imported-2',
@@ -980,8 +980,8 @@ describe('useEmailSignatures', () => {
           type: SignatureType.PLAIN_TEXT,
           htmlContent: '<p>Another</p>',
           plainTextContent: 'Another',
-          fullName: 'Another User',
-        },
+          fullName: 'Another User'
+        }
       ]);
 
       let importedCount: number = 0;
@@ -1025,19 +1025,19 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Valid</p>',
           plainTextContent: 'Valid',
-          fullName: 'Valid User',
+          fullName: 'Valid User'
         },
         {
           // Missing required fields
           id: 'invalid-1',
           name: '',
-          fullName: '',
+          fullName: ''
         },
         {
           // Missing id
           name: 'Also Invalid',
-          fullName: 'No ID',
-        },
+          fullName: 'No ID'
+        }
       ]);
 
       let importedCount: number = 0;
@@ -1063,14 +1063,14 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Test 1</p>',
           plainTextContent: 'Test 1',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
         await result.current.createSignature({
           name: 'Test 2',
           type: SignatureType.HTML,
           htmlContent: '<p>Test 2</p>',
           plainTextContent: 'Test 2',
-          fullName: 'Jane Doe',
+          fullName: 'Jane Doe'
         });
       });
 
@@ -1098,7 +1098,7 @@ describe('useEmailSignatures', () => {
           type: SignatureType.HTML,
           htmlContent: '<p>Persisted</p>',
           plainTextContent: 'Persisted',
-          fullName: 'John Doe',
+          fullName: 'John Doe'
         });
       });
 
@@ -1109,7 +1109,7 @@ describe('useEmailSignatures', () => {
       const calls = localStorageMock.setItem.mock.calls;
       const signatureCall = calls.find(call => call[0] === 'v-mail-signatures');
       expect(signatureCall).toBeDefined();
-      
+
       const savedData = JSON.parse(signatureCall![1]);
       expect(savedData.length).toBe(1);
       expect(savedData[0].name).toBe('Persisted');
@@ -1136,7 +1136,7 @@ describe('useEmailSignatures', () => {
         tags: [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        usageCount: 0,
+        usageCount: 0
       };
 
       localStorageMock.getItem = vi.fn(() => JSON.stringify([existingSignature]));
@@ -1163,7 +1163,7 @@ describe('useEmailSignatures', () => {
       // This should not throw
       await act(async () => {
         const result_signature = await result.current.updateSignature('non-existent', {
-          name: 'Updated',
+          name: 'Updated'
         });
         expect(result_signature).toBeNull();
       });

@@ -1,6 +1,6 @@
 // Advanced Search Types
 
-export type SearchField = 
+export type SearchField =
   | 'all'
   | 'from'
   | 'to'
@@ -12,7 +12,7 @@ export type SearchField =
   | 'is_starred'
   | 'has_label';
 
-export type SearchOperator = 
+export type SearchOperator =
   | 'contains'
   | 'not_contains'
   | 'equals'

@@ -25,7 +25,7 @@ import {
   PROFESSIONAL_INDICATORS,
   CASUAL_INDICATORS,
   FORMAL_INDICATORS,
-  COMMON_PHRASES,
+  COMMON_PHRASES
 } from '../types/emailTranslation';
 
 // ============================================================================
@@ -95,9 +95,9 @@ export class TranslationService {
       metadata: {
         totalProcessingTime: endTime - startTime,
         totalWordCount: subjectTranslation.metadata.wordCount + bodyTranslation.metadata.wordCount,
-        translationSource: bodyTranslation.source,
+        translationSource: bodyTranslation.source
       },
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     // Update statistics
@@ -165,9 +165,9 @@ export class TranslationService {
         detectedLanguage: sourceLanguage,
         toneMatch: this.detectToneMatch(text, tone),
         contextScore: this.calculateContextScore(text),
-        modelVersion: this.modelVersion,
+        modelVersion: this.modelVersion
       },
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     // Store in memory
@@ -235,7 +235,7 @@ export class TranslationService {
     return {
       language: primary.language,
       confidence: primary.confidence,
-      alternatives,
+      alternatives
     };
   }
 
@@ -304,7 +304,7 @@ export class TranslationService {
   getStatistics(): TranslationStatistics {
     return {
       ...this.statistics,
-      memorySize: this.memory.size,
+      memorySize: this.memory.size
     };
   }
 
@@ -393,7 +393,7 @@ private getLanguagePrefix(lang: SupportedLanguage): string {
     [SupportedLanguage.CHINESE]: 'ZH',
     [SupportedLanguage.JAPANESE]: 'JA',
     [SupportedLanguage.KOREAN]: 'KO',
-    [SupportedLanguage.ARABIC]: 'AR',
+    [SupportedLanguage.ARABIC]: 'AR'
   };
   return prefixes[lang] || 'TR';
 }
@@ -434,7 +434,7 @@ private async generateAlternatives(
   alternatives.push({
     text: alternativeText,
     tone: alternativeTone,
-    confidence: 0.85,
+    confidence: 0.85
   });
 
   return alternatives;
@@ -476,9 +476,15 @@ private calculateContextScore(text: string): number {
   const hasQuestions = text.includes('?');
 
   let score = 0.5;
-  if (hasParagraphs) score += 0.2;
-  if (hasListItems) score += 0.15;
-  if (hasQuestions) score += 0.15;
+  if (hasParagraphs) {
+score += 0.2;
+}
+  if (hasListItems) {
+score += 0.15;
+}
+  if (hasQuestions) {
+score += 0.15;
+}
 
   return Math.min(1, score);
 }
@@ -513,9 +519,9 @@ private getFromMemory(
         characterCount: text.length,
         toneMatch: 1,
         contextScore: 1,
-        modelVersion: this.modelVersion,
+        modelVersion: this.modelVersion
       },
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
   }
 
@@ -539,7 +545,7 @@ private storeInMemory(
     targetLanguage,
     frequency: existing ? existing.frequency + 1 : 1,
     lastUsed: new Date().toISOString(),
-    quality: existing ? existing.quality : 0.9,
+    quality: existing ? existing.quality : 0.9
   };
 
   this.memory.set(key, memory);
@@ -584,17 +590,17 @@ private initStatistics(): TranslationStatistics {
       [TranslationTone.PROFESSIONAL]: 0,
       [TranslationTone.CASUAL]: 0,
       [TranslationTone.FORMAL]: 0,
-      [TranslationTone.NEUTRAL]: 0,
+      [TranslationTone.NEUTRAL]: 0
     },
     translationsBySource: {
       [TranslationSource.ORIGINAL]: 0,
       [TranslationSource.AI]: 0,
       [TranslationSource.HUMAN]: 0,
-      [TranslationSource.CACHE]: 0,
+      [TranslationSource.CACHE]: 0
     },
     cacheHits: 0,
     cacheMisses: 0,
-    memorySize: 0,
+    memorySize: 0
   };
 }
 

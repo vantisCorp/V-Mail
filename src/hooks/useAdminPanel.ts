@@ -1,6 +1,6 @@
 /**
  * useAdminPanel Hook for V-Mail v1.2.0
- * 
+ *
  * Comprehensive hook for admin panel operations.
  */
 
@@ -24,7 +24,7 @@ import type {
   AdminAction,
   AuditLogSeverity,
   AdminUserRole,
-  UserStatus,
+  UserStatus
 } from '../types/adminPanel';
 
 // Mock data generators
@@ -44,7 +44,7 @@ const generateMockUsers = (): AdminUser[] => {
       updatedAt: now,
       storageUsed: 2.5,
       emailCount: 1250,
-      twoFactorEnabled: true,
+      twoFactorEnabled: true
     },
     {
       id: 'user-2',
@@ -61,7 +61,7 @@ const generateMockUsers = (): AdminUser[] => {
       teamName: 'Vantis Corp',
       storageUsed: 5.2,
       emailCount: 3200,
-      twoFactorEnabled: true,
+      twoFactorEnabled: true
     },
     {
       id: 'user-3',
@@ -78,7 +78,7 @@ const generateMockUsers = (): AdminUser[] => {
       teamName: 'Vantis Corp',
       storageUsed: 1.8,
       emailCount: 890,
-      twoFactorEnabled: false,
+      twoFactorEnabled: false
     },
     {
       id: 'user-4',
@@ -93,7 +93,7 @@ const generateMockUsers = (): AdminUser[] => {
       updatedAt: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
       storageUsed: 0.5,
       emailCount: 150,
-      twoFactorEnabled: false,
+      twoFactorEnabled: false
     },
     {
       id: 'user-5',
@@ -110,8 +110,8 @@ const generateMockUsers = (): AdminUser[] => {
       teamName: 'Tech Solutions',
       storageUsed: 3.1,
       emailCount: 750,
-      twoFactorEnabled: true,
-    },
+      twoFactorEnabled: true
+    }
   ];
 };
 
@@ -131,7 +131,7 @@ const generateMockAuditLogs = (): AuditLogEntry[] => {
       details: 'Created new user account',
       ipAddress: '192.168.1.1',
       userAgent: 'Mozilla/5.0',
-      timestamp: new Date(now.getTime() - 1 * 60 * 60 * 1000),
+      timestamp: new Date(now.getTime() - 1 * 60 * 60 * 1000)
     },
     {
       id: 'log-2',
@@ -146,7 +146,7 @@ const generateMockAuditLogs = (): AuditLogEntry[] => {
       details: 'User account suspended due to policy violation',
       ipAddress: '192.168.1.2',
       userAgent: 'Mozilla/5.0',
-      timestamp: new Date(now.getTime() - 3 * 60 * 60 * 1000),
+      timestamp: new Date(now.getTime() - 3 * 60 * 60 * 1000)
     },
     {
       id: 'log-3',
@@ -158,7 +158,7 @@ const generateMockAuditLogs = (): AuditLogEntry[] => {
       details: 'Multiple failed login attempts detected from IP 203.0.113.1',
       ipAddress: '203.0.113.1',
       userAgent: 'Unknown',
-      timestamp: new Date(now.getTime() - 6 * 60 * 60 * 1000),
+      timestamp: new Date(now.getTime() - 6 * 60 * 60 * 1000)
     },
     {
       id: 'log-4',
@@ -170,7 +170,7 @@ const generateMockAuditLogs = (): AuditLogEntry[] => {
       details: 'Updated system password policy settings',
       ipAddress: '192.168.1.1',
       userAgent: 'Mozilla/5.0',
-      timestamp: new Date(now.getTime() - 12 * 60 * 60 * 1000),
+      timestamp: new Date(now.getTime() - 12 * 60 * 60 * 1000)
     },
     {
       id: 'log-5',
@@ -185,8 +185,8 @@ const generateMockAuditLogs = (): AuditLogEntry[] => {
       details: 'Changed user role from support to admin',
       ipAddress: '192.168.1.2',
       userAgent: 'Mozilla/5.0',
-      timestamp: new Date(now.getTime() - 24 * 60 * 60 * 1000),
-    },
+      timestamp: new Date(now.getTime() - 24 * 60 * 60 * 1000)
+    }
   ];
 };
 
@@ -200,47 +200,47 @@ const generateMockSystemStatus = (): SystemStatus => {
         status: 'healthy',
         responseTime: 45,
         lastChecked: now,
-        uptime: 99.99,
+        uptime: 99.99
       },
       {
         service: 'Database',
         status: 'healthy',
         responseTime: 12,
         lastChecked: now,
-        uptime: 99.98,
+        uptime: 99.98
       },
       {
         service: 'Email Service',
         status: 'healthy',
         responseTime: 85,
         lastChecked: now,
-        uptime: 99.95,
+        uptime: 99.95
       },
       {
         service: 'Storage',
         status: 'healthy',
         responseTime: 25,
         lastChecked: now,
-        uptime: 99.99,
+        uptime: 99.99
       },
       {
         service: 'Authentication',
         status: 'healthy',
         responseTime: 35,
         lastChecked: now,
-        uptime: 99.99,
-      },
+        uptime: 99.99
+      }
     ],
     uptime: 99.97,
     version: '1.2.0',
-    lastDeployed: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+    lastDeployed: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
   };
 };
 
 const generateMockMetrics = (): SystemMetrics[] => {
   const now = new Date();
   const metrics: SystemMetrics[] = [];
-  
+
   for (let i = 0; i < 24; i++) {
     const timestamp = new Date(now.getTime() - i * 60 * 60 * 1000);
     metrics.push({
@@ -253,10 +253,10 @@ const generateMockMetrics = (): SystemMetrics[] => {
       activeConnections: Math.floor(Math.random() * 500 + 200),
       requestCount: Math.floor(Math.random() * 10000 + 5000),
       averageResponseTime: Math.random() * 100 + 50,
-      errorRate: Math.random() * 0.5,
+      errorRate: Math.random() * 0.5
     });
   }
-  
+
   return metrics.reverse();
 };
 
@@ -272,7 +272,7 @@ const generateMockAlerts = (): SystemAlert[] => {
       isRead: false,
       isResolved: false,
       createdAt: new Date(now.getTime() - 1 * 60 * 60 * 1000),
-      metadata: { ip: '203.0.113.1', attempts: 52 },
+      metadata: { ip: '203.0.113.1', attempts: 52 }
     },
     {
       id: 'alert-2',
@@ -282,7 +282,7 @@ const generateMockAlerts = (): SystemAlert[] => {
       message: 'System storage usage has exceeded 80% threshold',
       isRead: true,
       isResolved: false,
-      createdAt: new Date(now.getTime() - 12 * 60 * 60 * 1000),
+      createdAt: new Date(now.getTime() - 12 * 60 * 60 * 1000)
     },
     {
       id: 'alert-3',
@@ -294,8 +294,8 @@ const generateMockAlerts = (): SystemAlert[] => {
       isResolved: true,
       createdAt: new Date(now.getTime() - 24 * 60 * 60 * 1000),
       resolvedAt: new Date(now.getTime() - 20 * 60 * 60 * 1000),
-      resolvedBy: 'user-1',
-    },
+      resolvedBy: 'user-1'
+    }
   ];
 };
 
@@ -316,8 +316,8 @@ const generateMockStats = (): AdminStats => ({
   revenue: {
     mrr: 45600,
     arr: 547200,
-    growth: 12.5,
-  },
+    growth: 12.5
+  }
 });
 
 const generateMockSettings = (): AdminSettings => ({
@@ -337,7 +337,7 @@ const generateMockSettings = (): AdminSettings => ({
   enableTeamCreation: true,
   enablePublicApi: true,
   rateLimitRequests: 1000,
-  rateLimitWindow: 60,
+  rateLimitWindow: 60
 });
 
 export interface UseAdminPanelReturn {
@@ -351,7 +351,7 @@ export interface UseAdminPanelReturn {
   settings: AdminSettings | null;
   isLoading: boolean;
   error: string | null;
-  
+
   // User Management
   getUsers: (filter?: AdminUserFilter) => Promise<AdminUser[]>;
   getUser: (userId: string) => Promise<AdminUser | null>;
@@ -363,36 +363,36 @@ export interface UseAdminPanelReturn {
   bulkUpdateUsers: (userIds: string[], payload: UpdateUserPayload) => Promise<BulkOperationResult>;
   bulkDeleteUsers: (userIds: string[]) => Promise<BulkOperationResult>;
   exportUsers: (config: ExportConfig) => Promise<string>;
-  
+
   // Audit Logs
   getAuditLogs: (filter?: AuditLogFilter) => Promise<AuditLogEntry[]>;
   getAuditLog: (logId: string) => Promise<AuditLogEntry | null>;
   exportAuditLogs: (config: ExportConfig) => Promise<string>;
-  
+
   // System Operations
   getSystemStatus: () => Promise<SystemStatus>;
   getSystemMetrics: (hours?: number) => Promise<SystemMetrics[]>;
   getAlerts: () => Promise<SystemAlert[]>;
   resolveAlert: (alertId: string) => Promise<boolean>;
   dismissAlert: (alertId: string) => Promise<boolean>;
-  
+
   // Settings
   getSettings: () => Promise<AdminSettings>;
   updateSettings: (settings: Partial<AdminSettings>) => Promise<AdminSettings | null>;
-  
+
   // Statistics
   getStats: () => Promise<AdminStats>;
-  
+
   // Maintenance
   scheduleMaintenance: (window: Omit<MaintenanceWindow, 'id' | 'createdAt' | 'updatedAt'>) => Promise<MaintenanceWindow | null>;
   cancelMaintenance: (maintenanceId: string) => Promise<boolean>;
   getActiveMaintenance: () => Promise<MaintenanceWindow | null>;
-  
+
   // Utility Functions
   getFilteredUsers: (filter: AdminUserFilter) => AdminUser[];
   getFilteredAuditLogs: (filter: AuditLogFilter) => AuditLogEntry[];
   searchUsers: (query: string) => AdminUser[];
-  
+
   // Refresh Functions
   refreshUsers: () => Promise<void>;
   refreshAuditLogs: () => Promise<void>;
@@ -410,7 +410,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
   const [settings, setSettings] = useState<AdminSettings | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const { addNotification } = useNotifications();
 
   // Load initial data
@@ -455,10 +455,10 @@ export function useAdminPanel(): UseAdminPanelReturn {
   const createUser = useCallback(async (payload: CreateUserPayload): Promise<AdminUser | null> => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       const newUser: AdminUser = {
         id: `user-${Date.now()}`,
         email: payload.email,
@@ -472,13 +472,13 @@ export function useAdminPanel(): UseAdminPanelReturn {
         teamId: payload.teamId,
         storageUsed: 0,
         emailCount: 0,
-        twoFactorEnabled: false,
+        twoFactorEnabled: false
       };
-      
+
       setUsers(prev => [...prev, newUser]);
-      
+
       addNotification('success', `User "${payload.name}" has been created successfully.`);
-      
+
       return newUser;
     } catch (err) {
       setError('Failed to create user');
@@ -522,11 +522,11 @@ export function useAdminPanel(): UseAdminPanelReturn {
   const deleteUser = useCallback(async (userId: string): Promise<boolean> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       setUsers(prev => prev.filter(u => u.id !== userId));
-      
+
       addNotification('success', 'User has been deleted successfully.');
-      
+
       return true;
     } catch (err) {
       addNotification('error', 'Failed to delete user. Please try again.');
@@ -537,13 +537,13 @@ export function useAdminPanel(): UseAdminPanelReturn {
   const suspendUser = useCallback(async (userId: string): Promise<boolean> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
-      setUsers(prev => prev.map(u => 
+
+      setUsers(prev => prev.map(u =>
         u.id === userId ? { ...u, status: 'suspended' as UserStatus, updatedAt: new Date() } : u
       ));
-      
+
       addNotification('warning', 'User has been suspended successfully.');
-      
+
       return true;
     } catch (err) {
       addNotification('error', 'Failed to suspend user. Please try again.');
@@ -554,13 +554,13 @@ export function useAdminPanel(): UseAdminPanelReturn {
   const reactivateUser = useCallback(async (userId: string): Promise<boolean> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
-      setUsers(prev => prev.map(u => 
+
+      setUsers(prev => prev.map(u =>
         u.id === userId ? { ...u, status: 'active' as UserStatus, updatedAt: new Date() } : u
       ));
-      
+
       addNotification('success', 'User has been reactivated successfully.');
-      
+
       return true;
     } catch (err) {
       addNotification('error', 'Failed to reactivate user. Please try again.');
@@ -572,13 +572,13 @@ export function useAdminPanel(): UseAdminPanelReturn {
     const result: BulkOperationResult = {
       successful: [],
       failed: [],
-      totalProcessed: userIds.length,
+      totalProcessed: userIds.length
     };
-    
+
     for (const userId of userIds) {
       try {
         await new Promise(resolve => setTimeout(resolve, 100));
-        setUsers(prev => prev.map(u => 
+        setUsers(prev => prev.map(u =>
           u.id === userId ? { ...u, ...payload, updatedAt: new Date() } : u
         ));
         result.successful.push(userId);
@@ -586,9 +586,9 @@ export function useAdminPanel(): UseAdminPanelReturn {
         result.failed.push({ id: userId, error: 'Failed to update user' });
       }
     }
-    
+
     addNotification('success', `${result.successful.length} users updated successfully.`);
-    
+
     return result;
   }, [addNotification]);
 
@@ -596,9 +596,9 @@ export function useAdminPanel(): UseAdminPanelReturn {
     const result: BulkOperationResult = {
       successful: [],
       failed: [],
-      totalProcessed: userIds.length,
+      totalProcessed: userIds.length
     };
-    
+
     for (const userId of userIds) {
       try {
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -608,15 +608,15 @@ export function useAdminPanel(): UseAdminPanelReturn {
         result.failed.push({ id: userId, error: 'Failed to delete user' });
       }
     }
-    
+
     addNotification('success', `${result.successful.length} users deleted successfully.`);
-    
+
     return result;
   }, [addNotification]);
 
   const exportUsers = useCallback(async (config: ExportConfig): Promise<string> => {
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     const data = users.map(u => {
       const row: Record<string, any> = {};
       config.fields.forEach(field => {
@@ -624,11 +624,11 @@ export function useAdminPanel(): UseAdminPanelReturn {
       });
       return row;
     });
-    
+
     if (config.format === 'json') {
       return JSON.stringify(data, null, 2);
     }
-    
+
     // CSV format
     const headers = config.fields.join(',');
     const rows = data.map(row => config.fields.map(f => row[f]).join(','));
@@ -647,7 +647,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
 
   const exportAuditLogs = useCallback(async (config: ExportConfig): Promise<string> => {
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     const data = auditLogs.map(l => {
       const row: Record<string, any> = {};
       config.fields.forEach(field => {
@@ -655,11 +655,11 @@ export function useAdminPanel(): UseAdminPanelReturn {
       });
       return row;
     });
-    
+
     if (config.format === 'json') {
       return JSON.stringify(data, null, 2);
     }
-    
+
     const headers = config.fields.join(',');
     const rows = data.map(row => config.fields.map(f => row[f]).join(','));
     return [headers, ...rows].join('\n');
@@ -688,13 +688,13 @@ export function useAdminPanel(): UseAdminPanelReturn {
   const resolveAlert = useCallback(async (alertId: string): Promise<boolean> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 300));
-      
-      setAlerts(prev => prev.map(a => 
+
+      setAlerts(prev => prev.map(a =>
         a.id === alertId ? { ...a, isResolved: true, resolvedAt: new Date(), resolvedBy: 'current-user' } : a
       ));
-      
+
       addNotification('success', 'The alert has been resolved successfully.');
-      
+
       return true;
     } catch (err) {
       addNotification('error', 'Failed to resolve alert. Please try again.');
@@ -705,11 +705,11 @@ export function useAdminPanel(): UseAdminPanelReturn {
   const dismissAlert = useCallback(async (alertId: string): Promise<boolean> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 300));
-      
-      setAlerts(prev => prev.map(a => 
+
+      setAlerts(prev => prev.map(a =>
         a.id === alertId ? { ...a, isRead: true } : a
       ));
-      
+
       return true;
     } catch (err) {
       return false;
@@ -725,17 +725,19 @@ export function useAdminPanel(): UseAdminPanelReturn {
   const updateSettings = useCallback(async (newSettings: Partial<AdminSettings>): Promise<AdminSettings | null> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       let updatedSettings: AdminSettings | null = null;
-      
+
       setSettings(prev => {
-        if (!prev) return null;
+        if (!prev) {
+return null;
+}
         updatedSettings = { ...prev, ...newSettings };
         return updatedSettings;
       });
-      
+
       addNotification('success', 'Admin settings have been updated successfully.');
-      
+
       return updatedSettings;
     } catch (err) {
       addNotification('error', 'Failed to update settings. Please try again.');
@@ -753,16 +755,16 @@ export function useAdminPanel(): UseAdminPanelReturn {
   const scheduleMaintenance = useCallback(async (window: Omit<MaintenanceWindow, 'id' | 'createdAt' | 'updatedAt'>): Promise<MaintenanceWindow | null> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       const newWindow: MaintenanceWindow = {
         ...window,
         id: `maintenance-${Date.now()}`,
         createdAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       };
-      
+
       addNotification('info', `Maintenance window scheduled for ${new Date(window.startTime).toLocaleDateString()}.`);
-      
+
       return newWindow;
     } catch (err) {
       addNotification('error', 'Failed to schedule maintenance. Please try again.');
@@ -773,9 +775,9 @@ export function useAdminPanel(): UseAdminPanelReturn {
   const cancelMaintenance = useCallback(async (maintenanceId: string): Promise<boolean> => {
     try {
       await new Promise(resolve => setTimeout(resolve, 300));
-      
+
       addNotification('info', 'Maintenance window has been cancelled.');
-      
+
       return true;
     } catch (err) {
       return false;
@@ -790,31 +792,31 @@ export function useAdminPanel(): UseAdminPanelReturn {
   // Utility Functions
   const getFilteredUsers = useCallback((filter: AdminUserFilter): AdminUser[] => {
     let result = [...users];
-    
+
     if (filter.status && filter.status.length > 0) {
       result = result.filter(u => filter.status!.includes(u.status));
     }
-    
+
     if (filter.role && filter.role.length > 0) {
       result = result.filter(u => filter.role!.includes(u.role));
     }
-    
+
     if (filter.teamId) {
       result = result.filter(u => u.teamId === filter.teamId);
     }
-    
+
     if (filter.hasTeam !== undefined) {
       result = result.filter(u => filter.hasTeam ? !!u.teamId : !u.teamId);
     }
-    
+
     if (filter.search) {
       const searchLower = filter.search.toLowerCase();
-      result = result.filter(u => 
+      result = result.filter(u =>
         u.name.toLowerCase().includes(searchLower) ||
         u.email.toLowerCase().includes(searchLower)
       );
     }
-    
+
     if (filter.sortBy) {
       result.sort((a, b) => {
         let comparison = 0;
@@ -829,7 +831,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
             comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
             break;
           case 'lastLoginAt':
-            comparison = (a.lastLoginAt ? new Date(a.lastLoginAt).getTime() : 0) - 
+            comparison = (a.lastLoginAt ? new Date(a.lastLoginAt).getTime() : 0) -
                         (b.lastLoginAt ? new Date(b.lastLoginAt).getTime() : 0);
             break;
           case 'storageUsed':
@@ -839,54 +841,54 @@ export function useAdminPanel(): UseAdminPanelReturn {
         return filter.sortOrder === 'desc' ? -comparison : comparison;
       });
     }
-    
+
     if (filter.offset !== undefined) {
       result = result.slice(filter.offset);
     }
-    
+
     if (filter.limit !== undefined) {
       result = result.slice(0, filter.limit);
     }
-    
+
     return result;
   }, [users]);
 
   const getFilteredAuditLogs = useCallback((filter: AuditLogFilter): AuditLogEntry[] => {
     let result = [...auditLogs];
-    
+
     if (filter.action && filter.action.length > 0) {
       result = result.filter(l => filter.action!.includes(l.action));
     }
-    
+
     if (filter.severity && filter.severity.length > 0) {
       result = result.filter(l => filter.severity!.includes(l.severity));
     }
-    
+
     if (filter.userId) {
       result = result.filter(l => l.userId === filter.userId);
     }
-    
+
     if (filter.targetId) {
       result = result.filter(l => l.targetId === filter.targetId);
     }
-    
+
     if (filter.dateFrom) {
       result = result.filter(l => new Date(l.timestamp) >= filter.dateFrom!);
     }
-    
+
     if (filter.dateTo) {
       result = result.filter(l => new Date(l.timestamp) <= filter.dateTo!);
     }
-    
+
     if (filter.search) {
       const searchLower = filter.search.toLowerCase();
-      result = result.filter(l => 
+      result = result.filter(l =>
         l.action.toLowerCase().includes(searchLower) ||
         l.details.toLowerCase().includes(searchLower) ||
         l.userName.toLowerCase().includes(searchLower)
       );
     }
-    
+
     if (filter.sortBy) {
       result.sort((a, b) => {
         let comparison = 0;
@@ -894,10 +896,11 @@ export function useAdminPanel(): UseAdminPanelReturn {
           case 'timestamp':
             comparison = new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
             break;
-          case 'severity':
+          case 'severity': {
             const severityOrder: AuditLogSeverity[] = ['info', 'warning', 'error', 'critical'];
             comparison = severityOrder.indexOf(a.severity) - severityOrder.indexOf(b.severity);
             break;
+          }
           case 'action':
             comparison = a.action.localeCompare(b.action);
             break;
@@ -905,21 +908,21 @@ export function useAdminPanel(): UseAdminPanelReturn {
         return filter.sortOrder === 'desc' ? -comparison : comparison;
       });
     }
-    
+
     if (filter.offset !== undefined) {
       result = result.slice(filter.offset);
     }
-    
+
     if (filter.limit !== undefined) {
       result = result.slice(0, filter.limit);
     }
-    
+
     return result;
   }, [auditLogs]);
 
   const searchUsers = useCallback((query: string): AdminUser[] => {
     const queryLower = query.toLowerCase();
-    return users.filter(u => 
+    return users.filter(u =>
       u.name.toLowerCase().includes(queryLower) ||
       u.email.toLowerCase().includes(queryLower) ||
       (u.teamName && u.teamName.toLowerCase().includes(queryLower))
@@ -957,7 +960,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
     settings,
     isLoading,
     error,
-    
+
     getUsers,
     getUser,
     createUser,
@@ -968,33 +971,33 @@ export function useAdminPanel(): UseAdminPanelReturn {
     bulkUpdateUsers,
     bulkDeleteUsers,
     exportUsers,
-    
+
     getAuditLogs,
     getAuditLog,
     exportAuditLogs,
-    
+
     getSystemStatus,
     getSystemMetrics,
     getAlerts,
     resolveAlert,
     dismissAlert,
-    
+
     getSettings,
     updateSettings,
-    
+
     getStats,
-    
+
     scheduleMaintenance,
     cancelMaintenance,
     getActiveMaintenance,
-    
+
     getFilteredUsers,
     getFilteredAuditLogs,
     searchUsers,
-    
+
     refreshUsers,
     refreshAuditLogs,
     refreshSystemStatus,
-    refreshAlerts,
+    refreshAlerts
   };
 }

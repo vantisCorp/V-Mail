@@ -1,6 +1,6 @@
 /**
  * AI-Powered Email Categorization Hook
- * 
+ *
  * Provides automatic email categorization functionality using machine learning.
  */
 
@@ -15,7 +15,7 @@ import {
   CategorizationRule,
   BatchCategorizationResult,
   SYSTEM_CATEGORIES,
-  DEFAULT_CATEGORIZATION_CONFIG,
+  DEFAULT_CATEGORIZATION_CONFIG
 } from '../types/aiCategorization';
 import { categorizationModel } from '../ml/categorizationModel';
 
@@ -28,10 +28,10 @@ export const useAICategorization = (
   const [isEnabled, setIsEnabled] = useState<boolean>(
     config.enabled ?? DEFAULT_CATEGORIZATION_CONFIG.enabled
   );
-  
+
   const [modelConfig, setModelConfig] = useState<CategorizationModelConfig>({
     ...DEFAULT_CATEGORIZATION_CONFIG,
-    ...config,
+    ...config
   });
 
   const [customCategories, setCustomCategories] = useState<CustomCategory[]>([]);
@@ -67,10 +67,10 @@ export const useAICategorization = (
 
       // Use ML model
       const result = categorizationModel.categorize(email);
-      
+
       // Store result
       setCategorizationResults(prev => new Map(prev).set(email.id, result));
-      
+
       return result;
     } finally {
       setIsProcessing(false);
@@ -115,7 +115,7 @@ export const useAICategorization = (
         results,
         processedCount,
         failedCount,
-        totalTime: endTime - startTime,
+        totalTime: endTime - startTime
       };
     } finally {
       setIsProcessing(false);
@@ -127,7 +127,9 @@ export const useAICategorization = (
    */
   const applyRules = useCallback((email: any): CategorizationResult | null => {
     for (const rule of categorizationRules) {
-      if (!rule.enabled) continue;
+      if (!rule.enabled) {
+continue;
+}
 
       let matches = false;
       const conditions = rule.conditions;
@@ -143,12 +145,12 @@ export const useAICategorization = (
           primary: {
             category: rule.categoryId,
             confidence: 1.0,
-            reasoning: `Matched rule: ${rule.name}`,
+            reasoning: `Matched rule: ${rule.name}`
           },
           alternatives: [],
           timestamp: new Date().toISOString(),
           modelVersion: 'rule-based',
-          processingTime: 0,
+          processingTime: 0
         };
       }
     }
@@ -161,7 +163,7 @@ export const useAICategorization = (
    */
   const matchCondition = useCallback((email: any, condition: any): boolean => {
     let fieldValue = '';
-    
+
     switch (condition.field) {
       case 'sender':
         fieldValue = email.from || '';
@@ -212,11 +214,11 @@ export const useAICategorization = (
       ...category,
       id: `custom-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     setCustomCategories(prev => [...prev, newCategory]);
-    
+
     return newCategory;
   }, []);
 
@@ -251,7 +253,7 @@ export const useAICategorization = (
   ): void => {
     const trainingExample: TrainingExample = {
       ...example,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     setTrainingExamples(prev => [...prev, trainingExample]);
@@ -266,25 +268,27 @@ export const useAICategorization = (
    * Trigger auto-training
    */
   const triggerAutoTraining = useCallback(async () => {
-    if (isTraining) return;
+    if (isTraining) {
+return;
+}
 
     setIsTraining(true);
 
     try {
       // Get recent training examples
       const recentExamples = trainingExamples.slice(-modelConfig.trainingBatchSize);
-      
+
       if (recentExamples.length === 0) {
         return;
       }
 
       // Train the model
       await categorizationModel.trainWithExamples(recentExamples);
-      
+
       // Update model version
       setModelConfig(prev => ({
         ...prev,
-        modelVersion: categorizationModel.getModelVersion(),
+        modelVersion: categorizationModel.getModelVersion()
       }));
     } finally {
       setIsTraining(false);
@@ -299,11 +303,11 @@ export const useAICategorization = (
   ): CategorizationRule => {
     const newRule: CategorizationRule = {
       ...rule,
-      id: `rule-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `rule-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
     };
 
     setCategorizationRules(prev => [...prev, newRule]);
-    
+
     return newRule;
   }, []);
 
@@ -333,7 +337,7 @@ export const useAICategorization = (
    */
   const getStatistics = useCallback((): CategorizationStats => {
     const results = Array.from(categorizationResults.values());
-    
+
     const totalEmailsCategorized = results.length;
     const categoryCounts: Record<string, number> = {};
     let totalConfidence = 0;
@@ -346,8 +350,8 @@ export const useAICategorization = (
       totalProcessingTime += result.processingTime;
     });
 
-    const averageConfidence = totalEmailsCategorized > 0 
-      ? totalConfidence / totalEmailsCategorized 
+    const averageConfidence = totalEmailsCategorized > 0
+      ? totalConfidence / totalEmailsCategorized
       : 0;
 
     const processingTimeAvg = totalEmailsCategorized > 0
@@ -363,7 +367,7 @@ export const useAICategorization = (
         ? trainingExamples[trainingExamples.length - 1].timestamp
         : null,
       modelVersion: modelConfig.modelVersion,
-      processingTimeAvg,
+      processingTimeAvg
     };
   }, [categorizationResults, trainingExamples, modelConfig.modelVersion]);
 
@@ -377,12 +381,12 @@ export const useAICategorization = (
     // Find the email (would need access to email store)
     // For now, just add training example
     const email = { id: emailId }; // Placeholder
-    
+
     addTrainingExample({
       emailId,
       categoryId: correctCategory,
       userId: 'current-user', // Would get from auth
-      feedbackType: 'positive',
+      feedbackType: 'positive'
     });
   }, [addTrainingExample]);
 
@@ -444,6 +448,6 @@ export const useAICategorization = (
     getStatistics,
     clearResults,
     toggleEnabled,
-    updateConfig,
+    updateConfig
   };
 };

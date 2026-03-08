@@ -1,11 +1,11 @@
 /**
  * Search Engine Service
- * 
+ *
  * Provides full-text search capabilities using Lunr.js for:
  * - Emails (subject, body, from, to, cc, bcc)
  * - Contacts (name, email, phone, company)
  * - Calendar Events (title, description, location, attendees)
- * 
+ *
  * Features:
  * - Real-time indexing
  * - Natural language query parsing
@@ -16,14 +16,14 @@
  */
 
 import lunr from 'lunr';
-import { 
-  SearchScope, 
-  SearchFieldType, 
+import {
+  SearchScope,
+  SearchFieldType,
   SearchOperator,
   SearchFilter,
   SearchResultItem,
   SearchSuggestion,
-  SuggestionType,
+  SuggestionType
 } from '../types/enhancedSearch';
 import { Email } from '../types';
 import { Contact } from '../types/contacts';
@@ -98,7 +98,7 @@ const NL_PATTERNS = {
   larger: /larger:\s*(\d+)(kb|mb|gb)?/gi,
   smaller: /smaller:\s*(\d+)(kb|mb|gb)?/gi,
   label: /label:\s*["']?([^"'\s]+)["']?/gi,
-  folder: /in:\s*["']?([^"'\s]+)["']?/gi,
+  folder: /in:\s*["']?([^"'\s]+)["']?/gi
 };
 
 /**
@@ -108,11 +108,11 @@ export class SearchEngineService {
   private emailIndex: lunr.Index | null = null;
   private contactIndex: lunr.Index | null = null;
   private eventIndex: lunr.Index | null = null;
-  
+
   private emails: Map<string, IndexedEmail> = new Map();
   private contacts: Map<string, IndexedContact> = new Map();
   private events: Map<string, IndexedEvent> = new Map();
-  
+
   private searchHistory: string[] = [];
   private readonly maxHistorySize = 50;
 
@@ -153,7 +153,7 @@ export class SearchEngineService {
       this.field('jobTitle', { boost: 3 });
       this.field('notes', { boost: 1 });
       this.field('tags', { boost: 4 });
-      
+
       this.pipeline.add(lunr.trimmer, lunr.stopWordFilter, lunr.stemmer);
     });
 
@@ -166,7 +166,7 @@ export class SearchEngineService {
       this.field('attendees', { boost: 3 });
       this.field('organizer', { boost: 4 });
       this.field('status', { boost: 2 });
-      
+
       this.pipeline.add(lunr.trimmer, lunr.stopWordFilter, lunr.stemmer);
     });
   }
@@ -190,7 +190,7 @@ export class SearchEngineService {
       date: email.date?.toISOString() || '',
       size: 0,
       hasAttachments: email.hasAttachments || false,
-      priority: 'normal',
+      priority: 'normal'
     };
 
     this.emails.set(indexed.id, indexed);
@@ -219,7 +219,7 @@ export class SearchEngineService {
         date: email.date?.toISOString() || '',
         size: 0,
         hasAttachments: email.hasAttachments || false,
-        priority: 'normal',
+        priority: 'normal'
       };
       this.emails.set(indexed.id, indexed);
     });
@@ -232,7 +232,7 @@ export class SearchEngineService {
    */
   private rebuildEmailIndex(): void {
     const documents = Array.from(this.emails.values());
-    
+
     this.emailIndex = lunr(function(this: any) {
       this.ref('id');
       this.field('subject', { boost: 10 });
@@ -244,7 +244,7 @@ export class SearchEngineService {
       this.field('body', { boost: 1 });
       this.field('labels', { boost: 4 });
       this.field('folder', { boost: 2 });
-      
+
       documents.forEach(doc => {
         this.add(doc);
       });
@@ -266,7 +266,7 @@ export class SearchEngineService {
       company: contact.organization?.name || '',
       jobTitle: contact.organization?.title || '',
       notes: typeof contact.notes === 'string' ? contact.notes : (contact.notes || []).map((n: any) => n.content).join(' '),
-      tags: (contact.tags || []).join(' '),
+      tags: (contact.tags || []).join(' ')
     };
 
     this.contacts.set(indexed.id, indexed);
@@ -289,11 +289,11 @@ export class SearchEngineService {
         company: contact.organization?.name || '',
         jobTitle: contact.organization?.title || '',
         notes: typeof contact.notes === 'string' ? contact.notes : (contact.notes || []).map((n: any) => n.content).join(' '),
-        tags: (contact.tags || []).join(' '),
+        tags: (contact.tags || []).join(' ')
       };
       this.contacts.set(indexed.id, indexed);
     });
-    
+
     this.rebuildContactIndex();
   }
 
@@ -302,7 +302,7 @@ export class SearchEngineService {
    */
   private rebuildContactIndex(): void {
     const documents = Array.from(this.contacts.values());
-    
+
     this.contactIndex = lunr(function(this: any) {
       this.ref('id');
       this.field('displayName', { boost: 10 });
@@ -314,7 +314,7 @@ export class SearchEngineService {
       this.field('jobTitle', { boost: 3 });
       this.field('notes', { boost: 1 });
       this.field('tags', { boost: 4 });
-      
+
       documents.forEach(doc => {
         this.add(doc);
       });
@@ -331,13 +331,13 @@ export class SearchEngineService {
       title: event.summary || '',
       description: event.description || '',
       location: event.location || '',
-      attendees: (event.attendees || []).map((a: any) => 
+      attendees: (event.attendees || []).map((a: any) =>
         typeof a === 'string' ? a : a.email || a.name || ''
       ).join(' '),
       organizer: event.organizer?.email || event.organizer?.displayName || '',
       status: event.status || 'confirmed',
       startDate: event.start?.dateTime || String(event.start) || '',
-      endDate: event.end?.dateTime || String(event.end) || '',
+      endDate: event.end?.dateTime || String(event.end) || ''
     };
 
     this.events.set(indexed.id, indexed);
@@ -355,17 +355,17 @@ export class SearchEngineService {
         title: event.summary || '',
         description: event.description || '',
         location: event.location || '',
-        attendees: (event.attendees || []).map((a: any) => 
+        attendees: (event.attendees || []).map((a: any) =>
           typeof a === 'string' ? a : a.email || a.name || ''
         ).join(' '),
         organizer: event.organizer?.email || event.organizer?.displayName || '',
         status: event.status || 'confirmed',
         startDate: event.start?.dateTime || String(event.start) || '',
-        endDate: event.end?.dateTime || String(event.end) || '',
+        endDate: event.end?.dateTime || String(event.end) || ''
       };
       this.events.set(indexed.id, indexed);
     });
-    
+
     this.rebuildEventIndex();
   }
 
@@ -374,7 +374,7 @@ export class SearchEngineService {
    */
   private rebuildEventIndex(): void {
     const documents = Array.from(this.events.values());
-    
+
     this.eventIndex = lunr(function(this: any) {
       this.ref('id');
       this.field('title', { boost: 10 });
@@ -383,7 +383,7 @@ export class SearchEngineService {
       this.field('attendees', { boost: 3 });
       this.field('organizer', { boost: 4 });
       this.field('status', { boost: 2 });
-      
+
       documents.forEach(doc => {
         this.add(doc);
       });
@@ -395,28 +395,28 @@ export class SearchEngineService {
    */
   public searchAll(query: string, scope?: SearchScope): SearchResult[] {
     const results: SearchResult[] = [];
-    
+
     // Parse natural language query
     const parsedQuery = this.parseNaturalLanguageQuery(query);
-    
+
     // Search emails
     if (!scope || scope === SearchScope.ALL || scope === SearchScope.INBOX) {
       const emailResults = this.searchEmails(parsedQuery.text);
       results.push(...emailResults);
     }
-    
+
     // Search contacts
     if (!scope || scope === SearchScope.ALL) {
       const contactResults = this.searchContacts(parsedQuery.text);
       results.push(...contactResults);
     }
-    
+
     // Search events
     if (!scope || scope === SearchScope.ALL) {
       const eventResults = this.searchEvents(parsedQuery.text);
       results.push(...eventResults);
     }
-    
+
     // Apply filters if present
     return this.applyFilters(results, parsedQuery.filters);
   }
@@ -431,12 +431,12 @@ export class SearchEngineService {
 
     try {
       const results = this.emailIndex.search(query);
-      
+
       return results.map(result => ({
         id: result.ref,
         type: 'email' as const,
         score: result.score,
-        matches: Object.keys(result.matchData.metadata),
+        matches: Object.keys(result.matchData.metadata)
       }));
     } catch (error) {
       console.error('Email search error:', error);
@@ -454,12 +454,12 @@ export class SearchEngineService {
 
     try {
       const results = this.contactIndex.search(query);
-      
+
       return results.map(result => ({
         id: result.ref,
         type: 'contact' as const,
         score: result.score,
-        matches: Object.keys(result.matchData.metadata),
+        matches: Object.keys(result.matchData.metadata)
       }));
     } catch (error) {
       console.error('Contact search error:', error);
@@ -477,12 +477,12 @@ export class SearchEngineService {
 
     try {
       const results = this.eventIndex.search(query);
-      
+
       return results.map(result => ({
         id: result.ref,
         type: 'event' as const,
         score: result.score,
-        matches: Object.keys(result.matchData.metadata),
+        matches: Object.keys(result.matchData.metadata)
       }));
     } catch (error) {
       console.error('Event search error:', error);
@@ -509,7 +509,7 @@ export class SearchEngineService {
       filters.push({
         field: SearchFieldType.FROM,
         operator: SearchOperator.CONTAINS,
-        value: operators.from,
+        value: operators.from
       });
       cleanQuery = cleanQuery.replace(fromMatch[0], '').trim();
     }
@@ -521,7 +521,7 @@ export class SearchEngineService {
       filters.push({
         field: SearchFieldType.TO,
         operator: SearchOperator.CONTAINS,
-        value: operators.to,
+        value: operators.to
       });
       cleanQuery = cleanQuery.replace(toMatch[0], '').trim();
     }
@@ -533,7 +533,7 @@ export class SearchEngineService {
       filters.push({
         field: SearchFieldType.SUBJECT,
         operator: SearchOperator.CONTAINS,
-        value: operators.subject,
+        value: operators.subject
       });
       cleanQuery = cleanQuery.replace(subjectMatch[0], '').trim();
     }
@@ -559,7 +559,7 @@ export class SearchEngineService {
       filters.push({
         field: SearchFieldType.DATE,
         operator: SearchOperator.BEFORE,
-        value: operators.before,
+        value: operators.before
       });
       cleanQuery = cleanQuery.replace(beforeMatch[0], '').trim();
     }
@@ -571,7 +571,7 @@ export class SearchEngineService {
       filters.push({
         field: SearchFieldType.DATE,
         operator: SearchOperator.AFTER,
-        value: operators.after,
+        value: operators.after
       });
       cleanQuery = cleanQuery.replace(afterMatch[0], '').trim();
     }
@@ -583,7 +583,7 @@ export class SearchEngineService {
       filters.push({
         field: SearchFieldType.LABELS,
         operator: SearchOperator.CONTAINS,
-        value: operators.label,
+        value: operators.label
       });
       cleanQuery = cleanQuery.replace(labelMatch[0], '').trim();
     }
@@ -598,7 +598,7 @@ export class SearchEngineService {
     return {
       text: cleanQuery.trim(),
       filters,
-      operators,
+      operators
     };
   }
 
@@ -631,7 +631,7 @@ export class SearchEngineService {
           id: `history-${history}`,
           text: history,
           type: SuggestionType.HISTORY,
-          score: 1,
+          score: 1
         });
       });
 
@@ -652,7 +652,7 @@ export class SearchEngineService {
             id: `email-${email}`,
             text: email,
             type: SuggestionType.CONTACT,
-            score: 0.8,
+            score: 0.8
           });
         });
     }
@@ -667,7 +667,7 @@ export class SearchEngineService {
       { prefix: 'before:', description: 'Before date' },
       { prefix: 'after:', description: 'After date' },
       { prefix: 'label:', description: 'Search by label' },
-      { prefix: 'in:', description: 'Search in folder' },
+      { prefix: 'in:', description: 'Search in folder' }
     ];
 
     operatorSuggestions
@@ -678,7 +678,7 @@ export class SearchEngineService {
           text: op.prefix,
           type: SuggestionType.OPERATOR,
           description: op.description,
-          score: 0.9,
+          score: 0.9
         });
       });
 
@@ -704,13 +704,13 @@ export class SearchEngineService {
           if (email.subject.toLowerCase().includes(term)) {
             highlights.push({
               field: 'subject',
-              fragments: [this.highlightText(email.subject, term)],
+              fragments: [this.highlightText(email.subject, term)]
             });
           }
           if (email.body.toLowerCase().includes(term)) {
             highlights.push({
               field: 'body',
-              fragments: [this.highlightText(email.body.substring(0, 200), term)],
+              fragments: [this.highlightText(email.body.substring(0, 200), term)]
             });
           }
         });
@@ -732,17 +732,19 @@ export class SearchEngineService {
    * Add search to history
    */
   public addToHistory(query: string): void {
-    if (!query.trim()) return;
-    
+    if (!query.trim()) {
+return;
+}
+
     // Remove if already exists
     const index = this.searchHistory.indexOf(query);
     if (index !== -1) {
       this.searchHistory.splice(index, 1);
     }
-    
+
     // Add to beginning
     this.searchHistory.unshift(query);
-    
+
     // Trim to max size
     if (this.searchHistory.length > this.maxHistorySize) {
       this.searchHistory = this.searchHistory.slice(0, this.maxHistorySize);
@@ -808,7 +810,7 @@ export class SearchEngineService {
     return {
       emails: this.emails.size,
       contacts: this.contacts.size,
-      events: this.events.size,
+      events: this.events.size
     };
   }
 }

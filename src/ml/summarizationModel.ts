@@ -21,7 +21,7 @@ import {
   QUESTION_PATTERNS,
   KEY_POINT_KEYWORDS,
   STOP_WORDS,
-  TLDR_PHRASES,
+  TLDR_PHRASES
 } from '../types/emailSummarization';
 
 export type { SummarizationContext, SummarizationConfig };
@@ -121,11 +121,11 @@ export class SummarizationModel {
         summaryType: context.summaryType,
         summaryLength: context.summaryLength,
         language: context.language || 'en',
-        confidence: this.calculateConfidence(summary, sentences.length),
+        confidence: this.calculateConfidence(summary, sentences.length)
       },
       processingTime,
       modelVersion: this.modelVersion,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     // Cache result
@@ -151,7 +151,7 @@ export class SummarizationModel {
       summaryType: SummaryType.EXTRACTIVE,
       summaryLength: length,
       includeActionItems: true,
-      includeKeyPoints: true,
+      includeKeyPoints: true
     });
   }
 
@@ -166,13 +166,15 @@ export class SummarizationModel {
     sentences: string[],
     context: SummarizationContext
   ): string {
-    if (sentences.length === 0) return '';
+    if (sentences.length === 0) {
+return '';
+}
 
     // Score sentences
     const scoredSentences = sentences.map((sentence, index) => ({
       sentence,
       score: this.scoreSentence(sentence, index, sentences.length),
-      index,
+      index
     }));
 
     // Sort by score
@@ -199,7 +201,7 @@ export class SummarizationModel {
     const extractive = this.generateExtractiveSummary(sentences, context);
 
     // Apply transformations (simplified)
-    let abstractive = extractive
+    const abstractive = extractive
       .replace(/\b(I think|I believe|In my opinion)\b/gi, '')
       .replace(/\b(very|really|quite|extremely)\b/gi, '')
       .replace(/\s+/g, ' ')
@@ -286,9 +288,15 @@ export class SummarizationModel {
     score += lengthScore;
 
     // Sentence structure score
-    if (sentence.includes(':')) score += 0.3; // Lists, definitions
-    if (sentence.includes('-')) score += 0.2; // Dashes (often for emphasis)
-    if (/[A-Z]/.test(sentence[0])) score += 0.2; // Starts with capital
+    if (sentence.includes(':')) {
+score += 0.3;
+} // Lists, definitions
+    if (sentence.includes('-')) {
+score += 0.2;
+} // Dashes (often for emphasis)
+    if (/[A-Z]/.test(sentence[0])) {
+score += 0.2;
+} // Starts with capital
 
     return score;
   }
@@ -335,9 +343,9 @@ export class SummarizationModel {
               category: this.categorizeKeyPoint(sentence),
               priority: importance > 0.7 ? ContentPriority.HIGH : ContentPriority.MEDIUM,
               sourceEmailId: email.id,
-              timestamp: email.timestamp instanceof Date 
-                ? email.timestamp.toISOString() 
-                : email.timestamp,
+              timestamp: email.timestamp instanceof Date
+                ? email.timestamp.toISOString()
+                : email.timestamp
             });
           }
         }
@@ -356,12 +364,24 @@ export class SummarizationModel {
   private categorizeKeyPoint(sentence: string): string {
     const lower = sentence.toLowerCase();
 
-    if (/deadline|due|schedule|timeline/.test(lower)) return 'timeline';
-    if (/require|need|must|should/.test(lower)) return 'requirement';
-    if (/decision|agreed|concluded/.test(lower)) return 'decision';
-    if (/important|critical|crucial/.test(lower)) return 'important';
-    if (/goal|objective|target/.test(lower)) return 'objective';
-    if (/next|following|then/.test(lower)) return 'next_steps';
+    if (/deadline|due|schedule|timeline/.test(lower)) {
+return 'timeline';
+}
+    if (/require|need|must|should/.test(lower)) {
+return 'requirement';
+}
+    if (/decision|agreed|concluded/.test(lower)) {
+return 'decision';
+}
+    if (/important|critical|crucial/.test(lower)) {
+return 'important';
+}
+    if (/goal|objective|target/.test(lower)) {
+return 'objective';
+}
+    if (/next|following|then/.test(lower)) {
+return 'next_steps';
+}
 
     return 'general';
   }
@@ -391,9 +411,9 @@ export class SummarizationModel {
                 status: 'pending',
                 priority: this.determineActionPriority(sentence),
                 sourceEmailId: email.id,
-                timestamp: email.timestamp instanceof Date 
-                  ? email.timestamp.toISOString() 
-                  : email.timestamp,
+                timestamp: email.timestamp instanceof Date
+                  ? email.timestamp.toISOString()
+                  : email.timestamp
               });
             }
           }
@@ -440,7 +460,7 @@ export class SummarizationModel {
         text: sentence,
         type: this.determineSegmentType(sentence),
         importance: 1 - (index * 0.1), // Earlier sentences are more important
-        sourceEmails: emails.map(e => e.id),
+        sourceEmails: emails.map(e => e.id)
       });
     });
 
@@ -453,10 +473,18 @@ export class SummarizationModel {
   private determineSegmentType(sentence: string): SummarySegment['type'] {
     const lower = sentence.toLowerCase();
 
-    if (/\?/.test(sentence)) return 'question';
-    if (/decision|agreed|concluded|resolved/.test(lower)) return 'decision';
-    if (/please|need|should|must|will/.test(lower)) return 'action_item';
-    if (/important|key|main|primary/.test(lower)) return 'key_point';
+    if (/\?/.test(sentence)) {
+return 'question';
+}
+    if (/decision|agreed|concluded|resolved/.test(lower)) {
+return 'decision';
+}
+    if (/please|need|should|must|will/.test(lower)) {
+return 'action_item';
+}
+    if (/important|key|main|primary/.test(lower)) {
+return 'key_point';
+}
 
     return 'topic';
   }
@@ -478,7 +506,9 @@ export class SummarizationModel {
    * Calculate confidence score
    */
   private calculateConfidence(summary: string, originalSentences: number): number {
-    if (!summary) return 0;
+    if (!summary) {
+return 0;
+}
 
     const summaryWords = summary.split(/\s+/).length;
     const coverageRatio = summaryWords / (originalSentences * 10); // Rough estimate
@@ -505,11 +535,11 @@ export class SummarizationModel {
         summaryType: SummaryType.EXTRACTIVE,
         summaryLength: SummaryLength.MEDIUM,
         language: 'en',
-        confidence: 0,
+        confidence: 0
       },
       processingTime: 0,
       modelVersion: this.modelVersion,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
   }
 

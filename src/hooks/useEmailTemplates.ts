@@ -271,7 +271,9 @@ export const useEmailTemplates = () => {
 
   const updateTemplate = useCallback(async (id: string, payload: UpdateTemplatePayload): Promise<EmailTemplate | null> => {
     const index = templates.findIndex(t => t.id === id);
-    if (index === -1) return null;
+    if (index === -1) {
+return null;
+}
 
     const updated: EmailTemplate = {
       ...templates[index],
@@ -286,8 +288,12 @@ export const useEmailTemplates = () => {
 
   const deleteTemplate = useCallback(async (id: string): Promise<boolean> => {
     const index = templates.findIndex(t => t.id === id);
-    if (index === -1) return false;
-    if (templates[index].isSystem) return false; // Cannot delete system templates
+    if (index === -1) {
+return false;
+}
+    if (templates[index].isSystem) {
+return false;
+} // Cannot delete system templates
 
     const updated = templates.filter(t => t.id !== id);
     setTemplates(updated);
@@ -296,7 +302,9 @@ export const useEmailTemplates = () => {
 
   const cloneTemplate = useCallback(async (payload: CloneTemplatePayload): Promise<EmailTemplate | null> => {
     const source = templates.find(t => t.id === payload.sourceTemplateId);
-    if (!source) return null;
+    if (!source) {
+return null;
+}
 
     const cloned: EmailTemplate = {
       ...source,
@@ -329,35 +337,43 @@ export const useEmailTemplates = () => {
   // Variable operations
   const addVariable = useCallback(async (templateId: string, variable: Omit<TemplateVariable, 'id'>): Promise<TemplateVariable | null> => {
     const template = templates.find(t => t.id === templateId);
-    if (!template) return null;
+    if (!template) {
+return null;
+}
 
     const newVariable: TemplateVariable = {
       ...variable,
       id: `var_${Date.now()}`
     };
     const updatedVariables = [...template.variables, newVariable];
-    
+
     await updateTemplate(templateId, { variables: updatedVariables });
     return newVariable;
   }, [templates, updateTemplate]);
 
   const updateVariable = useCallback(async (templateId: string, variableId: string, updates: Partial<TemplateVariable>): Promise<boolean> => {
     const template = templates.find(t => t.id === templateId);
-    if (!template) return false;
+    if (!template) {
+return false;
+}
 
     const index = template.variables.findIndex(v => v.id === variableId);
-    if (index === -1) return false;
+    if (index === -1) {
+return false;
+}
 
     const updatedVariables = [...template.variables];
     updatedVariables[index] = { ...updatedVariables[index], ...updates };
-    
+
     await updateTemplate(templateId, { variables: updatedVariables });
     return true;
   }, [templates, updateTemplate]);
 
   const removeVariable = useCallback(async (templateId: string, variableId: string): Promise<boolean> => {
     const template = templates.find(t => t.id === templateId);
-    if (!template) return false;
+    if (!template) {
+return false;
+}
 
     const updatedVariables = template.variables.filter(v => v.id !== variableId);
     await updateTemplate(templateId, { variables: updatedVariables });
@@ -367,7 +383,9 @@ export const useEmailTemplates = () => {
   // Preview and validation
   const previewTemplate = useCallback((payload: PreviewTemplatePayload): string => {
     const template = templates.find(t => t.id === payload.templateId);
-    if (!template) return '';
+    if (!template) {
+return '';
+}
 
     let content = template.content;
     Object.entries(payload.variables).forEach(([key, value]) => {
@@ -439,7 +457,7 @@ export const useEmailTemplates = () => {
     }
     if (filter?.searchQuery) {
       const query = filter.searchQuery.toLowerCase();
-      filtered = filtered.filter(t => 
+      filtered = filtered.filter(t =>
         t.name.toLowerCase().includes(query) ||
         t.description.toLowerCase().includes(query) ||
         t.tags.some(tag => tag.toLowerCase().includes(query))
@@ -451,7 +469,7 @@ export const useEmailTemplates = () => {
       filtered.sort((a, b) => {
         let aVal: string | number = '';
         let bVal: string | number = '';
-        
+
         switch (filter.sortBy) {
           case 'name':
             aVal = a.name.toLowerCase();
@@ -470,7 +488,7 @@ export const useEmailTemplates = () => {
             bVal = b.analytics.totalUses;
             break;
         }
-        
+
         if (filter.sortOrder === 'desc') {
           return aVal > bVal ? -1 : 1;
         }
@@ -484,7 +502,9 @@ export const useEmailTemplates = () => {
   // Favorites
   const toggleFavorite = useCallback(async (templateId: string): Promise<boolean> => {
     const template = templates.find(t => t.id === templateId);
-    if (!template) return false;
+    if (!template) {
+return false;
+}
 
     await updateTemplate(templateId, { isFavorite: !template.isFavorite });
     return true;
@@ -493,7 +513,9 @@ export const useEmailTemplates = () => {
   // Version management
   const createVersion = useCallback(async (templateId: string, changeLog: string): Promise<TemplateVersion | null> => {
     const template = templates.find(t => t.id === templateId);
-    if (!template) return null;
+    if (!template) {
+return null;
+}
 
     const newVersion: TemplateVersion = {
       id: `ver_${Date.now()}`,
@@ -517,10 +539,14 @@ export const useEmailTemplates = () => {
 
   const restoreVersion = useCallback(async (templateId: string, versionId: string): Promise<boolean> => {
     const template = templates.find(t => t.id === templateId);
-    if (!template) return false;
+    if (!template) {
+return false;
+}
 
     const version = template.versions.find(v => v.id === versionId);
-    if (!version) return false;
+    if (!version) {
+return false;
+}
 
     await updateTemplate(templateId, {
       content: version.content,

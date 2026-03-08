@@ -13,10 +13,18 @@ const formatShortcut = (key: string, modifiers: string[]): string => {
   const parts = [...modifiers];
   parts.push(key);
   return parts.map(part => {
-    if (part === 'ctrl') return 'Ctrl';
-    if (part === 'alt') return 'Alt';
-    if (part === 'shift') return 'Shift';
-    if (part === 'meta') return '⌘';
+    if (part === 'ctrl') {
+return 'Ctrl';
+}
+    if (part === 'alt') {
+return 'Alt';
+}
+    if (part === 'shift') {
+return 'Shift';
+}
+    if (part === 'meta') {
+return '⌘';
+}
     return part.toUpperCase();
   }).join(' + ');
 };
@@ -26,9 +34,11 @@ export const KeyboardShortcutsHelp: React.FC<KeyboardShortcutsHelpProps> = ({
   onClose,
   shortcutGroups,
   isEnabled,
-  onToggleEnabled,
+  onToggleEnabled
 }) => {
-  if (!isOpen) return null;
+  if (!isOpen) {
+return null;
+}
 
   return (
     <div className="keyboard-shortcuts-overlay">

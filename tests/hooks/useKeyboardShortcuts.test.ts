@@ -37,7 +37,7 @@ describe('useKeyboardShortcuts', () => {
         description: 'Test shortcut',
         category: 'general',
         action: vi.fn(),
-        enabled: true,
+        enabled: true
       });
     });
 
@@ -56,7 +56,7 @@ describe('useKeyboardShortcuts', () => {
         description: 'Test shortcut',
         category: 'general',
         action: vi.fn(),
-        enabled: true,
+        enabled: true
       });
     });
 
@@ -155,7 +155,7 @@ describe('useKeyboardShortcuts', () => {
     act(() => {
       result.current.registerShortcut({
         ...initialShortcut,
-        description: 'Updated description',
+        description: 'Updated description'
       });
     });
 

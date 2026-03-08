@@ -9,7 +9,7 @@ import {
   ConditionLogic,
   RuleFieldType,
   RuleOperator,
-  RuleActionType,
+  RuleActionType
 } from '../../src/types/emailRules';
 
 describe('useEmailRules', () => {
@@ -20,7 +20,7 @@ describe('useEmailRules', () => {
   describe('Initialization and State', () => {
     it('should initialize with empty state and loading', () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       expect(result.current.isLoading).toBe(true);
       expect(result.current.rules).toEqual([]);
       expect(result.current.templates).toEqual([]);
@@ -28,22 +28,22 @@ describe('useEmailRules', () => {
 
     it('should load rules and templates after initialization', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
-      
+
       expect(result.current.rules.length).toBeGreaterThan(0);
       expect(result.current.templates.length).toBeGreaterThan(0);
     });
 
     it('should initialize selectedRule as null', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
-      
+
       expect(result.current.selectedRule).toBeNull();
     });
   });
@@ -51,7 +51,7 @@ describe('useEmailRules', () => {
   describe('Rule CRUD Operations', () => {
     it('should create a new rule', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -66,16 +66,16 @@ describe('useEmailRules', () => {
             {
               field: RuleFieldType.FROM,
               operator: RuleOperator.CONTAINS,
-              value: 'test@example.com',
-            },
+              value: 'test@example.com'
+            }
           ],
           conditionLogic: ConditionLogic.AND,
           actions: [
             {
               type: RuleActionType.ADD_LABEL,
-              parameters: { label: 'Test' },
-            },
-          ],
+              parameters: { label: 'Test' }
+            }
+          ]
         });
       });
 
@@ -86,7 +86,7 @@ describe('useEmailRules', () => {
 
     it('should update an existing rule', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -97,7 +97,7 @@ describe('useEmailRules', () => {
       await act(async () => {
         await result.current.updateRule(ruleToUpdate.id, {
           name: 'Updated Rule Name',
-          status: RuleStatus.PAUSED,
+          status: RuleStatus.PAUSED
         });
       });
 
@@ -109,7 +109,7 @@ describe('useEmailRules', () => {
 
     it('should delete a rule', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -127,7 +127,7 @@ describe('useEmailRules', () => {
 
     it('should get rule by ID', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -144,7 +144,7 @@ describe('useEmailRules', () => {
   describe('Rule Status Management', () => {
     it('should toggle rule status from active to paused', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -162,7 +162,7 @@ describe('useEmailRules', () => {
 
     it('should toggle rule status from paused to active', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -186,7 +186,7 @@ describe('useEmailRules', () => {
   describe('Rule Testing', () => {
     it('should test rule with matching email', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -207,7 +207,7 @@ describe('useEmailRules', () => {
         isRead: false,
         isStarred: false,
         isArchived: false,
-        direction: 'incoming' as const,
+        direction: 'incoming' as const
       };
 
       const testResult = result.current.testRule(rule.id, testEmail);
@@ -219,7 +219,7 @@ describe('useEmailRules', () => {
 
     it('should evaluate single condition', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -229,7 +229,7 @@ describe('useEmailRules', () => {
         field: RuleFieldType.FROM,
         operator: RuleOperator.CONTAINS,
         value: 'test@example.com',
-        caseSensitive: false,
+        caseSensitive: false
       };
 
       const matchingEmail = {
@@ -246,12 +246,12 @@ describe('useEmailRules', () => {
         isRead: false,
         isStarred: false,
         isArchived: false,
-        direction: 'incoming' as const,
+        direction: 'incoming' as const
       };
 
       const nonMatchingEmail = {
         ...matchingEmail,
-        from: 'other@example.com',
+        from: 'other@example.com'
       };
 
       expect(result.current.evaluateCondition(condition, matchingEmail)).toBe(true);
@@ -260,7 +260,7 @@ describe('useEmailRules', () => {
 
     it('should evaluate conditions with AND logic', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -271,15 +271,15 @@ describe('useEmailRules', () => {
           field: RuleFieldType.FROM,
           operator: RuleOperator.CONTAINS,
           value: 'test',
-          caseSensitive: false,
+          caseSensitive: false
         },
         {
           id: 'cond-2',
           field: RuleFieldType.SUBJECT,
           operator: RuleOperator.CONTAINS,
           value: 'urgent',
-          caseSensitive: false,
-        },
+          caseSensitive: false
+        }
       ];
 
       const matchingEmail = {
@@ -296,12 +296,12 @@ describe('useEmailRules', () => {
         isRead: false,
         isStarred: false,
         isArchived: false,
-        direction: 'incoming' as const,
+        direction: 'incoming' as const
       };
 
       const partialMatchEmail = {
         ...matchingEmail,
-        subject: 'regular issue',
+        subject: 'regular issue'
       };
 
       expect(result.current.evaluateConditions(conditions, ConditionLogic.AND, matchingEmail)).toBe(true);
@@ -310,7 +310,7 @@ describe('useEmailRules', () => {
 
     it('should evaluate conditions with OR logic', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -321,15 +321,15 @@ describe('useEmailRules', () => {
           field: RuleFieldType.FROM,
           operator: RuleOperator.CONTAINS,
           value: 'test',
-          caseSensitive: false,
+          caseSensitive: false
         },
         {
           id: 'cond-2',
           field: RuleFieldType.SUBJECT,
           operator: RuleOperator.CONTAINS,
           value: 'urgent',
-          caseSensitive: false,
-        },
+          caseSensitive: false
+        }
       ];
 
       const matchingEmail = {
@@ -346,7 +346,7 @@ describe('useEmailRules', () => {
         isRead: false,
         isStarred: false,
         isArchived: false,
-        direction: 'incoming' as const,
+        direction: 'incoming' as const
       };
 
       expect(result.current.evaluateConditions(conditions, ConditionLogic.OR, matchingEmail)).toBe(true);
@@ -356,7 +356,7 @@ describe('useEmailRules', () => {
   describe('Rule Execution', () => {
     it('should execute rule on matching email', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -377,7 +377,7 @@ describe('useEmailRules', () => {
         isRead: false,
         isStarred: false,
         isArchived: false,
-        direction: 'incoming' as const,
+        direction: 'incoming' as const
       };
 
       await act(async () => {
@@ -391,7 +391,7 @@ describe('useEmailRules', () => {
 
     it('should execute rule in dry run mode', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -412,7 +412,7 @@ describe('useEmailRules', () => {
         isRead: false,
         isStarred: false,
         isArchived: false,
-        direction: 'incoming' as const,
+        direction: 'incoming' as const
       };
 
       const initialCount = rule.executionCount;
@@ -429,7 +429,7 @@ describe('useEmailRules', () => {
   describe('Rule Statistics', () => {
     it('should get rule statistics', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -446,7 +446,7 @@ describe('useEmailRules', () => {
 
     it('should return null for non-existent rule statistics', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -459,13 +459,13 @@ describe('useEmailRules', () => {
   describe('Rule Filtering', () => {
     it('should filter rules by type', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
 
       const autoReplyRules = result.current.getFilteredRules({
-        type: RuleType.AUTO_REPLY,
+        type: RuleType.AUTO_REPLY
       });
 
       autoReplyRules.forEach(rule => {
@@ -475,13 +475,13 @@ describe('useEmailRules', () => {
 
     it('should filter rules by status', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
 
       const activeRules = result.current.getFilteredRules({
-        status: RuleStatus.ACTIVE,
+        status: RuleStatus.ACTIVE
       });
 
       activeRules.forEach(rule => {
@@ -491,13 +491,13 @@ describe('useEmailRules', () => {
 
     it('should filter rules by search query', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
 
       const searchResults = result.current.getFilteredRules({
-        searchQuery: 'support',
+        searchQuery: 'support'
       });
 
       searchResults.forEach(rule => {
@@ -509,13 +509,13 @@ describe('useEmailRules', () => {
 
     it('should filter rules by priority', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
 
       const highPriorityRules = result.current.getFilteredRules({
-        priority: RulePriority.HIGH,
+        priority: RulePriority.HIGH
       });
 
       highPriorityRules.forEach(rule => {
@@ -527,7 +527,7 @@ describe('useEmailRules', () => {
   describe('Template Operations', () => {
     it('should create rule from template', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -553,7 +553,7 @@ describe('useEmailRules', () => {
   describe('State Management', () => {
     it('should set selected rule', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
@@ -569,7 +569,7 @@ describe('useEmailRules', () => {
 
     it('should update selected rule when deleted', async () => {
       const { result } = renderHook(() => useEmailRules());
-      
+
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });

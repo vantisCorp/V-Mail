@@ -34,9 +34,9 @@ export const AutoReplySettings: React.FC<AutoReplySettingsProps> = ({ onClose })
       body: 'Thank you for your email. I am currently out of the office and will respond as soon as possible.',
       delayMinutes: 60,
       schedule: {
-        enabled: false,
-      },
-    },
+        enabled: false
+      }
+    }
   ]);
   const [selectedRule, setSelectedRule] = useState<AutoReplyRule | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -50,8 +50,8 @@ export const AutoReplySettings: React.FC<AutoReplySettingsProps> = ({ onClose })
       body: '',
       delayMinutes: 0,
       schedule: {
-        enabled: false,
-      },
+        enabled: false
+      }
     };
     setRules([...rules, newRule]);
     setSelectedRule(newRule);
@@ -276,7 +276,7 @@ const EditRuleForm: React.FC<EditRuleFormProps> = ({ rule, onSave, onCancel }) =
             onChange={(e) =>
               setFormData({
                 ...formData,
-                trigger: e.target.value as AutoReplyRule['trigger'],
+                trigger: e.target.value as AutoReplyRule['trigger']
               })
             }
             required
@@ -333,7 +333,7 @@ const EditRuleForm: React.FC<EditRuleFormProps> = ({ rule, onSave, onCancel }) =
             onChange={(e) =>
               setFormData({
                 ...formData,
-                delayMinutes: parseInt(e.target.value),
+                delayMinutes: parseInt(e.target.value)
               })
             }
             required
@@ -348,7 +348,7 @@ const EditRuleForm: React.FC<EditRuleFormProps> = ({ rule, onSave, onCancel }) =
             onChange={(e) =>
               setFormData({
                 ...formData,
-                schedule: { ...formData.schedule, enabled: e.target.checked },
+                schedule: { ...formData.schedule, enabled: e.target.checked }
               })
             }
           />
@@ -366,7 +366,7 @@ const EditRuleForm: React.FC<EditRuleFormProps> = ({ rule, onSave, onCancel }) =
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    schedule: { ...formData.schedule, startDate: e.target.value },
+                    schedule: { ...formData.schedule, startDate: e.target.value }
                   })
                 }
               />
@@ -381,7 +381,7 @@ const EditRuleForm: React.FC<EditRuleFormProps> = ({ rule, onSave, onCancel }) =
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    schedule: { ...formData.schedule, endDate: e.target.value },
+                    schedule: { ...formData.schedule, endDate: e.target.value }
                   })
                 }
               />
@@ -396,7 +396,7 @@ const EditRuleForm: React.FC<EditRuleFormProps> = ({ rule, onSave, onCancel }) =
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    schedule: { ...formData.schedule, startTime: e.target.value },
+                    schedule: { ...formData.schedule, startTime: e.target.value }
                   })
                 }
               />
@@ -411,7 +411,7 @@ const EditRuleForm: React.FC<EditRuleFormProps> = ({ rule, onSave, onCancel }) =
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    schedule: { ...formData.schedule, endTime: e.target.value },
+                    schedule: { ...formData.schedule, endTime: e.target.value }
                   })
                 }
               />
@@ -432,16 +432,16 @@ const EditRuleForm: React.FC<EditRuleFormProps> = ({ rule, onSave, onCancel }) =
                             ...formData,
                             schedule: {
                               ...formData.schedule,
-                              weekdays: [...weekdays, idx].sort(),
-                            },
+                              weekdays: [...weekdays, idx].sort()
+                            }
                           });
                         } else {
                           setFormData({
                             ...formData,
                             schedule: {
                               ...formData.schedule,
-                              weekdays: weekdays.filter((d) => d !== idx),
-                            },
+                              weekdays: weekdays.filter((d) => d !== idx)
+                            }
                           });
                         }
                       }}

@@ -20,7 +20,7 @@ import {
   CANCELLATION_PHRASES,
   VOICE_PHRASE_PATTERNS,
   VOICE_FEEDBACK_MESSAGES,
-  DEFAULT_VOICE_CONFIG,
+  DEFAULT_VOICE_CONFIG
 } from '../types/voiceAssistant';
 
 export class VoiceAssistantService {
@@ -31,7 +31,8 @@ export class VoiceAssistantService {
   private status: VoiceRecognitionStatus = VoiceRecognitionStatus.IDLE;
   private speakingStatus: SpeechSynthesisStatus = SpeechSynthesisStatus.IDLE;
   private statistics: VoiceAssistantStatistics;
-  private eventListeners: Map<string, Set<Function>> = new Map();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private eventListeners: Map<string, Set<(...args: any[]) => void>> = new Map();
   private currentUtterance: SpeechSynthesisUtterance | null = null;
   private silenceTimer: NodeJS.Timeout | null = null;
 
@@ -60,7 +61,7 @@ export class VoiceAssistantService {
       emailsRead: 0,
       commandsByType: {} as any,
       averageConfidence: 0,
-      lastReset: Date.now(),
+      lastReset: Date.now()
     };
   }
 
@@ -115,13 +116,13 @@ export class VoiceAssistantService {
     const result: VoiceRecognitionResult = {
       transcript,
       confidence,
-      isFinal,
+      isFinal
     };
 
     if (lastResult.length > 1) {
       result.alternatives = Array.from(lastResult).slice(1).map((alt: any) => ({
         transcript: alt.transcript,
-        confidence: alt.confidence,
+        confidence: alt.confidence
       }));
     }
 
@@ -187,7 +188,7 @@ export class VoiceAssistantService {
     this.statistics.recognitionAttempts++;
 
     const command = this.parseCommand(transcript);
-    
+
     if (command.type !== VoiceCommandType.UNKNOWN && command.confidence >= this.config.confidenceThreshold) {
       this.statistics.totalCommands++;
       this.statistics.successfulCommands++;
@@ -204,7 +205,7 @@ export class VoiceAssistantService {
 
   private parseCommand(transcript: string): VoiceCommand {
     const normalizedTranscript = transcript.toLowerCase().trim();
-    
+
     for (const pattern of VOICE_PHRASE_PATTERNS) {
       for (const regex of pattern.patterns) {
         const match = normalizedTranscript.match(regex);
@@ -228,7 +229,7 @@ export class VoiceAssistantService {
       type,
       transcript,
       confidence: this.calculateConfidence(transcript, type),
-      timestamp: Date.now(),
+      timestamp: Date.now()
     };
 
     // Extract command-specific data based on type
@@ -278,7 +279,7 @@ export class VoiceAssistantService {
       type: VoiceCommandType.UNKNOWN,
       transcript,
       confidence: 0,
-      timestamp: Date.now(),
+      timestamp: Date.now()
     };
   }
 
@@ -301,7 +302,7 @@ export class VoiceAssistantService {
 
   private extractRecipients(text: string): string[] {
     const recipients: string[] = [];
-    
+
     // Extract email addresses
     const emailRegex = /[\w.-]+@[\w.-]+\.\w+/g;
     const emails = text.match(emailRegex);
@@ -326,24 +327,32 @@ export class VoiceAssistantService {
 
   private extractMarkAction(transcript: string): MarkAction {
     const lower = transcript.toLowerCase();
-    
-    if (lower.includes('unread')) return MarkAction.UNREAD;
-    if (lower.includes('unstar') || lower.includes('unimportant')) return MarkAction.UNSTAR;
-    if (lower.includes('star')) return MarkAction.STAR;
-    if (lower.includes('important')) return MarkAction.IMPORTANT;
-    
+
+    if (lower.includes('unread')) {
+return MarkAction.UNREAD;
+}
+    if (lower.includes('unstar') || lower.includes('unimportant')) {
+return MarkAction.UNSTAR;
+}
+    if (lower.includes('star')) {
+return MarkAction.STAR;
+}
+    if (lower.includes('important')) {
+return MarkAction.IMPORTANT;
+}
+
     return MarkAction.READ;
   }
 
   private normalizeFolderName(folderName: string): string {
     const lowerName = folderName.toLowerCase().trim();
-    
+
     for (const [canonical, variations] of Object.entries(FOLDER_NAME_VARIATIONS)) {
       if (variations.includes(lowerName)) {
         return canonical;
       }
     }
-    
+
     return lowerName;
   }
 
@@ -353,11 +362,11 @@ export class VoiceAssistantService {
     }
 
     const utterance = new SpeechSynthesisUtterance(text);
-    
+
     utterance.rate = options?.rate ?? this.config.defaultSpeechRate;
     utterance.pitch = options?.pitch ?? this.config.defaultSpeechPitch;
     utterance.volume = options?.volume ?? this.config.defaultSpeechVolume;
-    
+
     if (options?.voice) {
       const voices = this.synthesis.getVoices();
       const voice = voices.find(v => v.voiceURI === options.voice);
@@ -424,7 +433,7 @@ export class VoiceAssistantService {
 
   updateConfig(newConfig: Partial<VoiceAssistantConfig>): void {
     this.config = { ...this.config, ...newConfig };
-    
+
     if (this.recognition) {
       this.recognition.continuous = this.config.continuousListening;
       this.recognition.lang = this.config.language;
@@ -451,14 +460,16 @@ export class VoiceAssistantService {
     return this.speakingStatus;
   }
 
-  on(event: string, callback: Function): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  on(event: string, callback: (...args: any[]) => void): void {
     if (!this.eventListeners.has(event)) {
       this.eventListeners.set(event, new Set());
     }
     this.eventListeners.get(event)!.add(callback);
   }
 
-  off(event: string, callback: Function): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  off(event: string, callback: (...args: any[]) => void): void {
     const listeners = this.eventListeners.get(event);
     if (listeners) {
       listeners.delete(callback);

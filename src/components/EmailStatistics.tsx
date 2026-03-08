@@ -10,7 +10,9 @@ interface EmailStatisticsProps {
 }
 
 const formatBytes = (bytes: number): string => {
-  if (bytes === 0) return '0 Bytes';
+  if (bytes === 0) {
+return '0 Bytes';
+}
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -21,7 +23,7 @@ const formatDate = (date: Date): string => {
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
-    day: 'numeric',
+    day: 'numeric'
   });
 };
 
@@ -38,9 +40,11 @@ export const EmailStatistics: React.FC<EmailStatisticsProps> = ({
   onClose,
   statistics,
   timeRange,
-  onRefresh,
+  onRefresh
 }) => {
-  if (!isOpen) return null;
+  if (!isOpen) {
+return null;
+}
 
   return (
     <div className="statistics-overlay">

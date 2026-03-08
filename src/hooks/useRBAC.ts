@@ -305,13 +305,13 @@ export const useRBAC = () => {
       setIsLoading(true);
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       setUserRoleAssignments(generateMockUserRoleAssignments());
       setCustomPermissionSets(generateMockCustomPermissionSets());
       setAccessPolicies(generateMockAccessPolicies());
       setAuditLogs(generateMockAuditLogs());
       setPermissionRequests(generateMockPermissionRequests());
-      
+
       setIsLoading(false);
     };
 
@@ -321,7 +321,7 @@ export const useRBAC = () => {
   // Permission checking
   const hasPermission = useCallback((userId: string, permission: Permission): PermissionCheck => {
     const assignment = userRoleAssignments.find(a => a.userId === userId);
-    
+
     if (!assignment) {
       return { hasPermission: false, reason: 'User not found' };
     }
@@ -375,7 +375,7 @@ export const useRBAC = () => {
   const assignRole = useCallback(async (payload: AssignRolePayload): Promise<UserRoleAssignment | null> => {
     // Check if user already has a role assignment
     const existingIndex = userRoleAssignments.findIndex(a => a.userId === payload.userId);
-    
+
     const newAssignment: UserRoleAssignment = {
       id: existingIndex >= 0 ? userRoleAssignments[existingIndex].id : Date.now().toString(),
       userId: payload.userId,
@@ -416,7 +416,9 @@ export const useRBAC = () => {
 
   const revokeRole = useCallback(async (payload: RevokeRolePayload): Promise<boolean> => {
     const index = userRoleAssignments.findIndex(a => a.userId === payload.userId);
-    if (index === -1) return false;
+    if (index === -1) {
+return false;
+}
 
     const assignment = userRoleAssignments[index];
     const auditLog: PermissionAuditLog = {
@@ -441,7 +443,9 @@ export const useRBAC = () => {
 
   const updatePermissions = useCallback(async (payload: UpdatePermissionsPayload): Promise<boolean> => {
     const index = userRoleAssignments.findIndex(a => a.userId === payload.userId);
-    if (index === -1) return false;
+    if (index === -1) {
+return false;
+}
 
     const assignment = userRoleAssignments[index];
     const auditLog: PermissionAuditLog = {
@@ -482,7 +486,9 @@ export const useRBAC = () => {
 
   const updateCustomPermissionSet = useCallback(async (id: string, payload: UpdateRolePayload): Promise<CustomPermissionSet | null> => {
     const index = customPermissionSets.findIndex(s => s.id === id);
-    if (index === -1) return null;
+    if (index === -1) {
+return null;
+}
 
     const updated: CustomPermissionSet = {
       ...customPermissionSets[index],
@@ -503,7 +509,9 @@ export const useRBAC = () => {
 
   const deleteCustomPermissionSet = useCallback(async (id: string): Promise<boolean> => {
     const index = customPermissionSets.findIndex(s => s.id === id);
-    if (index === -1) return false;
+    if (index === -1) {
+return false;
+}
 
     const updated = customPermissionSets.filter(s => s.id !== id);
     setCustomPermissionSets(updated);
@@ -524,7 +532,9 @@ export const useRBAC = () => {
 
   const updateAccessPolicy = useCallback(async (id: string, updates: Partial<AccessPolicy>): Promise<AccessPolicy | null> => {
     const index = accessPolicies.findIndex(p => p.id === id);
-    if (index === -1) return null;
+    if (index === -1) {
+return null;
+}
 
     const updated = { ...accessPolicies[index], ...updates };
     const updatedPolicies = [...accessPolicies];
@@ -536,7 +546,9 @@ export const useRBAC = () => {
 
   const deleteAccessPolicy = useCallback(async (id: string): Promise<boolean> => {
     const index = accessPolicies.findIndex(p => p.id === id);
-    if (index === -1) return false;
+    if (index === -1) {
+return false;
+}
 
     const updated = accessPolicies.filter(p => p.id !== id);
     setAccessPolicies(updated);
@@ -547,7 +559,9 @@ export const useRBAC = () => {
   // Permission requests management
   const approvePermissionRequest = useCallback(async (requestId: string): Promise<boolean> => {
     const index = permissionRequests.findIndex(r => r.id === requestId);
-    if (index === -1) return false;
+    if (index === -1) {
+return false;
+}
 
     const request = permissionRequests[index];
     const updated: PermissionRequest = {
@@ -574,7 +588,9 @@ export const useRBAC = () => {
 
   const rejectPermissionRequest = useCallback(async (requestId: string): Promise<boolean> => {
     const index = permissionRequests.findIndex(r => r.id === requestId);
-    if (index === -1) return false;
+    if (index === -1) {
+return false;
+}
 
     const request = permissionRequests[index];
     const updated: PermissionRequest = {
@@ -606,8 +622,8 @@ export const useRBAC = () => {
       return acc;
     }, {} as Record<Role, number>);
 
-    const expiringAssignments = userRoleAssignments.filter(a => 
-      a.expiresAt && 
+    const expiringAssignments = userRoleAssignments.filter(a =>
+      a.expiresAt &&
       new Date(a.expiresAt) < new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
     ).length;
 
@@ -617,7 +633,7 @@ export const useRBAC = () => {
       totalCustomRoles: customPermissionSets.length,
       activePolicies: accessPolicies.filter(p => p.isActive).length,
       auditLogEntries: auditLogs.length,
-      permissionChangesThisWeek: auditLogs.filter(log => 
+      permissionChangesThisWeek: auditLogs.filter(log =>
         new Date(log.timestamp) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
       ).length,
       expiringAssignments

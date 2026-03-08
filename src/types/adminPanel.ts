@@ -1,11 +1,11 @@
 /**
  * Admin Panel Types for V-Mail v1.2.0
- * 
+ *
  * This module defines comprehensive types for admin panel operations,
  * including user management, system monitoring, and audit logs.
  */
 
-export type AdminAction = 
+export type AdminAction =
   | 'user_create'
   | 'user_update'
   | 'user_delete'
@@ -23,23 +23,23 @@ export type AdminAction =
   | 'permission_grant'
   | 'permission_revoke';
 
-export type AuditLogSeverity = 
+export type AuditLogSeverity =
   | 'info'       // Informational events
   | 'warning'    // Warning events
   | 'error'      // Error events
   | 'critical';  // Critical security events
 
-export type SystemHealthStatus = 
+export type SystemHealthStatus =
   | 'healthy'    // All systems operational
   | 'degraded'   // Some services degraded
   | 'outage';    // Major outage
 
-export type AdminUserRole = 
+export type AdminUserRole =
   | 'super_admin'   // Full system access
   | 'admin'         // Administrative access
   | 'support';      // Support staff access
 
-export type UserStatus = 
+export type UserStatus =
   | 'active'
   | 'suspended'
   | 'deleted'

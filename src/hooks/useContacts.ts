@@ -18,7 +18,7 @@ import {
   ContactSyncStatus,
   ContactPreferences,
   CreateContactPayload,
-  UpdateContactPayload,
+  UpdateContactPayload
 } from '../types/contacts';
 import { contactsService } from '../services/contactsService';
 
@@ -70,7 +70,7 @@ export function useContacts(): UseContactsReturn {
     defaultView: 'list',
     sortOptions: {
       field: 'displayName',
-      order: 'asc',
+      order: 'asc'
     },
     displayFields: ['displayName', 'email', 'phone'],
     showAvatar: true,
@@ -82,7 +82,7 @@ export function useContacts(): UseContactsReturn {
     enableAutoMerge: false,
     mergeThreshold: 0.8,
     duplicateCheckEnabled: true,
-    emailTrackingEnabled: true,
+    emailTrackingEnabled: true
   });
   const [syncStatus, setSyncStatus] = useState<Map<string, ContactSyncStatus>>(new Map());
   const [loading, setLoading] = useState(false);
@@ -156,10 +156,10 @@ export function useContacts(): UseContactsReturn {
 
     try {
       const contact = await contactsService.createContact(payload);
-      
+
       // Update contacts list
       setContacts((prev) => [...prev, contact]);
-      
+
       // Refresh statistics
       const stats = await contactsService.getStatistics();
       setStatistics(stats);
@@ -184,14 +184,14 @@ export function useContacts(): UseContactsReturn {
 
     try {
       const updatedContact = await contactsService.updateContact(payload);
-      
+
       // Update contacts list
       setContacts((prev) =>
         prev.map((contact) =>
           contact.id === updatedContact.id ? updatedContact : contact
         )
       );
-      
+
       // Refresh statistics
       const stats = await contactsService.getStatistics();
       setStatistics(stats);
@@ -214,10 +214,10 @@ export function useContacts(): UseContactsReturn {
 
     try {
       await contactsService.deleteContact(contactId);
-      
+
       // Update contacts list
       setContacts((prev) => prev.filter((contact) => contact.id !== contactId));
-      
+
       // Refresh statistics
       const stats = await contactsService.getStatistics();
       setStatistics(stats);
@@ -248,7 +248,7 @@ export function useContacts(): UseContactsReturn {
 
     try {
       const contact = await contactsService.createContactFromEmail(email, options);
-      
+
       // Update contacts list
       setContacts((prev) => {
         const existingIndex = prev.findIndex((c) => c.id === contact.id);
@@ -259,7 +259,7 @@ export function useContacts(): UseContactsReturn {
         }
         return [...prev, contact];
       });
-      
+
       // Refresh statistics
       const stats = await contactsService.getStatistics();
       setStatistics(stats);
@@ -313,14 +313,14 @@ export function useContacts(): UseContactsReturn {
 
     try {
       const mergedContact = await contactsService.mergeContacts(primaryId, duplicateIds);
-      
+
       // Update contacts list
       setContacts((prev) =>
         prev.map((contact) =>
           contact.id === mergedContact.id ? mergedContact : contact
         ).filter((contact) => !duplicateIds.includes(contact.id))
       );
-      
+
       // Refresh statistics
       const stats = await contactsService.getStatistics();
       setStatistics(stats);
@@ -354,7 +354,7 @@ export function useContacts(): UseContactsReturn {
 
     try {
       const group = await contactsService.createGroup(name, description, color);
-      
+
       // Update groups list
       setGroups((prev) => [...prev, group]);
 
@@ -379,7 +379,7 @@ export function useContacts(): UseContactsReturn {
 
     try {
       const updatedGroup = await contactsService.updateGroup(groupId, updates);
-      
+
       // Update groups list
       setGroups((prev) =>
         prev.map((group) =>
@@ -405,7 +405,7 @@ export function useContacts(): UseContactsReturn {
 
     try {
       await contactsService.deleteGroup(groupId);
-      
+
       // Update groups list
       setGroups((prev) => prev.filter((group) => group.id !== groupId));
 
@@ -432,7 +432,7 @@ export function useContacts(): UseContactsReturn {
 
     try {
       await contactsService.addContactToGroup(contactId, groupId);
-      
+
       // Reload contacts and groups
       const loadedContacts = contactsService.getContacts();
       const loadedGroups = contactsService.getGroups();
@@ -458,7 +458,7 @@ export function useContacts(): UseContactsReturn {
 
     try {
       await contactsService.removeContactFromGroup(contactId, groupId);
-      
+
       // Reload contacts and groups
       const loadedContacts = contactsService.getContacts();
       const loadedGroups = contactsService.getGroups();
@@ -481,7 +481,7 @@ export function useContacts(): UseContactsReturn {
 
     try {
       await contactsService.syncContacts(accountId);
-      
+
       // Refresh contacts
       await refreshContacts();
     } catch (err) {
@@ -530,6 +530,6 @@ export function useContacts(): UseContactsReturn {
     addContactToGroup,
     removeContactFromGroup,
     syncContacts,
-    updatePreferences,
+    updatePreferences
   };
 }

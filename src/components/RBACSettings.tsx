@@ -124,7 +124,9 @@ const RBACSettings: React.FC = () => {
         {user.expiresAt ? new Date(user.expiresAt).toLocaleDateString() : 'Never'}
       </div>
       <div className="user-actions">
-        <button className="btn-icon" onClick={(e) => { e.stopPropagation(); /* TODO */ }}>⚙️</button>
+        <button className="btn-icon" onClick={(e) => {
+ e.stopPropagation(); /* TODO */
+}}>⚙️</button>
       </div>
     </div>
   );
@@ -494,7 +496,7 @@ const RBACSettings: React.FC = () => {
         {activeTab === 'settings' && (
           <div className="rbac-settings-section">
             <h2>RBAC Settings</h2>
-            
+
             <div className="settings-form">
               <div className="form-group">
                 <label>

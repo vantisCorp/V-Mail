@@ -8,7 +8,7 @@ import { useEmailTemplates } from '../useEmailTemplates';
 import {
   TemplateType,
   TemplatePermission,
-  VariableType,
+  VariableType
 } from '../../types/emailTemplates';
 
 // Mock timers
@@ -22,13 +22,13 @@ describe('useEmailTemplates', () => {
   describe('initial state', () => {
     it('should start with loading state', () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       expect(result.current.isLoading).toBe(true);
     });
 
     it('should load templates after initialization', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       // Fast-forward through loading
       await act(async () => {
         vi.advanceTimersByTime(600);
@@ -40,7 +40,7 @@ describe('useEmailTemplates', () => {
 
     it('should load categories on initialization', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -50,7 +50,7 @@ describe('useEmailTemplates', () => {
 
     it('should include system templates', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -64,7 +64,7 @@ describe('useEmailTemplates', () => {
   describe('createTemplate', () => {
     it('should create a new template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -78,7 +78,7 @@ describe('useEmailTemplates', () => {
           description: 'A test template',
           type: TemplateType.STANDARD,
           permission: TemplatePermission.PRIVATE,
-          content: '<p>Hello {{name}}</p>',
+          content: '<p>Hello {{name}}</p>'
         });
       });
 
@@ -89,7 +89,7 @@ describe('useEmailTemplates', () => {
 
     it('should set default values for new template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -101,7 +101,7 @@ describe('useEmailTemplates', () => {
           description: 'Test',
           type: TemplateType.STANDARD,
           permission: TemplatePermission.PRIVATE,
-          content: 'Test',
+          content: 'Test'
         });
       });
 
@@ -114,17 +114,17 @@ describe('useEmailTemplates', () => {
   describe('updateTemplate', () => {
     it('should update an existing template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
 
       const template = result.current.templates[0];
-      
+
       let updated: any;
       await act(async () => {
         updated = await result.current.updateTemplate(template.id, {
-          name: 'Updated Name',
+          name: 'Updated Name'
         });
       });
 
@@ -134,13 +134,13 @@ describe('useEmailTemplates', () => {
 
     it('should return null for non-existent template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
 
       const updated = await result.current.updateTemplate('non-existent', {
-        name: 'Updated',
+        name: 'Updated'
       });
 
       expect(updated).toBeNull();
@@ -150,7 +150,7 @@ describe('useEmailTemplates', () => {
   describe('deleteTemplate', () => {
     it('should delete a user template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -163,7 +163,7 @@ describe('useEmailTemplates', () => {
           description: 'Will be deleted',
           type: TemplateType.STANDARD,
           permission: TemplatePermission.PRIVATE,
-          content: 'Delete me',
+          content: 'Delete me'
         });
       });
 
@@ -179,20 +179,20 @@ describe('useEmailTemplates', () => {
 
     it('should not delete system templates', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
 
       const systemTemplate = result.current.getSystemTemplates()[0];
-      
+
       const success = await result.current.deleteTemplate(systemTemplate.id);
       expect(success).toBe(false);
     });
 
     it('should return false for non-existent template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -205,7 +205,7 @@ describe('useEmailTemplates', () => {
   describe('cloneTemplate', () => {
     it('should clone an existing template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -217,7 +217,7 @@ describe('useEmailTemplates', () => {
       await act(async () => {
         cloned = await result.current.cloneTemplate({
           sourceTemplateId: source.id,
-          name: 'Cloned Template',
+          name: 'Cloned Template'
         });
       });
 
@@ -229,14 +229,14 @@ describe('useEmailTemplates', () => {
 
     it('should return null for non-existent source', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
 
       const cloned = await result.current.cloneTemplate({
         sourceTemplateId: 'non-existent',
-        name: 'Clone',
+        name: 'Clone'
       });
 
       expect(cloned).toBeNull();
@@ -246,7 +246,7 @@ describe('useEmailTemplates', () => {
   describe('variable operations', () => {
     it('should add a variable to a template', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -259,7 +259,7 @@ describe('useEmailTemplates', () => {
           description: 'Test',
           type: TemplateType.STANDARD,
           permission: TemplatePermission.PRIVATE,
-          content: 'Hello',
+          content: 'Hello'
         });
       });
 
@@ -276,7 +276,7 @@ describe('useEmailTemplates', () => {
           key: 'test_var',
           description: 'A test variable',
           type: VariableType.TEXT,
-          isRequired: true,
+          isRequired: true
         });
       });
 
@@ -286,7 +286,7 @@ describe('useEmailTemplates', () => {
 
     it('should update a variable', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -306,8 +306,8 @@ describe('useEmailTemplates', () => {
             key: 'original_key',
             description: 'Original var',
             type: VariableType.TEXT,
-            isRequired: false,
-          }],
+            isRequired: false
+          }]
         });
       });
 
@@ -316,7 +316,7 @@ describe('useEmailTemplates', () => {
       });
 
       const success = await result.current.updateVariable(template.id, 'var1', {
-        name: 'Updated Name',
+        name: 'Updated Name'
       });
 
       expect(success).toBe(true);
@@ -324,7 +324,7 @@ describe('useEmailTemplates', () => {
 
     it('should remove a variable', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -344,8 +344,8 @@ describe('useEmailTemplates', () => {
             key: 'to_remove',
             description: 'Will be removed',
             type: VariableType.TEXT,
-            isRequired: false,
-          }],
+            isRequired: false
+          }]
         });
       });
 
@@ -361,7 +361,7 @@ describe('useEmailTemplates', () => {
   describe('previewTemplate', () => {
     it('should replace variables in template content', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -376,8 +376,8 @@ describe('useEmailTemplates', () => {
       const preview = result.current.previewTemplate({
         templateId: template.id,
         variables: {
-          [template.variables[0].key]: 'Test Value',
-        },
+          [template.variables[0].key]: 'Test Value'
+        }
       });
 
       expect(preview).toContain('Test Value');
@@ -385,10 +385,10 @@ describe('useEmailTemplates', () => {
 
     it('should return empty string for non-existent template', () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       const preview = result.current.previewTemplate({
         templateId: 'non-existent',
-        variables: {},
+        variables: {}
       });
 
       expect(preview).toBe('');
@@ -398,38 +398,38 @@ describe('useEmailTemplates', () => {
   describe('validateTemplate', () => {
     it('should validate correct template content', () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       const validation = result.current.validateTemplate('<p>Hello {{name}}</p>');
-      
+
       expect(validation.isValid).toBe(true);
       expect(validation.errors.length).toBe(0);
     });
 
     it('should detect unbalanced braces', () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       const validation = result.current.validateTemplate('<p>Hello {{name}</p>');
-      
+
       expect(validation.isValid).toBe(false);
       expect(validation.errors.some(e => e.message.includes('Unbalanced'))).toBe(true);
     });
 
     it('should detect empty variables', () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       const validation = result.current.validateTemplate('<p>Hello {{}}</p>');
-      
+
       expect(validation.isValid).toBe(false);
       expect(validation.errors.some(e => e.message.includes('Empty'))).toBe(true);
     });
 
     it('should warn about unclosed HTML tags', () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       // The validation logic checks for '<' without '>', but the string '<p>Hello {{name}}' has both
       // Let's test with actual unclosed tag
       const validation = result.current.validateTemplate('<pHello {{name}}');
-      
+
       // This should trigger the warning since there's '<' without matching '>'
       if (validation.warnings.length > 0) {
         expect(validation.warnings.some(w => w.message.includes('unclosed') || w.message.includes('HTML'))).toBe(true);
@@ -443,13 +443,13 @@ describe('useEmailTemplates', () => {
   describe('getFilteredTemplates', () => {
     it('should filter by type', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
 
       const filtered = result.current.getFilteredTemplates({
-        type: TemplateType.TRANSACTIONAL,
+        type: TemplateType.TRANSACTIONAL
       });
 
       expect(filtered.every(t => t.type === TemplateType.TRANSACTIONAL)).toBe(true);
@@ -457,14 +457,14 @@ describe('useEmailTemplates', () => {
 
     it('should filter by category', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
 
       const category = result.current.categories[0];
       const filtered = result.current.getFilteredTemplates({
-        categoryId: category.id,
+        categoryId: category.id
       });
 
       expect(filtered.every(t => t.categoryId === category.id)).toBe(true);
@@ -472,13 +472,13 @@ describe('useEmailTemplates', () => {
 
     it('should filter by favorites', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
 
       const filtered = result.current.getFilteredTemplates({
-        isFavorite: true,
+        isFavorite: true
       });
 
       expect(filtered.every(t => t.isFavorite)).toBe(true);
@@ -486,32 +486,32 @@ describe('useEmailTemplates', () => {
 
     it('should filter by search query', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
 
       const filtered = result.current.getFilteredTemplates({
-        searchQuery: 'welcome',
+        searchQuery: 'welcome'
       });
 
       expect(filtered.length).toBeGreaterThan(0);
-      expect(filtered.some(t => 
-        t.name.toLowerCase().includes('welcome') || 
+      expect(filtered.some(t =>
+        t.name.toLowerCase().includes('welcome') ||
         t.description.toLowerCase().includes('welcome')
       )).toBe(true);
     });
 
     it('should sort templates by name', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
 
       const sorted = result.current.getFilteredTemplates({
         sortBy: 'name',
-        sortOrder: 'asc',
+        sortOrder: 'asc'
       });
 
       for (let i = 1; i < sorted.length; i++) {
@@ -523,7 +523,7 @@ describe('useEmailTemplates', () => {
   describe('toggleFavorite', () => {
     it('should toggle favorite status', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -536,7 +536,7 @@ describe('useEmailTemplates', () => {
           description: 'Test',
           type: TemplateType.STANDARD,
           permission: TemplatePermission.PRIVATE,
-          content: 'Test',
+          content: 'Test'
         });
       });
 
@@ -558,7 +558,7 @@ describe('useEmailTemplates', () => {
   describe('version management', () => {
     it('should create a new version', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -571,7 +571,7 @@ describe('useEmailTemplates', () => {
           description: 'Test',
           type: TemplateType.STANDARD,
           permission: TemplatePermission.PRIVATE,
-          content: 'Test',
+          content: 'Test'
         });
       });
 
@@ -593,7 +593,7 @@ describe('useEmailTemplates', () => {
   describe('category management', () => {
     it('should create a new category', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -606,7 +606,7 @@ describe('useEmailTemplates', () => {
           name: 'Test Category',
           description: 'A test category',
           color: '#ff0000',
-          icon: '📁',
+          icon: '📁'
         });
       });
 
@@ -620,7 +620,7 @@ describe('useEmailTemplates', () => {
   describe('utility functions', () => {
     it('should get template by ID', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -634,7 +634,7 @@ describe('useEmailTemplates', () => {
 
     it('should return null for non-existent ID', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -645,7 +645,7 @@ describe('useEmailTemplates', () => {
 
     it('should get templates by category', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -658,7 +658,7 @@ describe('useEmailTemplates', () => {
 
     it('should get templates by tag', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -673,7 +673,7 @@ describe('useEmailTemplates', () => {
 
     it('should get favorites', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -684,7 +684,7 @@ describe('useEmailTemplates', () => {
 
     it('should get user templates', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -697,7 +697,7 @@ describe('useEmailTemplates', () => {
   describe('analytics', () => {
     it('should get template analytics', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -711,7 +711,7 @@ describe('useEmailTemplates', () => {
 
     it('should get usage logs', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });
@@ -724,7 +724,7 @@ describe('useEmailTemplates', () => {
   describe('refresh', () => {
     it('should refresh templates', async () => {
       const { result } = renderHook(() => useEmailTemplates());
-      
+
       await act(async () => {
         vi.advanceTimersByTime(600);
       });

@@ -1,7 +1,7 @@
 /**
  * useSentimentAnalysis Hook
  * Part of v1.4.0 AI-Powered Intelligence
- * 
+ *
  * Provides sentiment, emotion, and tone analysis for email content.
  */
 
@@ -19,11 +19,11 @@ import {
   SentimentEntry,
   ReplyToneSuggestion,
   SentimentFeedback,
-  SentimentFeedbackRecord,
+  SentimentFeedbackRecord
 } from '../types/sentimentAnalysis';
 import {
   SentimentModel,
-  createSentimentModel,
+  createSentimentModel
 } from '../ml/sentimentModel';
 
 // ============================================================================
@@ -87,7 +87,7 @@ export function useSentimentAnalysis(
     isLoading: false,
     error: null,
     currentResult: null,
-    statistics: null,
+    statistics: null
   });
 
   // Refs
@@ -118,7 +118,7 @@ export function useSentimentAnalysis(
       if (cached) {
         setState(prev => ({
           ...prev,
-          currentResult: cached,
+          currentResult: cached
         }));
         return cached;
       }
@@ -132,7 +132,7 @@ export function useSentimentAnalysis(
         setState(prev => ({
           ...prev,
           isLoading: false,
-          currentResult: result,
+          currentResult: result
         }));
 
         return result;
@@ -141,7 +141,7 @@ export function useSentimentAnalysis(
         setState(prev => ({
           ...prev,
           isLoading: false,
-          error: errorMessage,
+          error: errorMessage
         }));
         throw error;
       }
@@ -175,7 +175,7 @@ export function useSentimentAnalysis(
         setState(prev => ({
           ...prev,
           isLoading: false,
-          currentResult: results[results.length - 1] || null,
+          currentResult: results[results.length - 1] || null
         }));
 
         return results;
@@ -184,7 +184,7 @@ export function useSentimentAnalysis(
         setState(prev => ({
           ...prev,
           isLoading: false,
-          error: errorMessage,
+          error: errorMessage
         }));
         throw error;
       }
@@ -203,7 +203,7 @@ export function useSentimentAnalysis(
         body: text,
         sender: '',
         recipients: [],
-        timestamp: new Date(),
+        timestamp: new Date()
       };
 
       return analyze(context);
@@ -228,7 +228,9 @@ export function useSentimentAnalysis(
    */
   const getEmotion = useCallback((emailId: string): Emotion | null => {
     const result = resultsCache.current.get(emailId);
-    if (!result || result.emotions.length === 0) return null;
+    if (!result || result.emotions.length === 0) {
+return null;
+}
     return result.emotions[0].emotion;
   }, []);
 
@@ -237,7 +239,9 @@ export function useSentimentAnalysis(
    */
   const getTone = useCallback((emailId: string): Tone | null => {
     const result = resultsCache.current.get(emailId);
-    if (!result || result.tone.length === 0) return null;
+    if (!result || result.tone.length === 0) {
+return null;
+}
     return result.tone[0].tone;
   }, []);
 
@@ -261,7 +265,9 @@ export function useSentimentAnalysis(
       ? resultsCache.current.get(emailId)
       : state.currentResult;
 
-    if (!result || !modelRef.current) return null;
+    if (!result || !modelRef.current) {
+return null;
+}
 
     return modelRef.current.suggestReplyTone(result);
   }, [state.currentResult]);
@@ -274,7 +280,9 @@ export function useSentimentAnalysis(
       ? resultsCache.current.get(emailId)
       : state.currentResult;
 
-    if (!result || !modelRef.current) return null;
+    if (!result || !modelRef.current) {
+return null;
+}
 
     return modelRef.current.generateFeedback(result);
   }, [state.currentResult]);
@@ -292,7 +300,7 @@ export function useSentimentAnalysis(
     const sentimentDistribution: Record<Sentiment, number> = {
       [Sentiment.POSITIVE]: 0,
       [Sentiment.NEUTRAL]: 0,
-      [Sentiment.NEGATIVE]: 0,
+      [Sentiment.NEGATIVE]: 0
     };
 
     const emotionDistribution: Record<Emotion, number> = {} as any;
@@ -329,7 +337,7 @@ export function useSentimentAnalysis(
         subject: '',
         sentiment: result.overall,
         score: result.score,
-        timestamp: new Date(result.timestamp),
+        timestamp: new Date(result.timestamp)
       });
     });
 
@@ -346,9 +354,9 @@ export function useSentimentAnalysis(
       trend.push({
         date,
         averageScore: averageScore,
-        sentiment: averageScore > 0.1 ? Sentiment.POSITIVE : 
+        sentiment: averageScore > 0.1 ? Sentiment.POSITIVE :
                    averageScore < -0.1 ? Sentiment.NEGATIVE : Sentiment.NEUTRAL,
-        emailCount: Math.floor(results.length / 7),
+        emailCount: Math.floor(results.length / 7)
       });
     }
 
@@ -363,8 +371,8 @@ export function useSentimentAnalysis(
       topNegativeEmails: entries.filter(e => e.sentiment === Sentiment.NEGATIVE).slice(-5).reverse(),
       period: {
         start: trend[0].date,
-        end: trend[trend.length - 1].date,
-      },
+        end: trend[trend.length - 1].date
+      }
     };
   }, []);
 
@@ -378,7 +386,9 @@ export function useSentimentAnalysis(
 
     emailIds.forEach(id => {
       const result = resultsCache.current.get(id);
-      if (result) results.push(result);
+      if (result) {
+results.push(result);
+}
     });
 
     if (!modelRef.current) {
@@ -437,7 +447,7 @@ export function useSentimentAnalysis(
     setState(prev => ({
       ...prev,
       currentResult: null,
-      statistics: null,
+      statistics: null
     }));
   }, []);
 
@@ -480,7 +490,7 @@ export function useSentimentAnalysis(
     getFeedbackHistory,
 
     // Cache
-    clearCache,
+    clearCache
   };
 }
 

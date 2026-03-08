@@ -6,7 +6,7 @@ import {
   FolderCategory,
   OrganizationStrategy,
   ConfidenceLevel,
-  EmailPriority,
+  EmailPriority
 } from '../../src/types/smartFolders';
 
 describe('useSmartFolders', () => {
@@ -25,38 +25,38 @@ describe('useSmartFolders', () => {
     to: overrides.to || ['recipient@example.com'],
     hasAttachments: overrides.hasAttachments || false,
     readStatus: overrides.readStatus || 'unread',
-    date: new Date().toISOString(),
+    date: new Date().toISOString()
   });
 
   const workEmails = [
     createEmail('1', {
       subject: 'Project Meeting Tomorrow',
       body: 'Please join the project meeting tomorrow at 2pm to discuss the quarterly report.',
-      from: 'manager@company.com',
+      from: 'manager@company.com'
     }),
     createEmail('2', {
       subject: 'Project Update',
       body: 'Here is the latest project update for review. Please provide your feedback.',
-      from: 'manager@company.com',
+      from: 'manager@company.com'
     }),
     createEmail('3', {
       subject: 'Deadline Reminder',
       body: 'This is a reminder about the upcoming deadline for the project deliverable.',
-      from: 'manager@company.com',
-    }),
+      from: 'manager@company.com'
+    })
   ];
 
   const financeEmails = [
     createEmail('4', {
       subject: 'Bank Statement',
       body: 'Your monthly bank statement is now available for review.',
-      from: 'bank@example.com',
+      from: 'bank@example.com'
     }),
     createEmail('5', {
       subject: 'Invoice Payment',
       body: 'Payment confirmation for invoice #12345 has been processed.',
-      from: 'finance@example.com',
-    }),
+      from: 'finance@example.com'
+    })
   ];
 
   beforeEach(() => {
@@ -80,7 +80,7 @@ describe('useSmartFolders', () => {
       const { result } = renderHook(() => useSmartFolders({
         strategy: OrganizationStrategy.BY_SENDER,
         minConfidence: 0.8,
-        maxSuggestions: 3,
+        maxSuggestions: 3
       }));
 
       expect(result.current.config.strategy).toBe(OrganizationStrategy.BY_SENDER);
@@ -93,12 +93,12 @@ describe('useSmartFolders', () => {
     it('should suggest folders based on email patterns', async () => {
       const { result } = renderHook(() => useSmartFolders({
         minEmailsForFolder: 2,
-        maxSuggestions: 5,
+        maxSuggestions: 5
       }));
 
       await act(async () => {
         await result.current.suggestFolders({
-          emails: [...workEmails, ...financeEmails],
+          emails: [...workEmails, ...financeEmails]
         });
       });
 
@@ -109,12 +109,12 @@ describe('useSmartFolders', () => {
     it('should generate topic-based suggestions', async () => {
       const { result } = renderHook(() => useSmartFolders({
         minEmailsForFolder: 2,
-        maxSuggestions: 5,
+        maxSuggestions: 5
       }));
 
       await act(async () => {
         await result.current.suggestFolders({
-          emails: workEmails,
+          emails: workEmails
         });
       });
 
@@ -128,12 +128,12 @@ describe('useSmartFolders', () => {
     it('should generate sender-based suggestions', async () => {
       const { result } = renderHook(() => useSmartFolders({
         minEmailsForFolder: 2,
-        maxSuggestions: 5,
+        maxSuggestions: 5
       }));
 
       await act(async () => {
         await result.current.suggestFolders({
-          emails: workEmails,
+          emails: workEmails
         });
       });
 
@@ -147,12 +147,12 @@ describe('useSmartFolders', () => {
     it('should generate category-based suggestions', async () => {
       const { result } = renderHook(() => useSmartFolders({
         minEmailsForFolder: 2,
-        maxSuggestions: 5,
+        maxSuggestions: 5
       }));
 
       await act(async () => {
         await result.current.suggestFolders({
-          emails: [...workEmails, ...financeEmails],
+          emails: [...workEmails, ...financeEmails]
         });
       });
 
@@ -166,12 +166,12 @@ describe('useSmartFolders', () => {
     it('should not suggest folders for insufficient emails', async () => {
       const { result } = renderHook(() => useSmartFolders({
         minEmailsForFolder: 5,
-        maxSuggestions: 5,
+        maxSuggestions: 5
       }));
 
       await act(async () => {
         await result.current.suggestFolders({
-          emails: workEmails,
+          emails: workEmails
         });
       });
 
@@ -192,7 +192,7 @@ describe('useSmartFolders', () => {
 
       await act(async () => {
         await result.current.suggestFolders({
-          emails: workEmails,
+          emails: workEmails
         });
       });
 
@@ -203,7 +203,7 @@ describe('useSmartFolders', () => {
   describe('Email Routing', () => {
     it('should route email to appropriate folder', () => {
       const { result } = renderHook(() => useSmartFolders({
-        minConfidence: 0.5,
+        minConfidence: 0.5
       }));
 
       const folders = [{
@@ -219,7 +219,7 @@ describe('useSmartFolders', () => {
           type: 'KEYWORD' as const,
           condition: 'contains',
           value: 'project',
-          weight: 0.7,
+          weight: 0.7
         }],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -231,8 +231,8 @@ describe('useSmartFolders', () => {
           topKeywords: ['project', 'meeting'],
           commonTopics: ['project'],
           autoGenerated: true,
-          lastOptimization: new Date().toISOString(),
-        },
+          lastOptimization: new Date().toISOString()
+        }
       }];
 
       const result_route = result.current.routeEmail(workEmails[0], folders);
@@ -257,7 +257,7 @@ describe('useSmartFolders', () => {
           type: 'KEYWORD' as const,
           condition: 'contains',
           value: 'unrelated',
-          weight: 0.7,
+          weight: 0.7
         }],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -269,8 +269,8 @@ describe('useSmartFolders', () => {
           topKeywords: [],
           commonTopics: [],
           autoGenerated: true,
-          lastOptimization: new Date().toISOString(),
-        },
+          lastOptimization: new Date().toISOString()
+        }
       }];
 
       const result_route = result.current.routeEmail(workEmails[0], folders);
@@ -288,7 +288,7 @@ describe('useSmartFolders', () => {
 
     it('should route multiple emails', async () => {
       const { result } = renderHook(() => useSmartFolders({
-        minConfidence: 0.5,
+        minConfidence: 0.5
       }));
 
       const folders = [{
@@ -304,7 +304,7 @@ describe('useSmartFolders', () => {
           type: 'KEYWORD' as const,
           condition: 'contains',
           value: 'project',
-          weight: 0.7,
+          weight: 0.7
         }],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -316,8 +316,8 @@ describe('useSmartFolders', () => {
           topKeywords: ['project'],
           commonTopics: ['project'],
           autoGenerated: true,
-          lastOptimization: new Date().toISOString(),
-        },
+          lastOptimization: new Date().toISOString()
+        }
       }];
 
       await act(async () => {
@@ -341,7 +341,7 @@ describe('useSmartFolders', () => {
         keywords: ['project', 'update', 'meeting'],
         sampleEmails: ['1', '2', '3'],
         reason: 'Found 3 emails related to project',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
 
       act(() => {
@@ -368,7 +368,7 @@ describe('useSmartFolders', () => {
         keywords: ['project', 'meeting'],
         sampleEmails: [],
         reason: 'Test',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
 
       const folder = result.current.createFolder(suggestion);
@@ -381,7 +381,7 @@ describe('useSmartFolders', () => {
   describe('Folder Optimization', () => {
     it('should optimize folder rules', () => {
       const { result } = renderHook(() => useSmartFolders({
-        minConfidence: 0.1,
+        minConfidence: 0.1
       }));
 
       const folders = [{
@@ -397,7 +397,7 @@ describe('useSmartFolders', () => {
           type: 'KEYWORD' as const,
           condition: 'contains',
           value: 'project',
-          weight: 0.5,
+          weight: 0.5
         }],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -409,8 +409,8 @@ describe('useSmartFolders', () => {
           topKeywords: ['project'],
           commonTopics: ['project'],
           autoGenerated: true,
-          lastOptimization: new Date().toISOString(),
-        },
+          lastOptimization: new Date().toISOString()
+        }
       }];
 
       const optimized = result.current.optimizeFolders(folders, workEmails);
@@ -429,7 +429,7 @@ describe('useSmartFolders', () => {
 
     it('should update folder metadata', () => {
       const { result } = renderHook(() => useSmartFolders({
-        minConfidence: 0.1,
+        minConfidence: 0.1
       }));
 
       const folders = [{
@@ -445,7 +445,7 @@ describe('useSmartFolders', () => {
           type: 'KEYWORD' as const,
           condition: 'contains',
           value: 'project',
-          weight: 0.5,
+          weight: 0.5
         }],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -457,8 +457,8 @@ describe('useSmartFolders', () => {
           topKeywords: [],
           commonTopics: [],
           autoGenerated: true,
-          lastOptimization: new Date().toISOString(),
-        },
+          lastOptimization: new Date().toISOString()
+        }
       }];
 
       const optimized = result.current.optimizeFolders(folders, workEmails);
@@ -471,7 +471,7 @@ describe('useSmartFolders', () => {
   describe('User Actions and Learning', () => {
     it('should record user action', () => {
       const { result } = renderHook(() => useSmartFolders({
-        enableLearning: true,
+        enableLearning: true
       }));
 
       act(() => {
@@ -479,7 +479,7 @@ describe('useSmartFolders', () => {
           emailId: 'email-1',
           folderId: 'folder-1',
           action: 'MOVED',
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toISOString()
         });
       });
 
@@ -494,7 +494,7 @@ describe('useSmartFolders', () => {
 
       await act(async () => {
         await result.current.suggestFolders({
-          emails: workEmails,
+          emails: workEmails
         });
       });
 
@@ -514,7 +514,7 @@ describe('useSmartFolders', () => {
         keywords: ['test'],
         sampleEmails: [],
         reason: 'Test',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
 
       act(() => {
@@ -529,7 +529,7 @@ describe('useSmartFolders', () => {
 
       await act(async () => {
         await result.current.suggestFolders({
-          emails: [...workEmails, ...financeEmails],
+          emails: [...workEmails, ...financeEmails]
         });
       });
 
@@ -558,7 +558,7 @@ describe('useSmartFolders', () => {
         result.current.updateConfig({
           strategy: OrganizationStrategy.BY_SENDER,
           minConfidence: 0.9,
-          maxSuggestions: 3,
+          maxSuggestions: 3
         });
       });
 
@@ -570,12 +570,12 @@ describe('useSmartFolders', () => {
     it('should preserve existing config when updating partially', () => {
       const { result } = renderHook(() => useSmartFolders({
         strategy: OrganizationStrategy.BY_TOPIC,
-        minConfidence: 0.6,
+        minConfidence: 0.6
       }));
 
       act(() => {
         result.current.updateConfig({
-          maxSuggestions: 3,
+          maxSuggestions: 3
         });
       });
 

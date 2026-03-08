@@ -9,8 +9,8 @@ import { useTeamAccounts } from '../../src/hooks/useTeamAccounts';
 // Mock useNotifications
 vi.mock('../../src/hooks/useNotifications', () => ({
   useNotifications: () => ({
-    addNotification: vi.fn(),
-  }),
+    addNotification: vi.fn()
+  })
 }));
 
 describe('useTeamAccounts Hook', () => {
@@ -78,7 +78,7 @@ describe('useTeamAccounts Hook', () => {
         const team = await result.current.createTeamAccount({
           name: 'New Team',
           slug: 'new-team',
-          ownerId: 'user-1',
+          ownerId: 'user-1'
         });
 
         expect(team).not.toBeNull();
@@ -98,7 +98,7 @@ describe('useTeamAccounts Hook', () => {
 
       await act(async () => {
         const updated = await result.current.updateTeamAccount(teamId, {
-          name: 'Updated Team Name',
+          name: 'Updated Team Name'
         });
 
         expect(updated).not.toBeNull();
@@ -149,7 +149,7 @@ describe('useTeamAccounts Hook', () => {
       await act(async () => {
         const invitation = await result.current.inviteMember({
           email: 'newuser@example.com',
-          role: 'member',
+          role: 'member'
         });
 
         expect(invitation).not.toBeNull();
@@ -191,7 +191,7 @@ describe('useTeamAccounts Hook', () => {
       await act(async () => {
         await result.current.updateMember(memberToUpdate!.id, {
           department: 'Engineering',
-          jobTitle: 'Senior Developer',
+          jobTitle: 'Senior Developer'
         });
       });
 
@@ -246,7 +246,7 @@ describe('useTeamAccounts Hook', () => {
 
       // First suspend a member
       const memberToReactivate = result.current.members.find(m => m.status === 'active' && m.role !== 'owner');
-      
+
       await act(async () => {
         await result.current.suspendMember(memberToReactivate!.id);
       });
@@ -273,7 +273,7 @@ describe('useTeamAccounts Hook', () => {
       await act(async () => {
         await result.current.updateSettings(teamId, {
           allowMemberInvites: false,
-          requireApproval: false,
+          requireApproval: false
         });
       });
 
@@ -292,7 +292,7 @@ describe('useTeamAccounts Hook', () => {
       await act(async () => {
         const updated = await result.current.updatePasswordPolicy(teamId, {
           minLength: 12,
-          requireSpecialChars: true,
+          requireSpecialChars: true
         });
 
         expect(updated).toBe(true);
@@ -312,7 +312,7 @@ describe('useTeamAccounts Hook', () => {
       await act(async () => {
         const updated = await result.current.updateSessionPolicy(teamId, {
           maxDuration: 12,
-          idleTimeout: 15,
+          idleTimeout: 15
         });
 
         expect(updated).toBe(true);
@@ -351,7 +351,7 @@ describe('useTeamAccounts Hook', () => {
           last4: '1234',
           brand: 'mastercard',
           expiryMonth: 6,
-          expiryYear: 2026,
+          expiryYear: 2026
         });
 
         expect(updated).toBe(true);
@@ -371,7 +371,7 @@ describe('useTeamAccounts Hook', () => {
       await act(async () => {
         const updated = await result.current.updateBillingContact(teamId, {
           name: 'New Billing Contact',
-          email: 'newbilling@company.com',
+          email: 'newbilling@company.com'
         });
 
         expect(updated).toBe(true);
@@ -457,7 +457,7 @@ describe('useTeamAccounts Hook', () => {
       });
 
       const filtered = result.current.getFilteredMembers({
-        role: ['admin', 'manager'],
+        role: ['admin', 'manager']
       });
 
       expect(filtered.length).toBe(2);
@@ -475,7 +475,7 @@ describe('useTeamAccounts Hook', () => {
 
       const sorted = result.current.getFilteredMembers({
         sortBy: 'name',
-        sortOrder: 'asc',
+        sortOrder: 'asc'
       });
 
       for (let i = 1; i < sorted.length; i++) {
@@ -491,7 +491,7 @@ describe('useTeamAccounts Hook', () => {
       });
 
       const filtered = result.current.getFilteredActivities({
-        action: ['member_invited'],
+        action: ['member_invited']
       });
 
       expect(filtered.length).toBeGreaterThan(0);

@@ -370,7 +370,7 @@ export const DEFAULT_ANOMALY_CONFIG: AnomalyDetectionConfig = {
   enableAutomatedActions: false,
   maxAnalysisTime: 5000,
   enableDetailedLogging: false,
-  cacheSize: 1000,
+  cacheSize: 1000
 };
 
 /** Phishing indicator weights */
@@ -383,7 +383,7 @@ export const PHISHING_INDICATOR_WEIGHTS: Record<PhishingIndicatorType, number> =
   [PhishingIndicatorType.GRAMMAR_ERROR]: 0.3,
   [PhishingIndicatorType.GENERIC_GREETING]: 0.4,
   [PhishingIndicatorType.MISMATCHED_LINKS]: 0.85,
-  [PhishingIndicatorType.SUSPICIOUS_ATTACHMENT]: 0.8,
+  [PhishingIndicatorType.SUSPICIOUS_ATTACHMENT]: 0.8
 };
 
 /** Spam indicator weights */
@@ -395,7 +395,7 @@ export const SPAM_INDICATOR_WEIGHTS: Record<SpamIndicatorType, number> = {
   [SpamIndicatorType.PRICE_MENTION]: 0.4,
   [SpamIndicatorType.URGENCY_WORDS]: 0.5,
   [SpamIndicatorType.SUSPICIOUS_SENDER]: 0.7,
-  [SpamIndicatorType.UNSUBSCRIBE_FAIL]: 0.8,
+  [SpamIndicatorType.UNSUBSCRIBE_FAIL]: 0.8
 };
 
 /** Urgency phrases for phishing detection */
@@ -414,7 +414,7 @@ export const URGENCY_PHRASES = [
   'final notice',
   'dear customer',
   'dear user',
-  'click here immediately',
+  'click here immediately'
 ];
 
 /** Suspicious TLDs */
@@ -430,12 +430,12 @@ export const SUSPICIOUS_TLDS = [
   '.click',
   '.link',
   '.info',
-  '.biz',
+  '.biz'
 ];
 
 /** Known malicious URL patterns */
 export const MALICIOUS_URL_PATTERNS = [
   /(?:login|signin|verify|update|confirm|secure|account)\s*[-._]?\s*(?:here|now|today)/i,
   /(?:paypal|amazon|google|microsoft|apple|facebook|netflix)\s*[-._]?\s*(?:verify|secure|update)/i,
-  /(?:password|credential|social\s*security|credit\s*card)\s*[-._]?\s*(?:verify|confirm)/i,
+  /(?:password|credential|social\s*security|credit\s*card)\s*[-._]?\s*(?:verify|confirm)/i
 ];

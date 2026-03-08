@@ -402,7 +402,7 @@ export const useTaskManagement = () => {
           ...payload,
           updatedAt: new Date().toISOString()
         };
-        
+
         // Add activity log for status changes
         if (payload.status && payload.status !== task.status) {
           updatedTask.activityLog.push({
@@ -414,7 +414,7 @@ export const useTaskManagement = () => {
             description: `Status changed from ${task.status} to ${payload.status}`
           });
         }
-        
+
         return updatedTask;
       }
       return task;
@@ -434,10 +434,10 @@ export const useTaskManagement = () => {
     emailData: Record<string, any>,
     options: EmailToTaskOptions
   ): Promise<Task | null> => {
-    const title = options.extractTitleFromSubject 
-      ? emailData.subject || 'Task from Email' 
+    const title = options.extractTitleFromSubject
+      ? emailData.subject || 'Task from Email'
       : 'Task from Email';
-    
+
     const description = options.extractDescriptionFromBody
       ? emailData.body || ''
       : '';
@@ -458,7 +458,7 @@ export const useTaskManagement = () => {
       blocks: [],
       labels: [],
       tags: [],
-      attachments: options.includeAttachments && emailData.attachments ? 
+      attachments: options.includeAttachments && emailData.attachments ?
         emailData.attachments.map((att: any, idx: number) => ({
           id: generateId(),
           name: att.name || `attachment-${idx}`,
@@ -679,13 +679,13 @@ export const useTaskManagement = () => {
     const totalTasks = tasks.length;
     const completedTasks = tasks.filter(t => t.status === TaskStatus.COMPLETED).length;
     const inProgressTasks = tasks.filter(t => t.status === TaskStatus.IN_PROGRESS).length;
-    const overdueTasks = tasks.filter(t => 
+    const overdueTasks = tasks.filter(t =>
       t.dueDate && new Date(t.dueDate) < new Date() && t.status !== TaskStatus.COMPLETED
     ).length;
 
     const today = new Date();
     const weekFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-    const dueThisWeek = tasks.filter(t => 
+    const dueThisWeek = tasks.filter(t =>
       t.dueDate && new Date(t.dueDate) >= today && new Date(t.dueDate) <= weekFromNow
     ).length;
 
@@ -745,7 +745,9 @@ export const useTaskManagement = () => {
     if (filter?.dueDateRange) {
       const dateRange = filter.dueDateRange;
       filtered = filtered.filter(t => {
-        if (!t.dueDate) return false;
+        if (!t.dueDate) {
+return false;
+}
         const dueDate = new Date(t.dueDate);
         const from = dateRange.from ? new Date(dateRange.from) : null;
         const to = dateRange.to ? new Date(dateRange.to) : null;
@@ -778,21 +780,28 @@ export const useTaskManagement = () => {
 
   // Sort tasks
   const getSortedTasks = useCallback((tasks: Task[], sort?: TaskSort): Task[] => {
-    if (!sort) return tasks;
+    if (!sort) {
+return tasks;
+}
 
     return [...tasks].sort((a, b) => {
       let comparison = 0;
 
       switch (sort.field) {
         case 'dueDate':
-          if (!a.dueDate) return 1;
-          if (!b.dueDate) return -1;
+          if (!a.dueDate) {
+return 1;
+}
+          if (!b.dueDate) {
+return -1;
+}
           comparison = new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
           break;
-        case 'priority':
+        case 'priority': {
           const priorityOrder = [TaskPriority.LOW, TaskPriority.MEDIUM, TaskPriority.HIGH, TaskPriority.URGENT];
           comparison = priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority);
           break;
+        }
         case 'createdAt':
           comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
           break;

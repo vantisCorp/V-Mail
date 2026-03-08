@@ -1,20 +1,26 @@
 # Snyk (https://snyk.io) policy file
+# Integration ID: a3d28afb-4612-4fea-b2be-c195d1207642
 
 version: v1.25.0
 
-# ignores
+# Project settings
+project:
+  name: vantisCorp/V-Mail
+  branch: main
+
+# Ignores - add vulnerabilities to ignore here
 ignore: {}
 
-# patches
+# Patches - add patches to apply here
 patch: {}
 
-# limits
-limit:
-  # Limit the number of reachable vulnerabilities
-  severity:
-    - severity: 'high'
-      limit: 10
-    - severity: 'medium'
-      limit: 20
-    - severity: 'low'
-      limit: 50
+# Language settings
+language:
+  - nodejs
+  - typescript
+
+# Severity thresholds
+severity-threshold:
+  - high
+  - medium
+  - low

@@ -16,6 +16,8 @@ vi.mock('../../services/emailExportService', () => ({
     clearExportHistory: vi.fn(),
     getExportStatistics: vi.fn(),
     downloadFile: vi.fn(),
+    loadQueue: vi.fn(),
+    saveQueue: vi.fn(),
   },
 }));
 
@@ -59,6 +61,18 @@ describe('useEmailExport', () => {
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();
+
+    // Set default mock return values
+    (EmailExportService.getExportHistory as vi.Mock).mockReturnValue([]);
+    (EmailExportService.getExportQueue as vi.Mock).mockReturnValue([]);
+    (EmailExportService.getExportStatistics as vi.Mock).mockReturnValue({
+      totalExports: 0,
+      totalEmailsExported: 0,
+      averageExportTime: 0,
+      totalFileSize: 0,
+      formatBreakdown: {},
+    });
+    (EmailExportService.loadQueue as vi.Mock).mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -92,7 +106,7 @@ describe('useEmailExport', () => {
         fileSize: 1024,
       };
 
-      (EmailExportService.exportSingleEmail as jest.Mock).mockResolvedValue(mockResult);
+      (EmailExportService.exportSingleEmail as vi.Mock).mockResolvedValue(mockResult);
 
       const { result } = renderHook(() => useEmailExport());
 
@@ -111,7 +125,7 @@ describe('useEmailExport', () => {
     });
 
     it('should set isExporting to true during export', async () => {
-      (EmailExportService.exportSingleEmail as jest.Mock).mockImplementation(
+      (EmailExportService.exportSingleEmail as vi.Mock).mockImplementation(
         () => new Promise((resolve) => setTimeout(() => resolve({ success: true } as ExportResult), 100))
       );
 
@@ -139,7 +153,7 @@ describe('useEmailExport', () => {
         fileSize: 2048,
       };
 
-      (EmailExportService.exportMultipleEmails as jest.Mock).mockImplementation(
+      (EmailExportService.exportMultipleEmails as vi.Mock).mockImplementation(
         (emails, options, onProgress) => {
           if (onProgress) {
             onProgress({ percentage: 50, currentEmail: 1, totalEmails: 2, status: 'processing' });
@@ -167,11 +181,15 @@ describe('useEmailExport', () => {
 
     it('should update export progress during export', async () => {
       let progressCallback: ((progress: ExportProgress) => void) | undefined;
+      let resolvePromise: (value: any) => void;
+      const promise = new Promise((resolve) => {
+        resolvePromise = resolve;
+      });
 
-      (EmailExportService.exportMultipleEmails as jest.Mock).mockImplementation(
+      (EmailExportService.exportMultipleEmails as vi.Mock).mockImplementation(
         (emails, options, onProgress) => {
           progressCallback = onProgress;
-          return Promise.resolve({ success: true } as ExportResult);
+          return promise;
         }
       );
 
@@ -183,6 +201,7 @@ describe('useEmailExport', () => {
 
       expect(result.current.isExporting).toBe(true);
 
+      // Trigger progress callback before the promise resolves
       await act(async () => {
         if (progressCallback) {
           progressCallback({ percentage: 50, currentEmail: 1, totalEmails: 2, status: 'processing' });
@@ -190,6 +209,11 @@ describe('useEmailExport', () => {
       });
 
       expect(result.current.exportProgress?.percentage).toBe(50);
+
+      // Now resolve the promise to complete the export
+      await act(async () => {
+        resolvePromise!({ success: true } as ExportResult);
+      });
     });
   });
 
@@ -217,7 +241,7 @@ describe('useEmailExport', () => {
         },
       ];
 
-      (EmailExportService.getExportQueue as jest.Mock).mockReturnValue(mockQueue);
+      (EmailExportService.getExportQueue as vi.Mock).mockReturnValue(mockQueue);
 
       const { result } = renderHook(() => useEmailExport());
 
@@ -247,7 +271,7 @@ describe('useEmailExport', () => {
         },
       ];
 
-      (EmailExportService.getExportHistory as jest.Mock).mockReturnValue(mockHistory);
+      (EmailExportService.getExportHistory as vi.Mock).mockReturnValue(mockHistory);
 
       const { result } = renderHook(() => useEmailExport());
 
@@ -276,7 +300,7 @@ describe('useEmailExport', () => {
         formatBreakdown: { pdf: 8, json: 2 },
       };
 
-      (EmailExportService.getExportStatistics as jest.Mock).mockReturnValue(mockStats);
+      (EmailExportService.getExportStatistics as vi.Mock).mockReturnValue(mockStats);
 
       const { result } = renderHook(() => useEmailExport());
 
@@ -292,11 +316,11 @@ describe('useEmailExport', () => {
         fileSize: 2048,
       };
 
-      (EmailExportService.exportMultipleEmails as jest.Mock).mockResolvedValue(mockResult);
-      (EmailExportService.getExportHistory as jest.Mock).mockReturnValue([
+      (EmailExportService.exportMultipleEmails as vi.Mock).mockResolvedValue(mockResult);
+      (EmailExportService.getExportHistory as vi.Mock).mockReturnValue([
         { id: 'hist-1', format: 'pdf', emailCount: 2, timestamp: Date.now(), fileSize: 2048 },
       ]);
-      (EmailExportService.getExportStatistics as jest.Mock).mockReturnValue({
+      (EmailExportService.getExportStatistics as vi.Mock).mockReturnValue({
         totalExports: 1,
         totalEmailsExported: 2,
         averageExportTime: 1,
@@ -319,17 +343,20 @@ describe('useEmailExport', () => {
   describe('error handling', () => {
     it('should handle export errors', async () => {
       const mockError = new Error('Export failed');
-      (EmailExportService.exportSingleEmail as jest.Mock).mockRejectedValue(mockError);
+      (EmailExportService.exportSingleEmail as vi.Mock).mockRejectedValue(mockError);
 
       const { result } = renderHook(() => useEmailExport());
 
       await act(async () => {
-        await result.current.exportSingleEmail(mockEmails[0], defaultOptions);
+        try {
+          await result.current.exportSingleEmail(mockEmails[0], defaultOptions);
+        } catch (error) {
+          // Expected error
+          expect(error).toBe(mockError);
+        }
       });
 
-      await waitFor(() => {
-        expect(result.current.isExporting).toBe(false);
-      });
+      expect(result.current.isExporting).toBe(false);
     });
   });
 });

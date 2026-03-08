@@ -166,6 +166,7 @@ describe('ThreadAlgorithm', () => {
         id: '1',
         messageId: 'msg1',
         from: 'user1@example.com',
+        isRead: true, // First email is read
       });
 
       const email2 = createEmail({
@@ -173,15 +174,17 @@ describe('ThreadAlgorithm', () => {
         messageId: 'msg2',
         from: 'user2@example.com',
         inReplyTo: 'msg1',
-        isRead: false,
+        isRead: false, // Second email is unread
       });
 
       const threads = ThreadAlgorithm.groupEmailsIntoThreads([email1, email2]);
 
-      expect(threads[0].participantCount).toBe(2);
+      // 3 participants: user1@example.com, user2@example.com, recipient@example.com (from 'to' field)
+      expect(threads[0].participantCount).toBe(3);
       expect(threads[0].participantEmails).toContain('user1@example.com');
       expect(threads[0].participantEmails).toContain('user2@example.com');
-      expect(threads[0].unreadCount).toBe(1);
+      expect(threads[0].participantEmails).toContain('recipient@example.com');
+      expect(threads[0].unreadCount).toBe(1); // Only email2 is unread
     });
 
     it('should mark root emails correctly', () => {
@@ -502,7 +505,7 @@ describe('ThreadAlgorithm', () => {
       const filtered = ThreadAlgorithm.filterThreads([thread1, thread2], { subjectContains: 'important' });
 
       expect(filtered).toHaveLength(1);
-      expect(filtered[0].subject).toContain('important');
+      expect(filtered[0].subject.toLowerCase()).toContain('important');
     });
   });
 

@@ -3,6 +3,7 @@
  */
 
 import { renderHook, act, waitFor } from '@testing-library/react';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useEmailThreading } from '../useEmailThreading';
 import { Email, ThreadedEmail } from '../../types/emailThreading';
 
@@ -22,16 +23,20 @@ const createMockEmail = (overrides: Partial<Email> = {}): Email => ({
 
 describe('useEmailThreading', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('initial state', () => {
-    it('should initialize with empty state', () => {
+    it('should initialize with empty state', async () => {
       const { result } = renderHook(() => useEmailThreading([]));
+
+      // Wait for loading to complete
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
 
       expect(result.current.threads).toHaveLength(0);
       expect(result.current.allThreads).toHaveLength(0);
-      expect(result.current.loading).toBe(false);
       expect(result.current.selectedThreadId).toBeNull();
     });
 

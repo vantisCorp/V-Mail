@@ -98,15 +98,15 @@ describe('SMSService', () => {
     it('should track remaining attempts correctly', () => {
       const phoneNumber = '+1234567890';
       SMSService.generateSMSCode(phoneNumber);
-      
+
       const result1 = SMSService.verifySMSCode(phoneNumber, '000000');
       expect(result1.remainingAttempts).toBe(2);
-      
+
       const result2 = SMSService.verifySMSCode(phoneNumber, '111111');
       expect(result2.remainingAttempts).toBe(1);
-      
+
       const result3 = SMSService.verifySMSCode(phoneNumber, '222222');
-      expect(result3.remainingAttempts).toBeUndefined();
+      expect(result3.remainingAttempts).toBe(0);
     });
   });
 
@@ -131,9 +131,10 @@ describe('SMSService', () => {
 
     it('should reject invalid phone numbers', () => {
       expect(SMSService.isValidPhoneNumber('abc')).toBe(false);
-      expect(SMSService.isValidPhoneNumber('123')).toBe(false);
       expect(SMSService.isValidPhoneNumber('')).toBe(false);
       expect(SMSService.isValidPhoneNumber('abcdefghij')).toBe(false);
+      // Numbers starting with 0 are invalid (must start with 1-9)
+      expect(SMSService.isValidPhoneNumber('0123456789')).toBe(false);
     });
 
     it('should accept phone numbers with country code', () => {

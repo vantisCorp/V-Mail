@@ -5,6 +5,28 @@ All notable changes to V-Mail will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] - 2026-03-09
+
+### Fixed
+
+- Eliminated all 761 ESLint warnings across the codebase (PR #74, #75)
+  - Removed 301 unused variables and imports
+  - Fixed 165 max-len violations
+  - Added eslint-disable comments for legitimate `any` types, console/alert usage
+  - Fixed empty function bodies and catch blocks
+  - Updated `.eslintrc.json` max-len to ignore strings/templates/regex
+
+### Maintenance
+
+- Comprehensive repository audit and cleanup (PR #73)
+  - Synced all package versions to 1.5.0
+  - Removed legacy files (old configs, unused scripts)
+  - Fixed lint-staged configuration
+  - Updated documentation
+- Fixed npm security vulnerabilities (serialize-javascript RCE)
+- Updated dependencies: @tiptap/_ 3.20.1, @typescript-eslint/_ 8.57.0, @types/node,
+  rollup-plugin-visualizer
+
 ## [1.5.0] - 2026-03-06
 
 ### Added

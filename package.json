@@ -1,6 +1,6 @@
 {
   "name": "vantis-mail",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "type": "module",
   "description": "Vantis Mail - Profesjonalny, bezpieczny system pocztowy zbudowany zgodnie z normami wojskowymi i wywiadowczymi (Zero Trust)",
   "main": "index.html",

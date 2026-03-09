@@ -65,7 +65,7 @@ export function useEmailExport() {
    * Export a single email
    */
   const exportSingleEmail = useCallback(
-    async (email: any, options: ExportOptions): Promise<ExportResult> => {
+    async (email: unknown, options: ExportOptions): Promise<ExportResult> => {
       setIsExporting(true);
       setExportProgress(null);
 
@@ -86,7 +86,7 @@ export function useEmailExport() {
    */
   const exportMultipleEmails = useCallback(
     async (
-      emails: any[],
+      emails: unknown[],
       options: ExportOptions,
       onProgress?: (progress: ExportProgress) => void
     ): Promise<ExportResult> => {
@@ -94,16 +94,12 @@ export function useEmailExport() {
       setExportProgress(null);
 
       try {
-        const result = await EmailExportService.exportMultipleEmails(
-          emails,
-          options,
-          (progress) => {
-            setExportProgress(progress);
-            if (onProgress) {
-              onProgress(progress);
-            }
+        const result = await EmailExportService.exportMultipleEmails(emails, options, (progress) => {
+          setExportProgress(progress);
+          if (onProgress) {
+            onProgress(progress);
           }
-        );
+        });
         loadExportHistory();
         updateStatistics();
         return result;
@@ -119,7 +115,7 @@ export function useEmailExport() {
    * Queue an export request
    */
   const queueExport = useCallback(
-    async (emails: any[], options: ExportOptions): Promise<void> => {
+    async (emails: unknown[], options: ExportOptions): Promise<void> => {
       const request: ExportRequest = {
         id: `req_${Date.now()}`,
         emails,

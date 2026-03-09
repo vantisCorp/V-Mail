@@ -2,16 +2,10 @@
  * useTaskManagement Hook Tests
  */
 
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useTaskManagement } from '../useTaskManagement';
-import {
-  TaskPriority,
-  TaskStatus,
-  TaskType,
-  AssignmentType,
-  RecurrenceType
-} from '../../types/taskManagement';
+import { TaskPriority, TaskStatus, TaskType, AssignmentType } from '../../types/taskManagement';
 
 // Mock timers
 vi.useFakeTimers();
@@ -60,7 +54,7 @@ describe('useTaskManagement', () => {
 
       const initialCount = result.current.tasks.length;
 
-      let newTask: any;
+      let newTask: unknown;
       await act(async () => {
         newTask = await result.current.createTask({
           title: 'Test Task',
@@ -97,7 +91,7 @@ describe('useTaskManagement', () => {
         vi.advanceTimersByTime(600);
       });
 
-      let newTask: any;
+      let newTask: unknown;
       await act(async () => {
         newTask = await result.current.createTask({
           title: 'Activity Test',
@@ -145,7 +139,7 @@ describe('useTaskManagement', () => {
       });
 
       // Verify the task was updated in the tasks array
-      const updatedTask = result.current.tasks.find(t => t.id === task.id);
+      const updatedTask = result.current.tasks.find((t) => t.id === task.id);
       expect(updatedTask?.title).toBe('Updated Title');
     });
 
@@ -156,7 +150,7 @@ describe('useTaskManagement', () => {
         vi.advanceTimersByTime(600);
       });
 
-      const task = result.current.tasks.find(t => t.status !== TaskStatus.COMPLETED);
+      const task = result.current.tasks.find((t) => t.status !== TaskStatus.COMPLETED);
       if (!task) {
         expect(true).toBe(true);
         return;
@@ -185,7 +179,7 @@ describe('useTaskManagement', () => {
       });
 
       // Create a task to delete
-      let newTask: any;
+      let newTask: unknown;
       await act(async () => {
         newTask = await result.current.createTask({
           title: 'To Delete',
@@ -235,7 +229,7 @@ describe('useTaskManagement', () => {
         attachments: [{ name: 'doc.pdf', url: 'http://example.com/doc.pdf' }]
       };
 
-      let newTask: any;
+      let newTask: unknown;
       await act(async () => {
         newTask = await result.current.convertEmailToTask('email-123', emailData, {
           extractTitleFromSubject: true,
@@ -262,18 +256,22 @@ describe('useTaskManagement', () => {
         vi.advanceTimersByTime(600);
       });
 
-      let newTask: any;
+      let newTask: unknown;
       await act(async () => {
-        newTask = await result.current.convertEmailToTask('email-456', { subject: 'Test' }, {
-          extractTitleFromSubject: true,
-          extractDescriptionFromBody: false,
-          includeAttachments: false,
-          defaultPriority: TaskPriority.MEDIUM,
-          defaultType: TaskType.TASK,
-          createSubtasks: false,
-          createChecklist: false,
-          defaultDueDateOffset: 7
-        });
+        newTask = await result.current.convertEmailToTask(
+          'email-456',
+          { subject: 'Test' },
+          {
+            extractTitleFromSubject: true,
+            extractDescriptionFromBody: false,
+            includeAttachments: false,
+            defaultPriority: TaskPriority.MEDIUM,
+            defaultType: TaskType.TASK,
+            createSubtasks: false,
+            createChecklist: false,
+            defaultDueDateOffset: 7
+          }
+        );
       });
 
       expect(newTask.dueDate).toBeDefined();
@@ -290,7 +288,7 @@ describe('useTaskManagement', () => {
 
       const task = result.current.tasks[0];
 
-      let newSubTask: any;
+      let newSubTask: unknown;
       await act(async () => {
         newSubTask = await result.current.createSubTask(task.id, {
           title: 'New Subtask',
@@ -310,7 +308,7 @@ describe('useTaskManagement', () => {
         vi.advanceTimersByTime(600);
       });
 
-      const task = result.current.tasks.find(t => t.subtasks.length > 0);
+      const task = result.current.tasks.find((t) => t.subtasks.length > 0);
       if (!task) {
         expect(true).toBe(true);
         return;
@@ -333,7 +331,7 @@ describe('useTaskManagement', () => {
         vi.advanceTimersByTime(600);
       });
 
-      const task = result.current.tasks.find(t => t.subtasks.length > 0);
+      const task = result.current.tasks.find((t) => t.subtasks.length > 0);
       if (!task) {
         expect(true).toBe(true);
         return;
@@ -363,7 +361,7 @@ describe('useTaskManagement', () => {
       const task = result.current.tasks[0];
       const initialCommentCount = task.comments.length;
 
-      let newComment: any;
+      let newComment: unknown;
       await act(async () => {
         newComment = await result.current.addComment(task.id, {
           content: 'Test comment',
@@ -389,7 +387,6 @@ describe('useTaskManagement', () => {
       });
 
       const task = result.current.tasks[0];
-      const initialLogCount = task.activityLog.length;
 
       await act(async () => {
         await result.current.addComment(task.id, {
@@ -402,7 +399,7 @@ describe('useTaskManagement', () => {
       });
 
       const updatedTask = result.current.getTaskById(task.id);
-      const commentLog = updatedTask?.activityLog.find(log => log.type === 'comment_added');
+      const commentLog = updatedTask?.activityLog.find((log) => log.type === 'comment_added');
       expect(commentLog).toBeDefined();
     });
   });
@@ -417,7 +414,7 @@ describe('useTaskManagement', () => {
 
       const task = result.current.tasks[0];
 
-      let newItem: any;
+      let newItem: unknown;
       await act(async () => {
         newItem = await result.current.createChecklistItem(task.id, 'Check this', 1);
       });
@@ -434,7 +431,7 @@ describe('useTaskManagement', () => {
         vi.advanceTimersByTime(600);
       });
 
-      const task = result.current.tasks.find(t => t.checklist.length > 0);
+      const task = result.current.tasks.find((t) => t.checklist.length > 0);
       if (!task) {
         expect(true).toBe(true);
         return;
@@ -449,7 +446,7 @@ describe('useTaskManagement', () => {
       });
 
       const updatedTask = result.current.getTaskById(task.id);
-      const item = updatedTask?.checklist.find(i => i.id === itemId);
+      const item = updatedTask?.checklist.find((i) => i.id === itemId);
       expect(item?.completed).toBe(!initialState);
     });
 
@@ -460,7 +457,7 @@ describe('useTaskManagement', () => {
         vi.advanceTimersByTime(600);
       });
 
-      const task = result.current.tasks.find(t => t.checklist.length > 0);
+      const task = result.current.tasks.find((t) => t.checklist.length > 0);
       if (!task) {
         expect(true).toBe(true);
         return;
@@ -489,7 +486,7 @@ describe('useTaskManagement', () => {
 
       const task = result.current.tasks[0];
 
-      let newReminder: any;
+      let newReminder: unknown;
       await act(async () => {
         newReminder = await result.current.createReminder(task.id, {
           type: 'email',
@@ -546,7 +543,7 @@ describe('useTaskManagement', () => {
         status: TaskStatus.TODO
       });
 
-      expect(filtered.every(t => t.status === TaskStatus.TODO)).toBe(true);
+      expect(filtered.every((t) => t.status === TaskStatus.TODO)).toBe(true);
     });
 
     it('should filter by priority', async () => {
@@ -560,7 +557,7 @@ describe('useTaskManagement', () => {
         priority: TaskPriority.HIGH
       });
 
-      expect(filtered.every(t => t.priority === TaskPriority.HIGH)).toBe(true);
+      expect(filtered.every((t) => t.priority === TaskPriority.HIGH)).toBe(true);
     });
 
     it('should filter by type', async () => {
@@ -574,7 +571,7 @@ describe('useTaskManagement', () => {
         type: TaskType.BUG
       });
 
-      expect(filtered.every(t => t.type === TaskType.BUG)).toBe(true);
+      expect(filtered.every((t) => t.type === TaskType.BUG)).toBe(true);
     });
 
     it('should filter by search query', async () => {
@@ -589,10 +586,11 @@ describe('useTaskManagement', () => {
       });
 
       expect(filtered.length).toBeGreaterThan(0);
-      expect(filtered.some(t =>
-        t.title.toLowerCase().includes('marketing') ||
-        t.description?.toLowerCase().includes('marketing')
-      )).toBe(true);
+      expect(
+        filtered.some(
+          (t) => t.title.toLowerCase().includes('marketing') || t.description?.toLowerCase().includes('marketing')
+        )
+      ).toBe(true);
     });
 
     it('should filter by project', async () => {
@@ -607,7 +605,7 @@ describe('useTaskManagement', () => {
         projectId: project.id
       });
 
-      expect(filtered.every(t => t.projectId === project.id)).toBe(true);
+      expect(filtered.every((t) => t.projectId === project.id)).toBe(true);
     });
   });
 
@@ -625,7 +623,7 @@ describe('useTaskManagement', () => {
       });
 
       for (let i = 1; i < sorted.length; i++) {
-        expect(sorted[i].title.toLowerCase() >= sorted[i-1].title.toLowerCase()).toBe(true);
+        expect(sorted[i].title.toLowerCase() >= sorted[i - 1].title.toLowerCase()).toBe(true);
       }
     });
 
@@ -644,7 +642,7 @@ describe('useTaskManagement', () => {
       const priorityOrder = [TaskPriority.LOW, TaskPriority.MEDIUM, TaskPriority.HIGH, TaskPriority.URGENT];
 
       for (let i = 1; i < sorted.length; i++) {
-        const prevPriority = priorityOrder.indexOf(sorted[i-1].priority);
+        const prevPriority = priorityOrder.indexOf(sorted[i - 1].priority);
         const currPriority = priorityOrder.indexOf(sorted[i].priority);
         expect(prevPriority >= currPriority).toBe(true);
       }
@@ -685,7 +683,7 @@ describe('useTaskManagement', () => {
       });
 
       const tasks = result.current.getTasksByEmailId('email-123');
-      expect(tasks.every(t => t.sourceEmailId === 'email-123')).toBe(true);
+      expect(tasks.every((t) => t.sourceEmailId === 'email-123')).toBe(true);
     });
   });
 
@@ -699,7 +697,7 @@ describe('useTaskManagement', () => {
 
       const initialCount = result.current.projects.length;
 
-      let newProject: any;
+      let newProject: unknown;
       await act(async () => {
         newProject = await result.current.createProject({
           name: 'Test Project',

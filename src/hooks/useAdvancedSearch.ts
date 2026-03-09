@@ -1,13 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useNotifications } from './useNotifications';
 import type { Email } from '../types';
-import type {
-  SearchCondition,
-  SearchField,
-  SearchMatchMode,
-  SavedSearch,
-  SearchStats
-} from '../types/search';
+import type { SearchCondition, SearchMatchMode, SavedSearch, SearchStats } from '../types/search';
 
 const generateId = () => `search-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 
@@ -23,11 +17,7 @@ const evaluateCondition = (email: Email, condition: SearchCondition, caseSensiti
       const from = caseSensitive ? email.from : email.from.toLowerCase();
       const body = caseSensitive ? email.body : email.body.toLowerCase();
 
-      return (
-        subject.includes(query) ||
-        from.includes(query) ||
-        body.includes(query)
-      );
+      return subject.includes(query) || from.includes(query) || body.includes(query);
     }
 
     case 'from':
@@ -63,9 +53,6 @@ const evaluateCondition = (email: Email, condition: SearchCondition, caseSensiti
   }
 
   const conditionValue = caseSensitive ? condition.value : condition.value.toLowerCase();
-  const compareValue = typeof fieldValue === 'string' && !caseSensitive
-    ? fieldValue.toLowerCase()
-    : fieldValue;
 
   switch (condition.operator) {
     case 'contains':
@@ -101,15 +88,16 @@ const evaluateCondition = (email: Email, condition: SearchCondition, caseSensiti
 };
 
 // Helper function to apply advanced search (moved outside to avoid hoisting issues)
-const applyAdvancedSearch = (emailsToFilter: Email[], searchState: { conditions: SearchCondition[]; matchMode: SearchMatchMode; caseSensitive: boolean }) => {
+const applyAdvancedSearch = (
+  emailsToFilter: Email[],
+  searchState: { conditions: SearchCondition[]; matchMode: SearchMatchMode; caseSensitive: boolean }
+) => {
   return emailsToFilter.filter((email) => {
     const results = searchState.conditions.map((condition) =>
       evaluateCondition(email, condition, searchState.caseSensitive)
     );
 
-    const matches = searchState.matchMode === 'all'
-      ? results.every(Boolean)
-      : results.some(Boolean);
+    const matches = searchState.matchMode === 'all' ? results.every(Boolean) : results.some(Boolean);
 
     return matches;
   });
@@ -144,11 +132,7 @@ export const useAdvancedSearch = (emails: Email[]) => {
       const from = advancedSearch.caseSensitive ? email.from : email.from.toLowerCase();
       const body = advancedSearch.caseSensitive ? email.body : email.body.toLowerCase();
 
-      return (
-        subject.includes(query) ||
-        from.includes(query) ||
-        body.includes(query)
-      );
+      return subject.includes(query) || from.includes(query) || body.includes(query);
     });
   }, [emails, searchQuery, advancedSearch]);
 
@@ -162,9 +146,7 @@ export const useAdvancedSearch = (emails: Email[]) => {
   const updateCondition = useCallback((id: string, updates: Partial<SearchCondition>) => {
     setAdvancedSearch((prev) => ({
       ...prev,
-      conditions: prev.conditions.map((c) =>
-        c.id === id ? { ...c, ...updates } : c
-      )
+      conditions: prev.conditions.map((c) => (c.id === id ? { ...c, ...updates } : c))
     }));
   }, []);
 
@@ -192,59 +174,67 @@ export const useAdvancedSearch = (emails: Email[]) => {
     setAdvancedSearch((prev) => ({ ...prev, caseSensitive: !prev.caseSensitive }));
   }, []);
 
-  const handleSearchChange = useCallback((query: string) => {
-    setSearchQuery(query);
-    if (query.trim() && query.trim() !== searchQuery.trim()) {
-      // Add to recent searches
-      setRecentSearches((prev) => {
-        const filtered = prev.filter((s) => s !== query);
-        return [query, ...filtered].slice(0, 10);
+  const handleSearchChange = useCallback(
+    (query: string) => {
+      setSearchQuery(query);
+      if (query.trim() && query.trim() !== searchQuery.trim()) {
+        // Add to recent searches
+        setRecentSearches((prev) => {
+          const filtered = prev.filter((s) => s !== query);
+          return [query, ...filtered].slice(0, 10);
+        });
+      }
+    },
+    [searchQuery]
+  );
+
+  const saveSearch = useCallback(
+    (name: string) => {
+      if (advancedSearch.conditions.length === 0 && !searchQuery.trim()) {
+        addNotification('error', 'No search criteria to save');
+        return;
+      }
+
+      const savedSearch: SavedSearch = {
+        id: generateId(),
+        name: name.trim(),
+        conditions: advancedSearch.conditions,
+        matchMode: advancedSearch.matchMode,
+        createdAt: new Date().toISOString(),
+        lastUsed: new Date().toISOString()
+      };
+
+      setSavedSearches((prev) => [...prev, savedSearch]);
+      addNotification('success', `Search "${name}" saved`);
+    },
+    [advancedSearch, searchQuery, addNotification]
+  );
+
+  const loadSavedSearch = useCallback(
+    (savedSearch: SavedSearch) => {
+      setAdvancedSearch({
+        conditions: savedSearch.conditions,
+        matchMode: savedSearch.matchMode,
+        caseSensitive: false
       });
-    }
-  }, [searchQuery]);
+      setSearchQuery('');
 
-  const saveSearch = useCallback((name: string) => {
-    if (advancedSearch.conditions.length === 0 && !searchQuery.trim()) {
-      addNotification('error', 'No search criteria to save');
-      return;
-    }
+      setSavedSearches((prev) =>
+        prev.map((s) => (s.id === savedSearch.id ? { ...s, lastUsed: new Date().toISOString() } : s))
+      );
 
-    const savedSearch: SavedSearch = {
-      id: generateId(),
-      name: name.trim(),
-      conditions: advancedSearch.conditions,
-      matchMode: advancedSearch.matchMode,
-      createdAt: new Date().toISOString(),
-      lastUsed: new Date().toISOString()
-    };
+      addNotification('success', `Loaded search "${savedSearch.name}"`);
+    },
+    [addNotification]
+  );
 
-    setSavedSearches((prev) => [...prev, savedSearch]);
-    addNotification('success', `Search "${name}" saved`);
-  }, [advancedSearch, searchQuery, addNotification]);
-
-  const loadSavedSearch = useCallback((savedSearch: SavedSearch) => {
-    setAdvancedSearch({
-      conditions: savedSearch.conditions,
-      matchMode: savedSearch.matchMode,
-      caseSensitive: false
-    });
-    setSearchQuery('');
-
-    setSavedSearches((prev) =>
-      prev.map((s) =>
-        s.id === savedSearch.id
-          ? { ...s, lastUsed: new Date().toISOString() }
-          : s
-      )
-    );
-
-    addNotification('success', `Loaded search "${savedSearch.name}"`);
-  }, [addNotification]);
-
-  const deleteSavedSearch = useCallback((id: string) => {
-    setSavedSearches((prev) => prev.filter((s) => s.id !== id));
-    addNotification('success', 'Saved search deleted');
-  }, [addNotification]);
+  const deleteSavedSearch = useCallback(
+    (id: string) => {
+      setSavedSearches((prev) => prev.filter((s) => s.id !== id));
+      addNotification('success', 'Saved search deleted');
+    },
+    [addNotification]
+  );
 
   const clearSearch = useCallback(() => {
     setSearchQuery('');
@@ -255,11 +245,14 @@ export const useAdvancedSearch = (emails: Email[]) => {
     });
   }, []);
 
-  const stats: SearchStats = useMemo(() => ({
-    totalSearches: recentSearches.length,
-    savedSearches: savedSearches.length,
-    recentSearches
-  }), [recentSearches, savedSearches]);
+  const stats: SearchStats = useMemo(
+    () => ({
+      totalSearches: recentSearches.length,
+      savedSearches: savedSearches.length,
+      recentSearches
+    }),
+    [recentSearches, savedSearches]
+  );
 
   return {
     // Basic search

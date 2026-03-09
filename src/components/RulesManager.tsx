@@ -47,15 +47,21 @@ export const RulesManager: React.FC = () => {
   }, [getFilteredRules, filterType, filterStatus, searchQuery]);
 
   // Handlers
-  const handleToggleStatus = useCallback(async (ruleId: string) => {
-    await toggleRuleStatus(ruleId);
-  }, [toggleRuleStatus]);
+  const handleToggleStatus = useCallback(
+    async (ruleId: string) => {
+      await toggleRuleStatus(ruleId);
+    },
+    [toggleRuleStatus]
+  );
 
-  const handleDeleteRule = useCallback(async (ruleId: string) => {
-    if (window.confirm('Are you sure you want to delete this rule?')) {
-      await deleteRule(ruleId);
-    }
-  }, [deleteRule]);
+  const handleDeleteRule = useCallback(
+    async (ruleId: string) => {
+      if (window.confirm('Are you sure you want to delete this rule?')) {
+        await deleteRule(ruleId);
+      }
+    },
+    [deleteRule]
+  );
 
   const handleEditRule = useCallback((rule: EmailRule) => {
     setEditingRule(rule);
@@ -113,16 +119,10 @@ export const RulesManager: React.FC = () => {
       <div className="automation-header">
         <h1>Email Automation & Rules</h1>
         <div className="header-actions">
-          <button
-            className="btn btn-secondary"
-            onClick={() => setShowTemplateModal(true)}
-          >
+          <button className="btn btn-secondary" onClick={() => setShowTemplateModal(true)}>
             <span>📋</span> From Template
           </button>
-          <button
-            className="btn btn-primary"
-            onClick={() => setShowCreateModal(true)}
-          >
+          <button className="btn btn-primary" onClick={() => setShowCreateModal(true)}>
             <span>+</span> Create Rule
           </button>
         </div>
@@ -139,10 +139,7 @@ export const RulesManager: React.FC = () => {
           />
         </div>
         <div className="filter-group">
-          <select
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value as RuleType | '')}
-          >
+          <select value={filterType} onChange={(e) => setFilterType(e.target.value as RuleType | '')}>
             <option value="">All Types</option>
             <option value={RuleType.AUTO_REPLY}>Auto-Reply</option>
             <option value={RuleType.FORWARDING}>Forwarding</option>
@@ -151,10 +148,7 @@ export const RulesManager: React.FC = () => {
             <option value={RuleType.NOTIFICATION}>Notification</option>
             <option value={RuleType.CUSTOM}>Custom</option>
           </select>
-          <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value as RuleStatus | '')}
-          >
+          <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value as RuleStatus | '')}>
             <option value="">All Status</option>
             <option value={RuleStatus.ACTIVE}>Active</option>
             <option value={RuleStatus.PAUSED}>Paused</option>
@@ -173,15 +167,12 @@ export const RulesManager: React.FC = () => {
             <div className="empty-icon">📭</div>
             <h3>No rules found</h3>
             <p>Create your first automation rule to get started.</p>
-            <button
-              className="btn btn-primary"
-              onClick={() => setShowCreateModal(true)}
-            >
+            <button className="btn btn-primary" onClick={() => setShowCreateModal(true)}>
               Create Your First Rule
             </button>
           </div>
         ) : (
-          filteredRules.map(rule => (
+          filteredRules.map((rule) => (
             <div
               key={rule.id}
               className={`rule-card ${selectedRule?.id === rule.id ? 'selected' : ''}`}
@@ -190,12 +181,8 @@ export const RulesManager: React.FC = () => {
               <div className="rule-header">
                 <div className="rule-info">
                   <h3>{rule.name}</h3>
-                  <span className={`status-badge ${getStatusClass(rule.status)}`}>
-                    {rule.status}
-                  </span>
-                  <span className={`priority-badge ${getPriorityClass(rule.priority)}`}>
-                    {rule.priority}
-                  </span>
+                  <span className={`status-badge ${getStatusClass(rule.status)}`}>{rule.status}</span>
+                  <span className={`priority-badge ${getPriorityClass(rule.priority)}`}>{rule.priority}</span>
                 </div>
                 <div className="rule-actions">
                   <button
@@ -251,9 +238,7 @@ export const RulesManager: React.FC = () => {
                 </div>
                 <div className="rule-stats">
                   <span>Executed {rule.executionCount} times</span>
-                  {rule.lastExecuted && (
-                    <span>Last: {new Date(rule.lastExecuted).toLocaleDateString()}</span>
-                  )}
+                  {rule.lastExecuted && <span>Last: {new Date(rule.lastExecuted).toLocaleDateString()}</span>}
                 </div>
               </div>
             </div>
@@ -266,10 +251,7 @@ export const RulesManager: React.FC = () => {
         <div className="rule-details-panel">
           <div className="panel-header">
             <h2>{selectedRule.name}</h2>
-            <button
-              className="btn-close"
-              onClick={() => setSelectedRule(null)}
-            >
+            <button className="btn-close" onClick={() => setSelectedRule(null)}>
               ×
             </button>
           </div>
@@ -296,12 +278,8 @@ export const RulesManager: React.FC = () => {
                 {selectedRule.actions.map((action) => (
                   <li key={action.id}>
                     <span className="action-type">{action.type}</span>
-                    <span className="action-params">
-                      {JSON.stringify(action.parameters)}
-                    </span>
-                    {action.stopProcessing && (
-                      <span className="stop-badge">Stop</span>
-                    )}
+                    <span className="action-params">{JSON.stringify(action.parameters)}</span>
+                    {action.stopProcessing && <span className="stop-badge">Stop</span>}
                   </li>
                 ))}
               </ul>
@@ -315,10 +293,7 @@ export const RulesManager: React.FC = () => {
                 </div>
                 <div className="stat-item">
                   <span className="stat-value">
-                    {selectedRule.lastExecuted
-                      ? new Date(selectedRule.lastExecuted).toLocaleDateString()
-                      : 'Never'
-                    }
+                    {selectedRule.lastExecuted ? new Date(selectedRule.lastExecuted).toLocaleDateString() : 'Never'}
                   </span>
                   <span className="stat-label">Last Run</span>
                 </div>
@@ -326,16 +301,10 @@ export const RulesManager: React.FC = () => {
             </div>
           </div>
           <div className="panel-actions">
-            <button
-              className="btn btn-secondary"
-              onClick={() => handleEditRule(selectedRule)}
-            >
+            <button className="btn btn-secondary" onClick={() => handleEditRule(selectedRule)}>
               Edit Rule
             </button>
-            <button
-              className="btn btn-primary"
-              onClick={() => setShowTestModal(true)}
-            >
+            <button className="btn btn-primary" onClick={() => setShowTestModal(true)}>
               Test Rule
             </button>
           </div>
@@ -376,11 +345,7 @@ export const RulesManager: React.FC = () => {
 
       {/* Test Modal */}
       {showTestModal && selectedRule && (
-        <RuleTesterModal
-          rule={selectedRule}
-          onClose={() => setShowTestModal(false)}
-          onTest={testRule}
-        />
+        <RuleTesterModal rule={selectedRule} onClose={() => setShowTestModal(false)} onTest={testRule} />
       )}
     </div>
   );
@@ -399,9 +364,7 @@ const RuleBuilderModal: React.FC<RuleBuilderModalProps> = ({ rule, onClose, onSa
   const [ruleType, setRuleType] = useState<RuleType>(rule?.type || RuleType.CUSTOM);
   const [priority, setPriority] = useState<RulePriority>(rule?.priority || RulePriority.MEDIUM);
   const [conditions, setConditions] = useState<RuleCondition[]>(rule?.conditions || []);
-  const [conditionLogic, setConditionLogic] = useState<ConditionLogic>(
-    rule?.conditionLogic || ConditionLogic.AND
-  );
+  const [conditionLogic, setConditionLogic] = useState<ConditionLogic>(rule?.conditionLogic || ConditionLogic.AND);
   const [actions, setActions] = useState<RuleAction[]>(rule?.actions || []);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -440,8 +403,8 @@ const RuleBuilderModal: React.FC<RuleBuilderModalProps> = ({ rule, onClose, onSa
 
   const handleSave = async () => {
     if (!name.trim()) {
-return;
-}
+      return;
+    }
     setIsSaving(true);
     await onSave({
       name,
@@ -460,17 +423,14 @@ return;
       <div className="modal rule-builder-modal">
         <div className="modal-header">
           <h2>{rule ? 'Edit Rule' : 'Create Rule'}</h2>
-          <button className="btn-close" onClick={onClose}>×</button>
+          <button className="btn-close" onClick={onClose}>
+            ×
+          </button>
         </div>
         <div className="modal-body">
           <div className="form-group">
             <label>Rule Name *</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter rule name"
-            />
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter rule name" />
           </div>
           <div className="form-group">
             <label>Description</label>
@@ -570,10 +530,7 @@ return;
                   }}
                   placeholder="Value"
                 />
-                <button
-                  className="btn-icon danger"
-                  onClick={() => handleRemoveCondition(condition.id)}
-                >
+                <button className="btn-icon danger" onClick={() => handleRemoveCondition(condition.id)}>
                   ×
                 </button>
               </div>
@@ -635,10 +592,7 @@ return;
                   />
                   Stop
                 </label>
-                <button
-                  className="btn-icon danger"
-                  onClick={() => handleRemoveAction(action.id)}
-                >
+                <button className="btn-icon danger" onClick={() => handleRemoveAction(action.id)}>
                   ×
                 </button>
               </div>
@@ -652,12 +606,8 @@ return;
           <button className="btn btn-secondary" onClick={onClose}>
             Cancel
           </button>
-          <button
-            className="btn btn-primary"
-            onClick={handleSave}
-            disabled={!name.trim() || isSaving}
-          >
-            {isSaving ? 'Saving...' : (rule ? 'Update Rule' : 'Create Rule')}
+          <button className="btn btn-primary" onClick={handleSave} disabled={!name.trim() || isSaving}>
+            {isSaving ? 'Saving...' : rule ? 'Update Rule' : 'Create Rule'}
           </button>
         </div>
       </div>
@@ -679,8 +629,8 @@ const TemplatePickerModal: React.FC<TemplatePickerModalProps> = ({ templates, on
 
   const handleSelect = async () => {
     if (!selectedTemplate || !ruleName.trim()) {
-return;
-}
+      return;
+    }
     await onSelect(selectedTemplate.id, ruleName, priority);
   };
 
@@ -689,7 +639,9 @@ return;
       <div className="modal template-picker-modal">
         <div className="modal-header">
           <h2>Create Rule from Template</h2>
-          <button className="btn-close" onClick={onClose}>×</button>
+          <button className="btn-close" onClick={onClose}>
+            ×
+          </button>
         </div>
         <div className="modal-body">
           <div className="template-list">
@@ -738,11 +690,7 @@ return;
           <button className="btn btn-secondary" onClick={onClose}>
             Cancel
           </button>
-          <button
-            className="btn btn-primary"
-            onClick={handleSelect}
-            disabled={!selectedTemplate || !ruleName.trim()}
-          >
+          <button className="btn btn-primary" onClick={handleSelect} disabled={!selectedTemplate || !ruleName.trim()}>
             Create Rule
           </button>
         </div>
@@ -790,7 +738,9 @@ const RuleTesterModal: React.FC<RuleTesterModalProps> = ({ rule, onClose, onTest
       <div className="modal rule-tester-modal">
         <div className="modal-header">
           <h2>Test Rule: {rule.name}</h2>
-          <button className="btn-close" onClick={onClose}>×</button>
+          <button className="btn-close" onClick={onClose}>
+            ×
+          </button>
         </div>
         <div className="modal-body">
           <div className="test-email-form">
@@ -849,8 +799,12 @@ const RuleTesterModal: React.FC<RuleTesterModalProps> = ({ rule, onClose, onTest
               </div>
               {testResult.matches && (
                 <div className="result-details">
-                  <p><strong>Matched Conditions:</strong> {testResult.matchedConditions.length}</p>
-                  <p><strong>Actions to Execute:</strong></p>
+                  <p>
+                    <strong>Matched Conditions:</strong> {testResult.matchedConditions.length}
+                  </p>
+                  <p>
+                    <strong>Actions to Execute:</strong>
+                  </p>
                   <ul>
                     {testResult.actionsToExecute.map((action: any) => (
                       <li key={action.id}>{action.type}</li>
@@ -858,7 +812,9 @@ const RuleTesterModal: React.FC<RuleTesterModalProps> = ({ rule, onClose, onTest
                   </ul>
                   {testResult.warnings && testResult.warnings.length > 0 && (
                     <div className="warnings">
-                      <p><strong>Warnings:</strong></p>
+                      <p>
+                        <strong>Warnings:</strong>
+                      </p>
                       <ul>
                         {testResult.warnings.map((warning: string, idx: number) => (
                           <li key={idx}>{warning}</li>

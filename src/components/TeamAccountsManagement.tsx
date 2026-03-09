@@ -34,11 +34,7 @@ const RoleBadge: React.FC<{ role: TeamMemberRole }> = ({ role }) => {
     viewer: 'role-viewer'
   };
 
-  return (
-    <span className={`role-badge ${roleColors[role]}`}>
-      {role.charAt(0).toUpperCase() + role.slice(1)}
-    </span>
-  );
+  return <span className={`role-badge ${roleColors[role]}`}>{role.charAt(0).toUpperCase() + role.slice(1)}</span>;
 };
 
 // Status badge component
@@ -51,9 +47,7 @@ const StatusBadge: React.FC<{ status: TeamMemberStatus }> = ({ status }) => {
   };
 
   return (
-    <span className={`status-badge ${statusColors[status]}`}>
-      {status.charAt(0).toUpperCase() + status.slice(1)}
-    </span>
+    <span className={`status-badge ${statusColors[status]}`}>{status.charAt(0).toUpperCase() + status.slice(1)}</span>
   );
 };
 
@@ -77,18 +71,12 @@ const MemberCard: React.FC<{
   };
 
   return (
-    <div
-      className="member-card"
-      onMouseEnter={() => setShowActions(true)}
-      onMouseLeave={() => setShowActions(false)}
-    >
+    <div className="member-card" onMouseEnter={() => setShowActions(true)} onMouseLeave={() => setShowActions(false)}>
       <div className="member-avatar">
         {member.avatar ? (
           <img src={member.avatar} alt={member.name} />
         ) : (
-          <div className="avatar-placeholder">
-            {member.name.charAt(0).toUpperCase()}
-          </div>
+          <div className="avatar-placeholder">{member.name.charAt(0).toUpperCase()}</div>
         )}
       </div>
 
@@ -159,7 +147,13 @@ const InviteDialog: React.FC<{
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onInvite({ email, role, message: message || undefined, department: department || undefined, jobTitle: jobTitle || undefined });
+    onInvite({
+      email,
+      role,
+      message: message || undefined,
+      department: department || undefined,
+      jobTitle: jobTitle || undefined
+    });
     setEmail('');
     setRole('member');
     setMessage('');
@@ -169,15 +163,17 @@ const InviteDialog: React.FC<{
   };
 
   if (!isOpen) {
-return null;
-}
+    return null;
+  }
 
   return (
     <div className="modal-overlay">
       <div className="modal-content invite-dialog">
         <div className="modal-header">
           <h3>Invite Team Member</h3>
-          <button className="btn-close" onClick={onClose}>×</button>
+          <button className="btn-close" onClick={onClose}>
+            ×
+          </button>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -195,11 +191,7 @@ return null;
 
           <div className="form-group">
             <label htmlFor="role">Role *</label>
-            <select
-              id="role"
-              value={role}
-              onChange={(e) => setRole(e.target.value as TeamMemberRole)}
-            >
+            <select id="role" value={role} onChange={(e) => setRole(e.target.value as TeamMemberRole)}>
               <option value="viewer">Viewer - Read-only access</option>
               <option value="member">Member - Standard access</option>
               <option value="manager">Manager - Can manage members</option>
@@ -257,8 +249,12 @@ return null;
 };
 
 // Stats card component
-const StatsCard: React.FC<{ title: string; value: string | number; subtitle?: string; icon: string }> =
-  ({ title, value, subtitle, icon }) => (
+const StatsCard: React.FC<{ title: string; value: string | number; subtitle?: string; icon: string }> = ({
+  title,
+  value,
+  subtitle,
+  icon
+}) => (
   <div className="stats-card">
     <div className="stats-icon">{icon}</div>
     <div className="stats-content">
@@ -270,12 +266,14 @@ const StatsCard: React.FC<{ title: string; value: string | number; subtitle?: st
 );
 
 // Activity item component
-const ActivityItem: React.FC<{ activity: {
-  id: string;
-  action: string;
-  details: string;
-  timestamp: Date;
-} }> = ({ activity }) => {
+const ActivityItem: React.FC<{
+  activity: {
+    id: string;
+    action: string;
+    details: string;
+    timestamp: Date;
+  };
+}> = ({ activity }) => {
   const formatTimestamp = (date: Date) => {
     const now = new Date();
     const timestamp = new Date(date);
@@ -311,9 +309,7 @@ const ActivityItem: React.FC<{ activity: {
 
   return (
     <div className="activity-item">
-      <div className="activity-icon">
-        {actionIcons[activity.action] || '📋'}
-      </div>
+      <div className="activity-icon">{actionIcons[activity.action] || '📋'}</div>
       <div className="activity-content">
         <p className="activity-details">{activity.details}</p>
         <span className="activity-timestamp">{formatTimestamp(activity.timestamp)}</span>
@@ -352,34 +348,52 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
   } = useTeamAccounts(teamId);
 
   const filteredMembers = useMemo(() => getFilteredMembers(memberFilter), [getFilteredMembers, memberFilter]);
-  const filteredActivities = useMemo(() => getFilteredActivities(activityFilter), [getFilteredActivities, activityFilter]);
+  const filteredActivities = useMemo(
+    () => getFilteredActivities(activityFilter),
+    [getFilteredActivities, activityFilter]
+  );
   const stats = useMemo(() => getStats(teamId || ''), [getStats, teamId]);
 
-  const handleInvite = useCallback(async (payload: InviteMemberPayload) => {
-    await inviteMember(payload);
-  }, [inviteMember]);
+  const handleInvite = useCallback(
+    async (payload: InviteMemberPayload) => {
+      await inviteMember(payload);
+    },
+    [inviteMember]
+  );
 
-  const handleRemoveMember = useCallback(async (memberId: string) => {
-    if (confirm('Are you sure you want to remove this member?')) {
-      await removeMember(memberId);
-    }
-  }, [removeMember]);
+  const handleRemoveMember = useCallback(
+    async (memberId: string) => {
+      if (confirm('Are you sure you want to remove this member?')) {
+        await removeMember(memberId);
+      }
+    },
+    [removeMember]
+  );
 
-  const handleSuspendMember = useCallback(async (memberId: string) => {
-    if (confirm('Are you sure you want to suspend this member?')) {
-      await suspendMember(memberId);
-    }
-  }, [suspendMember]);
+  const handleSuspendMember = useCallback(
+    async (memberId: string) => {
+      if (confirm('Are you sure you want to suspend this member?')) {
+        await suspendMember(memberId);
+      }
+    },
+    [suspendMember]
+  );
 
-  const handleReactivateMember = useCallback(async (memberId: string) => {
-    await reactivateMember(memberId);
-  }, [reactivateMember]);
+  const handleReactivateMember = useCallback(
+    async (memberId: string) => {
+      await reactivateMember(memberId);
+    },
+    [reactivateMember]
+  );
 
-  const handleChangeRole = useCallback(async (memberId: string, role: TeamMemberRole) => {
-    if (confirm(`Are you sure you want to change this member's role to ${role}?`)) {
-      await changeMemberRole(memberId, role);
-    }
-  }, [changeMemberRole]);
+  const handleChangeRole = useCallback(
+    async (memberId: string, role: TeamMemberRole) => {
+      if (confirm(`Are you sure you want to change this member's role to ${role}?`)) {
+        await changeMemberRole(memberId, role);
+      }
+    },
+    [changeMemberRole]
+  );
 
   if (isLoading && !teamAccount) {
     return (
@@ -417,9 +431,7 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
       {/* Header */}
       <div className="team-accounts-header">
         <div className="team-info">
-          {teamAccount.logo && (
-            <img src={teamAccount.logo} alt={teamAccount.name} className="team-logo" />
-          )}
+          {teamAccount.logo && <img src={teamAccount.logo} alt={teamAccount.name} className="team-logo" />}
           <div className="team-details">
             <h2 className="team-name">{teamAccount.name}</h2>
             <p className="team-description">{teamAccount.description}</p>
@@ -479,43 +491,23 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
             <h3>Team Statistics</h3>
 
             <div className="stats-grid">
-              <StatsCard
-                title="Total Members"
-                value={stats?.totalMembers || 0}
-                icon="👥"
-              />
-              <StatsCard
-                title="Active Members"
-                value={stats?.activeMembers || 0}
-                icon="✅"
-              />
-              <StatsCard
-                title="Pending Invitations"
-                value={stats?.pendingInvitations || 0}
-                icon="📧"
-              />
-              <StatsCard
-                title="Emails This Month"
-                value={stats?.emailsThisMonth?.toLocaleString() || 0}
-                icon="✉️"
-              />
+              <StatsCard title="Total Members" value={stats?.totalMembers || 0} icon="👥" />
+              <StatsCard title="Active Members" value={stats?.activeMembers || 0} icon="✅" />
+              <StatsCard title="Pending Invitations" value={stats?.pendingInvitations || 0} icon="📧" />
+              <StatsCard title="Emails This Month" value={stats?.emailsThisMonth?.toLocaleString() || 0} icon="✉️" />
               <StatsCard
                 title="Storage Used"
                 value={`${stats?.storageUsed || 0} GB`}
                 subtitle={`of ${stats?.storageLimit || 0} GB`}
                 icon="💾"
               />
-              <StatsCard
-                title="Shared Folders"
-                value={stats?.sharedFolders || 0}
-                icon="📁"
-              />
+              <StatsCard title="Shared Folders" value={stats?.sharedFolders || 0} icon="📁" />
             </div>
 
             <div className="overview-section">
               <h4>Recent Activity</h4>
               <div className="activity-list">
-                {filteredActivities.slice(0, 5).map(activity => (
+                {filteredActivities.slice(0, 5).map((activity) => (
                   <ActivityItem key={activity.id} activity={activity} />
                 ))}
               </div>
@@ -532,7 +524,7 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
                   type="text"
                   placeholder="Search members..."
                   value={memberFilter.search || ''}
-                  onChange={(e) => setMemberFilter(prev => ({ ...prev, search: e.target.value }))}
+                  onChange={(e) => setMemberFilter((prev) => ({ ...prev, search: e.target.value }))}
                   className="search-input"
                 />
               </div>
@@ -540,10 +532,12 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
               <div className="filter-controls">
                 <select
                   value={memberFilter.role?.[0] || ''}
-                  onChange={(e) => setMemberFilter(prev => ({
-                    ...prev,
-                    role: e.target.value ? [e.target.value as TeamMemberRole] : undefined
-                  }))}
+                  onChange={(e) =>
+                    setMemberFilter((prev) => ({
+                      ...prev,
+                      role: e.target.value ? [e.target.value as TeamMemberRole] : undefined
+                    }))
+                  }
                   className="filter-select"
                 >
                   <option value="">All Roles</option>
@@ -556,10 +550,12 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
 
                 <select
                   value={memberFilter.status?.[0] || ''}
-                  onChange={(e) => setMemberFilter(prev => ({
-                    ...prev,
-                    status: e.target.value ? [e.target.value as TeamMemberStatus] : undefined
-                  }))}
+                  onChange={(e) =>
+                    setMemberFilter((prev) => ({
+                      ...prev,
+                      status: e.target.value ? [e.target.value as TeamMemberStatus] : undefined
+                    }))
+                  }
                   className="filter-select"
                 >
                   <option value="">All Statuses</option>
@@ -576,7 +572,7 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
                   <p>No members found matching your criteria.</p>
                 </div>
               ) : (
-                filteredMembers.map(member => (
+                filteredMembers.map((member) => (
                   <MemberCard
                     key={member.id}
                     member={member}
@@ -657,9 +653,11 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
                     min="6"
                     max="32"
                     value={teamAccount.settings.passwordPolicy.minLength}
-                    onChange={(e) => updateSettings(teamAccount.id, {
-                      passwordPolicy: { ...teamAccount.settings.passwordPolicy, minLength: parseInt(e.target.value) }
-                    })}
+                    onChange={(e) =>
+                      updateSettings(teamAccount.id, {
+                        passwordPolicy: { ...teamAccount.settings.passwordPolicy, minLength: parseInt(e.target.value) }
+                      })
+                    }
                   />
                 </div>
 
@@ -668,9 +666,11 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
                   <input
                     type="checkbox"
                     checked={teamAccount.settings.passwordPolicy.requireUppercase}
-                    onChange={(e) => updateSettings(teamAccount.id, {
-                      passwordPolicy: { ...teamAccount.settings.passwordPolicy, requireUppercase: e.target.checked }
-                    })}
+                    onChange={(e) =>
+                      updateSettings(teamAccount.id, {
+                        passwordPolicy: { ...teamAccount.settings.passwordPolicy, requireUppercase: e.target.checked }
+                      })
+                    }
                   />
                 </label>
 
@@ -679,9 +679,11 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
                   <input
                     type="checkbox"
                     checked={teamAccount.settings.passwordPolicy.requireLowercase}
-                    onChange={(e) => updateSettings(teamAccount.id, {
-                      passwordPolicy: { ...teamAccount.settings.passwordPolicy, requireLowercase: e.target.checked }
-                    })}
+                    onChange={(e) =>
+                      updateSettings(teamAccount.id, {
+                        passwordPolicy: { ...teamAccount.settings.passwordPolicy, requireLowercase: e.target.checked }
+                      })
+                    }
                   />
                 </label>
 
@@ -690,9 +692,11 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
                   <input
                     type="checkbox"
                     checked={teamAccount.settings.passwordPolicy.requireNumbers}
-                    onChange={(e) => updateSettings(teamAccount.id, {
-                      passwordPolicy: { ...teamAccount.settings.passwordPolicy, requireNumbers: e.target.checked }
-                    })}
+                    onChange={(e) =>
+                      updateSettings(teamAccount.id, {
+                        passwordPolicy: { ...teamAccount.settings.passwordPolicy, requireNumbers: e.target.checked }
+                      })
+                    }
                   />
                 </label>
               </div>
@@ -710,12 +714,15 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
                 <h4>Current Plan</h4>
                 <div className="plan-card">
                   <div className="plan-header">
-                    <span className="plan-name">{teamAccount.billing.plan.charAt(0).toUpperCase() + teamAccount.billing.plan.slice(1)}</span>
+                    <span className="plan-name">
+                      {teamAccount.billing.plan.charAt(0).toUpperCase() + teamAccount.billing.plan.slice(1)}
+                    </span>
                     <span className="plan-status">{teamAccount.billing.status}</span>
                   </div>
                   <div className="plan-details">
                     <p className="plan-price">
-                      ${teamAccount.billing.amount}<span className="price-period">/month</span>
+                      ${teamAccount.billing.amount}
+                      <span className="price-period">/month</span>
                     </p>
                     <p className="plan-members">
                       {teamAccount.billing.memberCount} / {teamAccount.billing.memberLimit} members
@@ -730,7 +737,7 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
               <div className="available-plans">
                 <h4>Available Plans</h4>
                 <div className="plans-grid">
-                  {(['free', 'starter', 'professional', 'enterprise'] as const).map(plan => (
+                  {(['free', 'starter', 'professional', 'enterprise'] as const).map((plan) => (
                     <div
                       key={plan}
                       className={`plan-option ${teamAccount.billing.plan === plan ? 'current' : ''}`}
@@ -754,7 +761,8 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
                     <span className="card-brand">{teamAccount.billing.paymentMethod.brand?.toUpperCase()}</span>
                     <span className="card-number">**** **** **** {teamAccount.billing.paymentMethod.last4}</span>
                     <span className="card-expiry">
-                      Expires {teamAccount.billing.paymentMethod.expiryMonth}/{teamAccount.billing.paymentMethod.expiryYear}
+                      Expires {teamAccount.billing.paymentMethod.expiryMonth}/
+                      {teamAccount.billing.paymentMethod.expiryYear}
                     </span>
                   </div>
                 )}
@@ -773,7 +781,7 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
                 type="text"
                 placeholder="Search activities..."
                 value={activityFilter.search || ''}
-                onChange={(e) => setActivityFilter(prev => ({ ...prev, search: e.target.value }))}
+                onChange={(e) => setActivityFilter((prev) => ({ ...prev, search: e.target.value }))}
                 className="search-input"
               />
             </div>
@@ -784,9 +792,7 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
                   <p>No activities found.</p>
                 </div>
               ) : (
-                filteredActivities.map(activity => (
-                  <ActivityItem key={activity.id} activity={activity} />
-                ))
+                filteredActivities.map((activity) => <ActivityItem key={activity.id} activity={activity} />)
               )}
             </div>
           </div>
@@ -794,11 +800,7 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
       </div>
 
       {/* Invite Dialog */}
-      <InviteDialog
-        isOpen={showInviteDialog}
-        onClose={() => setShowInviteDialog(false)}
-        onInvite={handleInvite}
-      />
+      <InviteDialog isOpen={showInviteDialog} onClose={() => setShowInviteDialog(false)} onInvite={handleInvite} />
     </div>
   );
 };

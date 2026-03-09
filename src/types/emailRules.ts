@@ -14,7 +14,7 @@ export enum RuleOperator {
   LESS_THAN = 'less_than',
   REGEX = 'regex',
   IS_EMPTY = 'is_empty',
-  IS_NOT_EMPTY = 'is_not_empty',
+  IS_NOT_EMPTY = 'is_not_empty'
 }
 
 /**
@@ -33,7 +33,7 @@ export enum RuleFieldType {
   DATE_RECEIVED = 'date_received',
   DATE_SENT = 'date_sent',
   SIZE = 'size',
-  HEADER = 'header',
+  HEADER = 'header'
 }
 
 /**
@@ -59,7 +59,7 @@ export enum RuleActionType {
   CREATE_TASK = 'create_task',
   CREATE_CALENDAR_EVENT = 'create_calendar_event',
   COPY_TO_FOLDER = 'copy_to_folder',
-  RUN_SCRIPT = 'run_script',
+  RUN_SCRIPT = 'run_script'
 }
 
 /**
@@ -71,7 +71,7 @@ export enum RuleType {
   CATEGORIZATION = 'categorization',
   CLEANUP = 'cleanup',
   NOTIFICATION = 'notification',
-  CUSTOM = 'custom',
+  CUSTOM = 'custom'
 }
 
 /**
@@ -81,7 +81,7 @@ export enum RulePriority {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
-  URGENT = 'urgent',
+  URGENT = 'urgent'
 }
 
 /**
@@ -90,7 +90,7 @@ export enum RulePriority {
 export enum RuleStatus {
   ACTIVE = 'active',
   PAUSED = 'paused',
-  DISABLED = 'disabled',
+  DISABLED = 'disabled'
 }
 
 /**
@@ -98,7 +98,7 @@ export enum RuleStatus {
  */
 export enum ConditionLogic {
   AND = 'and',
-  OR = 'or',
+  OR = 'or'
 }
 
 /**
@@ -120,7 +120,7 @@ export interface RuleCondition {
 export interface RuleAction {
   id: string;
   type: RuleActionType;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   delayMinutes?: number; // Execute after delay
   stopProcessing?: boolean; // Stop processing further rules
 }

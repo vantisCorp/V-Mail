@@ -124,12 +124,10 @@ export class SuggestionEngine {
 
     Object.entries(QUICK_ACTION_PATTERNS).forEach(([action, patterns]) => {
       const actionType = action as QuickActionType;
-      const matches = patterns.filter(pattern =>
-        content.includes(pattern) || subject.includes(pattern)
-      );
+      const matches = patterns.filter((pattern) => content.includes(pattern) || subject.includes(pattern));
 
       if (matches.length > 0) {
-        const confidence = Math.min(0.9, 0.5 + (matches.length * 0.1));
+        const confidence = Math.min(0.9, 0.5 + matches.length * 0.1);
 
         suggestions.push({
           id: `action-${actionType}-${Date.now()}`,
@@ -156,28 +154,30 @@ export class SuggestionEngine {
     const content = context.content.toLowerCase();
 
     const followUpKeywords = [
-      { keywords: ['follow up', 'get back to you', 'will contact', 'let you know'],
+      {
+        keywords: ['follow up', 'get back to you', 'will contact', 'let you know'],
         action: FollowUpAction.REMIND_WEEK,
-        reason: 'Sender mentioned they will follow up' },
-      { keywords: ['tomorrow', 'next day'],
-        action: FollowUpAction.REMIND_TOMORROW,
-        reason: 'Mentioned tomorrow' },
-      { keywords: ['next week', 'week from now'],
-        action: FollowUpAction.REMIND_WEEK,
-        reason: 'Mentioned next week' },
-      { keywords: ['next month', 'month from now'],
+        reason: 'Sender mentioned they will follow up'
+      },
+      { keywords: ['tomorrow', 'next day'], action: FollowUpAction.REMIND_TOMORROW, reason: 'Mentioned tomorrow' },
+      { keywords: ['next week', 'week from now'], action: FollowUpAction.REMIND_WEEK, reason: 'Mentioned next week' },
+      {
+        keywords: ['next month', 'month from now'],
         action: FollowUpAction.REMIND_MONTH,
-        reason: 'Mentioned next month' },
-      { keywords: ['meeting', 'call', 'discuss', 'schedule'],
+        reason: 'Mentioned next month'
+      },
+      {
+        keywords: ['meeting', 'call', 'discuss', 'schedule'],
         action: FollowUpAction.SCHEDULE_MEETING,
-        reason: 'Scheduling discussion requested' }
+        reason: 'Scheduling discussion requested'
+      }
     ];
 
     followUpKeywords.forEach(({ keywords, action, reason }) => {
-      const matches = keywords.filter(keyword => content.includes(keyword));
+      const matches = keywords.filter((keyword) => content.includes(keyword));
 
       if (matches.length > 0) {
-        const confidence = 0.7 + (matches.length * 0.05);
+        const confidence = 0.7 + matches.length * 0.05;
 
         suggestions.push({
           id: `followup-${action}-${Date.now()}`,
@@ -251,17 +251,15 @@ export class SuggestionEngine {
     }
 
     const teamKeywords = {
-      'manager': ['manager', 'supervisor', 'lead'],
-      'team': ['team', 'colleague', 'coworker'],
-      'hr': ['hr', 'human resources', 'personnel'],
-      'finance': ['finance', 'accounting', 'billing'],
-      'legal': ['legal', 'attorney', 'counsel']
+      manager: ['manager', 'supervisor', 'lead'],
+      team: ['team', 'colleague', 'coworker'],
+      hr: ['hr', 'human resources', 'personnel'],
+      finance: ['finance', 'accounting', 'billing'],
+      legal: ['legal', 'attorney', 'counsel']
     };
 
     Object.entries(teamKeywords).forEach(([role, keywords]) => {
-      const matches = keywords.filter(keyword =>
-        context.content.toLowerCase().includes(keyword)
-      );
+      const matches = keywords.filter((keyword) => context.content.toLowerCase().includes(keyword));
 
       if (matches.length > 0) {
         suggestions.push({
@@ -270,7 +268,7 @@ export class SuggestionEngine {
           recipientType: RecipientType.CC,
           email: `${role}@company.com`,
           name: `${role.charAt(0).toUpperCase() + role.slice(1)}`,
-          confidence: 0.6 + (matches.length * 0.05),
+          confidence: 0.6 + matches.length * 0.05,
           priority: SuggestionPriority.MEDIUM,
           reason: `Mentioned ${matches.join(', ')} - consider adding ${role}`
         });
@@ -312,12 +310,10 @@ export class SuggestionEngine {
     ];
 
     labelMappings.forEach(({ keywords, label, color }) => {
-      const matches = keywords.filter(keyword =>
-        content.includes(keyword) || subject.includes(keyword)
-      );
+      const matches = keywords.filter((keyword) => content.includes(keyword) || subject.includes(keyword));
 
       if (matches.length > 0) {
-        const confidence = 0.6 + (matches.length * 0.05);
+        const confidence = 0.6 + matches.length * 0.05;
 
         suggestions.push({
           id: `label-${label}-${Date.now()}`,
@@ -357,7 +353,7 @@ export class SuggestionEngine {
     let maxMatches = 0;
 
     Object.entries(categoryPatterns).forEach(([category, patterns]) => {
-      const matches = patterns.filter(pattern => fullText.includes(pattern));
+      const matches = patterns.filter((pattern) => fullText.includes(pattern));
       if (matches.length > maxMatches) {
         maxMatches = matches.length;
         bestMatch = category as ReplyCategory;
@@ -384,7 +380,7 @@ export class SuggestionEngine {
 
     const contentWords = context.content.toLowerCase().split(/\s+/);
     const templateWords = template.toLowerCase().split(/\s+/);
-    const commonWords = contentWords.filter(word => templateWords.includes(word));
+    const commonWords = contentWords.filter((word) => templateWords.includes(word));
     const similarity = commonWords.length / templateWords.length;
     confidence += similarity * 0.2;
 
@@ -393,11 +389,11 @@ export class SuggestionEngine {
 
   private determinePriority(confidence: ConfidenceScore): SuggestionPriority {
     if (confidence >= 0.8) {
-return SuggestionPriority.HIGH;
-}
+      return SuggestionPriority.HIGH;
+    }
     if (confidence >= 0.6) {
-return SuggestionPriority.MEDIUM;
-}
+      return SuggestionPriority.MEDIUM;
+    }
     return SuggestionPriority.LOW;
   }
 
@@ -492,9 +488,9 @@ return SuggestionPriority.MEDIUM;
   }
 
   private filterAndSortSuggestions(suggestions: Suggestion[]): Suggestion[] {
-    const filtered = suggestions.filter(s => s.confidence >= this.config.minConfidence);
+    const filtered = suggestions.filter((s) => s.confidence >= this.config.minConfidence);
 
-    const weightedSuggestions = filtered.map(suggestion => {
+    const weightedSuggestions = filtered.map((suggestion) => {
       let weight = suggestion.confidence;
 
       switch (suggestion.priority) {
@@ -522,7 +518,7 @@ return SuggestionPriority.MEDIUM;
     const byPriority: Record<SuggestionPriority, number> = {} as any;
     let totalConfidence = 0;
 
-    suggestions.forEach(suggestion => {
+    suggestions.forEach((suggestion) => {
       byType[suggestion.type] = (byType[suggestion.type] || 0) + 1;
       byPriority[suggestion.priority] = (byPriority[suggestion.priority] || 0) + 1;
       totalConfidence += suggestion.confidence;
@@ -575,8 +571,7 @@ return SuggestionPriority.MEDIUM;
 
     if (feedback.suggestion.type === SuggestionType.QUICK_ACTION) {
       const action = (feedback.suggestion as QuickActionSuggestion).action;
-      this.userBehavior.commonActions[action] =
-        (this.userBehavior.commonActions[action] || 0) + 1;
+      this.userBehavior.commonActions[action] = (this.userBehavior.commonActions[action] || 0) + 1;
     }
 
     if (feedback.suggestion.type === SuggestionType.REPLY && feedback.outcome === 'positive') {
@@ -600,9 +595,9 @@ return SuggestionPriority.MEDIUM;
   getTrainingStats() {
     return {
       totalExamples: this.trainingData.length,
-      positiveOutcomes: this.trainingData.filter(e => e.outcome === 'positive').length,
-      negativeOutcomes: this.trainingData.filter(e => e.outcome === 'negative').length,
-      neutralOutcomes: this.trainingData.filter(e => e.outcome === 'neutral').length
+      positiveOutcomes: this.trainingData.filter((e) => e.outcome === 'positive').length,
+      negativeOutcomes: this.trainingData.filter((e) => e.outcome === 'negative').length,
+      neutralOutcomes: this.trainingData.filter((e) => e.outcome === 'neutral').length
     };
   }
 
@@ -628,10 +623,7 @@ export function createSuggestionEngine(config?: Partial<SuggestionConfig>): Sugg
   return new SuggestionEngine(config);
 }
 
-export function generateSuggestions(
-  context: SuggestionContext,
-  config?: Partial<SuggestionConfig>
-): SuggestionResult {
+export function generateSuggestions(context: SuggestionContext, config?: Partial<SuggestionConfig>): SuggestionResult {
   const engine = createSuggestionEngine(config);
   return engine.generateSuggestions(context);
 }

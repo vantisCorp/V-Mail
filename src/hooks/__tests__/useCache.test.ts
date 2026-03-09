@@ -68,9 +68,7 @@ describe('useCache', () => {
     it('should mark data as stale after staleTime', async () => {
       vi.useFakeTimers();
 
-      const { result } = renderHook(() =>
-        useCache({ key: 'test-key', staleTime: 1000 })
-      );
+      const { result } = renderHook(() => useCache({ key: 'test-key', staleTime: 1000 }));
 
       await act(async () => {
         await result.current.set('test-value');
@@ -90,9 +88,7 @@ describe('useCache', () => {
     it('should reset stale state on new data', async () => {
       vi.useFakeTimers();
 
-      const { result } = renderHook(() =>
-        useCache({ key: 'test-key', staleTime: 1000 })
-      );
+      const { result } = renderHook(() => useCache({ key: 'test-key', staleTime: 1000 }));
 
       await act(async () => {
         await result.current.set('test-value');
@@ -121,7 +117,7 @@ describe('useCache', () => {
       await act(async () => {
         try {
           await result.current.set('test-value');
-        } catch (error) {
+        } catch {
           // Ignore
         }
       });
@@ -146,9 +142,12 @@ describe('useCacheManager', () => {
       const { result } = renderHook(() => useCacheManager());
 
       // Wait for the interval to populate metrics (1000ms interval in hook)
-      await waitFor(() => {
-        expect(result.current.metrics).not.toBeNull();
-      }, { timeout: 2000 });
+      await waitFor(
+        () => {
+          expect(result.current.metrics).not.toBeNull();
+        },
+        { timeout: 2000 }
+      );
 
       if (result.current.metrics) {
         expect(result.current.metrics.hits).toBeGreaterThanOrEqual(0);
@@ -305,9 +304,7 @@ describe('useCachedFetch', () => {
     it('should fetch and cache data', async () => {
       const fetcher = vi.fn().mockResolvedValue('fetched-data');
 
-      const { result } = renderHook(() =>
-        useCachedFetch('test-key', fetcher, { enabled: true })
-      );
+      const { result } = renderHook(() => useCachedFetch('test-key', fetcher, { enabled: true }));
 
       await waitFor(() => {
         expect(result.current.data).toBe('fetched-data');
@@ -319,9 +316,7 @@ describe('useCachedFetch', () => {
     it('should use cached data on subsequent calls', async () => {
       const fetcher = vi.fn().mockResolvedValue('fetched-data');
 
-      const { result, rerender } = renderHook(() =>
-        useCachedFetch('test-key', fetcher, { enabled: true })
-      );
+      const { result, rerender } = renderHook(() => useCachedFetch('test-key', fetcher, { enabled: true }));
 
       await waitFor(() => {
         expect(result.current.data).toBe('fetched-data');
@@ -342,9 +337,7 @@ describe('useCachedFetch', () => {
     it('should not fetch when disabled', async () => {
       const fetcher = vi.fn().mockResolvedValue('fetched-data');
 
-      renderHook(() =>
-        useCachedFetch('test-key', fetcher, { enabled: false })
-      );
+      renderHook(() => useCachedFetch('test-key', fetcher, { enabled: false }));
 
       expect(fetcher).not.toHaveBeenCalled();
     });
@@ -352,9 +345,7 @@ describe('useCachedFetch', () => {
     it('should handle fetch errors', async () => {
       const fetcher = vi.fn().mockRejectedValue(new Error('Fetch failed'));
 
-      const { result } = renderHook(() =>
-        useCachedFetch('test-key', fetcher, { enabled: true })
-      );
+      const { result } = renderHook(() => useCachedFetch('test-key', fetcher, { enabled: true }));
 
       await waitFor(() => {
         expect(result.current.error).not.toBeNull();
@@ -368,9 +359,7 @@ describe('useCachedFetch', () => {
     it('should manually fetch data', async () => {
       const fetcher = vi.fn().mockResolvedValue('fetched-data');
 
-      const { result } = renderHook(() =>
-        useCachedFetch('test-key', fetcher, { enabled: false })
-      );
+      const { result } = renderHook(() => useCachedFetch('test-key', fetcher, { enabled: false }));
 
       expect(fetcher).not.toHaveBeenCalled();
 

@@ -363,7 +363,7 @@ export const useTaskManagement = () => {
   // Initialize data
   useEffect(() => {
     const initialize = async () => {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setTasks(generateMockTasks());
       setProjects(generateMockProjects());
       setIsLoading(false);
@@ -390,105 +390,104 @@ export const useTaskManagement = () => {
       ]
     };
 
-    setTasks(prev => [...prev, newTask]);
+    setTasks((prev) => [...prev, newTask]);
     return newTask;
   }, []);
 
-  const updateTask = useCallback(async (id: string, payload: UpdateTaskPayload): Promise<Task | null> => {
-    setTasks(prev => prev.map(task => {
-      if (task.id === id) {
-        const updatedTask = {
-          ...task,
-          ...payload,
-          updatedAt: new Date().toISOString()
-        };
+  const updateTask = useCallback(
+    async (id: string, payload: UpdateTaskPayload): Promise<Task | null> => {
+      setTasks((prev) =>
+        prev.map((task) => {
+          if (task.id === id) {
+            const updatedTask = {
+              ...task,
+              ...payload,
+              updatedAt: new Date().toISOString()
+            };
 
-        // Add activity log for status changes
-        if (payload.status && payload.status !== task.status) {
-          updatedTask.activityLog.push({
-            id: generateId(),
-            type: 'status_changed',
-            userId: payload.assignedBy || task.assignedBy,
-            userName: 'User',
-            timestamp: new Date().toISOString(),
-            description: `Status changed from ${task.status} to ${payload.status}`
-          });
-        }
+            // Add activity log for status changes
+            if (payload.status && payload.status !== task.status) {
+              updatedTask.activityLog.push({
+                id: generateId(),
+                type: 'status_changed',
+                userId: payload.assignedBy || task.assignedBy,
+                userName: 'User',
+                timestamp: new Date().toISOString(),
+                description: `Status changed from ${task.status} to ${payload.status}`
+              });
+            }
 
-        return updatedTask;
-      }
-      return task;
-    }));
+            return updatedTask;
+          }
+          return task;
+        })
+      );
 
-    return tasks.find(t => t.id === id) || null;
-  }, [tasks]);
+      return tasks.find((t) => t.id === id) || null;
+    },
+    [tasks]
+  );
 
   const deleteTask = useCallback(async (id: string): Promise<boolean> => {
-    setTasks(prev => prev.filter(task => task.id !== id));
+    setTasks((prev) => prev.filter((task) => task.id !== id));
     return true;
   }, []);
 
   // Email to Task Conversion
-  const convertEmailToTask = useCallback(async (
-    emailId: string,
-    emailData: Record<string, any>,
-    options: EmailToTaskOptions
-  ): Promise<Task | null> => {
-    const title = options.extractTitleFromSubject
-      ? emailData.subject || 'Task from Email'
-      : 'Task from Email';
+  const convertEmailToTask = useCallback(
+    async (emailId: string, emailData: Record<string, any>, options: EmailToTaskOptions): Promise<Task | null> => {
+      const title = options.extractTitleFromSubject ? emailData.subject || 'Task from Email' : 'Task from Email';
 
-    const description = options.extractDescriptionFromBody
-      ? emailData.body || ''
-      : '';
+      const description = options.extractDescriptionFromBody ? emailData.body || '' : '';
 
-    const task: CreateTaskPayload = {
-      title,
-      description,
-      type: options.defaultType,
-      status: TaskStatus.TODO,
-      priority: options.defaultPriority,
-      assignedTo: options.autoAssign || [],
-      assignedBy: 'current-user',
-      assignmentType: AssignmentType.SINGLE,
-      progress: 0,
-      sourceEmailId: emailId,
-      emailConversation: [emailId],
-      dependsOn: [],
-      blocks: [],
-      labels: [],
-      tags: [],
-      attachments: options.includeAttachments && emailData.attachments ?
-        emailData.attachments.map((att: any, idx: number) => ({
-          id: generateId(),
-          name: att.name || `attachment-${idx}`,
-          url: att.url || '',
-          size: att.size,
-          mimeType: att.mimeType,
-          uploadedAt: new Date().toISOString(),
-          uploadedBy: 'current-user'
-        })) : [],
-      comments: [],
-      subtasks: [],
-      checklist: [],
-      reminders: []
-    };
+      const task: CreateTaskPayload = {
+        title,
+        description,
+        type: options.defaultType,
+        status: TaskStatus.TODO,
+        priority: options.defaultPriority,
+        assignedTo: options.autoAssign || [],
+        assignedBy: 'current-user',
+        assignmentType: AssignmentType.SINGLE,
+        progress: 0,
+        sourceEmailId: emailId,
+        emailConversation: [emailId],
+        dependsOn: [],
+        blocks: [],
+        labels: [],
+        tags: [],
+        attachments:
+          options.includeAttachments && emailData.attachments
+            ? emailData.attachments.map((att: any, idx: number) => ({
+                id: generateId(),
+                name: att.name || `attachment-${idx}`,
+                url: att.url || '',
+                size: att.size,
+                mimeType: att.mimeType,
+                uploadedAt: new Date().toISOString(),
+                uploadedBy: 'current-user'
+              }))
+            : [],
+        comments: [],
+        subtasks: [],
+        checklist: [],
+        reminders: []
+      };
 
-    // Set due date if specified
-    if (options.defaultDueDateOffset) {
-      const dueDate = new Date();
-      dueDate.setDate(dueDate.getDate() + options.defaultDueDateOffset);
-      task.dueDate = dueDate.toISOString();
-    }
+      // Set due date if specified
+      if (options.defaultDueDateOffset) {
+        const dueDate = new Date();
+        dueDate.setDate(dueDate.getDate() + options.defaultDueDateOffset);
+        task.dueDate = dueDate.toISOString();
+      }
 
-    return await createTask(task);
-  }, [createTask]);
+      return await createTask(task);
+    },
+    [createTask]
+  );
 
   // Subtask Management
-  const createSubTask = useCallback(async (
-    taskId: string,
-    payload: CreateSubTaskPayload
-  ): Promise<SubTask | null> => {
+  const createSubTask = useCallback(async (taskId: string, payload: CreateSubTaskPayload): Promise<SubTask | null> => {
     const newSubTask: SubTask = {
       ...payload,
       id: generateId(),
@@ -496,213 +495,227 @@ export const useTaskManagement = () => {
       updatedAt: new Date().toISOString()
     };
 
-    setTasks(prev => prev.map(task => {
-      if (task.id === taskId) {
-        return {
-          ...task,
-          subtasks: [...task.subtasks, newSubTask],
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return task;
-    }));
+    setTasks((prev) =>
+      prev.map((task) => {
+        if (task.id === taskId) {
+          return {
+            ...task,
+            subtasks: [...task.subtasks, newSubTask],
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return task;
+      })
+    );
 
     return newSubTask;
   }, []);
 
-  const updateSubTask = useCallback(async (
-    taskId: string,
-    subTaskId: string,
-    updates: Partial<SubTask>
-  ): Promise<boolean> => {
-    setTasks(prev => prev.map(task => {
-      if (task.id === taskId) {
-        return {
-          ...task,
-          subtasks: task.subtasks.map(st =>
-            st.id === subTaskId ? { ...st, ...updates, updatedAt: new Date().toISOString() } : st
-          ),
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return task;
-    }));
-    return true;
-  }, []);
+  const updateSubTask = useCallback(
+    async (taskId: string, subTaskId: string, updates: Partial<SubTask>): Promise<boolean> => {
+      setTasks((prev) =>
+        prev.map((task) => {
+          if (task.id === taskId) {
+            return {
+              ...task,
+              subtasks: task.subtasks.map((st) =>
+                st.id === subTaskId ? { ...st, ...updates, updatedAt: new Date().toISOString() } : st
+              ),
+              updatedAt: new Date().toISOString()
+            };
+          }
+          return task;
+        })
+      );
+      return true;
+    },
+    []
+  );
 
   const deleteSubTask = useCallback(async (taskId: string, subTaskId: string): Promise<boolean> => {
-    setTasks(prev => prev.map(task => {
-      if (task.id === taskId) {
-        return {
-          ...task,
-          subtasks: task.subtasks.filter(st => st.id !== subTaskId),
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return task;
-    }));
+    setTasks((prev) =>
+      prev.map((task) => {
+        if (task.id === taskId) {
+          return {
+            ...task,
+            subtasks: task.subtasks.filter((st) => st.id !== subTaskId),
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return task;
+      })
+    );
     return true;
   }, []);
 
   // Comment Management
-  const addComment = useCallback(async (
-    taskId: string,
-    payload: CreateCommentPayload
-  ): Promise<TaskComment | null> => {
+  const addComment = useCallback(async (taskId: string, payload: CreateCommentPayload): Promise<TaskComment | null> => {
     const newComment: TaskComment = {
       ...payload,
       id: generateId(),
       createdAt: new Date().toISOString()
     };
 
-    setTasks(prev => prev.map(task => {
-      if (task.id === taskId) {
-        return {
-          ...task,
-          comments: [...task.comments, newComment],
-          activityLog: [
-            ...task.activityLog,
-            {
-              id: generateId(),
-              type: 'comment_added',
-              userId: payload.authorId,
-              userName: payload.authorName,
-              timestamp: new Date().toISOString(),
-              description: 'Comment added'
-            }
-          ],
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return task;
-    }));
+    setTasks((prev) =>
+      prev.map((task) => {
+        if (task.id === taskId) {
+          return {
+            ...task,
+            comments: [...task.comments, newComment],
+            activityLog: [
+              ...task.activityLog,
+              {
+                id: generateId(),
+                type: 'comment_added',
+                userId: payload.authorId,
+                userName: payload.authorName,
+                timestamp: new Date().toISOString(),
+                description: 'Comment added'
+              }
+            ],
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return task;
+      })
+    );
 
     return newComment;
   }, []);
 
   // Checklist Management
-  const createChecklistItem = useCallback(async (
-    taskId: string,
-    text: string,
-    order: number
-  ): Promise<ChecklistItem | null> => {
-    const newItem: ChecklistItem = {
-      id: generateId(),
-      text,
-      completed: false,
-      order
-    };
+  const createChecklistItem = useCallback(
+    async (taskId: string, text: string, order: number): Promise<ChecklistItem | null> => {
+      const newItem: ChecklistItem = {
+        id: generateId(),
+        text,
+        completed: false,
+        order
+      };
 
-    setTasks(prev => prev.map(task => {
-      if (task.id === taskId) {
-        return {
-          ...task,
-          checklist: [...task.checklist, newItem],
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return task;
-    }));
+      setTasks((prev) =>
+        prev.map((task) => {
+          if (task.id === taskId) {
+            return {
+              ...task,
+              checklist: [...task.checklist, newItem],
+              updatedAt: new Date().toISOString()
+            };
+          }
+          return task;
+        })
+      );
 
-    return newItem;
-  }, []);
+      return newItem;
+    },
+    []
+  );
 
-  const toggleChecklistItem = useCallback(async (
-    taskId: string,
-    itemId: string
-  ): Promise<boolean> => {
-    setTasks(prev => prev.map(task => {
-      if (task.id === taskId) {
-        return {
-          ...task,
-          checklist: task.checklist.map(item =>
-            item.id === itemId
-              ? {
-                  ...item,
-                  completed: !item.completed,
-                  completedAt: !item.completed ? new Date().toISOString() : undefined
-                }
-              : item
-          ),
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return task;
-    }));
+  const toggleChecklistItem = useCallback(async (taskId: string, itemId: string): Promise<boolean> => {
+    setTasks((prev) =>
+      prev.map((task) => {
+        if (task.id === taskId) {
+          return {
+            ...task,
+            checklist: task.checklist.map((item) =>
+              item.id === itemId
+                ? {
+                    ...item,
+                    completed: !item.completed,
+                    completedAt: !item.completed ? new Date().toISOString() : undefined
+                  }
+                : item
+            ),
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return task;
+      })
+    );
     return true;
   }, []);
 
-  const deleteChecklistItem = useCallback(async (
-    taskId: string,
-    itemId: string
-  ): Promise<boolean> => {
-    setTasks(prev => prev.map(task => {
-      if (task.id === taskId) {
-        return {
-          ...task,
-          checklist: task.checklist.filter(item => item.id !== itemId),
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return task;
-    }));
+  const deleteChecklistItem = useCallback(async (taskId: string, itemId: string): Promise<boolean> => {
+    setTasks((prev) =>
+      prev.map((task) => {
+        if (task.id === taskId) {
+          return {
+            ...task,
+            checklist: task.checklist.filter((item) => item.id !== itemId),
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return task;
+      })
+    );
     return true;
   }, []);
 
   // Reminder Management
-  const createReminder = useCallback(async (
-    taskId: string,
-    payload: CreateReminderPayload
-  ): Promise<TaskReminder | null> => {
-    const newReminder: TaskReminder = {
-      ...payload,
-      id: generateId(),
-      sent: false
-    };
+  const createReminder = useCallback(
+    async (taskId: string, payload: CreateReminderPayload): Promise<TaskReminder | null> => {
+      const newReminder: TaskReminder = {
+        ...payload,
+        id: generateId(),
+        sent: false
+      };
 
-    setTasks(prev => prev.map(task => {
-      if (task.id === taskId) {
-        return {
-          ...task,
-          reminders: [...task.reminders, newReminder],
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return task;
-    }));
+      setTasks((prev) =>
+        prev.map((task) => {
+          if (task.id === taskId) {
+            return {
+              ...task,
+              reminders: [...task.reminders, newReminder],
+              updatedAt: new Date().toISOString()
+            };
+          }
+          return task;
+        })
+      );
 
-    return newReminder;
-  }, []);
+      return newReminder;
+    },
+    []
+  );
 
   // Task Statistics
   const getTaskStatistics = useCallback((): TaskStatistics => {
     const totalTasks = tasks.length;
-    const completedTasks = tasks.filter(t => t.status === TaskStatus.COMPLETED).length;
-    const inProgressTasks = tasks.filter(t => t.status === TaskStatus.IN_PROGRESS).length;
-    const overdueTasks = tasks.filter(t =>
-      t.dueDate && new Date(t.dueDate) < new Date() && t.status !== TaskStatus.COMPLETED
+    const completedTasks = tasks.filter((t) => t.status === TaskStatus.COMPLETED).length;
+    const inProgressTasks = tasks.filter((t) => t.status === TaskStatus.IN_PROGRESS).length;
+    const overdueTasks = tasks.filter(
+      (t) => t.dueDate && new Date(t.dueDate) < new Date() && t.status !== TaskStatus.COMPLETED
     ).length;
 
     const today = new Date();
     const weekFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-    const dueThisWeek = tasks.filter(t =>
-      t.dueDate && new Date(t.dueDate) >= today && new Date(t.dueDate) <= weekFromNow
+    const dueThisWeek = tasks.filter(
+      (t) => t.dueDate && new Date(t.dueDate) >= today && new Date(t.dueDate) <= weekFromNow
     ).length;
 
-    const tasksByStatus = tasks.reduce((acc, task) => {
-      acc[task.status] = (acc[task.status] || 0) + 1;
-      return acc;
-    }, {} as Record<TaskStatus, number>);
+    const tasksByStatus = tasks.reduce(
+      (acc, task) => {
+        acc[task.status] = (acc[task.status] || 0) + 1;
+        return acc;
+      },
+      {} as Record<TaskStatus, number>
+    );
 
-    const tasksByPriority = tasks.reduce((acc, task) => {
-      acc[task.priority] = (acc[task.priority] || 0) + 1;
-      return acc;
-    }, {} as Record<TaskPriority, number>);
+    const tasksByPriority = tasks.reduce(
+      (acc, task) => {
+        acc[task.priority] = (acc[task.priority] || 0) + 1;
+        return acc;
+      },
+      {} as Record<TaskPriority, number>
+    );
 
-    const tasksByType = tasks.reduce((acc, task) => {
-      acc[task.type] = (acc[task.type] || 0) + 1;
-      return acc;
-    }, {} as Record<TaskType, number>);
+    const tasksByType = tasks.reduce(
+      (acc, task) => {
+        acc[task.type] = (acc[task.type] || 0) + 1;
+        return acc;
+      },
+      {} as Record<TaskType, number>
+    );
 
     return {
       totalTasks,
@@ -718,71 +731,69 @@ export const useTaskManagement = () => {
   }, [tasks]);
 
   // Filter and search
-  const getFilteredTasks = useCallback((filter?: TaskFilter): Task[] => {
-    let filtered = [...tasks];
+  const getFilteredTasks = useCallback(
+    (filter?: TaskFilter): Task[] => {
+      let filtered = [...tasks];
 
-    if (filter?.status) {
-      filtered = filtered.filter(t => t.status === filter.status);
-    }
+      if (filter?.status) {
+        filtered = filtered.filter((t) => t.status === filter.status);
+      }
 
-    if (filter?.priority) {
-      filtered = filtered.filter(t => t.priority === filter.priority);
-    }
+      if (filter?.priority) {
+        filtered = filtered.filter((t) => t.priority === filter.priority);
+      }
 
-    if (filter?.type) {
-      filtered = filtered.filter(t => t.type === filter.type);
-    }
+      if (filter?.type) {
+        filtered = filtered.filter((t) => t.type === filter.type);
+      }
 
-    if (filter?.assignedTo) {
-      const assignedTo = filter.assignedTo;
-      filtered = filtered.filter(t => t.assignedTo.includes(assignedTo));
-    }
+      if (filter?.assignedTo) {
+        const assignedTo = filter.assignedTo;
+        filtered = filtered.filter((t) => t.assignedTo.includes(assignedTo));
+      }
 
-    if (filter?.projectId) {
-      filtered = filtered.filter(t => t.projectId === filter.projectId);
-    }
+      if (filter?.projectId) {
+        filtered = filtered.filter((t) => t.projectId === filter.projectId);
+      }
 
-    if (filter?.dueDateRange) {
-      const dateRange = filter.dueDateRange;
-      filtered = filtered.filter(t => {
-        if (!t.dueDate) {
-return false;
-}
-        const dueDate = new Date(t.dueDate);
-        const from = dateRange.from ? new Date(dateRange.from) : null;
-        const to = dateRange.to ? new Date(dateRange.to) : null;
-        return (!from || dueDate >= from) && (!to || dueDate <= to);
-      });
-    }
+      if (filter?.dueDateRange) {
+        const dateRange = filter.dueDateRange;
+        filtered = filtered.filter((t) => {
+          if (!t.dueDate) {
+            return false;
+          }
+          const dueDate = new Date(t.dueDate);
+          const from = dateRange.from ? new Date(dateRange.from) : null;
+          const to = dateRange.to ? new Date(dateRange.to) : null;
+          return (!from || dueDate >= from) && (!to || dueDate <= to);
+        });
+      }
 
-    if (filter?.search) {
-      const searchLower = filter.search.toLowerCase();
-      filtered = filtered.filter(t =>
-        t.title.toLowerCase().includes(searchLower) ||
-        t.description?.toLowerCase().includes(searchLower)
-      );
-    }
+      if (filter?.search) {
+        const searchLower = filter.search.toLowerCase();
+        filtered = filtered.filter(
+          (t) => t.title.toLowerCase().includes(searchLower) || t.description?.toLowerCase().includes(searchLower)
+        );
+      }
 
-    if (filter?.labels && filter.labels.length > 0) {
-      filtered = filtered.filter(t =>
-        filter.labels!.some(label => t.labels.includes(label))
-      );
-    }
+      if (filter?.labels && filter.labels.length > 0) {
+        filtered = filtered.filter((t) => filter.labels!.some((label) => t.labels.includes(label)));
+      }
 
-    if (filter?.tags && filter.tags.length > 0) {
-      filtered = filtered.filter(t =>
-        filter.tags!.some(tag => t.tags.includes(tag))
-      );
-    }
+      if (filter?.tags && filter.tags.length > 0) {
+        filtered = filtered.filter((t) => filter.tags!.some((tag) => t.tags.includes(tag)));
+      }
 
-    return filtered;
-  }, [tasks]);
+      return filtered;
+    },
+    [tasks]
+  );
 
   // Sort tasks
   const getSortedTasks = useCallback((tasks: Task[], sort?: TaskSort): Task[] => {
     if (!sort) {
-return tasks;
-}
+      return tasks;
+    }
 
     return [...tasks].sort((a, b) => {
       let comparison = 0;
@@ -790,11 +801,11 @@ return tasks;
       switch (sort.field) {
         case 'dueDate':
           if (!a.dueDate) {
-return 1;
-}
+            return 1;
+          }
           if (!b.dueDate) {
-return -1;
-}
+            return -1;
+          }
           comparison = new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
           break;
         case 'priority': {
@@ -820,13 +831,19 @@ return -1;
   }, []);
 
   // Utility functions
-  const getTaskById = useCallback((id: string): Task | null => {
-    return tasks.find(t => t.id === id) || null;
-  }, [tasks]);
+  const getTaskById = useCallback(
+    (id: string): Task | null => {
+      return tasks.find((t) => t.id === id) || null;
+    },
+    [tasks]
+  );
 
-  const getTasksByEmailId = useCallback((emailId: string): Task[] => {
-    return tasks.filter(t => t.sourceEmailId === emailId);
-  }, [tasks]);
+  const getTasksByEmailId = useCallback(
+    (emailId: string): Task[] => {
+      return tasks.filter((t) => t.sourceEmailId === emailId);
+    },
+    [tasks]
+  );
 
   // Project management
   const createProject = useCallback(async (payload: CreateProjectPayload): Promise<TaskProject> => {
@@ -838,14 +855,14 @@ return -1;
       updatedAt: new Date().toISOString()
     };
 
-    setProjects(prev => [...prev, newProject]);
+    setProjects((prev) => [...prev, newProject]);
     return newProject;
   }, []);
 
   // Refresh functions
   const refreshTasks = useCallback(async () => {
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
     setTasks(generateMockTasks());
     setIsLoading(false);
   }, []);

@@ -6,7 +6,6 @@
 import {
   EmailSummary,
   EmailForSummarization,
-  EmailThread,
   SummarizationContext,
   KeyPoint,
   ActionItem,
@@ -17,10 +16,7 @@ import {
   SummarizationConfig,
   DEFAULT_SUMMARIZATION_CONFIG,
   ACTION_ITEM_PATTERNS,
-  DECISION_PATTERNS,
-  QUESTION_PATTERNS,
   KEY_POINT_KEYWORDS,
-  STOP_WORDS,
   TLDR_PHRASES
 } from '../types/emailSummarization';
 
@@ -87,14 +83,12 @@ export class SummarizationModel {
     const tlDr = this.generateTlDr(summary, context);
 
     // Extract key points
-    const keyPoints = this.config.features.keyPointExtraction && context.includeKeyPoints
-      ? this.extractKeyPoints(emails)
-      : [];
+    const keyPoints =
+      this.config.features.keyPointExtraction && context.includeKeyPoints ? this.extractKeyPoints(emails) : [];
 
     // Extract action items
-    const actionItems = this.config.features.actionItemExtraction && context.includeActionItems
-      ? this.extractActionItems(emails)
-      : [];
+    const actionItems =
+      this.config.features.actionItemExtraction && context.includeActionItems ? this.extractActionItems(emails) : [];
 
     // Create summary segments
     const segments = this.createSummarySegments(summary, sentences, emails);
@@ -103,8 +97,8 @@ export class SummarizationModel {
     const processingTime = endTime - startTime;
 
     // Calculate metadata
-    const totalWords = fullText.split(/\s+/).filter(w => w.length > 0).length;
-    const summaryWordCount = summary.split(/\s+/).filter(w => w.length > 0).length;
+    const totalWords = fullText.split(/\s+/).filter((w) => w.length > 0).length;
+    const summaryWordCount = summary.split(/\s+/).filter((w) => w.length > 0).length;
 
     const result: EmailSummary = {
       id: `summary-${Date.now()}`,
@@ -162,13 +156,10 @@ export class SummarizationModel {
   /**
    * Generate extractive summary (select important sentences)
    */
-  private generateExtractiveSummary(
-    sentences: string[],
-    context: SummarizationContext
-  ): string {
+  private generateExtractiveSummary(sentences: string[], context: SummarizationContext): string {
     if (sentences.length === 0) {
-return '';
-}
+      return '';
+    }
 
     // Score sentences
     const scoredSentences = sentences.map((sentence, index) => ({
@@ -187,16 +178,13 @@ return '';
     // Sort back by original position
     topSentences.sort((a, b) => a.index - b.index);
 
-    return topSentences.map(s => s.sentence).join(' ');
+    return topSentences.map((s) => s.sentence).join(' ');
   }
 
   /**
    * Generate abstractive summary (simplified - would use real NLP in production)
    */
-  private generateAbstractiveSummary(
-    sentences: string[],
-    context: SummarizationContext
-  ): string {
+  private generateAbstractiveSummary(sentences: string[], context: SummarizationContext): string {
     // For simplicity, we'll use extractive with sentence transformation
     const extractive = this.generateExtractiveSummary(sentences, context);
 
@@ -213,10 +201,7 @@ return '';
   /**
    * Generate hybrid summary
    */
-  private generateHybridSummary(
-    sentences: string[],
-    context: SummarizationContext
-  ): string {
+  private generateHybridSummary(sentences: string[], context: SummarizationContext): string {
     const extractive = this.generateExtractiveSummary(sentences, context);
     const abstractive = this.generateAbstractiveSummary(sentences, context);
 
@@ -227,7 +212,7 @@ return '';
   /**
    * Generate TL;DR
    */
-  private generateTlDr(summary: string, context: SummarizationContext): string {
+  private generateTlDr(summary: string, _context: SummarizationContext): string {
     const sentences = this.extractSentences(summary);
     const firstSentence = sentences[0] || summary;
 
@@ -254,31 +239,24 @@ return '';
     return text
       .replace(/([.!?])\s+/g, '$1|||')
       .split('|||')
-      .map(s => s.trim())
-      .filter(s => s.length >= this.config.summarization.minSentenceLength);
+      .map((s) => s.trim())
+      .filter((s) => s.length >= this.config.summarization.minSentenceLength);
   }
 
   /**
    * Score a sentence for importance
    */
-  private scoreSentence(
-    sentence: string,
-    index: number,
-    totalSentences: number
-  ): number {
+  private scoreSentence(sentence: string, index: number, totalSentences: number): number {
     let score = 0;
 
     // Position score (first and last sentences are often important)
-    const positionScore = this.config.summarization.positionWeight * (
-      index === 0 ? 1 :
-      index === totalSentences - 1 ? 0.8 :
-      0.5
-    );
+    const positionScore =
+      this.config.summarization.positionWeight * (index === 0 ? 1 : index === totalSentences - 1 ? 0.8 : 0.5);
     score += positionScore;
 
     // Keyword score
     const words = sentence.toLowerCase().split(/\s+/);
-    const keywordMatches = words.filter(w => KEY_POINT_KEYWORDS.some(k => w.includes(k)));
+    const keywordMatches = words.filter((w) => KEY_POINT_KEYWORDS.some((k) => w.includes(k)));
     const keywordScore = keywordMatches.length / Math.max(words.length, 1);
     score += keywordScore * 2;
 
@@ -289,14 +267,14 @@ return '';
 
     // Sentence structure score
     if (sentence.includes(':')) {
-score += 0.3;
-} // Lists, definitions
+      score += 0.3;
+    } // Lists, definitions
     if (sentence.includes('-')) {
-score += 0.2;
-} // Dashes (often for emphasis)
+      score += 0.2;
+    } // Dashes (often for emphasis)
     if (/[A-Z]/.test(sentence[0])) {
-score += 0.2;
-} // Starts with capital
+      score += 0.2;
+    } // Starts with capital
 
     return score;
   }
@@ -306,11 +284,16 @@ score += 0.2;
    */
   private getMaxSentences(length: SummaryLength): number {
     switch (length) {
-      case SummaryLength.VERY_SHORT: return 2;
-      case SummaryLength.SHORT: return 5;
-      case SummaryLength.MEDIUM: return 10;
-      case SummaryLength.LONG: return 15;
-      default: return 5;
+      case SummaryLength.VERY_SHORT:
+        return 2;
+      case SummaryLength.SHORT:
+        return 5;
+      case SummaryLength.MEDIUM:
+        return 10;
+      case SummaryLength.LONG:
+        return 15;
+      default:
+        return 5;
     }
   }
 
@@ -324,7 +307,7 @@ score += 0.2;
   private extractKeyPoints(emails: EmailForSummarization[]): KeyPoint[] {
     const keyPoints: KeyPoint[] = [];
 
-    emails.forEach(email => {
+    emails.forEach((email) => {
       const sentences = this.extractSentences(email.body);
 
       sentences.forEach((sentence, index) => {
@@ -333,7 +316,7 @@ score += 0.2;
         if (importance > 0.5) {
           // Check for key point keywords
           const lowerSentence = sentence.toLowerCase();
-          const hasKeyword = KEY_POINT_KEYWORDS.some(k => lowerSentence.includes(k));
+          const hasKeyword = KEY_POINT_KEYWORDS.some((k) => lowerSentence.includes(k));
 
           if (hasKeyword) {
             keyPoints.push({
@@ -343,9 +326,7 @@ score += 0.2;
               category: this.categorizeKeyPoint(sentence),
               priority: importance > 0.7 ? ContentPriority.HIGH : ContentPriority.MEDIUM,
               sourceEmailId: email.id,
-              timestamp: email.timestamp instanceof Date
-                ? email.timestamp.toISOString()
-                : email.timestamp
+              timestamp: email.timestamp instanceof Date ? email.timestamp.toISOString() : email.timestamp
             });
           }
         }
@@ -353,9 +334,7 @@ score += 0.2;
     });
 
     // Sort by importance and return top items
-    return keyPoints
-      .sort((a, b) => b.importance - a.importance)
-      .slice(0, 10);
+    return keyPoints.sort((a, b) => b.importance - a.importance).slice(0, 10);
   }
 
   /**
@@ -365,23 +344,23 @@ score += 0.2;
     const lower = sentence.toLowerCase();
 
     if (/deadline|due|schedule|timeline/.test(lower)) {
-return 'timeline';
-}
+      return 'timeline';
+    }
     if (/require|need|must|should/.test(lower)) {
-return 'requirement';
-}
+      return 'requirement';
+    }
     if (/decision|agreed|concluded/.test(lower)) {
-return 'decision';
-}
+      return 'decision';
+    }
     if (/important|critical|crucial/.test(lower)) {
-return 'important';
-}
+      return 'important';
+    }
     if (/goal|objective|target/.test(lower)) {
-return 'objective';
-}
+      return 'objective';
+    }
     if (/next|following|then/.test(lower)) {
-return 'next_steps';
-}
+      return 'next_steps';
+    }
 
     return 'general';
   }
@@ -396,10 +375,10 @@ return 'next_steps';
   private extractActionItems(emails: EmailForSummarization[]): ActionItem[] {
     const actionItems: ActionItem[] = [];
 
-    emails.forEach(email => {
+    emails.forEach((email) => {
       const sentences = this.extractSentences(email.body);
 
-      sentences.forEach(sentence => {
+      sentences.forEach((sentence) => {
         // Check action item patterns
         for (const pattern of ACTION_ITEM_PATTERNS) {
           const matches = sentence.matchAll(pattern);
@@ -411,9 +390,7 @@ return 'next_steps';
                 status: 'pending',
                 priority: this.determineActionPriority(sentence),
                 sourceEmailId: email.id,
-                timestamp: email.timestamp instanceof Date
-                  ? email.timestamp.toISOString()
-                  : email.timestamp
+                timestamp: email.timestamp instanceof Date ? email.timestamp.toISOString() : email.timestamp
               });
             }
           }
@@ -459,8 +436,8 @@ return 'next_steps';
         id: `segment-${index}`,
         text: sentence,
         type: this.determineSegmentType(sentence),
-        importance: 1 - (index * 0.1), // Earlier sentences are more important
-        sourceEmails: emails.map(e => e.id)
+        importance: 1 - index * 0.1, // Earlier sentences are more important
+        sourceEmails: emails.map((e) => e.id)
       });
     });
 
@@ -474,17 +451,17 @@ return 'next_steps';
     const lower = sentence.toLowerCase();
 
     if (/\?/.test(sentence)) {
-return 'question';
-}
+      return 'question';
+    }
     if (/decision|agreed|concluded|resolved/.test(lower)) {
-return 'decision';
-}
+      return 'decision';
+    }
     if (/please|need|should|must|will/.test(lower)) {
-return 'action_item';
-}
+      return 'action_item';
+    }
     if (/important|key|main|primary/.test(lower)) {
-return 'key_point';
-}
+      return 'key_point';
+    }
 
     return 'topic';
   }
@@ -497,9 +474,7 @@ return 'key_point';
    * Combine emails into single text
    */
   private combineEmails(emails: EmailForSummarization[]): string {
-    return emails
-      .map(e => `${e.subject}\n${e.body}`)
-      .join('\n\n');
+    return emails.map((e) => `${e.subject}\n${e.body}`).join('\n\n');
   }
 
   /**
@@ -507,8 +482,8 @@ return 'key_point';
    */
   private calculateConfidence(summary: string, originalSentences: number): number {
     if (!summary) {
-return 0;
-}
+      return 0;
+    }
 
     const summaryWords = summary.split(/\s+/).length;
     const coverageRatio = summaryWords / (originalSentences * 10); // Rough estimate
@@ -547,7 +522,10 @@ return 0;
    * Get cache key
    */
   private getCacheKey(context: SummarizationContext): string {
-    const emailIds = context.emails.map(e => e.id).sort().join(',');
+    const emailIds = context.emails
+      .map((e) => e.id)
+      .sort()
+      .join(',');
     return `${emailIds}-${context.summaryType}-${context.summaryLength}`;
   }
 

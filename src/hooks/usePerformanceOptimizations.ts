@@ -192,8 +192,8 @@ class CacheManager {
   has(key: string): boolean {
     const entry = this.cache.get(key);
     if (!entry) {
-return false;
-}
+      return false;
+    }
 
     if (entry.ttl && Date.now() - parseInt(entry.timestamp) > entry.ttl) {
       this.cache.delete(key);
@@ -303,12 +303,8 @@ return false;
 
       const entries = Array.from(this.cache.values());
       if (entries.length > 0) {
-        const oldest = entries.reduce((min, e) =>
-          parseInt(e.timestamp) < parseInt(min.timestamp) ? e : min
-        );
-        const newest = entries.reduce((max, e) =>
-          parseInt(e.timestamp) > parseInt(max.timestamp) ? e : max
-        );
+        const oldest = entries.reduce((min, e) => (parseInt(e.timestamp) < parseInt(min.timestamp) ? e : min));
+        const newest = entries.reduce((max, e) => (parseInt(e.timestamp) > parseInt(max.timestamp) ? e : max));
         this.stats.oldestEntry = oldest.key;
         this.stats.newestEntry = newest.key;
       }
@@ -358,61 +354,58 @@ export const usePerformanceOptimizations = () => {
   /**
    * Record a performance metric
    */
-  const recordMetric = useCallback((
-    type: MetricType,
-    value: number,
-    metadata?: Record<string, any>,
-    component?: string,
-    route?: string
-  ) => {
-    if (!isEnabled || !monitoringConfig.enabled) {
-return;
-}
-
-    // Find threshold for metric type
-    const threshold = monitoringConfig.thresholds.find(t => t.metricType === type);
-
-    let severity: PerformanceSeverity = PerformanceSeverity.INFO;
-    if (threshold) {
-      if (value >= threshold.criticalThreshold) {
-        severity = PerformanceSeverity.CRITICAL;
-      } else if (value >= threshold.errorThreshold) {
-        severity = PerformanceSeverity.ERROR;
-      } else if (value >= threshold.warningThreshold) {
-        severity = PerformanceSeverity.WARNING;
+  const recordMetric = useCallback(
+    (type: MetricType, value: number, metadata?: Record<string, any>, component?: string, route?: string) => {
+      if (!isEnabled || !monitoringConfig.enabled) {
+        return;
       }
-    }
 
-    const metric: PerformanceMetric = {
-      id: `metric-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      type,
-      name: type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-      value,
-      threshold,
-      severity,
-      timestamp: new Date().toISOString(),
-      metadata,
-      component,
-      route
-    };
+      // Find threshold for metric type
+      const threshold = monitoringConfig.thresholds.find((t) => t.metricType === type);
 
-    setMetrics(prev => [...prev, metric]);
+      let severity: PerformanceSeverity = PerformanceSeverity.INFO;
+      if (threshold) {
+        if (value >= threshold.criticalThreshold) {
+          severity = PerformanceSeverity.CRITICAL;
+        } else if (value >= threshold.errorThreshold) {
+          severity = PerformanceSeverity.ERROR;
+        } else if (value >= threshold.warningThreshold) {
+          severity = PerformanceSeverity.WARNING;
+        }
+      }
 
-    // Create alert if needed
-    if (severity === PerformanceSeverity.ERROR || severity === PerformanceSeverity.CRITICAL) {
-      const alert: PerformanceAlert = {
-        id: `alert-${Date.now()}`,
-        type: severity,
-        metric,
-        message: `${metric.name} exceeded threshold: ${value}${threshold?.unit}`,
+      const metric: PerformanceMetric = {
+        id: `metric-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        type,
+        name: type.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
+        value,
+        threshold,
+        severity,
         timestamp: new Date().toISOString(),
-        acknowledged: false
+        metadata,
+        component,
+        route
       };
-      setAlerts(prev => [...prev, alert]);
-    }
 
-    return metric;
-  }, [isEnabled, monitoringConfig]);
+      setMetrics((prev) => [...prev, metric]);
+
+      // Create alert if needed
+      if (severity === PerformanceSeverity.ERROR || severity === PerformanceSeverity.CRITICAL) {
+        const alert: PerformanceAlert = {
+          id: `alert-${Date.now()}`,
+          type: severity,
+          metric,
+          message: `${metric.name} exceeded threshold: ${value}${threshold?.unit}`,
+          timestamp: new Date().toISOString(),
+          acknowledged: false
+        };
+        setAlerts((prev) => [...prev, alert]);
+      }
+
+      return metric;
+    },
+    [isEnabled, monitoringConfig]
+  );
 
   /**
    * Create a performance snapshot
@@ -424,130 +417,117 @@ return;
       metrics: [...metrics],
       summary: {
         totalMetrics: metrics.length,
-        criticalIssues: metrics.filter(m => m.severity === PerformanceSeverity.CRITICAL).length,
-        errors: metrics.filter(m => m.severity === PerformanceSeverity.ERROR).length,
-        warnings: metrics.filter(m => m.severity === PerformanceSeverity.WARNING).length,
+        criticalIssues: metrics.filter((m) => m.severity === PerformanceSeverity.CRITICAL).length,
+        errors: metrics.filter((m) => m.severity === PerformanceSeverity.ERROR).length,
+        warnings: metrics.filter((m) => m.severity === PerformanceSeverity.WARNING).length,
         averageRenderTime: calculateAverage(metrics, MetricType.RENDER_TIME),
         averageApiTime: calculateAverage(metrics, MetricType.API_CALL),
         cacheHitRate: calculateCacheHitRate(metrics)
       }
     };
 
-    setSnapshots(prev => [...prev, snapshot].slice(-100)); // Keep last 100 snapshots
+    setSnapshots((prev) => [...prev, snapshot].slice(-100)); // Keep last 100 snapshots
     return snapshot;
   }, [metrics]);
 
   /**
    * Cache operations
    */
-  const cache = useMemo(() => ({
-    set: <T>(key: string, value: T, ttl?: number): boolean => {
-      return cacheManagerRef.current?.set(key, value, ttl) ?? false;
-    },
-    get: <T>(key: string): T | null => {
-      return cacheManagerRef.current?.get<T>(key) ?? null;
-    },
-    has: (key: string): boolean => {
-      return cacheManagerRef.current?.has(key) ?? false;
-    },
-    delete: (key: string): boolean => {
-      return cacheManagerRef.current?.delete(key) ?? false;
-    },
-    clear: (): void => {
-      cacheManagerRef.current?.clear();
-    },
-    getStatistics: (): CacheStatistics => {
-      return cacheManagerRef.current?.getStatistics() ?? {
-        totalEntries: 0,
-        totalSize: 0,
-        hitRate: 0,
-        missRate: 0,
-        hits: 0,
-        misses: 0,
-        evictions: 0,
-        averageAccessTime: 0,
-        oldestEntry: '',
-        newestEntry: ''
-      };
-    }
-  }), [cacheConfig]);
+  const cache = useMemo(
+    () => ({
+      set: <T>(key: string, value: T, ttl?: number): boolean => {
+        return cacheManagerRef.current?.set(key, value, ttl) ?? false;
+      },
+      get: <T>(key: string): T | null => {
+        return cacheManagerRef.current?.get<T>(key) ?? null;
+      },
+      has: (key: string): boolean => {
+        return cacheManagerRef.current?.has(key) ?? false;
+      },
+      delete: (key: string): boolean => {
+        return cacheManagerRef.current?.delete(key) ?? false;
+      },
+      clear: (): void => {
+        cacheManagerRef.current?.clear();
+      },
+      getStatistics: (): CacheStatistics => {
+        return (
+          cacheManagerRef.current?.getStatistics() ?? {
+            totalEntries: 0,
+            totalSize: 0,
+            hitRate: 0,
+            missRate: 0,
+            hits: 0,
+            misses: 0,
+            evictions: 0,
+            averageAccessTime: 0,
+            oldestEntry: '',
+            newestEntry: ''
+          }
+        );
+      }
+    }),
+    [cacheConfig]
+  );
 
   /**
    * Measure component render time
    */
-  const measureRender = useCallback((
-    componentName: string,
-    renderFn: () => void
-  ) => {
-    const startTime = performance.now();
-    renderFn();
-    const endTime = performance.now();
+  const measureRender = useCallback(
+    (componentName: string, renderFn: () => void) => {
+      const startTime = performance.now();
+      renderFn();
+      const endTime = performance.now();
 
-    return recordMetric(
-      MetricType.RENDER_TIME,
-      endTime - startTime,
-      { componentName },
-      componentName
-    );
-  }, [recordMetric]);
+      return recordMetric(MetricType.RENDER_TIME, endTime - startTime, { componentName }, componentName);
+    },
+    [recordMetric]
+  );
 
   /**
    * Measure API call time
    */
-  const measureApiCall = useCallback(async <T>(
-    apiName: string,
-    apiCall: () => Promise<T>
-  ): Promise<T> => {
-    const startTime = performance.now();
-    try {
-      const result = await apiCall();
-      const endTime = performance.now();
+  const measureApiCall = useCallback(
+    async <T>(apiName: string, apiCall: () => Promise<T>): Promise<T> => {
+      const startTime = performance.now();
+      try {
+        const result = await apiCall();
+        const endTime = performance.now();
 
-      recordMetric(
-        MetricType.API_CALL,
-        endTime - startTime,
-        { apiName, success: true },
-        undefined,
-        apiName
-      );
+        recordMetric(MetricType.API_CALL, endTime - startTime, { apiName, success: true }, undefined, apiName);
 
-      return result;
-    } catch (error) {
-      const endTime = performance.now();
+        return result;
+      } catch (error) {
+        const endTime = performance.now();
 
-      recordMetric(
-        MetricType.API_CALL,
-        endTime - startTime,
-        { apiName, success: false, error },
-        undefined,
-        apiName
-      );
+        recordMetric(MetricType.API_CALL, endTime - startTime, { apiName, success: false, error }, undefined, apiName);
 
-      throw error;
-    }
-  }, [recordMetric]);
+        throw error;
+      }
+    },
+    [recordMetric]
+  );
 
   /**
    * Memoize a function result
    */
-  const memoize = useCallback(<T extends (...args: any[]) => any>(
-    fn: T,
-    key: string,
-    ttl?: number
-  ): T => {
-    return ((...args: Parameters<T>) => {
-      const cacheKey = `${key}-${JSON.stringify(args)}`;
+  const memoize = useCallback(
+    <T extends (...args: any[]) => any>(fn: T, key: string, ttl?: number): T => {
+      return ((...args: Parameters<T>) => {
+        const cacheKey = `${key}-${JSON.stringify(args)}`;
 
-      const cached = cache.get<ReturnType<T>>(cacheKey);
-      if (cached !== null) {
-        return cached;
-      }
+        const cached = cache.get<ReturnType<T>>(cacheKey);
+        if (cached !== null) {
+          return cached;
+        }
 
-      const result = fn(...args);
-      cache.set(cacheKey, result, ttl);
-      return result;
-    }) as T;
-  }, [cache]);
+        const result = fn(...args);
+        cache.set(cacheKey, result, ttl);
+        return result;
+      }) as T;
+    },
+    [cache]
+  );
 
   /**
    * Clear all metrics
@@ -561,39 +541,37 @@ return;
    * Acknowledge alert
    */
   const acknowledgeAlert = useCallback((alertId: string) => {
-    setAlerts(prev => prev.map(a =>
-      a.id === alertId ? { ...a, acknowledged: true } : a
-    ));
+    setAlerts((prev) => prev.map((a) => (a.id === alertId ? { ...a, acknowledged: true } : a)));
   }, []);
 
   /**
    * Generate performance report
    */
-  const generateReport = useCallback((
-    period: { start: string; end: string }
-  ): PerformanceReport => {
-    const periodSnapshots = snapshots.filter(s =>
-      new Date(s.timestamp) >= new Date(period.start) &&
-      new Date(s.timestamp) <= new Date(period.end)
-    );
+  const generateReport = useCallback(
+    (period: { start: string; end: string }): PerformanceReport => {
+      const periodSnapshots = snapshots.filter(
+        (s) => new Date(s.timestamp) >= new Date(period.start) && new Date(s.timestamp) <= new Date(period.end)
+      );
 
-    return {
-      id: `report-${Date.now()}`,
-      period,
-      snapshots: periodSnapshots,
-      summary: {
-        averageRenderTime: calculateAverageFromSnapshots(periodSnapshots, MetricType.RENDER_TIME),
-        p95RenderTime: calculatePercentileFromSnapshots(periodSnapshots, MetricType.RENDER_TIME, 95),
-        p99RenderTime: calculatePercentileFromSnapshots(periodSnapshots, MetricType.RENDER_TIME, 99),
-        averageApiTime: calculateAverageFromSnapshots(periodSnapshots, MetricType.API_CALL),
-        cacheHitRate: calculateCacheHitRateFromSnapshots(periodSnapshots),
-        memoryUsage: metrics.find(m => m.type === MetricType.MEMORY_USAGE)?.value || 0,
-        totalErrors: periodSnapshots.reduce((sum, s) => sum + s.summary.errors, 0),
-        totalWarnings: periodSnapshots.reduce((sum, s) => sum + s.summary.warnings, 0)
-      },
-      recommendations: generateRecommendations(metrics)
-    };
-  }, [snapshots, metrics]);
+      return {
+        id: `report-${Date.now()}`,
+        period,
+        snapshots: periodSnapshots,
+        summary: {
+          averageRenderTime: calculateAverageFromSnapshots(periodSnapshots, MetricType.RENDER_TIME),
+          p95RenderTime: calculatePercentileFromSnapshots(periodSnapshots, MetricType.RENDER_TIME, 95),
+          p99RenderTime: calculatePercentileFromSnapshots(periodSnapshots, MetricType.RENDER_TIME, 99),
+          averageApiTime: calculateAverageFromSnapshots(periodSnapshots, MetricType.API_CALL),
+          cacheHitRate: calculateCacheHitRateFromSnapshots(periodSnapshots),
+          memoryUsage: metrics.find((m) => m.type === MetricType.MEMORY_USAGE)?.value || 0,
+          totalErrors: periodSnapshots.reduce((sum, s) => sum + s.summary.errors, 0),
+          totalWarnings: periodSnapshots.reduce((sum, s) => sum + s.summary.warnings, 0)
+        },
+        recommendations: generateRecommendations(metrics)
+      };
+    },
+    [snapshots, metrics]
+  );
 
   return {
     // State
@@ -636,24 +614,22 @@ return;
  * Helper functions
  */
 function calculateAverage(metrics: PerformanceMetric[], type: MetricType): number {
-  const filtered = metrics.filter(m => m.type === type);
+  const filtered = metrics.filter((m) => m.type === type);
   if (filtered.length === 0) {
-return 0;
-}
+    return 0;
+  }
   return filtered.reduce((sum, m) => sum + m.value, 0) / filtered.length;
 }
 
 function calculateCacheHitRate(metrics: PerformanceMetric[]): number {
-  const hits = metrics.filter(m => m.type === MetricType.CACHE_HIT).length;
-  const misses = metrics.filter(m => m.type === MetricType.CACHE_MISS).length;
+  const hits = metrics.filter((m) => m.type === MetricType.CACHE_HIT).length;
+  const misses = metrics.filter((m) => m.type === MetricType.CACHE_MISS).length;
   const total = hits + misses;
   return total > 0 ? (hits / total) * 100 : 0;
 }
 
 function calculateAverageFromSnapshots(snapshots: PerformanceSnapshot[], type: MetricType): number {
-  const values = snapshots.flatMap(s =>
-    s.metrics.filter(m => m.type === type).map(m => m.value)
-  );
+  const values = snapshots.flatMap((s) => s.metrics.filter((m) => m.type === type).map((m) => m.value));
   return values.length > 0 ? values.reduce((sum, v) => sum + v, 0) / values.length : 0;
 }
 
@@ -662,19 +638,19 @@ function calculatePercentileFromSnapshots(
   type: MetricType,
   percentile: number
 ): number {
-  const values = snapshots.flatMap(s =>
-    s.metrics.filter(m => m.type === type).map(m => m.value)
-  ).sort((a, b) => a - b);
+  const values = snapshots
+    .flatMap((s) => s.metrics.filter((m) => m.type === type).map((m) => m.value))
+    .sort((a, b) => a - b);
 
   if (values.length === 0) {
-return 0;
-}
+    return 0;
+  }
   const index = Math.ceil((percentile / 100) * values.length) - 1;
   return values[index];
 }
 
 function calculateCacheHitRateFromSnapshots(snapshots: PerformanceSnapshot[]): number {
-  const hitRates = snapshots.map(s => s.summary.cacheHitRate);
+  const hitRates = snapshots.map((s) => s.summary.cacheHitRate);
   return hitRates.length > 0 ? hitRates.reduce((sum, r) => sum + r, 0) / hitRates.length : 0;
 }
 

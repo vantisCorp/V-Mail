@@ -8,7 +8,7 @@ export enum ContactProvider {
   GOOGLE = 'google',
   OUTLOOK = 'outlook',
   ICLOUD = 'icloud',
-  LOCAL = 'local',
+  LOCAL = 'local'
 }
 
 /**
@@ -20,7 +20,7 @@ export enum ContactFieldType {
   ADDRESS = 'address',
   WEBSITE = 'website',
   SOCIAL = 'social',
-  CUSTOM = 'custom',
+  CUSTOM = 'custom'
 }
 
 /**
@@ -209,7 +209,7 @@ export interface Contact {
   deleted?: boolean;
 
   // User fields
-  userFields?: Record<string, any>;
+  userFields?: Record<string, unknown>;
 }
 
 /**

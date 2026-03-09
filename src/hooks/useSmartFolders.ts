@@ -5,7 +5,6 @@ import {
   SmartFolder,
   FolderType,
   FolderCategory,
-  OrganizationStrategy,
   Suggestion,
   RoutingResult,
   OrganizationConfig,
@@ -21,7 +20,7 @@ export interface UseSmartFoldersReturn {
   isOrganizing: boolean;
   isSuggesting: boolean;
   error: string | null;
-  cache: Map<string, any>;
+  cache: Map<string, unknown>;
   statistics: OrganizationStatistics;
 
   // Methods
@@ -50,7 +49,7 @@ export const useSmartFolders = (initialConfig?: Partial<OrganizationConfig>): Us
   const [isOrganizing, setIsOrganizing] = useState<boolean>(false);
   const [isSuggesting, setIsSuggesting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [cache, setCache] = useState<Map<string, any>>(new Map());
+  const [cache, setCache] = useState<Map<string, unknown>>(new Map());
   const [config, setConfig] = useState<OrganizationConfig>({
     ...DEFAULT_ORGANIZATION_CONFIG,
     ...initialConfig
@@ -93,7 +92,7 @@ export const useSmartFolders = (initialConfig?: Partial<OrganizationConfig>): Us
 
   // Update model when config changes
   const updateConfig = useCallback((newConfig: Partial<OrganizationConfig>) => {
-    setConfig(prev => {
+    setConfig((prev) => {
       const updated = { ...prev, ...newConfig };
       if (modelRef.current) {
         modelRef.current.updateConfig(updated);
@@ -116,7 +115,7 @@ export const useSmartFolders = (initialConfig?: Partial<OrganizationConfig>): Us
       const results = model.suggestFolders(context);
 
       setSuggestions(results);
-      setStatistics(prev => ({
+      setStatistics((prev) => ({
         ...prev,
         totalFoldersSuggested: prev.totalFoldersSuggested + results.length
       }));
@@ -142,63 +141,66 @@ export const useSmartFolders = (initialConfig?: Partial<OrganizationConfig>): Us
   }, []);
 
   // Route emails batch
-  const routeEmails = useCallback(async (
-    emails: EmailForOrganization[],
-    folderList: SmartFolder[]
-  ): Promise<RoutingResult[]> => {
-    setIsOrganizing(true);
-    setError(null);
+  const routeEmails = useCallback(
+    async (emails: EmailForOrganization[], folderList: SmartFolder[]): Promise<RoutingResult[]> => {
+      setIsOrganizing(true);
+      setError(null);
 
-    try {
+      try {
+        const model = modelRef.current;
+        if (!model) {
+          throw new Error('Folder organizer model not initialized');
+        }
+
+        const results: RoutingResult[] = [];
+        let totalConfidence = 0;
+
+        for (const email of emails) {
+          const result = model.routeEmail(email, folderList);
+          if (result) {
+            results.push(result);
+            totalConfidence += result.confidence;
+          }
+        }
+
+        setStatistics((prev) => ({
+          ...prev,
+          totalRoutings: prev.totalRoutings + results.length,
+          averageConfidence: results.length > 0 ? totalConfidence / results.length : 0
+        }));
+
+        return results;
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to route emails';
+        setError(errorMessage);
+        throw err;
+      } finally {
+        setIsOrganizing(false);
+      }
+    },
+    []
+  );
+
+  // Create folder from suggestion
+  const createFolder = useCallback(
+    (suggestion: Suggestion): SmartFolder => {
       const model = modelRef.current;
       if (!model) {
         throw new Error('Folder organizer model not initialized');
       }
 
-      const results: RoutingResult[] = [];
-      let totalConfidence = 0;
+      const newFolder = model.createFolder(suggestion, folders);
 
-      for (const email of emails) {
-        const result = model.routeEmail(email, folderList);
-        if (result) {
-          results.push(result);
-          totalConfidence += result.confidence;
-        }
-      }
-
-      setStatistics(prev => ({
+      setFolders((prev) => [...prev, newFolder]);
+      setStatistics((prev) => ({
         ...prev,
-        totalRoutings: prev.totalRoutings + results.length,
-        averageConfidence: results.length > 0 ? totalConfidence / results.length : 0
+        totalFoldersCreated: prev.totalFoldersCreated + 1
       }));
 
-      return results;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to route emails';
-      setError(errorMessage);
-      throw err;
-    } finally {
-      setIsOrganizing(false);
-    }
-  }, []);
-
-  // Create folder from suggestion
-  const createFolder = useCallback((suggestion: Suggestion): SmartFolder => {
-    const model = modelRef.current;
-    if (!model) {
-      throw new Error('Folder organizer model not initialized');
-    }
-
-    const newFolder = model.createFolder(suggestion, folders);
-
-    setFolders(prev => [...prev, newFolder]);
-    setStatistics(prev => ({
-      ...prev,
-      totalFoldersCreated: prev.totalFoldersCreated + 1
-    }));
-
-    return newFolder;
-  }, [folders]);
+      return newFolder;
+    },
+    [folders]
+  );
 
   // Optimize folders
   const optimizeFolders = useCallback((folderList: SmartFolder[], emails: EmailForOrganization[]): SmartFolder[] => {

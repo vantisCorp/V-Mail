@@ -56,5 +56,5 @@ export interface TwoFactorAuthState {
 export interface TwoFactorAuthError {
   code: string;
   message: string;
-  details?: any;
+  details?: unknown;
 }

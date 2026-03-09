@@ -18,8 +18,7 @@ export const PerformanceMonitor: React.FC = () => {
 
   useEffect(() => {
     // Measure page load time
-    const loadTime =
-      performance.timing.loadEventEnd - performance.timing.navigationStart;
+    const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
     setMetrics((prev) => ({ ...prev, loadTime }));
 
     // FPS counter

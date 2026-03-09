@@ -83,9 +83,7 @@ export function useAnomalyDetection(initialConfig?: Partial<AnomalyDetectionConf
     setError(null);
 
     try {
-      const results = await Promise.all(
-        emails.map(email => serviceRef.current.detectAnomalies(email))
-      );
+      const results = await Promise.all(emails.map((email) => serviceRef.current.detectAnomalies(email)));
       return results;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Multiple analysis failed';
@@ -98,22 +96,22 @@ export function useAnomalyDetection(initialConfig?: Partial<AnomalyDetectionConf
 
   const getRiskLevel = useCallback((riskScore: number): RiskLevel => {
     if (riskScore < 0.2) {
-return RiskLevel.MINIMAL;
-}
+      return RiskLevel.MINIMAL;
+    }
     if (riskScore < 0.4) {
-return RiskLevel.LOW;
-}
+      return RiskLevel.LOW;
+    }
     if (riskScore < 0.6) {
-return RiskLevel.MODERATE;
-}
+      return RiskLevel.MODERATE;
+    }
     if (riskScore < 0.8) {
-return RiskLevel.HIGH;
-}
+      return RiskLevel.HIGH;
+    }
     return RiskLevel.SEVERE;
   }, []);
 
   const updateConfig = useCallback((newConfig: Partial<AnomalyDetectionConfig>) => {
-    setConfig(prev => {
+    setConfig((prev) => {
       const updated = { ...prev, ...newConfig };
       serviceRef.current.updateConfig(updated);
       return updated;

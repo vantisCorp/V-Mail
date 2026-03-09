@@ -125,7 +125,7 @@ export class SearchEngineService {
    */
   private initializeIndices(): void {
     // Email index
-    this.emailIndex = lunr(function(this: any) {
+    this.emailIndex = lunr(function (this: any) {
       this.ref('id');
       this.field('subject', { boost: 10 });
       this.field('from', { boost: 8 });
@@ -142,7 +142,7 @@ export class SearchEngineService {
     });
 
     // Contact index
-    this.contactIndex = lunr(function(this: any) {
+    this.contactIndex = lunr(function (this: any) {
       this.ref('id');
       this.field('displayName', { boost: 10 });
       this.field('firstName', { boost: 8 });
@@ -158,7 +158,7 @@ export class SearchEngineService {
     });
 
     // Event index
-    this.eventIndex = lunr(function(this: any) {
+    this.eventIndex = lunr(function (this: any) {
       this.ref('id');
       this.field('title', { boost: 10 });
       this.field('description', { boost: 5 });
@@ -203,7 +203,7 @@ export class SearchEngineService {
    * Index multiple emails at once
    */
   public indexEmails(emails: Email[]): void {
-    emails.forEach(email => {
+    emails.forEach((email) => {
       const indexed: IndexedEmail = {
         id: `email-${email.id}`,
         type: 'email',
@@ -233,7 +233,7 @@ export class SearchEngineService {
   private rebuildEmailIndex(): void {
     const documents = Array.from(this.emails.values());
 
-    this.emailIndex = lunr(function(this: any) {
+    this.emailIndex = lunr(function (this: any) {
       this.ref('id');
       this.field('subject', { boost: 10 });
       this.field('from', { boost: 8 });
@@ -245,7 +245,7 @@ export class SearchEngineService {
       this.field('labels', { boost: 4 });
       this.field('folder', { boost: 2 });
 
-      documents.forEach(doc => {
+      documents.forEach((doc) => {
         this.add(doc);
       });
     });
@@ -265,7 +265,8 @@ export class SearchEngineService {
       phones: (contact.phones || []).map((p: any) => p.number || p.phone || '').join(' '),
       company: contact.organization?.name || '',
       jobTitle: contact.organization?.title || '',
-      notes: typeof contact.notes === 'string' ? contact.notes : (contact.notes || []).map((n: any) => n.content).join(' '),
+      notes:
+        typeof contact.notes === 'string' ? contact.notes : (contact.notes || []).map((n: any) => n.content).join(' '),
       tags: (contact.tags || []).join(' ')
     };
 
@@ -277,7 +278,7 @@ export class SearchEngineService {
    * Index multiple contacts at once
    */
   public indexContacts(contacts: Contact[]): void {
-    contacts.forEach(contact => {
+    contacts.forEach((contact) => {
       const indexed: IndexedContact = {
         id: `contact-${contact.id}`,
         type: 'contact',
@@ -288,7 +289,10 @@ export class SearchEngineService {
         phones: (contact.phones || []).map((p: any) => p.number || p.phone || '').join(' '),
         company: contact.organization?.name || '',
         jobTitle: contact.organization?.title || '',
-        notes: typeof contact.notes === 'string' ? contact.notes : (contact.notes || []).map((n: any) => n.content).join(' '),
+        notes:
+          typeof contact.notes === 'string'
+            ? contact.notes
+            : (contact.notes || []).map((n: any) => n.content).join(' '),
         tags: (contact.tags || []).join(' ')
       };
       this.contacts.set(indexed.id, indexed);
@@ -303,7 +307,7 @@ export class SearchEngineService {
   private rebuildContactIndex(): void {
     const documents = Array.from(this.contacts.values());
 
-    this.contactIndex = lunr(function(this: any) {
+    this.contactIndex = lunr(function (this: any) {
       this.ref('id');
       this.field('displayName', { boost: 10 });
       this.field('firstName', { boost: 8 });
@@ -315,7 +319,7 @@ export class SearchEngineService {
       this.field('notes', { boost: 1 });
       this.field('tags', { boost: 4 });
 
-      documents.forEach(doc => {
+      documents.forEach((doc) => {
         this.add(doc);
       });
     });
@@ -331,9 +335,9 @@ export class SearchEngineService {
       title: event.summary || '',
       description: event.description || '',
       location: event.location || '',
-      attendees: (event.attendees || []).map((a: any) =>
-        typeof a === 'string' ? a : a.email || a.name || ''
-      ).join(' '),
+      attendees: (event.attendees || [])
+        .map((a: any) => (typeof a === 'string' ? a : a.email || a.name || ''))
+        .join(' '),
       organizer: event.organizer?.email || event.organizer?.displayName || '',
       status: event.status || 'confirmed',
       startDate: event.start?.dateTime || String(event.start) || '',
@@ -348,16 +352,16 @@ export class SearchEngineService {
    * Index multiple events at once
    */
   public indexEvents(events: CalendarEvent[]): void {
-    events.forEach(event => {
+    events.forEach((event) => {
       const indexed: IndexedEvent = {
         id: `event-${event.id}`,
         type: 'event',
         title: event.summary || '',
         description: event.description || '',
         location: event.location || '',
-        attendees: (event.attendees || []).map((a: any) =>
-          typeof a === 'string' ? a : a.email || a.name || ''
-        ).join(' '),
+        attendees: (event.attendees || [])
+          .map((a: any) => (typeof a === 'string' ? a : a.email || a.name || ''))
+          .join(' '),
         organizer: event.organizer?.email || event.organizer?.displayName || '',
         status: event.status || 'confirmed',
         startDate: event.start?.dateTime || String(event.start) || '',
@@ -375,7 +379,7 @@ export class SearchEngineService {
   private rebuildEventIndex(): void {
     const documents = Array.from(this.events.values());
 
-    this.eventIndex = lunr(function(this: any) {
+    this.eventIndex = lunr(function (this: any) {
       this.ref('id');
       this.field('title', { boost: 10 });
       this.field('description', { boost: 5 });
@@ -384,7 +388,7 @@ export class SearchEngineService {
       this.field('organizer', { boost: 4 });
       this.field('status', { boost: 2 });
 
-      documents.forEach(doc => {
+      documents.forEach((doc) => {
         this.add(doc);
       });
     });
@@ -432,7 +436,7 @@ export class SearchEngineService {
     try {
       const results = this.emailIndex.search(query);
 
-      return results.map(result => ({
+      return results.map((result) => ({
         id: result.ref,
         type: 'email' as const,
         score: result.score,
@@ -455,7 +459,7 @@ export class SearchEngineService {
     try {
       const results = this.contactIndex.search(query);
 
-      return results.map(result => ({
+      return results.map((result) => ({
         id: result.ref,
         type: 'contact' as const,
         score: result.score,
@@ -478,7 +482,7 @@ export class SearchEngineService {
     try {
       const results = this.eventIndex.search(query);
 
-      return results.map(result => ({
+      return results.map((result) => ({
         id: result.ref,
         type: 'event' as const,
         score: result.score,
@@ -624,9 +628,9 @@ export class SearchEngineService {
 
     // Add from history
     this.searchHistory
-      .filter(h => h.toLowerCase().includes(queryLower))
+      .filter((h) => h.toLowerCase().includes(queryLower))
       .slice(0, Math.min(5, limit))
-      .forEach(history => {
+      .forEach((history) => {
         suggestions.push({
           id: `history-${history}`,
           text: history,
@@ -639,7 +643,7 @@ export class SearchEngineService {
     if (query.length >= 2) {
       // Email addresses
       const emailSet = new Set<string>();
-      this.emails.forEach(email => {
+      this.emails.forEach((email) => {
         if (email.from && email.from.toLowerCase().includes(queryLower)) {
           emailSet.add(email.from);
         }
@@ -647,7 +651,7 @@ export class SearchEngineService {
 
       Array.from(emailSet)
         .slice(0, Math.min(3, limit - suggestions.length))
-        .forEach(email => {
+        .forEach((email) => {
           suggestions.push({
             id: `email-${email}`,
             text: email,
@@ -671,8 +675,8 @@ export class SearchEngineService {
     ];
 
     operatorSuggestions
-      .filter(op => op.prefix.startsWith(queryLower) || queryLower.endsWith(':'))
-      .forEach(op => {
+      .filter((op) => op.prefix.startsWith(queryLower) || queryLower.endsWith(':'))
+      .forEach((op) => {
         suggestions.push({
           id: `operator-${op.prefix}`,
           text: op.prefix,
@@ -682,15 +686,16 @@ export class SearchEngineService {
         });
       });
 
-    return suggestions
-      .sort((a, b) => (b.score || 0) - (a.score || 0))
-      .slice(0, limit);
+    return suggestions.sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0, limit);
   }
 
   /**
    * Generate highlights for search result
    */
-  public generateHighlights(result: SearchResult, query: string): Array<{
+  public generateHighlights(
+    result: SearchResult,
+    query: string
+  ): Array<{
     field: string;
     fragments: string[];
   }> {
@@ -700,7 +705,7 @@ export class SearchEngineService {
     if (result.type === 'email') {
       const email = this.emails.get(result.id);
       if (email) {
-        queryTerms.forEach(term => {
+        queryTerms.forEach((term) => {
           if (email.subject.toLowerCase().includes(term)) {
             highlights.push({
               field: 'subject',
@@ -733,8 +738,8 @@ export class SearchEngineService {
    */
   public addToHistory(query: string): void {
     if (!query.trim()) {
-return;
-}
+      return;
+    }
 
     // Remove if already exists
     const index = this.searchHistory.indexOf(query);

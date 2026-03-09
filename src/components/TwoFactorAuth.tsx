@@ -13,10 +13,7 @@ interface TwoFactorAuthProps {
   onSetupComplete?: () => void;
 }
 
-export const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({
-  username = 'user@example.com',
-  onSetupComplete
-}) => {
+export const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({ username = 'user@example.com', onSetupComplete }) => {
   const {
     state,
     loading,
@@ -72,6 +69,7 @@ export const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({
   };
 
   const handleDisable2FA = () => {
+    // eslint-disable-next-line no-alert
     if (window.confirm('Are you sure you want to disable two-factor authentication?')) {
       disable2FA();
     }
@@ -138,7 +136,7 @@ export const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({
     </div>
   );
 
-  const renderSMSInput = () => (
+  const renderSMSInput = () =>
     selectedMethod === 'sms' && (
       <div className="two-factor-auth-section">
         <h3>Enter Phone Number</h3>
@@ -155,10 +153,9 @@ export const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({
           </button>
         </div>
       </div>
-    )
-  );
+    );
 
-  const renderQRCode = () => (
+  const renderQRCode = () =>
     state.setupData?.qrCodeUri && (
       <div className="qr-code-container">
         <img src={state.setupData.qrCodeUri} alt="QR Code" />
@@ -168,8 +165,7 @@ export const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({
           <div className="secret-display">{state.setupData.secret}</div>
         </div>
       </div>
-    )
-  );
+    );
 
   const renderBackupCodes = (codes: string[]) => (
     <div className="backup-codes-container">
@@ -248,10 +244,7 @@ export const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({
                   <p>{device.deviceInfo}</p>
                   <p className="last-used">Last used: {new Date(device.lastUsed).toLocaleDateString()}</p>
                 </div>
-                <button
-                  className="remove-device-btn"
-                  onClick={() => removeTrustedDevice(device.id)}
-                >
+                <button className="remove-device-btn" onClick={() => removeTrustedDevice(device.id)}>
                   Remove
                 </button>
               </div>
@@ -310,9 +303,9 @@ export const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({
             <>
               {selectedMethod === 'totp' && renderQRCode()}
 
-              {selectedMethod === 'backup' && state.setupData.backupCodes && (
-                renderBackupCodes(state.setupData.backupCodes)
-              )}
+              {selectedMethod === 'backup' &&
+                state.setupData.backupCodes &&
+                renderBackupCodes(state.setupData.backupCodes)}
 
               {renderVerificationInput()}
 

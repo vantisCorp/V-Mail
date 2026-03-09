@@ -5,13 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useTaskManagement } from '../hooks/useTaskManagement';
-import {
-  TaskPriority,
-  TaskStatus,
-  TaskType,
-  AssignmentType,
-  RecurrenceType
-} from '../types/taskManagement';
+import { TaskPriority, TaskStatus, TaskType, AssignmentType, RecurrenceType } from '../types/taskManagement';
 import '../styles/task-management.css';
 
 interface TaskManagerProps {
@@ -108,23 +102,35 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
 
   const getPriorityColor = (priority: TaskPriority) => {
     switch (priority) {
-      case TaskPriority.URGENT: return '#EF4444';
-      case TaskPriority.HIGH: return '#F59E0B';
-      case TaskPriority.MEDIUM: return '#10B981';
-      case TaskPriority.LOW: return '#6B7280';
-      default: return '#6B7280';
+      case TaskPriority.URGENT:
+        return '#EF4444';
+      case TaskPriority.HIGH:
+        return '#F59E0B';
+      case TaskPriority.MEDIUM:
+        return '#10B981';
+      case TaskPriority.LOW:
+        return '#6B7280';
+      default:
+        return '#6B7280';
     }
   };
 
   const getStatusColor = (status: TaskStatus) => {
     switch (status) {
-      case TaskStatus.BACKLOG: return '#9CA3AF';
-      case TaskStatus.TODO: return '#6B7280';
-      case TaskStatus.IN_PROGRESS: return '#3B82F6';
-      case TaskStatus.IN_REVIEW: return '#F59E0B';
-      case TaskStatus.COMPLETED: return '#10B981';
-      case TaskStatus.CANCELLED: return '#EF4444';
-      default: return '#6B7280';
+      case TaskStatus.BACKLOG:
+        return '#9CA3AF';
+      case TaskStatus.TODO:
+        return '#6B7280';
+      case TaskStatus.IN_PROGRESS:
+        return '#3B82F6';
+      case TaskStatus.IN_REVIEW:
+        return '#F59E0B';
+      case TaskStatus.COMPLETED:
+        return '#10B981';
+      case TaskStatus.CANCELLED:
+        return '#EF4444';
+      default:
+        return '#6B7280';
     }
   };
 
@@ -159,16 +165,17 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
           <div className="task-actions">
             <span
               className="priority-badge"
-              style={{ backgroundColor: `${getPriorityColor(task.priority)}20`, color: getPriorityColor(task.priority) }}
+              style={{
+                backgroundColor: `${getPriorityColor(task.priority)}20`,
+                color: getPriorityColor(task.priority)
+              }}
             >
               {task.priority}
             </span>
           </div>
         </div>
 
-        {task.description && (
-          <p className="task-description">{task.description.substring(0, 100)}...</p>
-        )}
+        {task.description && <p className="task-description">{task.description.substring(0, 100)}...</p>}
 
         <div className="task-meta">
           <div className="meta-item">
@@ -225,7 +232,9 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
         <div className="task-footer">
           <div className="task-labels">
             {task.labels.slice(0, 2).map((label: string, index: number) => (
-              <span key={index} className="label-tag">{label}</span>
+              <span key={index} className="label-tag">
+                {label}
+              </span>
             ))}
             {task.labels.length > 2 && <span className="label-tag">+{task.labels.length - 2}</span>}
           </div>
@@ -251,10 +260,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
       <div className="task-detail">
         <div className="task-detail-header">
           <h2 className="task-detail-title">{task.title}</h2>
-          <button
-            className="close-btn"
-            onClick={() => setSelectedTask(null)}
-          >
+          <button className="close-btn" onClick={() => setSelectedTask(null)}>
             ✕
           </button>
         </div>
@@ -262,7 +268,9 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
         <div className="task-detail-meta">
           <div className="detail-meta-item">
             <span className="meta-label">Type:</span>
-            <span className="meta-value">{getTypeIcon(task.type)} {task.type}</span>
+            <span className="meta-value">
+              {getTypeIcon(task.type)} {task.type}
+            </span>
           </div>
           <div className="detail-meta-item">
             <span className="meta-label">Priority:</span>
@@ -296,9 +304,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
                     checked={subtask.completed}
                     onChange={(e) => handleToggleSubtask(task.id, subtask.id, e.target.checked)}
                   />
-                  <span className={`subtask-text ${subtask.completed ? 'completed' : ''}`}>
-                    {subtask.title}
-                  </span>
+                  <span className={`subtask-text ${subtask.completed ? 'completed' : ''}`}>{subtask.title}</span>
                 </div>
               ))}
             </div>
@@ -316,13 +322,8 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
                     checked={item.completed}
                     onChange={() => handleToggleChecklistItem(task.id, item.id)}
                   />
-                  <span className={`checklist-text ${item.completed ? 'completed' : ''}`}>
-                    {item.text}
-                  </span>
-                  <button
-                    className="remove-btn"
-                    onClick={() => deleteChecklistItem(task.id, item.id)}
-                  >
+                  <span className={`checklist-text ${item.completed ? 'completed' : ''}`}>{item.text}</span>
+                  <button className="remove-btn" onClick={() => deleteChecklistItem(task.id, item.id)}>
                     ✕
                   </button>
                 </div>
@@ -339,9 +340,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
                 <div key={comment.id} className="comment-item">
                   <div className="comment-header">
                     <span className="comment-author">{comment.authorName}</span>
-                    <span className="comment-time">
-                      {new Date(comment.createdAt).toLocaleString()}
-                    </span>
+                    <span className="comment-time">{new Date(comment.createdAt).toLocaleString()}</span>
                   </div>
                   <p className="comment-content">{comment.content}</p>
                 </div>
@@ -368,7 +367,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
   };
 
   const ProjectCard = ({ project }: { project: any }) => {
-    const projectTasks = tasks.filter(t => t.projectId === project.id);
+    const projectTasks = tasks.filter((t) => t.projectId === project.id);
 
     return (
       <div className="project-card">
@@ -381,16 +380,16 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
             <span className="project-count">{projectTasks.length} tasks</span>
           </div>
         </div>
-        {project.description && (
-          <p className="project-description">{project.description}</p>
-        )}
+        {project.description && <p className="project-description">{project.description}</p>}
       </div>
     );
   };
 
   const StatCard = ({ label, value, color }: { label: string; value: string | number; color: string }) => (
     <div className="stat-card" style={{ borderColor: `${color}40` }}>
-      <span className="stat-value" style={{ color }}>{value}</span>
+      <span className="stat-value" style={{ color }}>
+        {value}
+      </span>
       <span className="stat-label">{label}</span>
     </div>
   );
@@ -410,33 +409,21 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
         <h1>📋 Task Management</h1>
         <div className="header-actions">
           {emailData && (
-            <button
-              className="btn btn-primary"
-              onClick={() => setShowConvertModal(true)}
-            >
+            <button className="btn btn-primary" onClick={() => setShowConvertModal(true)}>
               📧 Convert Email to Task
             </button>
           )}
-          <button
-            className="btn btn-primary"
-            onClick={() => setShowCreateModal(true)}
-          >
+          <button className="btn btn-primary" onClick={() => setShowCreateModal(true)}>
             ➕ Create Task
           </button>
         </div>
       </div>
 
       <div className="tabs">
-        <button
-          className={`tab ${activeTab === 'tasks' ? 'active' : ''}`}
-          onClick={() => setActiveTab('tasks')}
-        >
+        <button className={`tab ${activeTab === 'tasks' ? 'active' : ''}`} onClick={() => setActiveTab('tasks')}>
           📋 Tasks ({tasks.length})
         </button>
-        <button
-          className={`tab ${activeTab === 'projects' ? 'active' : ''}`}
-          onClick={() => setActiveTab('projects')}
-        >
+        <button className={`tab ${activeTab === 'projects' ? 'active' : ''}`} onClick={() => setActiveTab('projects')}>
           📁 Projects ({projects.length})
         </button>
         <button
@@ -494,21 +481,14 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
           <option value={TaskType.MEETING}>Meeting</option>
           <option value={TaskType.FOLLOW_UP}>Follow Up</option>
         </select>
-        <select
-          className="filter-select"
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value as any)}
-        >
+        <select className="filter-select" value={sortBy} onChange={(e) => setSortBy(e.target.value as any)}>
           <option value="dueDate">Sort by Due Date</option>
           <option value="priority">Sort by Priority</option>
           <option value="createdAt">Sort by Created</option>
           <option value="title">Sort by Title</option>
           <option value="progress">Sort by Progress</option>
         </select>
-        <button
-          className="sort-toggle"
-          onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-        >
+        <button className="sort-toggle" onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
           {sortOrder === 'asc' ? '⬆️' : '⬇️'}
         </button>
       </div>
@@ -560,19 +540,13 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
           <div className="modal">
             <div className="modal-header">
               <h2>Create Task</h2>
-              <button
-                className="close-btn"
-                onClick={() => setShowCreateModal(false)}
-              >
+              <button className="close-btn" onClick={() => setShowCreateModal(false)}>
                 ✕
               </button>
             </div>
             <div className="modal-body">
               <p>Task creation form will be implemented here</p>
-              <button
-                className="btn btn-secondary"
-                onClick={() => setShowCreateModal(false)}
-              >
+              <button className="btn btn-secondary" onClick={() => setShowCreateModal(false)}>
                 Close
               </button>
             </div>
@@ -585,19 +559,13 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
           <div className="modal">
             <div className="modal-header">
               <h2>Convert Email to Task</h2>
-              <button
-                className="close-btn"
-                onClick={() => setShowConvertModal(false)}
-              >
+              <button className="close-btn" onClick={() => setShowConvertModal(false)}>
                 ✕
               </button>
             </div>
             <div className="modal-body">
               <p>Email to task conversion form will be implemented here</p>
-              <button
-                className="btn btn-secondary"
-                onClick={() => setShowConvertModal(false)}
-              >
+              <button className="btn btn-secondary" onClick={() => setShowConvertModal(false)}>
                 Close
               </button>
             </div>

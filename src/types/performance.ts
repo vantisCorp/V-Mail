@@ -20,7 +20,7 @@ export enum MetricType {
   CACHE_MISS = 'cache_miss',
   USER_INTERACTION = 'user_interaction',
   SCROLL_PERFORMANCE = 'scroll_performance',
-  ANIMATION_FRAME = 'animation_frame',
+  ANIMATION_FRAME = 'animation_frame'
 }
 
 /**
@@ -30,7 +30,7 @@ export enum PerformanceSeverity {
   INFO = 'info',
   WARNING = 'warning',
   ERROR = 'error',
-  CRITICAL = 'critical',
+  CRITICAL = 'critical'
 }
 
 /**
@@ -55,7 +55,7 @@ export interface PerformanceMetric {
   threshold?: PerformanceThreshold;
   severity: PerformanceSeverity;
   timestamp: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   component?: string;
   route?: string;
 }
@@ -87,13 +87,13 @@ export enum CacheStrategy {
   FIFO = 'fifo', // First In First Out
   LIFO = 'lifo', // Last In First Out
   TTL = 'ttl', // Time To Live
-  MANUAL = 'manual',
+  MANUAL = 'manual'
 }
 
 /**
  * Cache entry
  */
-export interface CacheEntry<T = any> {
+export interface CacheEntry<T = unknown> {
   key: string;
   value: T;
   timestamp: string;
@@ -176,7 +176,7 @@ export enum MemoizationStrategy {
   SHALLOW = 'shallow',
   DEEP = 'deep',
   MANUAL = 'manual',
-  DISABLED = 'disabled',
+  DISABLED = 'disabled'
 }
 
 /**
@@ -188,7 +188,7 @@ export interface ComponentOptimization {
   memoizationStrategy: MemoizationStrategy;
   virtualScroll: boolean;
   lazyLoad: boolean;
-  shouldUpdateCheck?: (prevProps: any, nextProps: any) => boolean;
+  shouldUpdateCheck?: (prevProps: unknown, nextProps: unknown) => boolean;
 }
 
 /**
@@ -270,7 +270,7 @@ export interface OptimizationAction {
   id: string;
   type: 'cache' | 'lazy_load' | 'code_split' | 'memoize' | 'virtual_scroll';
   target: string;
-  config: any;
+  config: unknown;
   appliedAt?: string;
   status: 'pending' | 'applied' | 'failed';
   result?: {

@@ -177,7 +177,6 @@ export class AnomalyDetectionService {
       if (this.cache.size < this.config.cacheSize) {
         this.cache.set(email.id, result);
       }
-
     } catch (error) {
       result.status = DetectionStatus.FAILED;
       result.description = error instanceof Error ? error.message : 'Analysis failed';
@@ -189,7 +188,9 @@ export class AnomalyDetectionService {
     return result;
   }
 
-  private async detectPhishing(email: any): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
+  private async detectPhishing(
+    email: any
+  ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     const indicators: AnomalyIndicator[] = [];
     let totalScore = 0;
     let indicatorCount = 0;
@@ -237,8 +238,8 @@ export class AnomalyDetectionService {
     }
 
     if (indicatorCount === 0) {
-return null;
-}
+      return null;
+    }
 
     const riskScore = totalScore / indicatorCount;
     const confidence = Math.min(riskScore + 0.1, 1);
@@ -246,7 +247,9 @@ return null;
     return { riskScore, confidence, indicators };
   }
 
-  private async detectSpam(email: any): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
+  private async detectSpam(
+    email: any
+  ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     const indicators: AnomalyIndicator[] = [];
     let totalScore = 0;
     let indicatorCount = 0;
@@ -284,8 +287,8 @@ return null;
     }
 
     if (indicatorCount === 0) {
-return null;
-}
+      return null;
+    }
 
     const riskScore = totalScore / indicatorCount;
     const confidence = Math.min(riskScore + 0.1, 1);
@@ -293,10 +296,12 @@ return null;
     return { riskScore, confidence, indicators };
   }
 
-  private async analyzeSenderReputation(email: any): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
+  private async analyzeSenderReputation(
+    email: any
+  ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     if (!email.sender || !email.sender.email) {
-return null;
-}
+      return null;
+    }
 
     const senderEmail = email.sender.email;
     const domain = senderEmail.split('@')[1];
@@ -330,23 +335,25 @@ return null;
     }
 
     if (indicators.length === 0) {
-return null;
-}
+      return null;
+    }
 
     return { riskScore, confidence, indicators };
   }
 
-  private async analyzeBehavior(email: any): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
+  private async analyzeBehavior(
+    email: any
+  ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     if (!email.sender || !email.sender.email) {
-return null;
-}
+      return null;
+    }
 
     const senderEmail = email.sender.email;
     const baseline = this.behavioralBaselines.get(senderEmail);
 
     if (!baseline) {
-return null;
-}
+      return null;
+    }
 
     const indicators: AnomalyIndicator[] = [];
     let totalDeviation = 0;
@@ -361,8 +368,8 @@ return null;
     }
 
     if (indicatorCount === 0) {
-return null;
-}
+      return null;
+    }
 
     const riskScore = totalDeviation / indicatorCount;
     const confidence = 0.7;
@@ -370,14 +377,16 @@ return null;
     return { riskScore, confidence, indicators };
   }
 
-  private async scanLinks(email: any): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
+  private async scanLinks(
+    email: any
+  ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     const body = email.body || '';
     const urlRegex = /https?:\/\/[^\s<>"{}|\\^`[\]]+/g;
     const urls = body.match(urlRegex);
 
     if (!urls || urls.length === 0) {
-return null;
-}
+      return null;
+    }
 
     const indicators: AnomalyIndicator[] = [];
     let riskScore = 0;
@@ -398,16 +407,18 @@ return null;
     }
 
     if (indicators.length === 0) {
-return null;
-}
+      return null;
+    }
 
     return { riskScore, confidence, indicators };
   }
 
-  private async scanAttachments(email: any): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
+  private async scanAttachments(
+    email: any
+  ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     if (!email.attachments || email.attachments.length === 0) {
-return null;
-}
+      return null;
+    }
 
     const indicators: AnomalyIndicator[] = [];
     let riskScore = 0;
@@ -428,8 +439,8 @@ return null;
     }
 
     if (indicators.length === 0) {
-return null;
-}
+      return null;
+    }
 
     return { riskScore, confidence, indicators };
   }
@@ -469,7 +480,6 @@ return null;
         result.categories.push(LinkCategory.SHORTENER);
         result.riskScore += 0.2;
       }
-
     } catch (error) {
       // Invalid URL
       result.riskScore = 0.1;
@@ -519,8 +529,8 @@ return null;
 
   private checkDomainMismatch(email: any): AnomalyIndicator | null {
     if (!email.sender || !email.sender.name || !email.sender.email) {
-return null;
-}
+      return null;
+    }
 
     const senderName = email.sender.name.toLowerCase();
     const senderEmail = email.sender.email.toLowerCase();
@@ -582,8 +592,8 @@ return null;
     const urls = body.match(urlRegex);
 
     if (!urls) {
-return [];
-}
+      return [];
+    }
 
     const indicators: AnomalyIndicator[] = [];
     for (const url of urls) {
@@ -629,8 +639,8 @@ return [];
     let count = 0;
     for (const word of promoWords) {
       if (combined.includes(word)) {
-count++;
-}
+        count++;
+      }
     }
 
     if (count >= 3) {
@@ -706,7 +716,7 @@ count++;
 
   private isSuspiciousDomain(domain: string): boolean {
     const suspiciousDomains = ['tempmail.com', 'throwaway.email', 'guerrillamail.com'];
-    return suspiciousDomains.some(d => domain.includes(d));
+    return suspiciousDomains.some((d) => domain.includes(d));
   }
 
   private checkEmailVolume(senderEmail: string, baseline: BehavioralBaseline): AnomalyIndicator | null {
@@ -726,7 +736,11 @@ count++;
     return null;
   }
 
-  private determineAnomalyType(result: AnomalyDetectionResult): { type: AnomalyType; severity: AnomalySeverity; description: string } {
+  private determineAnomalyType(result: AnomalyDetectionResult): {
+    type: AnomalyType;
+    severity: AnomalySeverity;
+    description: string;
+  } {
     if (result.riskScore < 0.3) {
       return {
         type: AnomalyType.UNKNOWN,
@@ -736,15 +750,15 @@ count++;
     }
 
     // Determine type based on indicators
-    const phishingCount = result.indicators.filter(i => i.source === 'phishing-detection').length;
-    const spamCount = result.indicators.filter(i => i.source === 'spam-detection').length;
-    const linkCount = result.indicators.filter(i => i.source === 'link-scan').length;
-    const attachmentCount = result.indicators.filter(i => i.source === 'attachment-scan').length;
+    const phishingCount = result.indicators.filter((i) => i.source === 'phishing-detection').length;
+    const spamCount = result.indicators.filter((i) => i.source === 'spam-detection').length;
+    const linkCount = result.indicators.filter((i) => i.source === 'link-scan').length;
+    const attachmentCount = result.indicators.filter((i) => i.source === 'attachment-scan').length;
 
     let type = AnomalyType.UNKNOWN;
     let description = 'Potential security threat detected';
 
-    if (phishingCount >= 2 || phishingCount > 0 && result.riskScore >= 0.7) {
+    if (phishingCount >= 2 || (phishingCount > 0 && result.riskScore >= 0.7)) {
       type = AnomalyType.PHISHING;
       description = 'Phishing attempt detected';
     } else if (spamCount >= 2) {
@@ -761,12 +775,12 @@ count++;
     // Determine severity
     let severity = AnomalySeverity.LOW;
     if (result.riskScore >= 0.8) {
-severity = AnomalySeverity.CRITICAL;
-} else if (result.riskScore >= 0.6) {
-severity = AnomalySeverity.HIGH;
-} else if (result.riskScore >= 0.4) {
-severity = AnomalySeverity.MEDIUM;
-}
+      severity = AnomalySeverity.CRITICAL;
+    } else if (result.riskScore >= 0.6) {
+      severity = AnomalySeverity.HIGH;
+    } else if (result.riskScore >= 0.4) {
+      severity = AnomalySeverity.MEDIUM;
+    }
 
     return { type, severity, description };
   }

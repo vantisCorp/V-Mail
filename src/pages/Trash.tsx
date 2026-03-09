@@ -4,13 +4,10 @@ import { EmailList } from '../components/EmailList';
 import { EmailPreview } from '../components/EmailPreview';
 import { NotificationSystem } from '../components/NotificationSystem';
 import { PerformanceMonitor } from '../components/PerformanceMonitor';
-import { useEmails } from '../hooks/useEmails';
 import { Email } from '../types';
 
 export const Trash: React.FC = () => {
   const [selectedEmail, setSelectedEmail] = React.useState<Email | null>(null);
-
-  const { emails } = useEmails();
 
   return (
     <div className="app">
@@ -18,17 +15,18 @@ export const Trash: React.FC = () => {
       <PerformanceMonitor />
 
       <Sidebar
+        // eslint-disable-next-line no-console
         onCompose={() => console.log('Compose')}
+        // eslint-disable-next-line no-console
         onPhantom={() => console.log('Phantom')}
+        // eslint-disable-next-line no-console
         onSelfDestruct={() => console.log('Self-destruct')}
+        // eslint-disable-next-line no-console
         onPanic={() => console.log('Panic')}
       />
 
       <main className="main-content">
-        <EmailList
-          onEmailSelect={setSelectedEmail}
-          selectedEmailId={selectedEmail?.id || null}
-        />
+        <EmailList onEmailSelect={setSelectedEmail} selectedEmailId={selectedEmail?.id || null} />
         <EmailPreview email={selectedEmail} />
       </main>
     </div>

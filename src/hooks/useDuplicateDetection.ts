@@ -81,7 +81,7 @@ export const useDuplicateDetection = (initialConfig?: Partial<DetectionConfig>):
 
   // Update model when config changes
   const updateConfig = useCallback((newConfig: Partial<DetectionConfig>) => {
-    setConfig(prev => {
+    setConfig((prev) => {
       const updated = { ...prev, ...newConfig };
       if (modelRef.current) {
         modelRef.current.updateConfig(updated);
@@ -91,65 +91,65 @@ export const useDuplicateDetection = (initialConfig?: Partial<DetectionConfig>):
   }, []);
 
   // Main detect method
-  const detect = useCallback(async (context: DetectionContext): Promise<DuplicateResult[]> => {
-    setIsDetecting(true);
-    setError(null);
+  const detect = useCallback(
+    async (context: DetectionContext): Promise<DuplicateResult[]> => {
+      setIsDetecting(true);
+      setError(null);
 
-    const startTime = Date.now();
-
-    try {
-      const model = modelRef.current;
-      if (!model) {
-        throw new Error('Duplicate detector model not initialized');
-      }
-
-      // Check cache for each pair
-      const localCacheHits = 0;
-      const localCacheMisses = 0;
-
-      // Run detection
-      const results = model.detectDuplicates(context);
-
-      // Update cache
-      if (config.enableCache) {
-        const newCache = new Map(cache);
-        for (const result of results) {
-          const key = model.generateCacheKey(result.originalEmail, result.duplicateEmail);
-          newCache.set(key, [result]);
+      try {
+        const model = modelRef.current;
+        if (!model) {
+          throw new Error('Duplicate detector model not initialized');
         }
-        setCache(newCache);
+
+        // Check cache for each pair
+        const localCacheHits = 0;
+        const localCacheMisses = 0;
+
+        // Run detection
+        const results = model.detectDuplicates(context);
+
+        // Update cache
+        if (config.enableCache) {
+          const newCache = new Map(cache);
+          for (const result of results) {
+            const key = model.generateCacheKey(result.originalEmail, result.duplicateEmail);
+            newCache.set(key, [result]);
+          }
+          setCache(newCache);
+        }
+
+        // Update statistics
+        const modelStats = model.getStatistics(results);
+
+        setStatistics((prev) => ({
+          ...prev,
+          totalEmailsProcessed: prev.totalEmailsProcessed + context.emails.length,
+          totalDuplicatesFound: prev.totalDuplicatesFound + results.length,
+          cacheHits: prev.cacheHits + localCacheHits,
+          cacheMisses: prev.cacheMisses + localCacheMisses + 1,
+          averageSimilarity: modelStats.averageSimilarity,
+          duplicatesByType: modelStats.duplicatesByType,
+          duplicatesBySeverity: modelStats.duplicatesBySeverity
+        }));
+
+        setDuplicates(results);
+
+        // Generate groups
+        const duplicateGroups = model.groupDuplicates(results);
+        setGroups(duplicateGroups);
+
+        return results;
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to detect duplicates';
+        setError(errorMessage);
+        throw err;
+      } finally {
+        setIsDetecting(false);
       }
-
-      // Update statistics
-      const processingTime = Date.now() - startTime;
-      const modelStats = model.getStatistics(results);
-
-      setStatistics(prev => ({
-        ...prev,
-        totalEmailsProcessed: prev.totalEmailsProcessed + context.emails.length,
-        totalDuplicatesFound: prev.totalDuplicatesFound + results.length,
-        cacheHits: prev.cacheHits + localCacheHits,
-        cacheMisses: prev.cacheMisses + localCacheMisses + 1,
-        averageSimilarity: modelStats.averageSimilarity,
-        duplicatesByType: modelStats.duplicatesByType,
-        duplicatesBySeverity: modelStats.duplicatesBySeverity
-      }));
-
-      setDuplicates(results);
-
-      // Generate groups
-      const duplicateGroups = model.groupDuplicates(results);
-      setGroups(duplicateGroups);
-
-      return results;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to detect duplicates';
-      setError(errorMessage);
-      throw err;
-    } finally {
-      setIsDetecting(false);
-    }
-  }, [cache, config]);
+    },
+    [cache, config]
+  );
 
   // Detect pair
   const detectPair = useCallback((email1: EmailForDetection, email2: EmailForDetection): DuplicateResult | null => {
@@ -161,12 +161,15 @@ export const useDuplicateDetection = (initialConfig?: Partial<DetectionConfig>):
   }, []);
 
   // Detect in list (convenience method)
-  const detectInList = useCallback(async (emails: EmailForDetection[]): Promise<DuplicateResult[]> => {
-    return detect({
-      emails,
-      config: { ...config }
-    });
-  }, [detect, config]);
+  const detectInList = useCallback(
+    async (emails: EmailForDetection[]): Promise<DuplicateResult[]> => {
+      return detect({
+        emails,
+        config: { ...config }
+      });
+    },
+    [detect, config]
+  );
 
   // Group duplicates
   const groupDuplicates = useCallback((duplicateResults: DuplicateResult[]): DuplicateGroup[] => {

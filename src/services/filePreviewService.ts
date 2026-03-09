@@ -10,17 +10,11 @@ import {
   SecurityStatus,
   FilePreview,
   FileThumbnail,
-  FileAttachment,
   PreviewOptions,
-  ThumbnailOptions,
   SecurityScanResult,
   PreviewStats,
   CreatePreviewPayload,
-  PreviewFilterOptions,
-  ArchiveContent,
-  ArchiveFileEntry,
-  DocumentContent,
-  DocumentPage
+  ArchiveContent
 } from '../types/filePreview';
 
 const PREVIEW_CACHE_KEY = 'v-mail-preview-cache';
@@ -427,25 +421,29 @@ export class FilePreviewService {
         ctx.drawImage(img, 0, 0, width, height);
 
         // Convert to blob
-        canvas.toBlob((thumbnailBlob) => {
-          if (!thumbnailBlob) {
-            reject(new Error('Failed to create thumbnail blob'));
-            return;
-          }
+        canvas.toBlob(
+          (thumbnailBlob) => {
+            if (!thumbnailBlob) {
+              reject(new Error('Failed to create thumbnail blob'));
+              return;
+            }
 
-          const thumbnail: FileThumbnail = {
-            id: `thumb-${previewId}-${options.quality}`,
-            fileId: previewId,
-            quality: options.quality,
-            url: URL.createObjectURL(thumbnailBlob),
-            width,
-            height,
-            size: thumbnailBlob.size,
-            generatedAt: new Date().toISOString()
-          };
+            const thumbnail: FileThumbnail = {
+              id: `thumb-${previewId}-${options.quality}`,
+              fileId: previewId,
+              quality: options.quality,
+              url: URL.createObjectURL(thumbnailBlob),
+              width,
+              height,
+              size: thumbnailBlob.size,
+              generatedAt: new Date().toISOString()
+            };
 
-          resolve(thumbnail);
-        }, 'image/jpeg', 0.8);
+            resolve(thumbnail);
+          },
+          'image/jpeg',
+          0.8
+        );
       };
       img.onerror = () => reject(new Error('Failed to load image for thumbnail'));
       img.src = URL.createObjectURL(blob);
@@ -523,8 +521,8 @@ export class FilePreviewService {
   getPreviewUrl(previewId: string, options?: PreviewOptions): string | null {
     const preview = this.getPreview(previewId);
     if (!preview) {
-return null;
-}
+      return null;
+    }
 
     if (options?.quality === PreviewQuality.THUMBNAIL) {
       const thumb = this.getThumbnail(previewId, PreviewQuality.THUMBNAIL);
@@ -540,8 +538,8 @@ return null;
   deletePreview(previewId: string): boolean {
     const preview = this.cache.get(previewId);
     if (!preview) {
-return false;
-}
+      return false;
+    }
 
     // Revoke object URLs
     if (preview.originalUrl) {

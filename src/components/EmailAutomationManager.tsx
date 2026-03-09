@@ -83,11 +83,16 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
 
   const getPriorityColor = (priority: RulePriority) => {
     switch (priority) {
-      case RulePriority.URGENT: return '#FF6B6B';
-      case RulePriority.HIGH: return '#FFA06B';
-      case RulePriority.NORMAL: return '#4ECDC4';
-      case RulePriority.LOW: return '#95E1D3';
-      default: return '#95E1D3';
+      case RulePriority.URGENT:
+        return '#FF6B6B';
+      case RulePriority.HIGH:
+        return '#FFA06B';
+      case RulePriority.NORMAL:
+        return '#4ECDC4';
+      case RulePriority.LOW:
+        return '#95E1D3';
+      default:
+        return '#95E1D3';
     }
   };
 
@@ -171,10 +176,7 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
     const isSelected = selectedRule === rule.id;
 
     return (
-      <div
-        className={`rule-card ${isSelected ? 'selected' : ''}`}
-        onClick={() => handleRuleSelect(rule.id)}
-      >
+      <div className={`rule-card ${isSelected ? 'selected' : ''}`} onClick={() => handleRuleSelect(rule.id)}>
         <div className="rule-header">
           <div className="rule-title-section">
             <span className="rule-icon">{getTriggerIcon(rule.triggerType)}</span>
@@ -190,9 +192,7 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
           </div>
         </div>
 
-        {rule.description && (
-          <p className="rule-description">{rule.description}</p>
-        )}
+        {rule.description && <p className="rule-description">{rule.description}</p>}
 
         <div className="rule-stats">
           <div className="stat-item">
@@ -218,12 +218,11 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
             <div className="conditions-list">
               {rule.conditions.slice(0, 2).map((condition: any, index: number) => (
                 <span key={index} className="condition-tag">
-                  {condition.field} {condition.operator} {typeof condition.value === 'string' ? condition.value.substring(0, 20) : condition.value}
+                  {condition.field} {condition.operator}{' '}
+                  {typeof condition.value === 'string' ? condition.value.substring(0, 20) : condition.value}
                 </span>
               ))}
-              {rule.conditions.length > 2 && (
-                <span className="condition-tag">+{rule.conditions.length - 2} more</span>
-              )}
+              {rule.conditions.length > 2 && <span className="condition-tag">+{rule.conditions.length - 2} more</span>}
             </div>
           </div>
 
@@ -235,9 +234,7 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
                   {getActionIcon(action.type)}
                 </span>
               ))}
-              {rule.actions.length > 3 && (
-                <span className="action-tag">+{rule.actions.length - 3}</span>
-              )}
+              {rule.actions.length > 3 && <span className="action-tag">+{rule.actions.length - 3}</span>}
             </div>
           </div>
         </div>
@@ -245,13 +242,9 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
         <div className="rule-footer">
           <div className="rule-meta">
             {rule.lastExecutedAt && (
-              <span className="last-executed">
-                Last: {new Date(rule.lastExecutedAt).toLocaleDateString()}
-              </span>
+              <span className="last-executed">Last: {new Date(rule.lastExecutedAt).toLocaleDateString()}</span>
             )}
-            <span className="created-at">
-              Created: {new Date(rule.createdAt).toLocaleDateString()}
-            </span>
+            <span className="created-at">Created: {new Date(rule.createdAt).toLocaleDateString()}</span>
           </div>
           <div className="rule-controls">
             <button
@@ -291,15 +284,12 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
   };
 
   const CategoryCard = ({ category }: { category: any }) => {
-    const categoryRules = rules.filter(r => r.categoryId === category.id);
+    const categoryRules = rules.filter((r) => r.categoryId === category.id);
 
     return (
       <div className="category-card">
         <div className="category-header">
-          <div
-            className="category-icon"
-            style={{ backgroundColor: `${category.color}20`, color: category.color }}
-          >
+          <div className="category-icon" style={{ backgroundColor: `${category.color}20`, color: category.color }}>
             {category.icon}
           </div>
           <div className="category-info">
@@ -307,9 +297,7 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
             <span className="category-count">{categoryRules.length} rules</span>
           </div>
         </div>
-        {category.description && (
-          <p className="category-description">{category.description}</p>
-        )}
+        {category.description && <p className="category-description">{category.description}</p>}
       </div>
     );
   };
@@ -320,22 +308,14 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
     return (
       <div className="log-entry">
         <div className="log-header">
-          <span className={`log-status ${log.status}`}>
-            {log.status === 'success' ? '✅' : '❌'}
-          </span>
+          <span className={`log-status ${log.status}`}>{log.status === 'success' ? '✅' : '❌'}</span>
           <span className="log-rule-name">{log.ruleName}</span>
-          <span className="log-time">
-            {new Date(log.executedAt).toLocaleString()}
-          </span>
+          <span className="log-time">{new Date(log.executedAt).toLocaleString()}</span>
         </div>
-        {log.emailSubject && (
-          <div className="log-email-subject">{log.emailSubject}</div>
-        )}
+        {log.emailSubject && <div className="log-email-subject">{log.emailSubject}</div>}
         <div className="log-details">
           <span className="log-duration">{log.totalDuration}ms</span>
-          <span className="log-actions-count">
-            {log.executedActions.length} actions
-          </span>
+          <span className="log-actions-count">{log.executedActions.length} actions</span>
         </div>
       </div>
     );
@@ -358,9 +338,7 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
           </div>
           <div className="analytics-stat">
             <span className="stat-label">Success Rate</span>
-            <span className="stat-value">
-              {statistics?.successRate ? statistics.successRate.toFixed(1) : 0}%
-            </span>
+            <span className="stat-value">{statistics?.successRate ? statistics.successRate.toFixed(1) : 0}%</span>
           </div>
           <div className="analytics-stat">
             <span className="stat-label">Avg. Duration</span>
@@ -374,9 +352,7 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
             <h4>Recent Errors</h4>
             {statistics.recentErrors.slice(0, 3).map((error, index) => (
               <div key={index} className="error-item">
-                <span className="error-time">
-                  {new Date(error.timestamp).toLocaleString()}
-                </span>
+                <span className="error-time">{new Date(error.timestamp).toLocaleString()}</span>
                 <span className="error-message">{error.error}</span>
               </div>
             ))}
@@ -400,26 +376,17 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
       <div className="automation-header">
         <h1>🤖 Email Automation & Rules</h1>
         <div className="header-actions">
-          <button
-            className="btn btn-primary"
-            onClick={() => setShowCreateModal(true)}
-          >
+          <button className="btn btn-primary" onClick={() => setShowCreateModal(true)}>
             ➕ Create Rule
           </button>
-          <button
-            className="btn btn-secondary"
-            onClick={() => refreshRules()}
-          >
+          <button className="btn btn-secondary" onClick={() => refreshRules()}>
             🔄 Refresh
           </button>
         </div>
       </div>
 
       <div className="tabs">
-        <button
-          className={`tab ${activeTab === 'rules' ? 'active' : ''}`}
-          onClick={() => setActiveTab('rules')}
-        >
+        <button className={`tab ${activeTab === 'rules' ? 'active' : ''}`} onClick={() => setActiveTab('rules')}>
           ⚡ Rules ({rules.length})
         </button>
         <button
@@ -428,10 +395,7 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
         >
           📁 Categories ({categories.length})
         </button>
-        <button
-          className={`tab ${activeTab === 'logs' ? 'active' : ''}`}
-          onClick={() => setActiveTab('logs')}
-        >
+        <button className={`tab ${activeTab === 'logs' ? 'active' : ''}`} onClick={() => setActiveTab('logs')}>
           📋 Execution Logs ({executionLogs.length})
         </button>
         <button
@@ -484,10 +448,7 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
               <div className="empty-state">
                 <span className="empty-icon">📭</span>
                 <p>No automation rules found</p>
-                <button
-                  className="btn btn-primary"
-                  onClick={() => setShowCreateModal(true)}
-                >
+                <button className="btn btn-primary" onClick={() => setShowCreateModal(true)}>
                   Create your first rule
                 </button>
               </div>
@@ -502,7 +463,9 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
             ))}
             <div
               className="category-card add-category"
-              onClick={() => {/* TODO: Implement category creation */}}
+              onClick={() => {
+                /* TODO: Implement category creation */
+              }}
             >
               <div className="add-category-content">
                 <span className="add-icon">➕</span>
@@ -540,19 +503,13 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
           <div className="modal">
             <div className="modal-header">
               <h2>Create Automation Rule</h2>
-              <button
-                className="close-btn"
-                onClick={() => setShowCreateModal(false)}
-              >
+              <button className="close-btn" onClick={() => setShowCreateModal(false)}>
                 ✕
               </button>
             </div>
             <div className="modal-body">
               <p>Rule creation form will be implemented here</p>
-              <button
-                className="btn btn-secondary"
-                onClick={() => setShowCreateModal(false)}
-              >
+              <button className="btn btn-secondary" onClick={() => setShowCreateModal(false)}>
                 Close
               </button>
             </div>

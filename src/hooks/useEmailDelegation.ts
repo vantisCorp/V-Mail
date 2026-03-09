@@ -3,7 +3,6 @@ import { useNotifications } from './useNotifications';
 import type {
   Delegation,
   DelegationPermission,
-  DelegationStatus,
   DelegationStats,
   DelegationActivity,
   DelegationInvitation,
@@ -33,23 +32,23 @@ export const useEmailDelegation = () => {
   const [delegations, setDelegations] = useState<Delegation[]>([]);
   const [activities, setActivities] = useState<DelegationActivity[]>([]);
   const [invitations, setInvitations] = useState<DelegationInvitation[]>([]);
-  const [delegatedEmails, setDelegatedEmails] = useState<Delegation[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [delegatedEmails] = useState<Delegation[]>([]);
+  const [isLoading] = useState(false);
 
   // Calculate statistics
   const stats = useMemo<DelegationStats>(() => {
-    const activeDelegations = delegations.filter(d => d.status === 'active');
-    const pendingDelegations = delegations.filter(d => d.status === 'pending');
+    const activeDelegations = delegations.filter((d) => d.status === 'active');
+    const pendingDelegations = delegations.filter((d) => d.status === 'pending');
 
     const permissionCounts = activeDelegations.reduce(
       (acc, d) => {
         if (d.permission === 'send_as') {
-acc.sentAsCount++;
-} else if (d.permission === 'send_on_behalf') {
-acc.sendOnBehalfCount++;
-} else if (d.permission === 'manage') {
-acc.manageCount++;
-}
+          acc.sentAsCount++;
+        } else if (d.permission === 'send_on_behalf') {
+          acc.sendOnBehalfCount++;
+        } else if (d.permission === 'manage') {
+          acc.manageCount++;
+        }
         return acc;
       },
       { sentAsCount: 0, sendOnBehalfCount: 0, manageCount: 0 }
@@ -82,7 +81,7 @@ acc.manageCount++;
         actionDetails,
         timestamp: new Date().toISOString()
       };
-      setActivities(prev => [activity, ...prev].slice(0, 100));
+      setActivities((prev) => [activity, ...prev].slice(0, 100));
     },
     []
   );
@@ -90,11 +89,12 @@ acc.manageCount++;
   // Grant delegation
   const grantDelegation = useCallback(
     (options: GrantDelegationOptions, currentUserId: string, currentUserName: string, currentUserEmail: string) => {
-      const { delegateEmail, delegateName, delegateId, permission, allowedActions, folders, expiresAt, notes } = options;
+      const { delegateEmail, delegateName, delegateId, permission, allowedActions, folders, expiresAt, notes } =
+        options;
 
       // Check if delegation already exists
       const existingDelegation = delegations.find(
-        d => d.ownerId === currentUserId && d.delegateId === delegateId && !['revoked', 'expired'].includes(d.status)
+        (d) => d.ownerId === currentUserId && d.delegateId === delegateId && !['revoked', 'expired'].includes(d.status)
       );
 
       if (existingDelegation) {
@@ -136,8 +136,8 @@ acc.manageCount++;
         createdAt: now
       };
 
-      setDelegations(prev => [...prev, newDelegation]);
-      setInvitations(prev => [...prev, invitation]);
+      setDelegations((prev) => [...prev, newDelegation]);
+      setInvitations((prev) => [...prev, invitation]);
 
       logActivity(newDelegation.id, 'delegation_granted', currentUserId, currentUserName);
       addNotification('success', `Delegation invitation sent to ${delegateName}`);
@@ -150,7 +150,7 @@ acc.manageCount++;
   // Accept delegation invitation
   const acceptDelegation = useCallback(
     (invitationId: string, delegateId: string, delegateName: string) => {
-      const invitation = invitations.find(i => i.id === invitationId);
+      const invitation = invitations.find((i) => i.id === invitationId);
       if (!invitation) {
         addNotification('error', 'Invitation not found');
         return;
@@ -159,13 +159,13 @@ acc.manageCount++;
       const now = new Date().toISOString();
 
       // Update invitation
-      setInvitations(prev =>
-        prev.map(i => i.id === invitationId ? { ...i, status: 'active', acceptedAt: now } : i)
+      setInvitations((prev) =>
+        prev.map((i) => (i.id === invitationId ? { ...i, status: 'active', acceptedAt: now } : i))
       );
 
       // Update delegation
-      setDelegations(prev =>
-        prev.map(d =>
+      setDelegations((prev) =>
+        prev.map((d) =>
           d.ownerId === invitation.ownerId && d.delegateEmail === invitation.delegateEmail
             ? { ...d, status: 'active', delegateId, delegateName, acceptedAt: now }
             : d
@@ -173,7 +173,7 @@ acc.manageCount++;
       );
 
       logActivity(
-        delegations.find(d => d.ownerId === invitation.ownerId)?.id || '',
+        delegations.find((d) => d.ownerId === invitation.ownerId)?.id || '',
         'delegation_accepted',
         delegateId,
         delegateName
@@ -187,15 +187,13 @@ acc.manageCount++;
   // Revoke delegation
   const revokeDelegation = useCallback(
     (delegationId: string, currentUserId: string, currentUserName: string) => {
-      const delegation = delegations.find(d => d.id === delegationId);
+      const delegation = delegations.find((d) => d.id === delegationId);
       if (!delegation) {
         addNotification('error', 'Delegation not found');
         return;
       }
 
-      setDelegations(prev =>
-        prev.map(d => d.id === delegationId ? { ...d, status: 'revoked' } : d)
-      );
+      setDelegations((prev) => prev.map((d) => (d.id === delegationId ? { ...d, status: 'revoked' } : d)));
 
       logActivity(delegationId, 'delegation_revoked', currentUserId, currentUserName);
       addNotification('success', `Delegation revoked for ${delegation.delegateName}`);
@@ -206,9 +204,7 @@ acc.manageCount++;
   // Suspend delegation
   const suspendDelegation = useCallback(
     (delegationId: string, currentUserId: string, currentUserName: string) => {
-      setDelegations(prev =>
-        prev.map(d => d.id === delegationId ? { ...d, status: 'suspended' } : d)
-      );
+      setDelegations((prev) => prev.map((d) => (d.id === delegationId ? { ...d, status: 'suspended' } : d)));
 
       logActivity(delegationId, 'delegation_suspended', currentUserId, currentUserName);
       addNotification('success', 'Delegation suspended');
@@ -219,9 +215,7 @@ acc.manageCount++;
   // Resume delegation
   const resumeDelegation = useCallback(
     (delegationId: string, currentUserId: string, currentUserName: string) => {
-      setDelegations(prev =>
-        prev.map(d => d.id === delegationId ? { ...d, status: 'active' } : d)
-      );
+      setDelegations((prev) => prev.map((d) => (d.id === delegationId ? { ...d, status: 'active' } : d)));
 
       logActivity(delegationId, 'delegation_resumed', currentUserId, currentUserName);
       addNotification('success', 'Delegation resumed');
@@ -234,7 +228,7 @@ acc.manageCount++;
     (options: UpdateDelegationOptions, currentUserId: string, currentUserName: string) => {
       const { delegationId, permission, allowedActions, folders, expiresAt, notes } = options;
 
-      const delegation = delegations.find(d => d.id === delegationId);
+      const delegation = delegations.find((d) => d.id === delegationId);
       if (!delegation) {
         addNotification('error', 'Delegation not found');
         return;
@@ -242,11 +236,11 @@ acc.manageCount++;
 
       const previousPermission = delegation.permission;
 
-      setDelegations(prev =>
-        prev.map(d => {
+      setDelegations((prev) =>
+        prev.map((d) => {
           if (d.id !== delegationId) {
-return d;
-}
+            return d;
+          }
 
           return {
             ...d,
@@ -260,13 +254,10 @@ return d;
       );
 
       if (permission && permission !== previousPermission) {
-        logActivity(
-          delegationId,
-          'permission_changed',
-          currentUserId,
-          currentUserName,
-          { previousPermission, newPermission: permission }
-        );
+        logActivity(delegationId, 'permission_changed', currentUserId, currentUserName, {
+          previousPermission,
+          newPermission: permission
+        });
       }
 
       addNotification('success', 'Delegation updated');
@@ -277,7 +268,7 @@ return d;
   // Get delegations where user is the owner
   const getDelegationsOwned = useCallback(
     (userId: string): Delegation[] => {
-      return delegations.filter(d => d.ownerId === userId);
+      return delegations.filter((d) => d.ownerId === userId);
     },
     [delegations]
   );
@@ -285,7 +276,7 @@ return d;
   // Get delegations where user is the delegate
   const getDelegationsAsDelegate = useCallback(
     (userId: string): Delegation[] => {
-      return delegations.filter(d => d.delegateId === userId);
+      return delegations.filter((d) => d.delegateId === userId);
     },
     [delegations]
   );
@@ -294,11 +285,11 @@ return d;
   const hasDelegationPermission = useCallback(
     (ownerId: string, delegateId: string, requiredPermission: DelegationPermission): boolean => {
       const delegation = delegations.find(
-        d => d.ownerId === ownerId && d.delegateId === delegateId && d.status === 'active'
+        (d) => d.ownerId === ownerId && d.delegateId === delegateId && d.status === 'active'
       );
       if (!delegation) {
-return false;
-}
+        return false;
+      }
 
       const permissionLevels: DelegationPermission[] = ['send_as', 'send_on_behalf', 'manage'];
       const userLevel = permissionLevels.indexOf(delegation.permission);
@@ -312,10 +303,10 @@ return false;
   // Check if action is allowed for delegate
   const isActionAllowed = useCallback(
     (delegationId: string, action: DelegationAction): boolean => {
-      const delegation = delegations.find(d => d.id === delegationId && d.status === 'active');
+      const delegation = delegations.find((d) => d.id === delegationId && d.status === 'active');
       if (!delegation) {
-return false;
-}
+        return false;
+      }
 
       return delegation.allowedActions?.includes(action) ?? false;
     },
@@ -325,7 +316,7 @@ return false;
   // Get activities for a delegation
   const getDelegationActivities = useCallback(
     (delegationId: string): DelegationActivity[] => {
-      return activities.filter(a => a.delegationId === delegationId);
+      return activities.filter((a) => a.delegationId === delegationId);
     },
     [activities]
   );
@@ -333,7 +324,7 @@ return false;
   // Get pending invitations for a user
   const getPendingInvitations = useCallback(
     (email: string): DelegationInvitation[] => {
-      return invitations.filter(i => i.delegateEmail === email && i.status === 'pending');
+      return invitations.filter((i) => i.delegateEmail === email && i.status === 'pending');
     },
     [invitations]
   );
@@ -345,23 +336,24 @@ return false;
 
       if (filter) {
         if (filter.ownerId) {
-          result = result.filter(d => d.ownerId === filter.ownerId);
+          result = result.filter((d) => d.ownerId === filter.ownerId);
         }
         if (filter.delegateId) {
-          result = result.filter(d => d.delegateId === filter.delegateId);
+          result = result.filter((d) => d.delegateId === filter.delegateId);
         }
         if (filter.permission) {
-          result = result.filter(d => d.permission === filter.permission);
+          result = result.filter((d) => d.permission === filter.permission);
         }
         if (filter.status) {
-          result = result.filter(d => d.status === filter.status);
+          result = result.filter((d) => d.status === filter.status);
         }
         if (filter.search) {
           const searchLower = filter.search.toLowerCase();
-          result = result.filter(d =>
-            d.delegateName.toLowerCase().includes(searchLower) ||
-            d.delegateEmail.toLowerCase().includes(searchLower) ||
-            d.ownerName.toLowerCase().includes(searchLower)
+          result = result.filter(
+            (d) =>
+              d.delegateName.toLowerCase().includes(searchLower) ||
+              d.delegateEmail.toLowerCase().includes(searchLower) ||
+              d.ownerName.toLowerCase().includes(searchLower)
           );
         }
       }
@@ -405,17 +397,15 @@ return false;
   // Decline delegation invitation
   const declineDelegation = useCallback(
     (invitationId: string) => {
-      const invitation = invitations.find(i => i.id === invitationId);
+      const invitation = invitations.find((i) => i.id === invitationId);
       if (!invitation) {
-return;
-}
+        return;
+      }
 
-      setInvitations(prev =>
-        prev.map(i => i.id === invitationId ? { ...i, status: 'revoked' } : i)
-      );
+      setInvitations((prev) => prev.map((i) => (i.id === invitationId ? { ...i, status: 'revoked' } : i)));
 
-      setDelegations(prev =>
-        prev.map(d =>
+      setDelegations((prev) =>
+        prev.map((d) =>
           d.ownerId === invitation.ownerId && d.delegateEmail === invitation.delegateEmail
             ? { ...d, status: 'revoked' }
             : d

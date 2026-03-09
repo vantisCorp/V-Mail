@@ -126,7 +126,7 @@ export interface Task {
   activityLog: TaskActivity[];
 
   // Custom fields
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 
   // Metadata
   projectId?: string;
@@ -201,7 +201,7 @@ export interface TaskActivity {
   userName: string;
   timestamp: string;
   description: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Task statistics
@@ -302,6 +302,9 @@ export type CreateReminderPayload = Omit<TaskReminder, 'id' | 'sent' | 'sentAt'>
 
 export type CreateProjectPayload = Omit<TaskProject, 'id' | 'createdAt' | 'updatedAt' | 'taskCount'>;
 
-export type CreateEpicPayload = Omit<TaskEpic, 'id' | 'createdAt' | 'updatedAt' | 'taskCount' | 'completedCount' | 'progress'>;
+export type CreateEpicPayload = Omit<
+  TaskEpic,
+  'id' | 'createdAt' | 'updatedAt' | 'taskCount' | 'completedCount' | 'progress'
+>;
 
 export type CreateSprintPayload = Omit<TaskSprint, 'id' | 'createdAt' | 'updatedAt' | 'taskCount'>;

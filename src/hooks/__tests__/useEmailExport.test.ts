@@ -72,7 +72,9 @@ describe('useEmailExport', () => {
       totalFileSize: 0,
       formatBreakdown: {}
     });
-    (EmailExportService.loadQueue as vi.Mock).mockImplementation(() => {});
+    (EmailExportService.loadQueue as vi.Mock).mockImplementation(() => {
+      /* noop */
+    });
   });
 
   afterEach(() => {
@@ -117,10 +119,7 @@ describe('useEmailExport', () => {
 
       await waitFor(() => {
         expect(result.current.isExporting).toBe(false);
-        expect(EmailExportService.exportSingleEmail).toHaveBeenCalledWith(
-          mockEmails[0],
-          defaultOptions
-        );
+        expect(EmailExportService.exportSingleEmail).toHaveBeenCalledWith(mockEmails[0], defaultOptions);
       });
     });
 
@@ -153,24 +152,20 @@ describe('useEmailExport', () => {
         fileSize: 2048
       };
 
-      (EmailExportService.exportMultipleEmails as vi.Mock).mockImplementation(
-        (emails, options, onProgress) => {
-          if (onProgress) {
-            onProgress({ percentage: 50, currentEmail: 1, totalEmails: 2, status: 'processing' });
-            onProgress({ percentage: 100, currentEmail: 2, totalEmails: 2, status: 'completed' });
-          }
-          return Promise.resolve(mockResult);
+      (EmailExportService.exportMultipleEmails as vi.Mock).mockImplementation((emails, options, onProgress) => {
+        if (onProgress) {
+          onProgress({ percentage: 50, currentEmail: 1, totalEmails: 2, status: 'processing' });
+          onProgress({ percentage: 100, currentEmail: 2, totalEmails: 2, status: 'completed' });
         }
-      );
+        return Promise.resolve(mockResult);
+      });
 
       const { result } = renderHook(() => useEmailExport());
 
       await act(async () => {
-        const exportResult = await result.current.exportMultipleEmails(
-          mockEmails,
-          defaultOptions,
-          (progress) => {}
-        );
+        const exportResult = await result.current.exportMultipleEmails(mockEmails, defaultOptions, (_progress) => {
+          /* noop */
+        });
         expect(exportResult).toEqual(mockResult);
       });
 
@@ -181,17 +176,15 @@ describe('useEmailExport', () => {
 
     it('should update export progress during export', async () => {
       let progressCallback: ((progress: ExportProgress) => void) | undefined;
-      let resolvePromise: (value: any) => void;
+      let resolvePromise: (value: unknown) => void;
       const promise = new Promise((resolve) => {
         resolvePromise = resolve;
       });
 
-      (EmailExportService.exportMultipleEmails as vi.Mock).mockImplementation(
-        (emails, options, onProgress) => {
-          progressCallback = onProgress;
-          return promise;
-        }
-      );
+      (EmailExportService.exportMultipleEmails as vi.Mock).mockImplementation((emails, options, onProgress) => {
+        progressCallback = onProgress;
+        return promise;
+      });
 
       const { result } = renderHook(() => useEmailExport());
 

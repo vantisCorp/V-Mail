@@ -39,7 +39,7 @@ export interface ExportResult {
 
 export interface ExportRequest {
   id: string;
-  emails: any[]; // Email type
+  emails: unknown[]; // Email type
   options: ExportOptions;
   status: 'pending' | 'processing' | 'completed' | 'failed';
   progress?: ExportProgress;

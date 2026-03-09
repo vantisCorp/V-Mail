@@ -6,30 +6,30 @@
  */
 
 export type TeamMemberRole =
-  | 'owner'        // Team owner - full access
-  | 'admin'        // Team administrator - can manage members and settings
-  | 'manager'      // Team manager - can manage members and view reports
-  | 'member'       // Team member - standard access
-  | 'viewer';      // Team viewer - read-only access
+  | 'owner' // Team owner - full access
+  | 'admin' // Team administrator - can manage members and settings
+  | 'manager' // Team manager - can manage members and view reports
+  | 'member' // Team member - standard access
+  | 'viewer'; // Team viewer - read-only access
 
 export type TeamMemberStatus =
-  | 'active'       // Member is active in the team
-  | 'pending'      // Invitation sent, not yet accepted
-  | 'suspended'    // Member temporarily suspended
-  | 'removed';     // Member has been removed from team
+  | 'active' // Member is active in the team
+  | 'pending' // Invitation sent, not yet accepted
+  | 'suspended' // Member temporarily suspended
+  | 'removed'; // Member has been removed from team
 
 export type TeamBillingPlan =
-  | 'free'         // Free plan with limited members
-  | 'starter'      // Starter plan - up to 10 members
+  | 'free' // Free plan with limited members
+  | 'starter' // Starter plan - up to 10 members
   | 'professional' // Professional plan - up to 50 members
-  | 'enterprise';  // Enterprise plan - unlimited members
+  | 'enterprise'; // Enterprise plan - unlimited members
 
 export type TeamSubscriptionStatus =
-  | 'trial'        // Trial period
-  | 'active'       // Active subscription
-  | 'past_due'     // Payment past due
-  | 'cancelled'    // Subscription cancelled
-  | 'expired';     // Subscription expired
+  | 'trial' // Trial period
+  | 'active' // Active subscription
+  | 'past_due' // Payment past due
+  | 'cancelled' // Subscription cancelled
+  | 'expired'; // Subscription expired
 
 /**
  * Team member interface
@@ -198,7 +198,7 @@ export interface TeamActivity {
   member: TeamMember;
   action: string;
   details: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   ipAddress?: string;
   userAgent?: string;
   timestamp: Date;

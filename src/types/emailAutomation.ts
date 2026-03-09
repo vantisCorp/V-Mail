@@ -136,7 +136,7 @@ export interface ConditionGroup {
 export interface RuleAction {
   id: string;
   type: ActionType;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   delay?: number; // Delay in seconds before executing
   stopProcessing?: boolean; // Stop processing further rules
 }
@@ -215,7 +215,7 @@ export interface RuleExecutionLog {
   totalDuration: number;
 
   // Additional data
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Rule test result
@@ -330,7 +330,10 @@ export interface RuleCategory {
 }
 
 // Payload types for operations
-export type CreateRulePayload = Omit<AutomationRule, 'id' | 'createdAt' | 'updatedAt' | 'executionCount' | 'successCount' | 'failureCount'>;
+export type CreateRulePayload = Omit<
+  AutomationRule,
+  'id' | 'createdAt' | 'updatedAt' | 'executionCount' | 'successCount' | 'failureCount'
+>;
 
 export type UpdateRulePayload = Partial<CreateRulePayload>;
 

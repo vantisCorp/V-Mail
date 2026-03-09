@@ -58,18 +58,14 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     children: React.ReactNode;
     title: string;
   }> = ({ onClick, isActive, children, title }) => (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`toolbar-btn ${isActive ? 'active' : ''}`}
-      title={title}
-    >
+    <button type="button" onClick={onClick} className={`toolbar-btn ${isActive ? 'active' : ''}`} title={title}>
       {children}
     </button>
   );
 
   const setLink = () => {
     const previousUrl = editor.getAttributes('link').href;
+    // eslint-disable-next-line no-alert
     const url = window.prompt('Enter URL:', previousUrl);
 
     if (url === null) {
@@ -173,11 +169,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
         <div className="toolbar-divider"></div>
 
-        <ToolbarButton
-          onClick={setLink}
-          isActive={editor.isActive('link')}
-          title="Link"
-        >
+        <ToolbarButton onClick={setLink} isActive={editor.isActive('link')} title="Link">
           🔗
         </ToolbarButton>
         <ToolbarButton
@@ -190,16 +182,10 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
         <div className="toolbar-divider"></div>
 
-        <ToolbarButton
-          onClick={() => editor.chain().focus().undo().run()}
-          title="Undo (Ctrl+Z)"
-        >
+        <ToolbarButton onClick={() => editor.chain().focus().undo().run()} title="Undo (Ctrl+Z)">
           ↶
         </ToolbarButton>
-        <ToolbarButton
-          onClick={() => editor.chain().focus().redo().run()}
-          title="Redo (Ctrl+Y)"
-        >
+        <ToolbarButton onClick={() => editor.chain().focus().redo().run()} title="Redo (Ctrl+Y)">
           ↷
         </ToolbarButton>
       </div>

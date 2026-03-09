@@ -28,6 +28,7 @@ export class SMSService {
 
     // In production, send SMS via SMS provider API
     // For now, log to console
+    // eslint-disable-next-line no-console
     console.log(`[SMS Service] Code for ${phoneNumber}: ${code}`);
 
     return code;
@@ -90,8 +91,6 @@ export class SMSService {
    * Generate SMS setup data
    */
   static async generateSetupData(phoneNumber: string): Promise<TwoFactorAuthSetup> {
-    const code = this.generateSMSCode(phoneNumber);
-
     return {
       method: 'sms',
       phoneNumber,

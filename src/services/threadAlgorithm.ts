@@ -4,12 +4,7 @@
  * Builds thread trees and manages relationships
  */
 
-import {
-  Email,
-  EmailThread,
-  ThreadNode,
-  ThreadedEmail
-} from '../types/emailThreading';
+import { Email, EmailThread, ThreadNode, ThreadedEmail } from '../types/emailThreading';
 
 export class ThreadAlgorithm {
   /**
@@ -36,8 +31,8 @@ export class ThreadAlgorithm {
     emails.forEach((email) => {
       const node = messageMap.get(email.messageId);
       if (!node) {
-return;
-}
+        return;
+      }
 
       // Try to find parent using inReplyTo
       if (email.inReplyTo) {
@@ -128,8 +123,9 @@ return;
         const nextEmails = thread.messages.slice(i + 1);
 
         currentEmail.hasReplies = nextEmails.some(
-          (next) => next.inReplyTo === currentEmail.messageId ||
-                   (next.references && next.references.includes(currentEmail.messageId))
+          (next) =>
+            next.inReplyTo === currentEmail.messageId ||
+            (next.references && next.references.includes(currentEmail.messageId))
         );
 
         currentEmail.isLastInThread = !currentEmail.hasReplies;
@@ -178,7 +174,7 @@ return;
       return 0;
     }
 
-    return (email.references?.length || 0);
+    return email.references?.length || 0;
   }
 
   /**
@@ -329,23 +325,23 @@ return;
   ): EmailThread[] {
     return threads.filter((thread) => {
       if (filter.folderId && thread.folderId !== filter.folderId) {
-return false;
-}
+        return false;
+      }
       if (filter.unreadOnly && thread.unreadCount === 0) {
-return false;
-}
+        return false;
+      }
       if (filter.starredOnly && !thread.messages.some((e) => e.isStarred)) {
-return false;
-}
+        return false;
+      }
       if (filter.hasAttachments && !thread.messages.some((e) => e.attachments && e.attachments.length > 0)) {
-return false;
-}
+        return false;
+      }
       if (filter.participant && !thread.participantEmails.includes(filter.participant)) {
-return false;
-}
+        return false;
+      }
       if (filter.subjectContains && !thread.subject.toLowerCase().includes(filter.subjectContains.toLowerCase())) {
-return false;
-}
+        return false;
+      }
 
       return true;
     });
@@ -361,7 +357,8 @@ return false;
       unreadThreads: threads.filter((t) => t.unreadCount > 0).length,
       unreadMessages: threads.reduce((sum, t) => sum + t.unreadCount, 0),
       starredThreads: threads.filter((t) => t.messages.some((e) => e.isStarred)).length,
-      threadsWithAttachments: threads.filter((t) => t.messages.some((e) => e.attachments && e.attachments.length > 0)).length,
+      threadsWithAttachments: threads.filter((t) => t.messages.some((e) => e.attachments && e.attachments.length > 0))
+        .length,
       averageMessagesPerThread: 0
     };
 

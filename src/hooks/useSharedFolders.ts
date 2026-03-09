@@ -7,7 +7,6 @@ import type {
   SharedFolderActivity,
   ShareInvitation,
   FolderPermission,
-  ShareTargetType,
   ShareStatus,
   ShareFolderOptions,
   UpdatePermissionOptions,
@@ -33,18 +32,18 @@ export const useSharedFolders = () => {
   const [sharedFolders, setSharedFolders] = useState<SharedFolder[]>([]);
   const [activities, setActivities] = useState<SharedFolderActivity[]>([]);
   const [invitations, setInvitations] = useState<ShareInvitation[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
   // Calculate statistics
   const stats = useMemo<SharedFolderStats>(() => {
     const totalParticipants = sharedFolders.reduce(
-      (sum, folder) => sum + folder.participants.filter(p => p.status === 'accepted').length,
+      (sum, folder) => sum + folder.participants.filter((p) => p.status === 'accepted').length,
       0
     );
 
     const foldersByPermission = sharedFolders.reduce(
       (acc, folder) => {
-        folder.participants.forEach(p => {
+        folder.participants.forEach((p) => {
           if (p.status === 'accepted') {
             acc[p.permission]++;
           }
@@ -55,7 +54,7 @@ export const useSharedFolders = () => {
     );
 
     const pendingInvitations = sharedFolders.reduce(
-      (sum, folder) => sum + folder.participants.filter(p => p.status === 'pending').length,
+      (sum, folder) => sum + folder.participants.filter((p) => p.status === 'pending').length,
       0
     );
 
@@ -92,7 +91,7 @@ export const useSharedFolders = () => {
         newValue,
         timestamp: new Date().toISOString()
       };
-      setActivities(prev => [activity, ...prev].slice(0, 100)); // Keep last 100 activities
+      setActivities((prev) => [activity, ...prev].slice(0, 100)); // Keep last 100 activities
     },
     []
   );
@@ -100,10 +99,10 @@ export const useSharedFolders = () => {
   // Share a folder with a user or team
   const shareFolder = useCallback(
     (options: ShareFolderOptions, currentUserId: string, currentUserName: string) => {
-      const { folderId, targetType, targetId, targetName, targetEmail, permission, message } = options;
+      const { folderId, targetType, targetId, targetName, targetEmail, permission } = options;
 
-      setSharedFolders(prevFolders => {
-        const existingFolderIndex = prevFolders.findIndex(f => f.folderId === folderId);
+      setSharedFolders((prevFolders) => {
+        const existingFolderIndex = prevFolders.findIndex((f) => f.folderId === folderId);
 
         if (existingFolderIndex >= 0) {
           // Update existing shared folder
@@ -111,7 +110,7 @@ export const useSharedFolders = () => {
 
           // Check if already shared with this target
           const existingParticipant = folder.participants.find(
-            p => p.targetId === targetId && p.targetType === targetType
+            (p) => p.targetId === targetId && p.targetType === targetType
           );
 
           if (existingParticipant) {
@@ -190,18 +189,18 @@ export const useSharedFolders = () => {
   // Unshare a folder from a participant
   const unshareFolder = useCallback(
     (folderId: string, participantId: string, currentUserId: string, currentUserName: string) => {
-      setSharedFolders(prevFolders => {
-        return prevFolders.map(folder => {
+      setSharedFolders((prevFolders) => {
+        return prevFolders.map((folder) => {
           if (folder.folderId !== folderId) {
-return folder;
-}
+            return folder;
+          }
 
-          const participant = folder.participants.find(p => p.id === participantId);
+          const participant = folder.participants.find((p) => p.id === participantId);
           if (!participant) {
-return folder;
-}
+            return folder;
+          }
 
-          const updatedParticipants = folder.participants.filter(p => p.id !== participantId);
+          const updatedParticipants = folder.participants.filter((p) => p.id !== participantId);
 
           logActivity(
             folderId,
@@ -232,20 +231,20 @@ return folder;
     (options: UpdatePermissionOptions, currentUserId: string, currentUserName: string) => {
       const { folderId, participantId, newPermission } = options;
 
-      setSharedFolders(prevFolders => {
-        return prevFolders.map(folder => {
+      setSharedFolders((prevFolders) => {
+        return prevFolders.map((folder) => {
           if (folder.folderId !== folderId) {
-return folder;
-}
+            return folder;
+          }
 
-          const participant = folder.participants.find(p => p.id === participantId);
+          const participant = folder.participants.find((p) => p.id === participantId);
           if (!participant) {
-return folder;
-}
+            return folder;
+          }
 
           const oldPermission = participant.permission;
 
-          const updatedParticipants = folder.participants.map(p =>
+          const updatedParticipants = folder.participants.map((p) =>
             p.id === participantId ? { ...p, permission: newPermission } : p
           );
 
@@ -277,22 +276,22 @@ return folder;
   // Accept a share invitation
   const acceptInvitation = useCallback(
     (invitationId: string) => {
-      setInvitations(prev => {
-        const invitation = prev.find(i => i.id === invitationId);
+      setInvitations((prev) => {
+        const invitation = prev.find((i) => i.id === invitationId);
         if (!invitation) {
-return prev;
-}
+          return prev;
+        }
 
         // Update the participant status in shared folders
-        setSharedFolders(folders =>
-          folders.map(folder => {
+        setSharedFolders((folders) =>
+          folders.map((folder) => {
             if (folder.folderId !== invitation.folderId) {
-return folder;
-}
+              return folder;
+            }
 
             return {
               ...folder,
-              participants: folder.participants.map(p =>
+              participants: folder.participants.map((p) =>
                 p.targetId === invitation.toEmail || p.targetEmail === invitation.toEmail
                   ? { ...p, status: 'accepted', acceptedAt: new Date().toISOString() }
                   : p
@@ -304,9 +303,7 @@ return folder;
         );
 
         addNotification('success', `You now have access to "${invitation.folderName}"`);
-        return prev.map(i =>
-          i.id === invitationId ? { ...i, status: 'accepted' } : i
-        );
+        return prev.map((i) => (i.id === invitationId ? { ...i, status: 'accepted' } : i));
       });
     },
     [addNotification]
@@ -315,14 +312,12 @@ return folder;
   // Decline a share invitation
   const declineInvitation = useCallback(
     (invitationId: string) => {
-      setInvitations(prev => {
-        const invitation = prev.find(i => i.id === invitationId);
+      setInvitations((prev) => {
+        const invitation = prev.find((i) => i.id === invitationId);
         if (invitation) {
           addNotification('info', `Invitation to "${invitation.folderName}" declined`);
         }
-        return prev.map(i =>
-          i.id === invitationId ? { ...i, status: 'declined' } : i
-        );
+        return prev.map((i) => (i.id === invitationId ? { ...i, status: 'declined' } : i));
       });
     },
     [addNotification]
@@ -331,18 +326,18 @@ return folder;
   // Revoke access for a participant
   const revokeAccess = useCallback(
     (folderId: string, participantId: string, currentUserId: string, currentUserName: string) => {
-      setSharedFolders(prevFolders => {
-        return prevFolders.map(folder => {
+      setSharedFolders((prevFolders) => {
+        return prevFolders.map((folder) => {
           if (folder.folderId !== folderId) {
-return folder;
-}
+            return folder;
+          }
 
-          const participant = folder.participants.find(p => p.id === participantId);
+          const participant = folder.participants.find((p) => p.id === participantId);
           if (!participant) {
-return folder;
-}
+            return folder;
+          }
 
-          const updatedParticipants = folder.participants.map(p =>
+          const updatedParticipants = folder.participants.map((p) =>
             p.id === participantId ? { ...p, status: 'revoked' as ShareStatus } : p
           );
 
@@ -372,8 +367,8 @@ return folder;
   // Get folders shared with a specific user
   const getFoldersSharedWithUser = useCallback(
     (userId: string): SharedFolder[] => {
-      return sharedFolders.filter(folder =>
-        folder.participants.some(p => p.targetId === userId && p.status === 'accepted')
+      return sharedFolders.filter((folder) =>
+        folder.participants.some((p) => p.targetId === userId && p.status === 'accepted')
       );
     },
     [sharedFolders]
@@ -382,7 +377,7 @@ return folder;
   // Get folders owned by a user
   const getFoldersOwnedByUser = useCallback(
     (userId: string): SharedFolder[] => {
-      return sharedFolders.filter(folder => folder.ownerId === userId);
+      return sharedFolders.filter((folder) => folder.ownerId === userId);
     },
     [sharedFolders]
   );
@@ -390,7 +385,7 @@ return folder;
   // Get participants of a shared folder
   const getFolderParticipants = useCallback(
     (folderId: string): SharedFolderParticipant[] => {
-      const folder = sharedFolders.find(f => f.folderId === folderId);
+      const folder = sharedFolders.find((f) => f.folderId === folderId);
       return folder?.participants || [];
     },
     [sharedFolders]
@@ -399,7 +394,7 @@ return folder;
   // Get activities for a folder
   const getFolderActivities = useCallback(
     (folderId: string): SharedFolderActivity[] => {
-      return activities.filter(a => a.folderId === folderId);
+      return activities.filter((a) => a.folderId === folderId);
     },
     [activities]
   );
@@ -412,28 +407,21 @@ return folder;
       // Apply filters
       if (filter) {
         if (filter.ownerId) {
-          result = result.filter(f => f.ownerId === filter.ownerId);
+          result = result.filter((f) => f.ownerId === filter.ownerId);
         }
         if (filter.participantId) {
-          result = result.filter(f =>
-            f.participants.some(p => p.targetId === filter.participantId)
-          );
+          result = result.filter((f) => f.participants.some((p) => p.targetId === filter.participantId));
         }
         if (filter.permission) {
-          result = result.filter(f =>
-            f.participants.some(p => p.permission === filter.permission)
-          );
+          result = result.filter((f) => f.participants.some((p) => p.permission === filter.permission));
         }
         if (filter.status) {
-          result = result.filter(f =>
-            f.participants.some(p => p.status === filter.status)
-          );
+          result = result.filter((f) => f.participants.some((p) => p.status === filter.status));
         }
         if (filter.search) {
           const searchLower = filter.search.toLowerCase();
-          result = result.filter(f =>
-            f.folderName.toLowerCase().includes(searchLower) ||
-            f.ownerName.toLowerCase().includes(searchLower)
+          result = result.filter(
+            (f) => f.folderName.toLowerCase().includes(searchLower) || f.ownerName.toLowerCase().includes(searchLower)
           );
         }
       }
@@ -470,22 +458,20 @@ return folder;
   // Check if user has permission for a folder
   const hasPermission = useCallback(
     (folderId: string, userId: string, requiredPermission: FolderPermission): boolean => {
-      const folder = sharedFolders.find(f => f.folderId === folderId);
+      const folder = sharedFolders.find((f) => f.folderId === folderId);
       if (!folder) {
-return false;
-}
+        return false;
+      }
 
       // Owner has all permissions
       if (folder.ownerId === userId) {
-return true;
-}
+        return true;
+      }
 
-      const participant = folder.participants.find(
-        p => p.targetId === userId && p.status === 'accepted'
-      );
+      const participant = folder.participants.find((p) => p.targetId === userId && p.status === 'accepted');
       if (!participant) {
-return false;
-}
+        return false;
+      }
 
       const permissionLevels: FolderPermission[] = ['read', 'write', 'admin'];
       const userLevel = permissionLevels.indexOf(participant.permission);
@@ -498,12 +484,17 @@ return false;
 
   // Update folder info (name, description, etc.)
   const updateFolderInfo = useCallback(
-    (folderId: string, updates: Partial<Pick<SharedFolder, 'folderName' | 'description'>>, currentUserId: string, currentUserName: string) => {
-      setSharedFolders(prevFolders => {
-        return prevFolders.map(folder => {
+    (
+      folderId: string,
+      updates: Partial<Pick<SharedFolder, 'folderName' | 'description'>>,
+      currentUserId: string,
+      currentUserName: string
+    ) => {
+      setSharedFolders((prevFolders) => {
+        return prevFolders.map((folder) => {
           if (folder.folderId !== folderId) {
-return folder;
-}
+            return folder;
+          }
 
           if (updates.folderName && updates.folderName !== folder.folderName) {
             logActivity(

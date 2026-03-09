@@ -4,7 +4,7 @@
  * Comprehensive hook for team account management operations.
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useNotifications } from './useNotifications';
 import type {
   TeamAccount,
@@ -259,7 +259,7 @@ const generateMockActivities = (): TeamActivity[] => {
       memberId: 'member-2',
       member: {} as TeamMember,
       action: 'member_role_changed',
-      details: 'Changed Bob Manager\'s role from member to manager',
+      details: "Changed Bob Manager's role from member to manager",
       timestamp: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
     }
   ];
@@ -334,7 +334,7 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
       setIsLoading(true);
       try {
         // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
         const mockTeam = generateMockTeamAccount();
         setTeamAccount(mockTeam);
         setMembers([
@@ -401,7 +401,7 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
           }
         ]);
         setActivities(generateMockActivities());
-      } catch (err) {
+      } catch {
         setError('Failed to load team account');
       } finally {
         setIsLoading(false);
@@ -414,647 +414,729 @@ export function useTeamAccounts(teamId?: string): UseTeamAccountsReturn {
   }, [teamId]);
 
   // Team Account Actions
-  const createTeamAccount = useCallback(async (payload: CreateTeamAccountPayload): Promise<TeamAccount | null> => {
-    setIsLoading(true);
-    setError(null);
+  const createTeamAccount = useCallback(
+    async (payload: CreateTeamAccountPayload): Promise<TeamAccount | null> => {
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      const newTeam: TeamAccount = {
-        id: `team-${Date.now()}`,
-        name: payload.name,
-        slug: payload.slug,
-        description: payload.description,
-        website: payload.website,
-        industry: payload.industry,
-        size: payload.size,
-        ownerId: payload.ownerId,
-        owner: {
-          id: `member-${Date.now()}`,
-          userId: payload.ownerId,
-          teamId: `team-${Date.now()}`,
-          role: 'owner',
-          status: 'active',
-          email: 'owner@example.com',
-          name: 'Team Owner',
-          joinedAt: new Date(),
-          lastActiveAt: new Date(),
-          permissions: ['all']
-        },
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        settings: {} as TeamSettings,
-        billing: {} as TeamBilling,
-        stats: {} as TeamStats
-      };
-
-      setTeamAccount(newTeam);
-      addNotification('success', `Team "${payload.name}" has been created successfully.`);
-
-      return newTeam;
-    } catch (err) {
-      setError('Failed to create team account');
-      addNotification('error', 'Failed to create team account. Please try again.');
-      return null;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [addNotification]);
-
-  const updateTeamAccount = useCallback(async (teamId: string, payload: UpdateTeamAccountPayload): Promise<TeamAccount | null> => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      setTeamAccount(prev => {
-        if (!prev) {
-return null;
-}
-        return {
-          ...prev,
-          ...payload,
-          updatedAt: new Date()
+        const newTeam: TeamAccount = {
+          id: `team-${Date.now()}`,
+          name: payload.name,
+          slug: payload.slug,
+          description: payload.description,
+          website: payload.website,
+          industry: payload.industry,
+          size: payload.size,
+          ownerId: payload.ownerId,
+          owner: {
+            id: `member-${Date.now()}`,
+            userId: payload.ownerId,
+            teamId: `team-${Date.now()}`,
+            role: 'owner',
+            status: 'active',
+            email: 'owner@example.com',
+            name: 'Team Owner',
+            joinedAt: new Date(),
+            lastActiveAt: new Date(),
+            permissions: ['all']
+          },
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          settings: {} as TeamSettings,
+          billing: {} as TeamBilling,
+          stats: {} as TeamStats
         };
-      });
 
-      addNotification('success', 'Team account has been updated successfully.');
+        setTeamAccount(newTeam);
+        addNotification('success', `Team "${payload.name}" has been created successfully.`);
 
-      return teamAccount;
-    } catch (err) {
-      setError('Failed to update team account');
-      addNotification('error', 'Failed to update team account. Please try again.');
-      return null;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [addNotification, teamAccount]);
+        return newTeam;
+      } catch {
+        setError('Failed to create team account');
+        addNotification('error', 'Failed to create team account. Please try again.');
+        return null;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [addNotification]
+  );
 
-  const deleteTeamAccount = useCallback(async (teamId: string): Promise<boolean> => {
-    setIsLoading(true);
-    setError(null);
+  const updateTeamAccount = useCallback(
+    async (teamId: string, payload: UpdateTeamAccountPayload): Promise<TeamAccount | null> => {
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-      setTeamAccount(null);
-      setMembers([]);
-      setInvitations([]);
-      setActivities([]);
+        setTeamAccount((prev) => {
+          if (!prev) {
+            return null;
+          }
+          return {
+            ...prev,
+            ...payload,
+            updatedAt: new Date()
+          };
+        });
 
-      addNotification('success', 'Team account has been deleted successfully.');
+        addNotification('success', 'Team account has been updated successfully.');
 
-      return true;
-    } catch (err) {
-      setError('Failed to delete team account');
-      addNotification('error', 'Failed to delete team account. Please try again.');
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [addNotification]);
+        return teamAccount;
+      } catch {
+        setError('Failed to update team account');
+        addNotification('error', 'Failed to update team account. Please try again.');
+        return null;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [addNotification, teamAccount]
+  );
 
-  const regenerateInviteLink = useCallback(async (teamId: string): Promise<string | null> => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 300));
-      const newLink = `https://vmail.app/invite/${teamId}/${Date.now().toString(36)}`;
+  const deleteTeamAccount = useCallback(
+    async (_teamId: string): Promise<boolean> => {
+      setIsLoading(true);
+      setError(null);
 
-      addNotification('success', 'New invite link has been generated.');
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-      return newLink;
-    } catch (err) {
-      addNotification('error', 'Failed to generate invite link.');
-      return null;
-    }
-  }, [addNotification]);
+        setTeamAccount(null);
+        setMembers([]);
+        setInvitations([]);
+        setActivities([]);
+
+        addNotification('success', 'Team account has been deleted successfully.');
+
+        return true;
+      } catch {
+        setError('Failed to delete team account');
+        addNotification('error', 'Failed to delete team account. Please try again.');
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [addNotification]
+  );
+
+  const regenerateInviteLink = useCallback(
+    async (teamId: string): Promise<string | null> => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        const newLink = `https://vmail.app/invite/${teamId}/${Date.now().toString(36)}`;
+
+        addNotification('success', 'New invite link has been generated.');
+
+        return newLink;
+      } catch {
+        addNotification('error', 'Failed to generate invite link.');
+        return null;
+      }
+    },
+    [addNotification]
+  );
 
   // Member Actions
-  const inviteMember = useCallback(async (payload: InviteMemberPayload): Promise<TeamInvitation | null> => {
-    setIsLoading(true);
-    setError(null);
+  const inviteMember = useCallback(
+    async (payload: InviteMemberPayload): Promise<TeamInvitation | null> => {
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-      const invitation: TeamInvitation = {
-        id: `invitation-${Date.now()}`,
-        teamId: teamAccount?.id || '',
-        email: payload.email,
-        role: payload.role,
-        invitedBy: 'current-user',
-        invitedByMember: {} as TeamMember,
-        status: 'pending',
-        invitedAt: new Date(),
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        message: payload.message
-      };
+        const invitation: TeamInvitation = {
+          id: `invitation-${Date.now()}`,
+          teamId: teamAccount?.id || '',
+          email: payload.email,
+          role: payload.role,
+          invitedBy: 'current-user',
+          invitedByMember: {} as TeamMember,
+          status: 'pending',
+          invitedAt: new Date(),
+          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          message: payload.message
+        };
 
-      setInvitations(prev => [...prev, invitation]);
+        setInvitations((prev) => [...prev, invitation]);
 
-      addNotification('success', `Invitation has been sent to ${payload.email}.`);
+        addNotification('success', `Invitation has been sent to ${payload.email}.`);
 
-      return invitation;
-    } catch (err) {
-      setError('Failed to send invitation');
-      addNotification('error', 'Failed to send invitation. Please try again.');
-      return null;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [addNotification, teamAccount]);
+        return invitation;
+      } catch {
+        setError('Failed to send invitation');
+        addNotification('error', 'Failed to send invitation. Please try again.');
+        return null;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [addNotification, teamAccount]
+  );
 
-  const acceptInvitation = useCallback(async (invitationId: string): Promise<boolean> => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+  const acceptInvitation = useCallback(
+    async (invitationId: string): Promise<boolean> => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-      setInvitations(prev => prev.map(inv =>
-        inv.id === invitationId
-          ? { ...inv, status: 'active' as TeamMemberStatus, acceptedAt: new Date() }
-          : inv
-      ));
+        setInvitations((prev) =>
+          prev.map((inv) =>
+            inv.id === invitationId ? { ...inv, status: 'active' as TeamMemberStatus, acceptedAt: new Date() } : inv
+          )
+        );
 
-      addNotification('success', 'You have joined the team successfully.');
+        addNotification('success', 'You have joined the team successfully.');
 
-      return true;
-    } catch (err) {
-      addNotification('error', 'Failed to accept invitation.');
-      return false;
-    }
-  }, [addNotification]);
+        return true;
+      } catch {
+        addNotification('error', 'Failed to accept invitation.');
+        return false;
+      }
+    },
+    [addNotification]
+  );
 
-  const declineInvitation = useCallback(async (invitationId: string): Promise<boolean> => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 300));
+  const declineInvitation = useCallback(
+    async (invitationId: string): Promise<boolean> => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 300));
 
-      setInvitations(prev => prev.filter(inv => inv.id !== invitationId));
+        setInvitations((prev) => prev.filter((inv) => inv.id !== invitationId));
 
-      addNotification('info', 'The invitation has been declined.');
+        addNotification('info', 'The invitation has been declined.');
 
-      return true;
-    } catch (err) {
-      addNotification('error', 'Failed to decline invitation.');
-      return false;
-    }
-  }, [addNotification]);
+        return true;
+      } catch {
+        addNotification('error', 'Failed to decline invitation.');
+        return false;
+      }
+    },
+    [addNotification]
+  );
 
-  const removeMember = useCallback(async (memberId: string): Promise<boolean> => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+  const removeMember = useCallback(
+    async (memberId: string): Promise<boolean> => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-      setMembers(prev => prev.filter(m => m.id !== memberId));
+        setMembers((prev) => prev.filter((m) => m.id !== memberId));
 
-      addNotification('success', 'Member has been removed from the team.');
+        addNotification('success', 'Member has been removed from the team.');
 
-      return true;
-    } catch (err) {
-      addNotification('error', 'Failed to remove member.');
-      return false;
-    }
-  }, [addNotification]);
+        return true;
+      } catch {
+        addNotification('error', 'Failed to remove member.');
+        return false;
+      }
+    },
+    [addNotification]
+  );
 
-  const updateMember = useCallback(async (memberId: string, payload: UpdateMemberPayload): Promise<TeamMember | null> => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+  const updateMember = useCallback(
+    async (memberId: string, payload: UpdateMemberPayload): Promise<TeamMember | null> => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-      let updatedMember: TeamMember | null = null;
+        let updatedMember: TeamMember | null = null;
 
-      setMembers(prev => prev.map(m => {
-        if (m.id === memberId) {
-          updatedMember = { ...m, ...payload };
-          return updatedMember;
-        }
-        return m;
-      }));
+        setMembers((prev) =>
+          prev.map((m) => {
+            if (m.id === memberId) {
+              updatedMember = { ...m, ...payload };
+              return updatedMember;
+            }
+            return m;
+          })
+        );
 
-      addNotification('success', 'Member information has been updated.');
+        addNotification('success', 'Member information has been updated.');
 
-      return updatedMember;
-    } catch (err) {
-      addNotification('error', 'Failed to update member.');
-      return null;
-    }
-  }, [addNotification]);
+        return updatedMember;
+      } catch {
+        addNotification('error', 'Failed to update member.');
+        return null;
+      }
+    },
+    [addNotification]
+  );
 
-  const changeMemberRole = useCallback(async (memberId: string, role: TeamMemberRole): Promise<boolean> => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+  const changeMemberRole = useCallback(
+    async (memberId: string, role: TeamMemberRole): Promise<boolean> => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-      setMembers(prev => prev.map(m =>
-        m.id === memberId ? { ...m, role } : m
-      ));
+        setMembers((prev) => prev.map((m) => (m.id === memberId ? { ...m, role } : m)));
 
-      addNotification('success', `Member role has been changed to ${role}.`);
+        addNotification('success', `Member role has been changed to ${role}.`);
 
-      return true;
-    } catch (err) {
-      addNotification('error', 'Failed to change member role.');
-      return false;
-    }
-  }, [addNotification]);
+        return true;
+      } catch {
+        addNotification('error', 'Failed to change member role.');
+        return false;
+      }
+    },
+    [addNotification]
+  );
 
-  const suspendMember = useCallback(async (memberId: string): Promise<boolean> => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+  const suspendMember = useCallback(
+    async (memberId: string): Promise<boolean> => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-      setMembers(prev => prev.map(m =>
-        m.id === memberId ? { ...m, status: 'suspended' as TeamMemberStatus } : m
-      ));
+        setMembers((prev) =>
+          prev.map((m) => (m.id === memberId ? { ...m, status: 'suspended' as TeamMemberStatus } : m))
+        );
 
-      addNotification('warning', 'Member has been suspended.');
+        addNotification('warning', 'Member has been suspended.');
 
-      return true;
-    } catch (err) {
-      addNotification('error', 'Failed to suspend member.');
-      return false;
-    }
-  }, [addNotification]);
+        return true;
+      } catch {
+        addNotification('error', 'Failed to suspend member.');
+        return false;
+      }
+    },
+    [addNotification]
+  );
 
-  const reactivateMember = useCallback(async (memberId: string): Promise<boolean> => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+  const reactivateMember = useCallback(
+    async (memberId: string): Promise<boolean> => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-      setMembers(prev => prev.map(m =>
-        m.id === memberId ? { ...m, status: 'active' as TeamMemberStatus } : m
-      ));
+        setMembers((prev) => prev.map((m) => (m.id === memberId ? { ...m, status: 'active' as TeamMemberStatus } : m)));
 
-      addNotification('success', 'Member has been reactivated.');
+        addNotification('success', 'Member has been reactivated.');
 
-      return true;
-    } catch (err) {
-      addNotification('error', 'Failed to reactivate member.');
-      return false;
-    }
-  }, [addNotification]);
+        return true;
+      } catch {
+        addNotification('error', 'Failed to reactivate member.');
+        return false;
+      }
+    },
+    [addNotification]
+  );
 
   // Settings Actions
-  const updateSettings = useCallback(async (teamId: string, settings: Partial<TeamSettings>): Promise<TeamSettings | null> => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+  const updateSettings = useCallback(
+    async (teamId: string, settings: Partial<TeamSettings>): Promise<TeamSettings | null> => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-      let updatedSettings: TeamSettings | null = null;
+        let updatedSettings: TeamSettings | null = null;
 
-      setTeamAccount(prev => {
-        if (!prev) {
-return null;
-}
-        updatedSettings = { ...prev.settings, ...settings, updatedAt: new Date() };
-        return {
-          ...prev,
-          settings: updatedSettings!
-        };
-      });
-
-      addNotification('success', 'Team settings have been updated.');
-
-      return updatedSettings;
-    } catch (err) {
-      addNotification('error', 'Failed to update team settings.');
-      return null;
-    }
-  }, [addNotification]);
-
-  const updatePasswordPolicy = useCallback(async (teamId: string, policy: Partial<TeamSettings['passwordPolicy']>): Promise<boolean> => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 300));
-
-      setTeamAccount(prev => {
-        if (!prev) {
-return null;
-}
-        return {
-          ...prev,
-          settings: {
-            ...prev.settings,
-            passwordPolicy: { ...prev.settings.passwordPolicy, ...policy }
+        setTeamAccount((prev) => {
+          if (!prev) {
+            return null;
           }
-        };
-      });
+          updatedSettings = { ...prev.settings, ...settings, updatedAt: new Date() };
+          return {
+            ...prev,
+            settings: updatedSettings!
+          };
+        });
 
-      addNotification('success', 'Password policy has been updated.');
+        addNotification('success', 'Team settings have been updated.');
 
-      return true;
-    } catch (err) {
-      addNotification('error', 'Failed to update password policy.');
-      return false;
-    }
-  }, [addNotification]);
+        return updatedSettings;
+      } catch {
+        addNotification('error', 'Failed to update team settings.');
+        return null;
+      }
+    },
+    [addNotification]
+  );
 
-  const updateSessionPolicy = useCallback(async (teamId: string, policy: Partial<TeamSettings['sessionPolicy']>): Promise<boolean> => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 300));
+  const updatePasswordPolicy = useCallback(
+    async (teamId: string, policy: Partial<TeamSettings['passwordPolicy']>): Promise<boolean> => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 300));
 
-      setTeamAccount(prev => {
-        if (!prev) {
-return null;
-}
-        return {
-          ...prev,
-          settings: {
-            ...prev.settings,
-            sessionPolicy: { ...prev.settings.sessionPolicy, ...policy }
+        setTeamAccount((prev) => {
+          if (!prev) {
+            return null;
           }
-        };
-      });
+          return {
+            ...prev,
+            settings: {
+              ...prev.settings,
+              passwordPolicy: { ...prev.settings.passwordPolicy, ...policy }
+            }
+          };
+        });
 
-      addNotification('success', 'Session policy has been updated.');
+        addNotification('success', 'Password policy has been updated.');
 
-      return true;
-    } catch (err) {
-      addNotification('error', 'Failed to update session policy.');
-      return false;
-    }
-  }, [addNotification]);
+        return true;
+      } catch {
+        addNotification('error', 'Failed to update password policy.');
+        return false;
+      }
+    },
+    [addNotification]
+  );
 
-  const updateRetentionPolicy = useCallback(async (teamId: string, policy: Partial<TeamSettings['retentionPolicy']>): Promise<boolean> => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 300));
+  const updateSessionPolicy = useCallback(
+    async (teamId: string, policy: Partial<TeamSettings['sessionPolicy']>): Promise<boolean> => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 300));
 
-      setTeamAccount(prev => {
-        if (!prev) {
-return null;
-}
-        return {
-          ...prev,
-          settings: {
-            ...prev.settings,
-            retentionPolicy: { ...prev.settings.retentionPolicy, ...policy }
+        setTeamAccount((prev) => {
+          if (!prev) {
+            return null;
           }
-        };
-      });
+          return {
+            ...prev,
+            settings: {
+              ...prev.settings,
+              sessionPolicy: { ...prev.settings.sessionPolicy, ...policy }
+            }
+          };
+        });
 
-      addNotification('success', 'Retention policy has been updated.');
+        addNotification('success', 'Session policy has been updated.');
 
-      return true;
-    } catch (err) {
-      addNotification('error', 'Failed to update retention policy.');
-      return false;
-    }
-  }, [addNotification]);
+        return true;
+      } catch {
+        addNotification('error', 'Failed to update session policy.');
+        return false;
+      }
+    },
+    [addNotification]
+  );
+
+  const updateRetentionPolicy = useCallback(
+    async (teamId: string, policy: Partial<TeamSettings['retentionPolicy']>): Promise<boolean> => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 300));
+
+        setTeamAccount((prev) => {
+          if (!prev) {
+            return null;
+          }
+          return {
+            ...prev,
+            settings: {
+              ...prev.settings,
+              retentionPolicy: { ...prev.settings.retentionPolicy, ...policy }
+            }
+          };
+        });
+
+        addNotification('success', 'Retention policy has been updated.');
+
+        return true;
+      } catch {
+        addNotification('error', 'Failed to update retention policy.');
+        return false;
+      }
+    },
+    [addNotification]
+  );
 
   // Billing Actions
-  const updatePlan = useCallback(async (teamId: string, plan: TeamBilling['plan']): Promise<TeamBilling | null> => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+  const updatePlan = useCallback(
+    async (teamId: string, plan: TeamBilling['plan']): Promise<TeamBilling | null> => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-      let updatedBilling: TeamBilling | null = null;
+        let updatedBilling: TeamBilling | null = null;
 
-      setTeamAccount(prev => {
-        if (!prev) {
-return null;
-}
-        const planLimits: Record<TeamBilling['plan'], { members: number; storage: number; amount: number }> = {
-          free: { members: 3, storage: 5, amount: 0 },
-          starter: { members: 10, storage: 25, amount: 29 },
-          professional: { members: 50, storage: 100, amount: 99 },
-          enterprise: { members: 999999, storage: 1000, amount: 299 }
-        };
-
-        updatedBilling = {
-          ...prev.billing,
-          plan,
-          memberLimit: planLimits[plan].members,
-          storageLimit: planLimits[plan].storage,
-          amount: planLimits[plan].amount
-        };
-
-        return {
-          ...prev,
-          billing: updatedBilling!
-        };
-      });
-
-      addNotification('success', `Your plan has been changed to ${plan}.`);
-
-      return updatedBilling;
-    } catch (err) {
-      addNotification('error', 'Failed to update plan.');
-      return null;
-    }
-  }, [addNotification]);
-
-  const updatePaymentMethod = useCallback(async (teamId: string, paymentMethod: TeamBilling['paymentMethod']): Promise<boolean> => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      setTeamAccount(prev => {
-        if (!prev) {
-return null;
-}
-        return {
-          ...prev,
-          billing: {
-            ...prev.billing,
-            paymentMethod
+        setTeamAccount((prev) => {
+          if (!prev) {
+            return null;
           }
-        };
-      });
+          const planLimits: Record<TeamBilling['plan'], { members: number; storage: number; amount: number }> = {
+            free: { members: 3, storage: 5, amount: 0 },
+            starter: { members: 10, storage: 25, amount: 29 },
+            professional: { members: 50, storage: 100, amount: 99 },
+            enterprise: { members: 999999, storage: 1000, amount: 299 }
+          };
 
-      addNotification('success', 'Payment method has been updated.');
-
-      return true;
-    } catch (err) {
-      addNotification('error', 'Failed to update payment method.');
-      return false;
-    }
-  }, [addNotification]);
-
-  const updateBillingContact = useCallback(async (teamId: string, contact: Partial<TeamBilling['billingContact']>): Promise<boolean> => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 300));
-
-      setTeamAccount(prev => {
-        if (!prev) {
-return null;
-}
-        return {
-          ...prev,
-          billing: {
+          updatedBilling = {
             ...prev.billing,
-            billingContact: {
-              ...prev.billing.billingContact,
-              ...contact
+            plan,
+            memberLimit: planLimits[plan].members,
+            storageLimit: planLimits[plan].storage,
+            amount: planLimits[plan].amount
+          };
+
+          return {
+            ...prev,
+            billing: updatedBilling!
+          };
+        });
+
+        addNotification('success', `Your plan has been changed to ${plan}.`);
+
+        return updatedBilling;
+      } catch {
+        addNotification('error', 'Failed to update plan.');
+        return null;
+      }
+    },
+    [addNotification]
+  );
+
+  const updatePaymentMethod = useCallback(
+    async (teamId: string, paymentMethod: TeamBilling['paymentMethod']): Promise<boolean> => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        setTeamAccount((prev) => {
+          if (!prev) {
+            return null;
+          }
+          return {
+            ...prev,
+            billing: {
+              ...prev.billing,
+              paymentMethod
             }
+          };
+        });
+
+        addNotification('success', 'Payment method has been updated.');
+
+        return true;
+      } catch {
+        addNotification('error', 'Failed to update payment method.');
+        return false;
+      }
+    },
+    [addNotification]
+  );
+
+  const updateBillingContact = useCallback(
+    async (teamId: string, contact: Partial<TeamBilling['billingContact']>): Promise<boolean> => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 300));
+
+        setTeamAccount((prev) => {
+          if (!prev) {
+            return null;
           }
-        };
-      });
+          return {
+            ...prev,
+            billing: {
+              ...prev.billing,
+              billingContact: {
+                ...prev.billing.billingContact,
+                ...contact
+              }
+            }
+          };
+        });
 
-      addNotification('success', 'Billing contact has been updated.');
+        addNotification('success', 'Billing contact has been updated.');
 
-      return true;
-    } catch (err) {
-      addNotification('error', 'Failed to update billing contact.');
-      return false;
-    }
-  }, [addNotification]);
+        return true;
+      } catch {
+        addNotification('error', 'Failed to update billing contact.');
+        return false;
+      }
+    },
+    [addNotification]
+  );
 
-  const getInvoices = useCallback(async (teamId: string): Promise<TeamBilling['invoices']> => {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return teamAccount?.billing.invoices || [];
-  }, [teamAccount]);
+  const getInvoices = useCallback(
+    async (_teamId: string): Promise<TeamBilling['invoices']> => {
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      return teamAccount?.billing.invoices || [];
+    },
+    [teamAccount]
+  );
 
   // Utility Functions
-  const getMembersByRole = useCallback((role: TeamMemberRole): TeamMember[] => {
-    return members.filter(m => m.role === role);
-  }, [members]);
+  const getMembersByRole = useCallback(
+    (role: TeamMemberRole): TeamMember[] => {
+      return members.filter((m) => m.role === role);
+    },
+    [members]
+  );
 
-  const getMembersByStatus = useCallback((status: TeamMemberStatus): TeamMember[] => {
-    return members.filter(m => m.status === status);
-  }, [members]);
+  const getMembersByStatus = useCallback(
+    (status: TeamMemberStatus): TeamMember[] => {
+      return members.filter((m) => m.status === status);
+    },
+    [members]
+  );
 
-  const getMember = useCallback((memberId: string): TeamMember | undefined => {
-    return members.find(m => m.id === memberId);
-  }, [members]);
+  const getMember = useCallback(
+    (memberId: string): TeamMember | undefined => {
+      return members.find((m) => m.id === memberId);
+    },
+    [members]
+  );
 
-  const hasPermission = useCallback((memberId: string, permission: string): boolean => {
-    const member = members.find(m => m.id === memberId);
-    if (!member) {
-return false;
-}
-    return member.permissions.includes('all') || member.permissions.includes(permission);
-  }, [members]);
+  const hasPermission = useCallback(
+    (memberId: string, permission: string): boolean => {
+      const member = members.find((m) => m.id === memberId);
+      if (!member) {
+        return false;
+      }
+      return member.permissions.includes('all') || member.permissions.includes(permission);
+    },
+    [members]
+  );
 
-  const canPerformAction = useCallback((memberId: string, action: string): boolean => {
-    const member = members.find(m => m.id === memberId);
-    if (!member) {
-return false;
-}
+  const canPerformAction = useCallback(
+    (memberId: string, action: string): boolean => {
+      const member = members.find((m) => m.id === memberId);
+      if (!member) {
+        return false;
+      }
 
-    const actionPermissions: Record<string, TeamMemberRole[]> = {
-      'manage_team': ['owner', 'admin'],
-      'manage_members': ['owner', 'admin', 'manager'],
-      'manage_settings': ['owner', 'admin'],
-      'view_reports': ['owner', 'admin', 'manager'],
-      'send_emails': ['owner', 'admin', 'manager', 'member'],
-      'create_folders': ['owner', 'admin', 'manager', 'member'],
-      'view_emails': ['owner', 'admin', 'manager', 'member', 'viewer']
-    };
+      const actionPermissions: Record<string, TeamMemberRole[]> = {
+        manage_team: ['owner', 'admin'],
+        manage_members: ['owner', 'admin', 'manager'],
+        manage_settings: ['owner', 'admin'],
+        view_reports: ['owner', 'admin', 'manager'],
+        send_emails: ['owner', 'admin', 'manager', 'member'],
+        create_folders: ['owner', 'admin', 'manager', 'member'],
+        view_emails: ['owner', 'admin', 'manager', 'member', 'viewer']
+      };
 
-    const requiredRoles = actionPermissions[action];
-    if (!requiredRoles) {
-return false;
-}
+      const requiredRoles = actionPermissions[action];
+      if (!requiredRoles) {
+        return false;
+      }
 
-    return requiredRoles.includes(member.role);
-  }, [members]);
+      return requiredRoles.includes(member.role);
+    },
+    [members]
+  );
 
-  const getFilteredMembers = useCallback((filter: TeamMemberFilter): TeamMember[] => {
-    let result = [...members];
+  const getFilteredMembers = useCallback(
+    (filter: TeamMemberFilter): TeamMember[] => {
+      let result = [...members];
 
-    if (filter.status && filter.status.length > 0) {
-      result = result.filter(m => filter.status!.includes(m.status));
-    }
+      if (filter.status && filter.status.length > 0) {
+        result = result.filter((m) => filter.status!.includes(m.status));
+      }
 
-    if (filter.role && filter.role.length > 0) {
-      result = result.filter(m => filter.role!.includes(m.role));
-    }
+      if (filter.role && filter.role.length > 0) {
+        result = result.filter((m) => filter.role!.includes(m.role));
+      }
 
-    if (filter.department && filter.department.length > 0) {
-      result = result.filter(m => m.department && filter.department!.includes(m.department));
-    }
+      if (filter.department && filter.department.length > 0) {
+        result = result.filter((m) => m.department && filter.department!.includes(m.department));
+      }
 
-    if (filter.search) {
-      const searchLower = filter.search.toLowerCase();
-      result = result.filter(m =>
-        m.name.toLowerCase().includes(searchLower) ||
-        m.email.toLowerCase().includes(searchLower) ||
-        (m.department && m.department.toLowerCase().includes(searchLower))
-      );
-    }
+      if (filter.search) {
+        const searchLower = filter.search.toLowerCase();
+        result = result.filter(
+          (m) =>
+            m.name.toLowerCase().includes(searchLower) ||
+            m.email.toLowerCase().includes(searchLower) ||
+            (m.department && m.department.toLowerCase().includes(searchLower))
+        );
+      }
 
-    if (filter.sortBy) {
-      result.sort((a, b) => {
-        let comparison = 0;
-        switch (filter.sortBy) {
-          case 'name':
-            comparison = a.name.localeCompare(b.name);
-            break;
-          case 'email':
-            comparison = a.email.localeCompare(b.email);
-            break;
-          case 'role':
-            comparison = a.role.localeCompare(b.role);
-            break;
-          case 'joinedAt':
-            comparison = new Date(a.joinedAt).getTime() - new Date(b.joinedAt).getTime();
-            break;
-          case 'lastActiveAt':
-            comparison = new Date(a.lastActiveAt).getTime() - new Date(b.lastActiveAt).getTime();
-            break;
-        }
-        return filter.sortOrder === 'desc' ? -comparison : comparison;
-      });
-    }
+      if (filter.sortBy) {
+        result.sort((a, b) => {
+          let comparison = 0;
+          switch (filter.sortBy) {
+            case 'name':
+              comparison = a.name.localeCompare(b.name);
+              break;
+            case 'email':
+              comparison = a.email.localeCompare(b.email);
+              break;
+            case 'role':
+              comparison = a.role.localeCompare(b.role);
+              break;
+            case 'joinedAt':
+              comparison = new Date(a.joinedAt).getTime() - new Date(b.joinedAt).getTime();
+              break;
+            case 'lastActiveAt':
+              comparison = new Date(a.lastActiveAt).getTime() - new Date(b.lastActiveAt).getTime();
+              break;
+          }
+          return filter.sortOrder === 'desc' ? -comparison : comparison;
+        });
+      }
 
-    return result;
-  }, [members]);
+      return result;
+    },
+    [members]
+  );
 
-  const getFilteredActivities = useCallback((filter: TeamActivityFilter): TeamActivity[] => {
-    let result = [...activities];
+  const getFilteredActivities = useCallback(
+    (filter: TeamActivityFilter): TeamActivity[] => {
+      let result = [...activities];
 
-    if (filter.action && filter.action.length > 0) {
-      result = result.filter(a => filter.action!.includes(a.action));
-    }
+      if (filter.action && filter.action.length > 0) {
+        result = result.filter((a) => filter.action!.includes(a.action));
+      }
 
-    if (filter.memberId && filter.memberId.length > 0) {
-      result = result.filter(a => filter.memberId!.includes(a.memberId));
-    }
+      if (filter.memberId && filter.memberId.length > 0) {
+        result = result.filter((a) => filter.memberId!.includes(a.memberId));
+      }
 
-    if (filter.dateFrom) {
-      result = result.filter(a => new Date(a.timestamp) >= filter.dateFrom!);
-    }
+      if (filter.dateFrom) {
+        result = result.filter((a) => new Date(a.timestamp) >= filter.dateFrom!);
+      }
 
-    if (filter.dateTo) {
-      result = result.filter(a => new Date(a.timestamp) <= filter.dateTo!);
-    }
+      if (filter.dateTo) {
+        result = result.filter((a) => new Date(a.timestamp) <= filter.dateTo!);
+      }
 
-    if (filter.search) {
-      const searchLower = filter.search.toLowerCase();
-      result = result.filter(a =>
-        a.action.toLowerCase().includes(searchLower) ||
-        a.details.toLowerCase().includes(searchLower)
-      );
-    }
+      if (filter.search) {
+        const searchLower = filter.search.toLowerCase();
+        result = result.filter(
+          (a) => a.action.toLowerCase().includes(searchLower) || a.details.toLowerCase().includes(searchLower)
+        );
+      }
 
-    if (filter.sortBy) {
-      result.sort((a, b) => {
-        let comparison = 0;
-        switch (filter.sortBy) {
-          case 'timestamp':
-            comparison = new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
-            break;
-          case 'action':
-            comparison = a.action.localeCompare(b.action);
-            break;
-        }
-        return filter.sortOrder === 'desc' ? -comparison : comparison;
-      });
-    }
+      if (filter.sortBy) {
+        result.sort((a, b) => {
+          let comparison = 0;
+          switch (filter.sortBy) {
+            case 'timestamp':
+              comparison = new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+              break;
+            case 'action':
+              comparison = a.action.localeCompare(b.action);
+              break;
+          }
+          return filter.sortOrder === 'desc' ? -comparison : comparison;
+        });
+      }
 
-    return result;
-  }, [activities]);
+      return result;
+    },
+    [activities]
+  );
 
-  const getStats = useCallback((teamId: string): TeamStats | null => {
-    return teamAccount?.stats || null;
-  }, [teamAccount]);
+  const getStats = useCallback(
+    (_teamId: string): TeamStats | null => {
+      return teamAccount?.stats || null;
+    },
+    [teamAccount]
+  );
 
   // Refresh Functions
   const refreshTeamAccount = useCallback(async (): Promise<void> => {
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
     setTeamAccount(generateMockTeamAccount());
     setIsLoading(false);
   }, []);
 
   const refreshMembers = useCallback(async (): Promise<void> => {
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 300));
     const mockTeam = generateMockTeamAccount();
     setMembers([mockTeam.owner]);
   }, []);
 
   const refreshActivities = useCallback(async (): Promise<void> => {
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 300));
     setActivities(generateMockActivities());
   }, []);
 

@@ -14,11 +14,7 @@ interface EmailThreadListProps {
   onThreadClick?: (threadId: string) => void;
 }
 
-export const EmailThreadList: React.FC<EmailThreadListProps> = ({
-  emails,
-  onEmailClick,
-  onThreadClick
-}) => {
+export const EmailThreadList: React.FC<EmailThreadListProps> = ({ emails, onEmailClick, onThreadClick }) => {
   const {
     threads,
     preferences,
@@ -46,10 +42,7 @@ export const EmailThreadList: React.FC<EmailThreadListProps> = ({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Skip if input is focused
-      if (
-        e.target instanceof HTMLInputElement ||
-        e.target instanceof HTMLTextAreaElement
-      ) {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
         return;
       }
 
@@ -100,7 +93,16 @@ export const EmailThreadList: React.FC<EmailThreadListProps> = ({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedThreadId, goToNextThread, goToPreviousThread, expandThread, toggleThreadExpansion, markThreadAsRead, archiveThread, starThread]);
+  }, [
+    selectedThreadId,
+    goToNextThread,
+    goToPreviousThread,
+    expandThread,
+    toggleThreadExpansion,
+    markThreadAsRead,
+    archiveThread,
+    starThread
+  ]);
 
   const getInitials = (email: string) => {
     const parts = email.split('@')[0].split('.');
@@ -155,9 +157,7 @@ export const EmailThreadList: React.FC<EmailThreadListProps> = ({
         <div className="thread-empty-icon">📧</div>
         <div className="thread-empty-title">No threads found</div>
         <div className="thread-empty-description">
-          {Object.keys(filter).length > 0
-            ? 'Try adjusting your filters or search criteria'
-            : 'Your inbox is empty'}
+          {Object.keys(filter).length > 0 ? 'Try adjusting your filters or search criteria' : 'Your inbox is empty'}
         </div>
       </div>
     );
@@ -218,18 +218,10 @@ export const EmailThreadList: React.FC<EmailThreadListProps> = ({
         </div>
 
         <div className="thread-pagination">
-          <button
-            className="thread-pagination-btn"
-            onClick={goToPreviousThread}
-            disabled={!navigation.canGoBack}
-          >
+          <button className="thread-pagination-btn" onClick={goToPreviousThread} disabled={!navigation.canGoBack}>
             ← Prev
           </button>
-          <button
-            className="thread-pagination-btn"
-            onClick={goToNextThread}
-            disabled={!navigation.canGoForward}
-          >
+          <button className="thread-pagination-btn" onClick={goToNextThread} disabled={!navigation.canGoForward}>
             Next →
           </button>
         </div>
@@ -294,13 +286,9 @@ export const EmailThreadList: React.FC<EmailThreadListProps> = ({
               {/* Thread Meta */}
               <div className="thread-meta">
                 <div className="thread-count">
-                  <span className={`thread-count-badge ${isUnread ? 'unread' : ''}`}>
-                    {thread.messageCount}
-                  </span>
+                  <span className={`thread-count-badge ${isUnread ? 'unread' : ''}`}>{thread.messageCount}</span>
                 </div>
-                <div className="thread-timestamp">
-                  {formatTimestamp(thread.lastActivityAt)}
-                </div>
+                <div className="thread-timestamp">{formatTimestamp(thread.lastActivityAt)}</div>
               </div>
 
               {/* Thread Actions */}
@@ -349,9 +337,7 @@ export const EmailThreadList: React.FC<EmailThreadListProps> = ({
                   >
                     <div className="thread-message-header">
                       <div className="thread-message-from">{email.from}</div>
-                      <div className="thread-message-timestamp">
-                        {formatTimestamp(email.timestamp)}
-                      </div>
+                      <div className="thread-message-timestamp">{formatTimestamp(email.timestamp)}</div>
                     </div>
 
                     <div className="thread-message-body">

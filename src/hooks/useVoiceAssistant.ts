@@ -186,7 +186,7 @@ export function useVoiceAssistant(initialConfig?: Partial<VoiceAssistantConfig>)
   }, []);
 
   const updateConfig = useCallback((newConfig: Partial<VoiceAssistantConfig>) => {
-    setConfig(prev => {
+    setConfig((prev) => {
       const updated = { ...prev, ...newConfig };
       serviceRef.current?.updateConfig(updated);
       return updated;

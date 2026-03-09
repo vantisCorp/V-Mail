@@ -120,10 +120,12 @@ export class VoiceAssistantService {
     };
 
     if (lastResult.length > 1) {
-      result.alternatives = Array.from(lastResult).slice(1).map((alt: any) => ({
-        transcript: alt.transcript,
-        confidence: alt.confidence
-      }));
+      result.alternatives = Array.from(lastResult)
+        .slice(1)
+        .map((alt: any) => ({
+          transcript: alt.transcript,
+          confidence: alt.confidence
+        }));
     }
 
     if (isFinal) {
@@ -219,11 +221,7 @@ export class VoiceAssistantService {
     return this.buildUnknownCommand(normalizedTranscript);
   }
 
-  private buildCommand(
-    type: VoiceCommandType,
-    transcript: string,
-    match: RegExpMatchArray
-  ): VoiceCommand {
+  private buildCommand(type: VoiceCommandType, transcript: string, match: RegExpMatchArray): VoiceCommand {
     const command: VoiceCommand = {
       id: this.generateId(),
       type,
@@ -314,7 +312,7 @@ export class VoiceAssistantService {
     const nameRegex = /(?:to|for|cc|bcc)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/gi;
     const nameMatches = text.match(nameRegex);
     if (nameMatches) {
-      nameMatches.forEach(match => {
+      nameMatches.forEach((match) => {
         const name = match.replace(/^(?:to|for|cc|bcc)\s+/i, '').trim();
         if (!recipients.includes(name)) {
           recipients.push(name);
@@ -329,17 +327,17 @@ export class VoiceAssistantService {
     const lower = transcript.toLowerCase();
 
     if (lower.includes('unread')) {
-return MarkAction.UNREAD;
-}
+      return MarkAction.UNREAD;
+    }
     if (lower.includes('unstar') || lower.includes('unimportant')) {
-return MarkAction.UNSTAR;
-}
+      return MarkAction.UNSTAR;
+    }
     if (lower.includes('star')) {
-return MarkAction.STAR;
-}
+      return MarkAction.STAR;
+    }
     if (lower.includes('important')) {
-return MarkAction.IMPORTANT;
-}
+      return MarkAction.IMPORTANT;
+    }
 
     return MarkAction.READ;
   }
@@ -369,7 +367,7 @@ return MarkAction.IMPORTANT;
 
     if (options?.voice) {
       const voices = this.synthesis.getVoices();
-      const voice = voices.find(v => v.voiceURI === options.voice);
+      const voice = voices.find((v) => v.voiceURI === options.voice);
       if (voice) {
         utterance.voice = voice;
       }
@@ -417,12 +415,12 @@ return MarkAction.IMPORTANT;
 
   isConfirmation(transcript: string): boolean {
     const normalized = transcript.toLowerCase().trim();
-    return CONFIRMATION_PHRASES.some(phrase => normalized.includes(phrase));
+    return CONFIRMATION_PHRASES.some((phrase) => normalized.includes(phrase));
   }
 
   isCancellation(transcript: string): boolean {
     const normalized = transcript.toLowerCase().trim();
-    return CANCELLATION_PHRASES.some(phrase => normalized.includes(phrase));
+    return CANCELLATION_PHRASES.some((phrase) => normalized.includes(phrase));
   }
 
   provideFeedback(message: string): void {
@@ -479,7 +477,7 @@ return MarkAction.IMPORTANT;
   private emit(event: string, data?: any): void {
     const listeners = this.eventListeners.get(event);
     if (listeners) {
-      listeners.forEach(callback => callback(data));
+      listeners.forEach((callback) => callback(data));
     }
   }
 

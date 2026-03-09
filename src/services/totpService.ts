@@ -5,7 +5,7 @@
 
 import * as speakeasy from 'speakeasy';
 import * as QRCode from 'qrcode';
-import { TwoFactorAuthSetup, TwoFactorAuthVerifyRequest, TwoFactorAuthVerifyResponse } from '../types/twoFactorAuth';
+import { TwoFactorAuthSetup, TwoFactorAuthVerifyResponse } from '../types/twoFactorAuth';
 
 export class TOTPService {
   private static readonly SECRET_LENGTH = 32;
@@ -25,11 +25,7 @@ export class TOTPService {
   /**
    * Generate QR code URI for TOTP setup
    */
-  static async generateQRCodeURI(
-    secret: string,
-    username: string,
-    issuer: string = 'V-Mail'
-  ): Promise<string> {
+  static async generateQRCodeURI(secret: string, username: string, issuer: string = 'V-Mail'): Promise<string> {
     return await QRCode.toDataURL(
       `otpauth://totp/${issuer}:${username}?secret=${secret}&issuer=${issuer}&algorithm=SHA1&digits=${this.CODE_LENGTH}&period=${this.TIME_STEP}`,
       {
@@ -59,11 +55,7 @@ export class TOTPService {
   /**
    * Verify TOTP code with detailed response
    */
-  static verifyCodeWithDetails(
-    secret: string,
-    token: string,
-    attempts: number = 3
-  ): TwoFactorAuthVerifyResponse {
+  static verifyCodeWithDetails(secret: string, token: string, attempts: number = 3): TwoFactorAuthVerifyResponse {
     const isValid = this.verifyCode(secret, token);
 
     return {
@@ -114,10 +106,7 @@ export class TOTPService {
   /**
    * Generate complete TOTP setup data
    */
-  static async generateSetupData(
-    username: string,
-    issuer: string = 'V-Mail'
-  ): Promise<TwoFactorAuthSetup> {
+  static async generateSetupData(username: string, issuer: string = 'V-Mail'): Promise<TwoFactorAuthSetup> {
     const secret = this.generateSecret();
     const qrCodeUri = await this.generateQRCodeURI(secret, username, issuer);
     const backupCodes = this.generateBackupCodes();

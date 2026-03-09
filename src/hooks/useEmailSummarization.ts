@@ -27,8 +27,16 @@ export interface UseEmailSummarizationReturn {
 
   // Methods
   summarize: (context: SummarizationContext) => Promise<EmailSummary>;
-  summarizeThread: (emails: Array<{ id: string; subject: string; body: string; from: string; date: string }>) => Promise<EmailSummary>;
-  summarizeEmail: (email: { id: string; subject: string; body: string; from: string; date: string }) => Promise<EmailSummary>;
+  summarizeThread: (
+    emails: Array<{ id: string; subject: string; body: string; from: string; date: string }>
+  ) => Promise<EmailSummary>;
+  summarizeEmail: (email: {
+    id: string;
+    subject: string;
+    body: string;
+    from: string;
+    date: string;
+  }) => Promise<EmailSummary>;
   getKeyPoints: (summary: EmailSummary) => KeyPoint[];
   getActionItems: (summary: EmailSummary) => ActionItem[];
   getSegments: (summary: EmailSummary) => SummarySegment[];
@@ -70,7 +78,7 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
 
   // Update model when config changes
   const updateConfig = useCallback((newConfig: Partial<SummarizationConfig>) => {
-    setConfig(prev => {
+    setConfig((prev) => {
       const updated = { ...prev, ...newConfig };
       if (modelRef.current) {
         modelRef.current.updateConfig(updated);
@@ -80,96 +88,105 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
   }, []);
 
   // Main summarize method
-  const summarize = useCallback(async (context: SummarizationContext): Promise<EmailSummary> => {
-    setIsSummarizing(true);
-    setError(null);
+  const summarize = useCallback(
+    async (context: SummarizationContext): Promise<EmailSummary> => {
+      setIsSummarizing(true);
+      setError(null);
 
-    const startTime = Date.now();
+      const startTime = Date.now();
 
-    try {
-      const model = modelRef.current;
-      if (!model) {
-        throw new Error('Summarization model not initialized');
-      }
+      try {
+        const model = modelRef.current;
+        if (!model) {
+          throw new Error('Summarization model not initialized');
+        }
 
-      // Check cache
-      const cacheKey = model.generateCacheKey(context);
-      if (config.performance.cacheEnabled && cache.has(cacheKey)) {
-        const cachedSummary = cache.get(cacheKey)!;
-        setStatistics(prev => ({
+        // Check cache
+        const cacheKey = model.generateCacheKey(context);
+        if (config.performance.cacheEnabled && cache.has(cacheKey)) {
+          const cachedSummary = cache.get(cacheKey)!;
+          setStatistics((prev) => ({
+            ...prev,
+            cacheHits: prev.cacheHits + 1
+          }));
+          setSummary(cachedSummary);
+          return cachedSummary;
+        }
+
+        setStatistics((prev) => ({
           ...prev,
-          cacheHits: prev.cacheHits + 1
+          cacheMisses: prev.cacheMisses + 1
         }));
-        setSummary(cachedSummary);
-        return cachedSummary;
+
+        // Generate summary
+        const result = model.summarize(context);
+
+        // Update statistics
+        const processingTime = Date.now() - startTime;
+        const totalTime = statistics.totalProcessingTime + processingTime;
+        const totalSummaries = statistics.totalSummaries + 1;
+
+        setStatistics({
+          totalSummaries,
+          totalProcessingTime: totalTime,
+          averageProcessingTime: totalTime / totalSummaries,
+          cacheHits: statistics.cacheHits,
+          cacheMisses: statistics.cacheMisses + 1
+        });
+
+        // Update cache
+        if (config.performance.cacheEnabled) {
+          setCache((prev) => new Map(prev).set(cacheKey, result));
+        }
+
+        setSummary(result);
+        return result;
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to summarize email';
+        setError(errorMessage);
+        throw err;
+      } finally {
+        setIsSummarizing(false);
       }
-
-      setStatistics(prev => ({
-        ...prev,
-        cacheMisses: prev.cacheMisses + 1
-      }));
-
-      // Generate summary
-      const result = model.summarize(context);
-
-      // Update statistics
-      const processingTime = Date.now() - startTime;
-      const totalTime = statistics.totalProcessingTime + processingTime;
-      const totalSummaries = statistics.totalSummaries + 1;
-
-      setStatistics({
-        totalSummaries,
-        totalProcessingTime: totalTime,
-        averageProcessingTime: totalTime / totalSummaries,
-        cacheHits: statistics.cacheHits,
-        cacheMisses: statistics.cacheMisses + 1
-      });
-
-      // Update cache
-      if (config.performance.cacheEnabled) {
-        setCache(prev => new Map(prev).set(cacheKey, result));
-      }
-
-      setSummary(result);
-      return result;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to summarize email';
-      setError(errorMessage);
-      throw err;
-    } finally {
-      setIsSummarizing(false);
-    }
-  }, [cache, config, statistics]);
+    },
+    [cache, config, statistics]
+  );
 
   // Convenience method for thread summarization
-  const summarizeThread = useCallback(async (
-    emails: Array<{ id: string; subject: string; body: string; from: string; date: string }>
-  ): Promise<EmailSummary> => {
-    return summarize({
-      emails: emails as any,
-      summaryType: SummaryType.HYBRID,
-      summaryLength: SummaryLength.MEDIUM,
-      includeActionItems: true,
-      includeKeyPoints: true
-    });
-  }, [summarize]);
+  const summarizeThread = useCallback(
+    async (
+      emails: Array<{ id: string; subject: string; body: string; from: string; date: string }>
+    ): Promise<EmailSummary> => {
+      return summarize({
+        emails: emails as any,
+        summaryType: SummaryType.HYBRID,
+        summaryLength: SummaryLength.MEDIUM,
+        includeActionItems: true,
+        includeKeyPoints: true
+      });
+    },
+    [summarize]
+  );
 
   // Convenience method for single email summarization
-  const summarizeEmail = useCallback(async (
-    email: { id: string; subject: string; body: string; from: string; date: string }
-  ): Promise<EmailSummary> => {
-    return summarize({
-      emails: [{
-        ...email,
-        to: '',
-        timestamp: email.date
-      } as any],
-      summaryType: config.defaultSummaryType || SummaryType.EXTRACTIVE,
-      summaryLength: config.defaultSummaryLength || SummaryLength.MEDIUM,
-      includeActionItems: true,
-      includeKeyPoints: true
-    });
-  }, [summarize, config.defaultSummaryType, config.defaultSummaryLength]);
+  const summarizeEmail = useCallback(
+    async (email: { id: string; subject: string; body: string; from: string; date: string }): Promise<EmailSummary> => {
+      return summarize({
+        emails: [
+          {
+            ...email,
+            to: '',
+            timestamp: email.date
+          } as any
+        ],
+        summaryType: config.defaultSummaryType || SummaryType.EXTRACTIVE,
+        summaryLength: config.defaultSummaryLength || SummaryLength.MEDIUM,
+        includeActionItems: true,
+        includeKeyPoints: true
+      });
+    },
+    [summarize, config.defaultSummaryType, config.defaultSummaryLength]
+  );
 
   // Get key points from summary
   const getKeyPoints = useCallback((summary: EmailSummary): KeyPoint[] => {

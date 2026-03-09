@@ -22,10 +22,7 @@ class EmailExportService {
   /**
    * Export a single email
    */
-  static async exportSingleEmail(
-    email: any,
-    options: ExportOptions
-  ): Promise<ExportResult> {
+  static async exportSingleEmail(email: any, options: ExportOptions): Promise<ExportResult> {
     const startTime = Date.now();
 
     try {
@@ -161,10 +158,7 @@ class EmailExportService {
   /**
    * Export email to PDF format
    */
-  private static async exportToPDF(
-    email: any,
-    includeHeaders: boolean
-  ): Promise<Blob> {
+  private static async exportToPDF(email: any, includeHeaders: boolean): Promise<Blob> {
     // Create HTML content for PDF
     const html = `
       <!DOCTYPE html>
@@ -180,14 +174,18 @@ class EmailExportService {
         </style>
       </head>
       <body>
-        ${includeHeaders ? `
+        ${
+          includeHeaders
+            ? `
         <div class="header">
           <div class="header-row"><span class="label">From:</span> ${email.from?.email}</div>
           <div class="header-row"><span class="label">To:</span> ${email.to?.map((t: any) => t.email).join(', ')}</div>
           <div class="header-row"><span class="label">Subject:</span> ${email.subject}</div>
           <div class="header-row"><span class="label">Date:</span> ${new Date(email.date).toLocaleString()}</div>
         </div>
-        ` : ''}
+        `
+            : ''
+        }
         <div class="body">
           ${email.body || email.plainBody || ''}
         </div>
@@ -230,10 +228,7 @@ class EmailExportService {
   /**
    * Export email to JSON format
    */
-  private static async exportToJSON(
-    email: any,
-    includeMetadata: boolean
-  ): Promise<Blob> {
+  private static async exportToJSON(email: any, includeMetadata: boolean): Promise<Blob> {
     const data = {
       id: email.id,
       subject: email.subject,
@@ -280,14 +275,10 @@ class EmailExportService {
       try {
         request.status = 'processing';
 
-        const result = await this.exportMultipleEmails(
-          request.emails,
-          request.options,
-          (progress) => {
-            request.progress = progress;
-            this.saveQueue();
-          }
-        );
+        const result = await this.exportMultipleEmails(request.emails, request.options, (progress) => {
+          request.progress = progress;
+          this.saveQueue();
+        });
 
         request.result = result;
         request.status = result.success ? 'completed' : 'failed';
@@ -379,9 +370,7 @@ class EmailExportService {
       totalEmailsExported: history.reduce((sum, entry) => sum + entry.emailCount, 0),
       totalFileSize: history.reduce((sum, entry) => sum + entry.fileSize, 0),
       averageExportTime:
-        history.length > 0
-          ? history.reduce((sum, entry) => sum + entry.duration, 0) / history.length
-          : 0,
+        history.length > 0 ? history.reduce((sum, entry) => sum + entry.duration, 0) / history.length : 0,
       formatBreakdown: {
         pdf: 0,
         eml: 0,

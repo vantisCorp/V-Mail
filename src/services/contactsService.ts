@@ -141,22 +141,10 @@ export class ContactsService {
    */
   private saveToStorage(): void {
     try {
-      localStorage.setItem(
-        'vmail_contact_accounts',
-        JSON.stringify(Array.from(this.accounts.values()))
-      );
-      localStorage.setItem(
-        'vmail_contacts',
-        JSON.stringify(Array.from(this.contacts.values()))
-      );
-      localStorage.setItem(
-        'vmail_contact_groups',
-        JSON.stringify(Array.from(this.groups.values()))
-      );
-      localStorage.setItem(
-        'vmail_contact_preferences',
-        JSON.stringify(this.preferences)
-      );
+      localStorage.setItem('vmail_contact_accounts', JSON.stringify(Array.from(this.accounts.values())));
+      localStorage.setItem('vmail_contacts', JSON.stringify(Array.from(this.contacts.values())));
+      localStorage.setItem('vmail_contact_groups', JSON.stringify(Array.from(this.groups.values())));
+      localStorage.setItem('vmail_contact_preferences', JSON.stringify(this.preferences));
     } catch (error) {
       console.error('Error saving contacts data:', error);
     }
@@ -232,9 +220,7 @@ export class ContactsService {
   /**
    * Fetch contacts from provider (simulated)
    */
-  private async fetchContactsFromProvider(
-    account: ContactAccount
-  ): Promise<Contact[]> {
+  private async fetchContactsFromProvider(account: ContactAccount): Promise<Contact[]> {
     // This would make actual API calls to Google People API or Microsoft Graph
     // For demonstration, we'll return mock data
 
@@ -281,34 +267,28 @@ export class ContactsService {
   /**
    * Get all contacts
    */
-  public getContacts(
-    filters?: ContactFilterOptions,
-    sort?: ContactSortOptions
-  ): Contact[] {
+  public getContacts(filters?: ContactFilterOptions, sort?: ContactSortOptions): Contact[] {
     let contacts = Array.from(this.contacts.values());
 
     // Apply filters
     if (filters) {
       if (filters.query) {
         const query = filters.query.toLowerCase();
-        contacts = contacts.filter((contact) =>
-          contact.displayName.toLowerCase().includes(query) ||
-          contact.firstName?.toLowerCase().includes(query) ||
-          contact.lastName?.toLowerCase().includes(query) ||
-          contact.emails.some((e) => e.address.toLowerCase().includes(query))
+        contacts = contacts.filter(
+          (contact) =>
+            contact.displayName.toLowerCase().includes(query) ||
+            contact.firstName?.toLowerCase().includes(query) ||
+            contact.lastName?.toLowerCase().includes(query) ||
+            contact.emails.some((e) => e.address.toLowerCase().includes(query))
         );
       }
 
       if (filters.groups && filters.groups.length > 0) {
-        contacts = contacts.filter((contact) =>
-          filters.groups!.some((groupId) => contact.groupIds.includes(groupId))
-        );
+        contacts = contacts.filter((contact) => filters.groups!.some((groupId) => contact.groupIds.includes(groupId)));
       }
 
       if (filters.tags && filters.tags.length > 0) {
-        contacts = contacts.filter((contact) =>
-          filters.tags!.some((tag) => contact.tags.includes(tag))
-        );
+        contacts = contacts.filter((contact) => filters.tags!.some((tag) => contact.tags.includes(tag)));
       }
 
       if (filters.starred) {
@@ -328,9 +308,7 @@ export class ContactsService {
       }
 
       if (filters.minEmailCount) {
-        contacts = contacts.filter(
-          (contact) => (contact.emailCount || 0) >= filters.minEmailCount!
-        );
+        contacts = contacts.filter((contact) => (contact.emailCount || 0) >= filters.minEmailCount!);
       }
 
       if (filters.maxResults) {
@@ -354,9 +332,7 @@ export class ContactsService {
             comparison = (a.lastName || '').localeCompare(b.lastName || '');
             break;
           case 'email':
-            comparison = (a.emails[0]?.address || '').localeCompare(
-              b.emails[0]?.address || ''
-            );
+            comparison = (a.emails[0]?.address || '').localeCompare(b.emails[0]?.address || '');
             break;
           case 'createdAt':
             comparison = a.createdAt.localeCompare(b.createdAt);
@@ -365,9 +341,7 @@ export class ContactsService {
             comparison = a.updatedAt.localeCompare(b.updatedAt);
             break;
           case 'lastEmailDate':
-            comparison = (a.lastEmailDate || '').localeCompare(
-              b.lastEmailDate || ''
-            );
+            comparison = (a.lastEmailDate || '').localeCompare(b.lastEmailDate || '');
             break;
         }
 
@@ -458,53 +432,51 @@ export class ContactsService {
 
     // Update contact fields
     if (payload.firstName !== undefined) {
-contact.firstName = payload.firstName;
-}
+      contact.firstName = payload.firstName;
+    }
     if (payload.lastName !== undefined) {
-contact.lastName = payload.lastName;
-}
+      contact.lastName = payload.lastName;
+    }
     if (payload.displayName !== undefined) {
-contact.displayName = payload.displayName;
-}
+      contact.displayName = payload.displayName;
+    }
     if (payload.emails !== undefined) {
-contact.emails = payload.emails;
-}
+      contact.emails = payload.emails;
+    }
     if (payload.phones !== undefined) {
-contact.phones = payload.phones;
-}
+      contact.phones = payload.phones;
+    }
     if (payload.addresses !== undefined) {
-contact.addresses = payload.addresses;
-}
+      contact.addresses = payload.addresses;
+    }
     if (payload.websites !== undefined) {
-contact.websites = payload.websites;
-}
+      contact.websites = payload.websites;
+    }
     if (payload.socials !== undefined) {
-contact.socials = payload.socials;
-}
+      contact.socials = payload.socials;
+    }
     if (payload.customFields !== undefined) {
-contact.customFields = payload.customFields;
-}
+      contact.customFields = payload.customFields;
+    }
     if (payload.organization !== undefined) {
-contact.organization = payload.organization;
-}
+      contact.organization = payload.organization;
+    }
     if (payload.birthday !== undefined) {
-contact.birthday = payload.birthday;
-}
+      contact.birthday = payload.birthday;
+    }
     if (payload.notes !== undefined) {
-contact.notes = payload.notes;
-}
+      contact.notes = payload.notes;
+    }
     if (payload.photo !== undefined) {
-contact.photo = payload.photo;
-}
+      contact.photo = payload.photo;
+    }
     if (payload.groupIds !== undefined) {
       // Remove from old groups
       contact.groupIds.forEach((oldGroupId) => {
         if (!payload.groupIds!.includes(oldGroupId)) {
           const group = this.groups.get(oldGroupId);
           if (group) {
-            group.contactIds = group.contactIds.filter(
-              (id) => id !== contact.id
-            );
+            group.contactIds = group.contactIds.filter((id) => id !== contact.id);
           }
         }
       });
@@ -524,14 +496,14 @@ contact.photo = payload.photo;
       contact.groupIds = payload.groupIds;
     }
     if (payload.tags !== undefined) {
-contact.tags = payload.tags;
-}
+      contact.tags = payload.tags;
+    }
     if (payload.starred !== undefined) {
-contact.starred = payload.starred;
-}
+      contact.starred = payload.starred;
+    }
     if (payload.favorite !== undefined) {
-contact.favorite = payload.favorite;
-}
+      contact.favorite = payload.favorite;
+    }
 
     contact.updatedAt = new Date().toISOString();
     if (contact.version !== undefined) {
@@ -634,10 +606,7 @@ contact.favorite = payload.favorite;
   /**
    * Create contact from email
    */
-  public async createContactFromEmail(
-    email: any,
-    options: EmailToContactOptions
-  ): Promise<Contact> {
+  public async createContactFromEmail(email: any, options: EmailToContactOptions): Promise<Contact> {
     const extractedData = this.extractContactDataFromEmail(email, options);
 
     // Check if contact already exists
@@ -668,14 +637,14 @@ contact.favorite = payload.favorite;
         mergedPayload.phones = [...existingContact.phones, ...(extractedData.phones || [])];
       } else if (options.mergeStrategy === 'replace') {
         if (extractedData.firstName) {
-mergedPayload.firstName = extractedData.firstName;
-}
+          mergedPayload.firstName = extractedData.firstName;
+        }
         if (extractedData.lastName) {
-mergedPayload.lastName = extractedData.lastName;
-}
+          mergedPayload.lastName = extractedData.lastName;
+        }
         if (extractedData.organization) {
-mergedPayload.organization = extractedData.organization;
-}
+          mergedPayload.organization = extractedData.organization;
+        }
         mergedPayload.emails = extractedData.emails || [];
         mergedPayload.phones = extractedData.phones || [];
       }
@@ -709,10 +678,7 @@ mergedPayload.organization = extractedData.organization;
   /**
    * Extract contact data from email
    */
-  private extractContactDataFromEmail(
-    email: any,
-    options: EmailToContactOptions
-  ): Partial<CreateContactPayload> {
+  private extractContactDataFromEmail(email: any, options: EmailToContactOptions): Partial<CreateContactPayload> {
     const result: Partial<CreateContactPayload> = {
       emails: [],
       phones: []
@@ -829,12 +795,8 @@ mergedPayload.organization = extractedData.organization;
 
     const now = new Date();
     const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-    const recentlyAddedContacts = contacts.filter(
-      (c) => new Date(c.createdAt) > oneWeekAgo
-    ).length;
-    const recentlyUpdatedContacts = contacts.filter(
-      (c) => new Date(c.updatedAt) > oneWeekAgo
-    ).length;
+    const recentlyAddedContacts = contacts.filter((c) => new Date(c.createdAt) > oneWeekAgo).length;
+    const recentlyUpdatedContacts = contacts.filter((c) => new Date(c.updatedAt) > oneWeekAgo).length;
 
     const duplicateContacts = (await this.findDuplicateContacts()).length;
 
@@ -875,12 +837,8 @@ mergedPayload.organization = extractedData.organization;
     // Find duplicates
     byEmail.forEach((duplicateContacts, email) => {
       if (duplicateContacts.length > 1) {
-        const primaryContact = duplicateContacts.reduce((a, b) =>
-          a.updatedAt > b.updatedAt ? a : b
-        );
-        const others = duplicateContacts.filter(
-          (c) => c.id !== primaryContact.id
-        );
+        const primaryContact = duplicateContacts.reduce((a, b) => (a.updatedAt > b.updatedAt ? a : b));
+        const others = duplicateContacts.filter((c) => c.id !== primaryContact.id);
 
         suggestions.push({
           primaryContact,
@@ -907,9 +865,7 @@ mergedPayload.organization = extractedData.organization;
       if (duplicateContacts.length > 1 && duplicateContacts.length === 2) {
         // Only suggest if not already suggested by email
         const hasEmailMatch = suggestions.some((s) =>
-          s.duplicateContacts.some((dc) =>
-            duplicateContacts.some((c) => c.id === dc.id)
-          )
+          s.duplicateContacts.some((dc) => duplicateContacts.some((c) => c.id === dc.id))
         );
 
         if (!hasEmailMatch) {
@@ -933,10 +889,7 @@ mergedPayload.organization = extractedData.organization;
   /**
    * Suggest merged contact
    */
-  private suggestMerge(
-    primary: Contact,
-    duplicates: Contact[]
-  ): Partial<Contact> {
+  private suggestMerge(primary: Contact, duplicates: Contact[]): Partial<Contact> {
     const merged: Partial<Contact> = {
       firstName: primary.firstName || duplicates[0].firstName,
       lastName: primary.lastName || duplicates[0].lastName,
@@ -970,10 +923,7 @@ mergedPayload.organization = extractedData.organization;
   /**
    * Merge contacts
    */
-  public async mergeContacts(
-    primaryContactId: string,
-    duplicateContactIds: string[]
-  ): Promise<Contact> {
+  public async mergeContacts(primaryContactId: string, duplicateContactIds: string[]): Promise<Contact> {
     const primaryContact = this.contacts.get(primaryContactId);
     if (!primaryContact) {
       throw new Error('Primary contact not found');
@@ -1024,11 +974,7 @@ mergedPayload.organization = extractedData.organization;
   /**
    * Create a new group
    */
-  public async createGroup(
-    name: string,
-    description?: string,
-    color?: string
-  ): Promise<ContactGroup> {
+  public async createGroup(name: string, description?: string, color?: string): Promise<ContactGroup> {
     const group: ContactGroup = {
       id: this.generateGroupId(),
       name,
@@ -1062,14 +1008,14 @@ mergedPayload.organization = extractedData.organization;
     }
 
     if (updates.name) {
-group.name = updates.name;
-}
+      group.name = updates.name;
+    }
     if (updates.description !== undefined) {
-group.description = updates.description;
-}
+      group.description = updates.description;
+    }
     if (updates.color !== undefined) {
-group.color = updates.color;
-}
+      group.color = updates.color;
+    }
     group.updatedAt = new Date().toISOString();
 
     this.groups.set(groupId, group);
@@ -1103,10 +1049,7 @@ group.color = updates.color;
   /**
    * Add contact to group
    */
-  public async addContactToGroup(
-    contactId: string,
-    groupId: string
-  ): Promise<void> {
+  public async addContactToGroup(contactId: string, groupId: string): Promise<void> {
     const contact = this.contacts.get(contactId);
     const group = this.groups.get(groupId);
 
@@ -1133,10 +1076,7 @@ group.color = updates.color;
   /**
    * Remove contact from group
    */
-  public async removeContactFromGroup(
-    contactId: string,
-    groupId: string
-  ): Promise<void> {
+  public async removeContactFromGroup(contactId: string, groupId: string): Promise<void> {
     const contact = this.contacts.get(contactId);
     const group = this.groups.get(groupId);
 
@@ -1159,9 +1099,7 @@ group.color = updates.color;
    * Get or create group
    */
   private async getOrCreateGroup(groupName: string): Promise<ContactGroup> {
-    let group = Array.from(this.groups.values()).find(
-      (g) => g.name === groupName
-    );
+    let group = Array.from(this.groups.values()).find((g) => g.name === groupName);
 
     if (!group) {
       group = await this.createGroup(groupName);

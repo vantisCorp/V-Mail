@@ -2,14 +2,10 @@
  * useEmailTemplates Hook Tests
  */
 
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useEmailTemplates } from '../useEmailTemplates';
-import {
-  TemplateType,
-  TemplatePermission,
-  VariableType
-} from '../../types/emailTemplates';
+import { TemplateType, TemplatePermission, VariableType } from '../../types/emailTemplates';
 
 // Mock timers
 vi.useFakeTimers();
@@ -57,7 +53,7 @@ describe('useEmailTemplates', () => {
 
       const systemTemplates = result.current.getSystemTemplates();
       expect(systemTemplates.length).toBeGreaterThan(0);
-      expect(systemTemplates.every(t => t.isSystem)).toBe(true);
+      expect(systemTemplates.every((t) => t.isSystem)).toBe(true);
     });
   });
 
@@ -71,7 +67,7 @@ describe('useEmailTemplates', () => {
 
       const initialCount = result.current.templates.length;
 
-      let newTemplate: any;
+      let newTemplate: unknown;
       await act(async () => {
         newTemplate = await result.current.createTemplate({
           name: 'Test Template',
@@ -94,7 +90,7 @@ describe('useEmailTemplates', () => {
         vi.advanceTimersByTime(600);
       });
 
-      let newTemplate: any;
+      let newTemplate: unknown;
       await act(async () => {
         newTemplate = await result.current.createTemplate({
           name: 'Test',
@@ -121,7 +117,7 @@ describe('useEmailTemplates', () => {
 
       const template = result.current.templates[0];
 
-      let updated: any;
+      let updated: unknown;
       await act(async () => {
         updated = await result.current.updateTemplate(template.id, {
           name: 'Updated Name'
@@ -156,7 +152,7 @@ describe('useEmailTemplates', () => {
       });
 
       // Create a template to delete
-      let newTemplate: any;
+      let newTemplate: unknown;
       await act(async () => {
         newTemplate = await result.current.createTemplate({
           name: 'To Delete',
@@ -213,7 +209,7 @@ describe('useEmailTemplates', () => {
       const source = result.current.templates[0];
       const initialCount = result.current.templates.length;
 
-      let cloned: any;
+      let cloned: unknown;
       await act(async () => {
         cloned = await result.current.cloneTemplate({
           sourceTemplateId: source.id,
@@ -252,7 +248,7 @@ describe('useEmailTemplates', () => {
       });
 
       // Create a template first
-      let template: any;
+      let template: unknown;
       await act(async () => {
         template = await result.current.createTemplate({
           name: 'Variable Test',
@@ -263,13 +259,11 @@ describe('useEmailTemplates', () => {
         });
       });
 
-      const initialVarCount = template.variables.length;
-
       await act(async () => {
         vi.advanceTimersByTime(100);
       });
 
-      let newVar: any;
+      let newVar: unknown;
       await act(async () => {
         newVar = await result.current.addVariable(template.id, {
           name: 'Test Var',
@@ -292,7 +286,7 @@ describe('useEmailTemplates', () => {
       });
 
       // Create a template with a variable
-      let template: any;
+      let template: unknown;
       await act(async () => {
         template = await result.current.createTemplate({
           name: 'Var Update Test',
@@ -300,14 +294,16 @@ describe('useEmailTemplates', () => {
           type: TemplateType.STANDARD,
           permission: TemplatePermission.PRIVATE,
           content: 'Hello',
-          variables: [{
-            id: 'var1',
-            name: 'Original',
-            key: 'original_key',
-            description: 'Original var',
-            type: VariableType.TEXT,
-            isRequired: false
-          }]
+          variables: [
+            {
+              id: 'var1',
+              name: 'Original',
+              key: 'original_key',
+              description: 'Original var',
+              type: VariableType.TEXT,
+              isRequired: false
+            }
+          ]
         });
       });
 
@@ -330,7 +326,7 @@ describe('useEmailTemplates', () => {
       });
 
       // Create a template with a variable
-      let template: any;
+      let template: unknown;
       await act(async () => {
         template = await result.current.createTemplate({
           name: 'Var Remove Test',
@@ -338,14 +334,16 @@ describe('useEmailTemplates', () => {
           type: TemplateType.STANDARD,
           permission: TemplatePermission.PRIVATE,
           content: 'Hello',
-          variables: [{
-            id: 'var1',
-            name: 'To Remove',
-            key: 'to_remove',
-            description: 'Will be removed',
-            type: VariableType.TEXT,
-            isRequired: false
-          }]
+          variables: [
+            {
+              id: 'var1',
+              name: 'To Remove',
+              key: 'to_remove',
+              description: 'Will be removed',
+              type: VariableType.TEXT,
+              isRequired: false
+            }
+          ]
         });
       });
 
@@ -366,7 +364,7 @@ describe('useEmailTemplates', () => {
         vi.advanceTimersByTime(600);
       });
 
-      const template = result.current.templates.find(t => t.variables.length > 0);
+      const template = result.current.templates.find((t) => t.variables.length > 0);
       if (!template) {
         // Skip if no template with variables
         expect(true).toBe(true);
@@ -411,7 +409,7 @@ describe('useEmailTemplates', () => {
       const validation = result.current.validateTemplate('<p>Hello {{name}</p>');
 
       expect(validation.isValid).toBe(false);
-      expect(validation.errors.some(e => e.message.includes('Unbalanced'))).toBe(true);
+      expect(validation.errors.some((e) => e.message.includes('Unbalanced'))).toBe(true);
     });
 
     it('should detect empty variables', () => {
@@ -420,7 +418,7 @@ describe('useEmailTemplates', () => {
       const validation = result.current.validateTemplate('<p>Hello {{}}</p>');
 
       expect(validation.isValid).toBe(false);
-      expect(validation.errors.some(e => e.message.includes('Empty'))).toBe(true);
+      expect(validation.errors.some((e) => e.message.includes('Empty'))).toBe(true);
     });
 
     it('should warn about unclosed HTML tags', () => {
@@ -432,7 +430,9 @@ describe('useEmailTemplates', () => {
 
       // This should trigger the warning since there's '<' without matching '>'
       if (validation.warnings.length > 0) {
-        expect(validation.warnings.some(w => w.message.includes('unclosed') || w.message.includes('HTML'))).toBe(true);
+        expect(validation.warnings.some((w) => w.message.includes('unclosed') || w.message.includes('HTML'))).toBe(
+          true
+        );
       } else {
         // If no warnings, the validation passed (implementation may differ)
         expect(true).toBe(true);
@@ -452,7 +452,7 @@ describe('useEmailTemplates', () => {
         type: TemplateType.TRANSACTIONAL
       });
 
-      expect(filtered.every(t => t.type === TemplateType.TRANSACTIONAL)).toBe(true);
+      expect(filtered.every((t) => t.type === TemplateType.TRANSACTIONAL)).toBe(true);
     });
 
     it('should filter by category', async () => {
@@ -467,7 +467,7 @@ describe('useEmailTemplates', () => {
         categoryId: category.id
       });
 
-      expect(filtered.every(t => t.categoryId === category.id)).toBe(true);
+      expect(filtered.every((t) => t.categoryId === category.id)).toBe(true);
     });
 
     it('should filter by favorites', async () => {
@@ -481,7 +481,7 @@ describe('useEmailTemplates', () => {
         isFavorite: true
       });
 
-      expect(filtered.every(t => t.isFavorite)).toBe(true);
+      expect(filtered.every((t) => t.isFavorite)).toBe(true);
     });
 
     it('should filter by search query', async () => {
@@ -496,10 +496,11 @@ describe('useEmailTemplates', () => {
       });
 
       expect(filtered.length).toBeGreaterThan(0);
-      expect(filtered.some(t =>
-        t.name.toLowerCase().includes('welcome') ||
-        t.description.toLowerCase().includes('welcome')
-      )).toBe(true);
+      expect(
+        filtered.some(
+          (t) => t.name.toLowerCase().includes('welcome') || t.description.toLowerCase().includes('welcome')
+        )
+      ).toBe(true);
     });
 
     it('should sort templates by name', async () => {
@@ -515,7 +516,7 @@ describe('useEmailTemplates', () => {
       });
 
       for (let i = 1; i < sorted.length; i++) {
-        expect(sorted[i].name.toLowerCase() >= sorted[i-1].name.toLowerCase()).toBe(true);
+        expect(sorted[i].name.toLowerCase() >= sorted[i - 1].name.toLowerCase()).toBe(true);
       }
     });
   });
@@ -529,7 +530,7 @@ describe('useEmailTemplates', () => {
       });
 
       // Create a template
-      let template: any;
+      let template: unknown;
       await act(async () => {
         template = await result.current.createTemplate({
           name: 'Favorite Test',
@@ -564,7 +565,7 @@ describe('useEmailTemplates', () => {
       });
 
       // Create a template
-      let template: any;
+      let template: unknown;
       await act(async () => {
         template = await result.current.createTemplate({
           name: 'Version Test',
@@ -579,7 +580,7 @@ describe('useEmailTemplates', () => {
         vi.advanceTimersByTime(100);
       });
 
-      let newVersion: any;
+      let newVersion: unknown;
       await act(async () => {
         newVersion = await result.current.createVersion(template.id, 'Initial version');
       });
@@ -598,9 +599,7 @@ describe('useEmailTemplates', () => {
         vi.advanceTimersByTime(600);
       });
 
-      const initialCount = result.current.categories.length;
-
-      let newCategory: any;
+      let newCategory: unknown;
       await act(async () => {
         newCategory = await result.current.createCategory({
           name: 'Test Category',
@@ -653,7 +652,7 @@ describe('useEmailTemplates', () => {
       const category = result.current.categories[0];
       const templates = result.current.getTemplatesByCategory(category.id);
 
-      expect(templates.every(t => t.categoryId === category.id)).toBe(true);
+      expect(templates.every((t) => t.categoryId === category.id)).toBe(true);
     });
 
     it('should get templates by tag', async () => {
@@ -664,7 +663,7 @@ describe('useEmailTemplates', () => {
       });
 
       // Find a template with tags
-      const template = result.current.templates.find(t => t.tags.length > 0);
+      const template = result.current.templates.find((t) => t.tags.length > 0);
       if (template) {
         const templates = result.current.getTemplatesByTag(template.tags[0]);
         expect(templates.length).toBeGreaterThan(0);
@@ -679,7 +678,7 @@ describe('useEmailTemplates', () => {
       });
 
       const favorites = result.current.getFavorites();
-      expect(favorites.every(t => t.isFavorite)).toBe(true);
+      expect(favorites.every((t) => t.isFavorite)).toBe(true);
     });
 
     it('should get user templates', async () => {
@@ -690,7 +689,7 @@ describe('useEmailTemplates', () => {
       });
 
       const userTemplates = result.current.getUserTemplates();
-      expect(userTemplates.every(t => !t.isSystem)).toBe(true);
+      expect(userTemplates.every((t) => !t.isSystem)).toBe(true);
     });
   });
 

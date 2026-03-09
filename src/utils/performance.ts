@@ -5,7 +5,7 @@
 /**
  * Memoize function results to avoid expensive recalculations
  */
-export function memoize<T extends(...args: any[]) => any>(
+export function memoize<T extends (...args: any[]) => any>(
   fn: T,
   keyGenerator?: (...args: Parameters<T>) => string
 ): T {
@@ -27,10 +27,7 @@ export function memoize<T extends(...args: any[]) => any>(
 /**
  * Debounce function to limit execution rate
  */
-export function debounce<T extends(...args: any[]) => any>(
-  fn: T,
-  delay: number
-): (...args: Parameters<T>) => void {
+export function debounce<T extends (...args: any[]) => any>(fn: T, delay: number): (...args: Parameters<T>) => void {
   let timeoutId: NodeJS.Timeout | null = null;
 
   return (...args: Parameters<T>) => {
@@ -47,10 +44,7 @@ export function debounce<T extends(...args: any[]) => any>(
 /**
  * Throttle function to limit execution rate
  */
-export function throttle<T extends(...args: any[]) => any>(
-  fn: T,
-  limit: number
-): (...args: Parameters<T>) => void {
+export function throttle<T extends (...args: any[]) => any>(fn: T, limit: number): (...args: Parameters<T>) => void {
   let inThrottle: boolean = false;
   let lastResult: ReturnType<T>;
 
@@ -71,9 +65,7 @@ export function throttle<T extends(...args: any[]) => any>(
 /**
  * Request animation frame throttle for smooth animations
  */
-export function rafThrottle<T extends(...args: any[]) => any>(
-  fn: T
-): (...args: Parameters<T>) => void {
+export function rafThrottle<T extends (...args: any[]) => any>(fn: T): (...args: Parameters<T>) => void {
   let rafId: number | null = null;
 
   return (...args: Parameters<T>) => {
@@ -91,10 +83,7 @@ export function rafThrottle<T extends(...args: any[]) => any>(
 /**
  * Lazy load images with intersection observer
  */
-export function lazyLoadImages(
-  selector: string = 'img[data-src]',
-  options?: IntersectionObserverInit
-): void {
+export function lazyLoadImages(selector: string = 'img[data-src]', options?: IntersectionObserverInit): void {
   const images = document.querySelectorAll(selector);
 
   if ('IntersectionObserver' in window) {
@@ -142,10 +131,7 @@ export function preloadResources(resources: Array<{ href: string; as: string }>)
 /**
  * Measure performance of a function
  */
-export function measurePerformance<T extends(...args: any[]) => any>(
-  fn: T,
-  label: string
-): T {
+export function measurePerformance<T extends (...args: any[]) => any>(fn: T, label: string): T {
   return ((...args: Parameters<T>) => {
     const start = performance.now();
     const result = fn(...args);
@@ -176,10 +162,7 @@ export function calculateVisibleRange(
   buffer: number = 5
 ): { start: number; end: number } {
   const start = Math.max(0, Math.floor(scrollTop / itemHeight) - buffer);
-  const end = Math.min(
-    totalItems,
-    Math.ceil((scrollTop + containerHeight) / itemHeight) + buffer
-  );
+  const end = Math.min(totalItems, Math.ceil((scrollTop + containerHeight) / itemHeight) + buffer);
 
   return { start, end };
 }
@@ -227,11 +210,7 @@ export function isSlowConnection(): boolean {
     return false;
   }
 
-  return (
-    connection.saveData ||
-    connection.effectiveType === 'slow-2g' ||
-    connection.effectiveType === '2g'
-  );
+  return connection.saveData || connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g';
 }
 
 /**

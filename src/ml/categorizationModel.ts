@@ -102,7 +102,7 @@ export class CategorizationModel {
       .toLowerCase()
       .replace(/[^\w\s]/g, ' ')
       .split(/\s+/)
-      .filter(word => word.length > 2);
+      .filter((word) => word.length > 2);
   }
 
   /**
@@ -127,12 +127,24 @@ export class CategorizationModel {
    */
   private hasPromoKeywords(text: string): boolean {
     const promoKeywords = [
-      'sale', 'discount', 'offer', 'deal', 'coupon', 'promo',
-      'limited time', 'special offer', 'buy now', 'free shipping',
-      'save', 'off', 'clearance', 'bargain', 'exclusive'
+      'sale',
+      'discount',
+      'offer',
+      'deal',
+      'coupon',
+      'promo',
+      'limited time',
+      'special offer',
+      'buy now',
+      'free shipping',
+      'save',
+      'off',
+      'clearance',
+      'bargain',
+      'exclusive'
     ];
     const lowerText = text.toLowerCase();
-    return promoKeywords.some(keyword => lowerText.includes(keyword));
+    return promoKeywords.some((keyword) => lowerText.includes(keyword));
   }
 
   /**
@@ -140,12 +152,20 @@ export class CategorizationModel {
    */
   private hasUrgencyKeywords(text: string): boolean {
     const urgencyKeywords = [
-      'urgent', 'asap', 'important', 'critical', 'immediate',
-      'deadline', 'expires', 'time sensitive', 'action required',
-      'priority', 'emergency'
+      'urgent',
+      'asap',
+      'important',
+      'critical',
+      'immediate',
+      'deadline',
+      'expires',
+      'time sensitive',
+      'action required',
+      'priority',
+      'emergency'
     ];
     const lowerText = text.toLowerCase();
-    return urgencyKeywords.some(keyword => lowerText.includes(keyword));
+    return urgencyKeywords.some((keyword) => lowerText.includes(keyword));
   }
 
   /**
@@ -169,150 +189,150 @@ export class CategorizationModel {
     // Work category
     let workScore = 0;
     if (this.isWorkDomain(domain)) {
-workScore += 0.4;
-}
+      workScore += 0.4;
+    }
     if (this.hasWorkKeywords(subject + ' ' + body)) {
-workScore += 0.3;
-}
+      workScore += 0.3;
+    }
     if (features.hasAttachments) {
-workScore += 0.2;
-}
+      workScore += 0.2;
+    }
     if (features.isReply || features.isForward) {
-workScore += 0.1;
-}
+      workScore += 0.1;
+    }
     if (features.hasUrgencyKeywords) {
-workScore += 0.2;
-}
+      workScore += 0.2;
+    }
     scores.set(EmailCategory.WORK, workScore);
 
     // Personal category
     let personalScore = 0;
     if (this.isPersonalDomain(domain)) {
-personalScore += 0.5;
-}
+      personalScore += 0.5;
+    }
     if (this.hasPersonalKeywords(subject + ' ' + body)) {
-personalScore += 0.3;
-}
+      personalScore += 0.3;
+    }
     if (features.recipientCount <= 1) {
-personalScore += 0.2;
-}
+      personalScore += 0.2;
+    }
     scores.set(EmailCategory.PERSONAL, personalScore);
 
     // Promotions category
     let promoScore = 0;
     if (features.hasPromoKeywords) {
-promoScore += 0.5;
-}
+      promoScore += 0.5;
+    }
     if (features.hasUnsubscribeLink) {
-promoScore += 0.4;
-}
+      promoScore += 0.4;
+    }
     if (this.isPromoDomain(domain)) {
-promoScore += 0.3;
-}
+      promoScore += 0.3;
+    }
     if (features.linkCount > 3) {
-promoScore += 0.2;
-}
+      promoScore += 0.2;
+    }
     scores.set(EmailCategory.PROMOTIONS, promoScore);
 
     // Social category
     let socialScore = 0;
     if (this.isSocialDomain(domain)) {
-socialScore += 0.5;
-}
+      socialScore += 0.5;
+    }
     if (this.hasSocialKeywords(subject)) {
-socialScore += 0.4;
-}
+      socialScore += 0.4;
+    }
     if (features.hourOfDay >= 18 || features.hourOfDay <= 8) {
-socialScore += 0.1;
-}
+      socialScore += 0.1;
+    }
     scores.set(EmailCategory.SOCIAL, socialScore);
 
     // Updates category
     let updatesScore = 0;
     if (this.isUpdatesDomain(domain)) {
-updatesScore += 0.4;
-}
+      updatesScore += 0.4;
+    }
     if (this.hasUpdatesKeywords(subject)) {
-updatesScore += 0.3;
-}
+      updatesScore += 0.3;
+    }
     if (!features.isReply && !features.isForward) {
-updatesScore += 0.2;
-}
+      updatesScore += 0.2;
+    }
     scores.set(EmailCategory.UPDATES, updatesScore);
 
     // Finance category
     let financeScore = 0;
     if (this.isFinanceDomain(domain)) {
-financeScore += 0.5;
-}
+      financeScore += 0.5;
+    }
     if (this.hasFinanceKeywords(subject + ' ' + body)) {
-financeScore += 0.4;
-}
+      financeScore += 0.4;
+    }
     if (features.hasUrgencyKeywords) {
-financeScore += 0.2;
-}
+      financeScore += 0.2;
+    }
     scores.set(EmailCategory.FINANCE, financeScore);
 
     // Travel category
     let travelScore = 0;
     if (this.isTravelDomain(domain)) {
-travelScore += 0.5;
-}
+      travelScore += 0.5;
+    }
     if (this.hasTravelKeywords(subject + ' ' + body)) {
-travelScore += 0.4;
-}
+      travelScore += 0.4;
+    }
     if (features.hasAttachments) {
-travelScore += 0.2;
-}
+      travelScore += 0.2;
+    }
     scores.set(EmailCategory.TRAVEL, travelScore);
 
     // Shopping category
     let shoppingScore = 0;
     if (this.isShoppingDomain(domain)) {
-shoppingScore += 0.5;
-}
+      shoppingScore += 0.5;
+    }
     if (this.hasShoppingKeywords(subject + ' ' + body)) {
-shoppingScore += 0.4;
-}
+      shoppingScore += 0.4;
+    }
     if (features.hasAttachments) {
-shoppingScore += 0.2;
-}
+      shoppingScore += 0.2;
+    }
     scores.set(EmailCategory.SHOPPING, shoppingScore);
 
     // News category
     let newsScore = 0;
     if (this.isNewsDomain(domain)) {
-newsScore += 0.4;
-}
+      newsScore += 0.4;
+    }
     if (this.hasNewsKeywords(subject)) {
-newsScore += 0.3;
-}
+      newsScore += 0.3;
+    }
     if (features.linkCount > 0) {
-newsScore += 0.2;
-}
+      newsScore += 0.2;
+    }
     scores.set(EmailCategory.NEWS, newsScore);
 
     // Forums category
     let forumsScore = 0;
     if (this.isForumDomain(domain)) {
-forumsScore += 0.5;
-}
+      forumsScore += 0.5;
+    }
     if (this.hasForumKeywords(subject)) {
-forumsScore += 0.3;
-}
+      forumsScore += 0.3;
+    }
     scores.set(EmailCategory.FORUMS, forumsScore);
 
     // Spam category
     let spamScore = 0;
     if (features.hasPromoKeywords) {
-spamScore += 0.3;
-}
+      spamScore += 0.3;
+    }
     if (features.linkCount > 5) {
-spamScore += 0.2;
-}
+      spamScore += 0.2;
+    }
     if (features.hasUnsubscribeLink) {
-spamScore += 0.2;
-}
+      spamScore += 0.2;
+    }
     scores.set(EmailCategory.SPAM, spamScore);
 
     return scores;
@@ -335,10 +355,7 @@ spamScore += 0.2;
   /**
    * Sort categories by score and return top N
    */
-  private getTopCategories(
-    scores: Map<string, number>,
-    max: number
-  ): CategoryConfidence[] {
+  private getTopCategories(scores: Map<string, number>, max: number): CategoryConfidence[] {
     return Array.from(scores.entries())
       .sort((a, b) => b[1] - a[1])
       .slice(0, max)
@@ -365,7 +382,7 @@ spamScore += 0.2;
   // Helper methods for domain and keyword detection
   private isWorkDomain(domain: string): boolean {
     const workDomains = ['company.com', 'corporate', 'enterprise', 'business'];
-    return workDomains.some(d => domain.includes(d));
+    return workDomains.some((d) => domain.includes(d));
   }
 
   private isPersonalDomain(domain: string): boolean {
@@ -375,87 +392,87 @@ spamScore += 0.2;
 
   private isPromoDomain(domain: string): boolean {
     const promoDomains = ['marketing', 'promo', 'promo-email', 'newsletter'];
-    return promoDomains.some(d => domain.includes(d));
+    return promoDomains.some((d) => domain.includes(d));
   }
 
   private isSocialDomain(domain: string): boolean {
     const socialDomains = ['facebook', 'twitter', 'instagram', 'linkedin', 'social'];
-    return socialDomains.some(d => domain.includes(d));
+    return socialDomains.some((d) => domain.includes(d));
   }
 
   private isUpdatesDomain(domain: string): boolean {
     const updatesDomains = ['notification', 'update', 'alert', 'noreply'];
-    return updatesDomains.some(d => domain.includes(d));
+    return updatesDomains.some((d) => domain.includes(d));
   }
 
   private isFinanceDomain(domain: string): boolean {
     const financeDomains = ['bank', 'finance', 'investment', 'paypal', 'stripe'];
-    return financeDomains.some(d => domain.includes(d));
+    return financeDomains.some((d) => domain.includes(d));
   }
 
   private isTravelDomain(domain: string): boolean {
     const travelDomains = ['airline', 'booking', 'hotel', 'travel', 'expedia'];
-    return travelDomains.some(d => domain.includes(d));
+    return travelDomains.some((d) => domain.includes(d));
   }
 
   private isShoppingDomain(domain: string): boolean {
     const shoppingDomains = ['amazon', 'ebay', 'shop', 'store', 'commerce'];
-    return shoppingDomains.some(d => domain.includes(d));
+    return shoppingDomains.some((d) => domain.includes(d));
   }
 
   private isNewsDomain(domain: string): boolean {
     const newsDomains = ['news', 'journal', 'times', 'post', 'daily'];
-    return newsDomains.some(d => domain.includes(d));
+    return newsDomains.some((d) => domain.includes(d));
   }
 
   private isForumDomain(domain: string): boolean {
     const forumDomains = ['forum', 'community', 'reddit', 'stackoverflow'];
-    return forumDomains.some(d => domain.includes(d));
+    return forumDomains.some((d) => domain.includes(d));
   }
 
   private hasWorkKeywords(text: string): boolean {
     const keywords = ['meeting', 'project', 'deadline', 'report', 'review', 'contract'];
-    return keywords.some(k => text.toLowerCase().includes(k));
+    return keywords.some((k) => text.toLowerCase().includes(k));
   }
 
   private hasPersonalKeywords(text: string): boolean {
     const keywords = ['family', 'friend', 'personal', 'weekend', 'dinner', 'birthday'];
-    return keywords.some(k => text.toLowerCase().includes(k));
+    return keywords.some((k) => text.toLowerCase().includes(k));
   }
 
   private hasSocialKeywords(text: string): boolean {
     const keywords = ['notification', 'mention', 'comment', 'like', 'share'];
-    return keywords.some(k => text.toLowerCase().includes(k));
+    return keywords.some((k) => text.toLowerCase().includes(k));
   }
 
   private hasUpdatesKeywords(text: string): boolean {
     const keywords = ['update', 'notification', 'alert', 'news', 'release'];
-    return keywords.some(k => text.toLowerCase().includes(k));
+    return keywords.some((k) => text.toLowerCase().includes(k));
   }
 
   private hasFinanceKeywords(text: string): boolean {
     const keywords = ['payment', 'invoice', 'receipt', 'bank', 'credit', 'debit'];
-    return keywords.some(k => text.toLowerCase().includes(k));
+    return keywords.some((k) => text.toLowerCase().includes(k));
   }
 
   private hasTravelKeywords(text: string): boolean {
     const keywords = ['flight', 'hotel', 'reservation', 'booking', 'itinerary', 'check-in'];
-    return keywords.some(k => text.toLowerCase().includes(k));
+    return keywords.some((k) => text.toLowerCase().includes(k));
   }
 
   private hasShoppingKeywords(text: string): boolean {
     const keywords = ['order', 'shipment', 'delivery', 'purchase', 'cart'];
-    return keywords.some(k => text.toLowerCase().includes(k));
+    return keywords.some((k) => text.toLowerCase().includes(k));
   }
 
   private hasNewsKeywords(text: string): boolean {
     const keywords = ['newsletter', 'digest', 'weekly', 'breaking news'];
-    return keywords.some(k => text.toLowerCase().includes(k));
+    return keywords.some((k) => text.toLowerCase().includes(k));
   }
 
   private hasForumKeywords(text: string): boolean {
     const keywords = ['reply', 'thread', 'post', 'comment', 'upvote'];
-    return keywords.some(k => text.toLowerCase().includes(k));
+    return keywords.some((k) => text.toLowerCase().includes(k));
   }
 
   /**
@@ -493,7 +510,7 @@ spamScore += 0.2;
   batchCategorize(emails: any[]): Map<string, CategorizationResult> {
     const results = new Map<string, CategorizationResult>();
 
-    emails.forEach(email => {
+    emails.forEach((email) => {
       const result = this.categorize(email);
       results.set(email.id, result);
     });
@@ -512,7 +529,7 @@ spamScore += 0.2;
     // For now, this is a placeholder
 
     console.log(`Training with ${examples.length} examples`);
-    await new Promise(resolve => setTimeout(resolve, 100)); // Simulate training
+    await new Promise((resolve) => setTimeout(resolve, 100)); // Simulate training
   }
 
   /**

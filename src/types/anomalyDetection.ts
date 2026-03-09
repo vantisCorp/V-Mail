@@ -16,7 +16,7 @@ export enum AnomalySeverity {
   /** High severity - significant concern */
   HIGH = 'HIGH',
   /** Critical severity - immediate action required */
-  CRITICAL = 'CRITICAL',
+  CRITICAL = 'CRITICAL'
 }
 
 /**
@@ -46,7 +46,7 @@ export enum AnomalyType {
   /** Bulk email anomaly */
   BULK_ANOMALY = 'BULK_ANOMALY',
   /** Unknown anomaly type */
-  UNKNOWN = 'UNKNOWN',
+  UNKNOWN = 'UNKNOWN'
 }
 
 /**
@@ -60,7 +60,7 @@ export enum DetectionStatus {
   /** Analysis complete */
   COMPLETED = 'COMPLETED',
   /** Analysis failed */
-  FAILED = 'FAILED',
+  FAILED = 'FAILED'
 }
 
 /**
@@ -76,7 +76,7 @@ export enum RiskLevel {
   /** High risk */
   HIGH = 'HIGH',
   /** Severe risk */
-  SEVERE = 'SEVERE',
+  SEVERE = 'SEVERE'
 }
 
 /**
@@ -94,7 +94,7 @@ export interface AnomalyDetectionResult {
   description: string;
   indicators: AnomalyIndicator[];
   recommendedActions: RecommendedAction[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -131,7 +131,7 @@ export enum ActionType {
   QUARANTINE_EMAIL = 'QUARANTINE_EMAIL',
   REMOVE_LINKS = 'REMOVE_LINKS',
   SCAN_ATTACHMENT = 'SCAN_ATTACHMENT',
-  REQUIRE_2FA = 'REQUIRE_2FA',
+  REQUIRE_2FA = 'REQUIRE_2FA'
 }
 
 /**
@@ -153,7 +153,7 @@ export enum PhishingIndicatorType {
   GRAMMAR_ERROR = 'GRAMMAR_ERROR',
   GENERIC_GREETING = 'GENERIC_GREETING',
   MISMATCHED_LINKS = 'MISMATCHED_LINKS',
-  SUSPICIOUS_ATTACHMENT = 'SUSPICIOUS_ATTACHMENT',
+  SUSPICIOUS_ATTACHMENT = 'SUSPICIOUS_ATTACHMENT'
 }
 
 /**
@@ -173,7 +173,7 @@ export enum SpamIndicatorType {
   PRICE_MENTION = 'PRICE_MENTION',
   URGENCY_WORDS = 'URGENCY_WORDS',
   SUSPICIOUS_SENDER = 'SUSPICIOUS_SENDER',
-  UNSUBSCRIBE_FAIL = 'UNSUBSCRIBE_FAIL',
+  UNSUBSCRIBE_FAIL = 'UNSUBSCRIBE_FAIL'
 }
 
 /**
@@ -194,14 +194,14 @@ export enum SenderCategory {
   KNOWN = 'KNOWN',
   UNKNOWN = 'UNKNOWN',
   SUSPICIOUS = 'SUSPICIOUS',
-  MALICIOUS = 'MALICIOUS',
+  MALICIOUS = 'MALICIOUS'
 }
 
 export enum TrustLevel {
   HIGH = 'HIGH',
   MEDIUM = 'MEDIUM',
   LOW = 'LOW',
-  NONE = 'NONE',
+  NONE = 'NONE'
 }
 
 export interface SenderHistoricalData {
@@ -218,7 +218,7 @@ export enum SenderFlag {
   RECENTLY_FLAGGED = 'RECENTLY_FLAGGED',
   DOMAIN_MISMATCH = 'DOMAIN_MISMATCH',
   SUSPICIOUS_DOMAIN = 'SUSPICIOUS_DOMAIN',
-  COMPROMISED = 'COMPROMISED',
+  COMPROMISED = 'COMPROMISED'
 }
 
 /**
@@ -244,7 +244,7 @@ export enum PatternType {
   UNUSUAL_RECIPIENT = 'UNUSUAL_RECIPIENT',
   UNUSUAL_CONTENT = 'UNUSUAL_CONTENT',
   UNUSUAL_ATTACHMENT = 'UNUSUAL_ATTACHMENT',
-  UNUSUAL_FORMAT = 'UNUSUAL_FORMAT',
+  UNUSUAL_FORMAT = 'UNUSUAL_FORMAT'
 }
 
 export interface BehavioralBaseline {
@@ -333,7 +333,7 @@ export enum LinkCategory {
   ADULT = 'ADULT',
   GAMBLING = 'GAMBLING',
   REDIRECT = 'REDIRECT',
-  SHORTENER = 'SHORTENER',
+  SHORTENER = 'SHORTENER'
 }
 
 /**

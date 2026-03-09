@@ -3,13 +3,12 @@
  * Manages Google Calendar and Microsoft Outlook/Exchange integration
  */
 
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   CalendarEvent,
   CalendarProvider,
   EventStatus,
   EventVisibility,
-  RecurrenceFrequency,
   Calendar,
   CalendarAccount,
   CreateEventPayload,
@@ -20,8 +19,7 @@ import {
   FreeBusyQuery,
   FreeBusyResponse,
   CalendarSyncStatus,
-  EventAttendee,
-  RecurrenceRule
+  EventAttendee
 } from '../types/calendar';
 
 // Generate unique ID
@@ -143,9 +141,7 @@ const generateMockEvents = (): CalendarEvent[] => {
         { email: 'team@company.com', displayName: 'Team', responseStatus: 'accepted' },
         { email: 'user@example.com', displayName: 'User', responseStatus: 'accepted' }
       ],
-      reminders: [
-        { method: 'popup', minutes: 10 }
-      ],
+      reminders: [{ method: 'popup', minutes: 10 }],
       created: new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString(),
       updated: new Date(today.getTime() - 1 * 24 * 60 * 60 * 1000).toISOString(),
       creator: { email: 'john.doe@gmail.com', displayName: 'John Doe' },
@@ -197,12 +193,8 @@ const generateMockEvents = (): CalendarEvent[] => {
         dateTime: new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000 + 11 * 60 * 60 * 1000).toISOString(),
         timeZone: 'America/New_York'
       },
-      attendees: [
-        { email: 'client@external.com', displayName: 'Client', responseStatus: 'needsAction' }
-      ],
-      reminders: [
-        { method: 'popup', minutes: 30 }
-      ],
+      attendees: [{ email: 'client@external.com', displayName: 'Client', responseStatus: 'needsAction' }],
+      reminders: [{ method: 'popup', minutes: 30 }],
       created: new Date(today.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString(),
       updated: new Date(today.getTime() - 1 * 24 * 60 * 60 * 1000).toISOString()
     },
@@ -249,7 +241,7 @@ export const useCalendar = () => {
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setAccounts(generateMockAccounts());
       setCalendars(generateMockCalendars());
       setEvents(generateMockEvents());
@@ -264,299 +256,319 @@ export const useCalendar = () => {
   }, []);
 
   // Account Management
-  const connectCalendar = useCallback(async (
-    provider: CalendarProvider,
-    authCode?: string
-  ): Promise<CalendarAccount | null> => {
-    // Mock OAuth flow
-    const newAccount: CalendarAccount = {
-      id: generateId(),
-      provider,
-      userId: 'user-1',
-      email: `user@${provider === CalendarProvider.GOOGLE ? 'gmail.com' : 'outlook.com'}`,
-      displayName: 'User',
-      accessToken: 'mock-token',
-      refreshToken: 'mock-refresh-token',
-      expiresAt: new Date(Date.now() + 3600000).toISOString(),
-      scopes: provider === CalendarProvider.GOOGLE
-        ? ['https://www.googleapis.com/auth/calendar']
-        : ['Calendars.ReadWrite'],
-      isActive: true,
-      isPrimary: accounts.length === 0,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
+  const connectCalendar = useCallback(
+    async (provider: CalendarProvider, _authCode?: string): Promise<CalendarAccount | null> => {
+      // Mock OAuth flow
+      const newAccount: CalendarAccount = {
+        id: generateId(),
+        provider,
+        userId: 'user-1',
+        email: `user@${provider === CalendarProvider.GOOGLE ? 'gmail.com' : 'outlook.com'}`,
+        displayName: 'User',
+        accessToken: 'mock-token',
+        refreshToken: 'mock-refresh-token',
+        expiresAt: new Date(Date.now() + 3600000).toISOString(),
+        scopes:
+          provider === CalendarProvider.GOOGLE ? ['https://www.googleapis.com/auth/calendar'] : ['Calendars.ReadWrite'],
+        isActive: true,
+        isPrimary: accounts.length === 0,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
 
-    setAccounts(prev => [...prev, newAccount]);
-    return newAccount;
-  }, [accounts.length]);
+      setAccounts((prev) => [...prev, newAccount]);
+      return newAccount;
+    },
+    [accounts.length]
+  );
 
-  const disconnectCalendar = useCallback(async (accountId: string): Promise<boolean> => {
-    setAccounts(prev => prev.filter(a => a.id !== accountId));
-    setCalendars(prev => prev.filter(c => c.accountId !== accountId));
-    setEvents(prev => prev.filter(e => {
-      const eventAccount = accounts.find(a => a.id === accountId);
-      return e.provider !== eventAccount?.provider;
-    }));
-    return true;
-  }, [accounts]);
+  const disconnectCalendar = useCallback(
+    async (accountId: string): Promise<boolean> => {
+      setAccounts((prev) => prev.filter((a) => a.id !== accountId));
+      setCalendars((prev) => prev.filter((c) => c.accountId !== accountId));
+      setEvents((prev) =>
+        prev.filter((e) => {
+          const eventAccount = accounts.find((a) => a.id === accountId);
+          return e.provider !== eventAccount?.provider;
+        })
+      );
+      return true;
+    },
+    [accounts]
+  );
 
   const refreshAccountToken = useCallback(async (accountId: string): Promise<boolean> => {
-    setAccounts(prev => prev.map(account => {
-      if (account.id === accountId) {
-        return {
-          ...account,
-          accessToken: 'new-mock-token',
-          expiresAt: new Date(Date.now() + 3600000).toISOString(),
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return account;
-    }));
+    setAccounts((prev) =>
+      prev.map((account) => {
+        if (account.id === accountId) {
+          return {
+            ...account,
+            accessToken: 'new-mock-token',
+            expiresAt: new Date(Date.now() + 3600000).toISOString(),
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return account;
+      })
+    );
     return true;
   }, []);
 
   // Event CRUD Operations
-  const createEvent = useCallback(async (payload: CreateEventPayload): Promise<CalendarEvent | null> => {
-    const calendar = calendars.find(c => c.calendarId === payload.calendarId);
+  const createEvent = useCallback(
+    async (payload: CreateEventPayload): Promise<CalendarEvent | null> => {
+      const calendar = calendars.find((c) => c.calendarId === payload.calendarId);
 
-    const newEvent: CalendarEvent = {
-      id: generateId(),
-      provider: calendar?.provider || CalendarProvider.GOOGLE,
-      providerEventId: `event-${Date.now()}`,
-      summary: payload.summary,
-      description: payload.description,
-      location: payload.location,
-      status: EventStatus.CONFIRMED,
-      visibility: payload.visibility || EventVisibility.DEFAULT,
-      start: payload.start,
-      end: payload.end,
-      recurrence: payload.recurrence,
-      attendees: payload.attendees?.map(a => ({
-        email: a.email,
-        displayName: a.displayName,
-        responseStatus: 'needsAction' as const
-      })),
-      reminders: payload.reminders?.useDefault
-        ? [{ method: 'popup', minutes: 30 }]
-        : payload.reminders?.overrides,
-      created: new Date().toISOString(),
-      updated: new Date().toISOString(),
-      conferenceData: payload.conferenceData
-    };
+      const newEvent: CalendarEvent = {
+        id: generateId(),
+        provider: calendar?.provider || CalendarProvider.GOOGLE,
+        providerEventId: `event-${Date.now()}`,
+        summary: payload.summary,
+        description: payload.description,
+        location: payload.location,
+        status: EventStatus.CONFIRMED,
+        visibility: payload.visibility || EventVisibility.DEFAULT,
+        start: payload.start,
+        end: payload.end,
+        recurrence: payload.recurrence,
+        attendees: payload.attendees?.map((a) => ({
+          email: a.email,
+          displayName: a.displayName,
+          responseStatus: 'needsAction' as const
+        })),
+        reminders: payload.reminders?.useDefault ? [{ method: 'popup', minutes: 30 }] : payload.reminders?.overrides,
+        created: new Date().toISOString(),
+        updated: new Date().toISOString(),
+        conferenceData: payload.conferenceData
+      };
 
-    setEvents(prev => [...prev, newEvent]);
-    return newEvent;
-  }, [calendars]);
+      setEvents((prev) => [...prev, newEvent]);
+      return newEvent;
+    },
+    [calendars]
+  );
 
-  const updateEvent = useCallback(async (eventId: string, payload: UpdateEventPayload): Promise<CalendarEvent | null> => {
-    let updatedEvent: CalendarEvent | null = null;
+  const updateEvent = useCallback(
+    async (eventId: string, payload: UpdateEventPayload): Promise<CalendarEvent | null> => {
+      let updatedEvent: CalendarEvent | null = null;
 
-    setEvents(prev => {
-      const found = prev.find(e => e.id === eventId);
-      if (found) {
-        updatedEvent = {
-          ...found,
-          ...payload,
-          start: payload.start || found.start,
-          end: payload.end || found.end,
-          attendees: payload.attendees?.map(a => ({
-            ...a,
-            responseStatus: a.responseStatus || 'needsAction' as const
-          })) || found.attendees,
-          reminders: payload.reminders?.useDefault
-            ? [{ method: 'popup' as const, minutes: 30 }]
-            : payload.reminders?.overrides || found.reminders,
-          updated: new Date().toISOString()
-        };
-        return prev.map(e => e.id === eventId ? updatedEvent! : e);
-      }
-      return prev;
-    });
+      setEvents((prev) => {
+        const found = prev.find((e) => e.id === eventId);
+        if (found) {
+          updatedEvent = {
+            ...found,
+            ...payload,
+            start: payload.start || found.start,
+            end: payload.end || found.end,
+            attendees:
+              payload.attendees?.map((a) => ({
+                ...a,
+                responseStatus: a.responseStatus || ('needsAction' as const)
+              })) || found.attendees,
+            reminders: payload.reminders?.useDefault
+              ? [{ method: 'popup' as const, minutes: 30 }]
+              : payload.reminders?.overrides || found.reminders,
+            updated: new Date().toISOString()
+          };
+          return prev.map((e) => (e.id === eventId ? updatedEvent! : e));
+        }
+        return prev;
+      });
 
-    return updatedEvent;
-  }, []);
+      return updatedEvent;
+    },
+    []
+  );
 
   const deleteEvent = useCallback(async (eventId: string): Promise<boolean> => {
-    setEvents(prev => prev.filter(e => e.id !== eventId));
+    setEvents((prev) => prev.filter((e) => e.id !== eventId));
     return true;
   }, []);
 
-  const getEventById = useCallback((eventId: string): CalendarEvent | null => {
-    return events.find(e => e.id === eventId) || null;
-  }, [events]);
+  const getEventById = useCallback(
+    (eventId: string): CalendarEvent | null => {
+      return events.find((e) => e.id === eventId) || null;
+    },
+    [events]
+  );
 
   // Email to Event Conversion
-  const convertEmailToEvent = useCallback(async (
-    emailId: string,
-    emailData: {
-      subject: string;
-      from: string;
-      body?: string;
-      date: string;
-      to?: string[];
-    },
-    options: EmailToEventOptions
-  ): Promise<CalendarEvent | null> => {
-    // Extract event details from email
-    let summary = 'Event from Email';
-    let description = '';
-    const location = '';
-    const attendees: EventAttendee[] = [];
-    let eventDate = new Date();
+  const convertEmailToEvent = useCallback(
+    async (
+      emailId: string,
+      emailData: {
+        subject: string;
+        from: string;
+        body?: string;
+        date: string;
+        to?: string[];
+      },
+      options: EmailToEventOptions
+    ): Promise<CalendarEvent | null> => {
+      // Extract event details from email
+      let summary = 'Event from Email';
+      let description = '';
+      const location = '';
+      const attendees: EventAttendee[] = [];
+      let eventDate = new Date();
 
-    // Extract title from subject
-    if (options.extractTitleFromSubject && emailData.subject) {
-      summary = emailData.subject;
-    }
+      // Extract title from subject
+      if (options.extractTitleFromSubject && emailData.subject) {
+        summary = emailData.subject;
+      }
 
-    // Extract description from body
-    if (options.extractDescriptionFromBody && emailData.body) {
-      description = emailData.body;
-    }
+      // Extract description from body
+      if (options.extractDescriptionFromBody && emailData.body) {
+        description = emailData.body;
+      }
 
-    // Extract date from body (simplified - would use NLP in production)
-    if (options.extractDateFromBody && emailData.body) {
-      const datePatterns = [
-        /(\d{1,2}\/\d{1,2}\/\d{4})/,
-        /(\d{4}-\d{2}-\d{2})/,
-        /(tomorrow|next week|monday|tuesday|wednesday|thursday|friday|saturday|sunday)/i
-      ];
+      // Extract date from body (simplified - would use NLP in production)
+      if (options.extractDateFromBody && emailData.body) {
+        const datePatterns = [
+          /(\d{1,2}\/\d{1,2}\/\d{4})/,
+          /(\d{4}-\d{2}-\d{2})/,
+          /(tomorrow|next week|monday|tuesday|wednesday|thursday|friday|saturday|sunday)/i
+        ];
 
-      for (const pattern of datePatterns) {
-        const match = emailData.body.match(pattern);
-        if (match) {
-          // Parse date (simplified)
-          if (match[1] === 'tomorrow') {
-            eventDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
+        for (const pattern of datePatterns) {
+          const match = emailData.body.match(pattern);
+          if (match) {
+            // Parse date (simplified)
+            if (match[1] === 'tomorrow') {
+              eventDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
+            }
+            break;
           }
-          break;
         }
       }
-    }
 
-    // Extract attendees from body
-    if (options.extractAttendeesFromBody && emailData.body) {
-      const emailPattern = /[\w.-]+@[\w.-]+\.\w+/g;
-      const extractedEmails = emailData.body.match(emailPattern) || [];
-      extractedEmails.forEach(email => {
-        if (!attendees.find(a => a.email === email)) {
-          attendees.push({
-            email,
-            responseStatus: 'needsAction'
-          });
-        }
-      });
-    }
-
-    // Auto-add email sender and recipients
-    if (options.autoAddAttendees) {
-      attendees.push({
-        email: emailData.from,
-        responseStatus: 'needsAction'
-      });
-      if (emailData.to) {
-        emailData.to.forEach(toEmail => {
-          if (!attendees.find(a => a.email === toEmail)) {
+      // Extract attendees from body
+      if (options.extractAttendeesFromBody && emailData.body) {
+        const emailPattern = /[\w.-]+@[\w.-]+\.\w+/g;
+        const extractedEmails = emailData.body.match(emailPattern) || [];
+        extractedEmails.forEach((email) => {
+          if (!attendees.find((a) => a.email === email)) {
             attendees.push({
-              email: toEmail,
+              email,
               responseStatus: 'needsAction'
             });
           }
         });
       }
-    }
 
-    // Create event
-    const startDate = eventDate;
-    const endDate = new Date(startDate.getTime() + options.defaultDuration * 60 * 1000);
+      // Auto-add email sender and recipients
+      if (options.autoAddAttendees) {
+        attendees.push({
+          email: emailData.from,
+          responseStatus: 'needsAction'
+        });
+        if (emailData.to) {
+          emailData.to.forEach((toEmail) => {
+            if (!attendees.find((a) => a.email === toEmail)) {
+              attendees.push({
+                email: toEmail,
+                responseStatus: 'needsAction'
+              });
+            }
+          });
+        }
+      }
 
-    const calendar = calendars.find(c => c.primary);
+      // Create event
+      const startDate = eventDate;
+      const endDate = new Date(startDate.getTime() + options.defaultDuration * 60 * 1000);
 
-    const newEvent: CalendarEvent = {
-      id: generateId(),
-      provider: calendar?.provider || CalendarProvider.GOOGLE,
-      providerEventId: `event-${Date.now()}`,
-      summary,
-      description,
-      location,
-      status: EventStatus.TENTATIVE,
-      visibility: EventVisibility.PRIVATE,
-      start: {
-        dateTime: startDate.toISOString(),
-        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
-      },
-      end: {
-        dateTime: endDate.toISOString(),
-        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
-      },
-      attendees: [...new Map(attendees.map(a => [a.email, a])).values()],
-      reminders: [{ method: 'popup', minutes: options.defaultReminder }],
-      sourceEmailId: emailId,
-      created: new Date().toISOString(),
-      updated: new Date().toISOString()
-    };
+      const calendar = calendars.find((c) => c.primary);
 
-    setEvents(prev => [...prev, newEvent]);
-    return newEvent;
-  }, [calendars]);
+      const newEvent: CalendarEvent = {
+        id: generateId(),
+        provider: calendar?.provider || CalendarProvider.GOOGLE,
+        providerEventId: `event-${Date.now()}`,
+        summary,
+        description,
+        location,
+        status: EventStatus.TENTATIVE,
+        visibility: EventVisibility.PRIVATE,
+        start: {
+          dateTime: startDate.toISOString(),
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        },
+        end: {
+          dateTime: endDate.toISOString(),
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        },
+        attendees: [...new Map(attendees.map((a) => [a.email, a])).values()],
+        reminders: [{ method: 'popup', minutes: options.defaultReminder }],
+        sourceEmailId: emailId,
+        created: new Date().toISOString(),
+        updated: new Date().toISOString()
+      };
+
+      setEvents((prev) => [...prev, newEvent]);
+      return newEvent;
+    },
+    [calendars]
+  );
 
   // Event Filtering
-  const getFilteredEvents = useCallback((filter?: EventFilterOptions): CalendarEvent[] => {
-    let filtered = [...events];
+  const getFilteredEvents = useCallback(
+    (filter?: EventFilterOptions): CalendarEvent[] => {
+      let filtered = [...events];
 
-    if (filter?.timeMin) {
-      const timeMin = new Date(filter.timeMin);
-      filtered = filtered.filter(e => {
-        const start = e.start.dateTime ? new Date(e.start.dateTime) : new Date(e.start.date!);
-        return start >= timeMin;
-      });
-    }
+      if (filter?.timeMin) {
+        const timeMin = new Date(filter.timeMin);
+        filtered = filtered.filter((e) => {
+          const start = e.start.dateTime ? new Date(e.start.dateTime) : new Date(e.start.date!);
+          return start >= timeMin;
+        });
+      }
 
-    if (filter?.timeMax) {
-      const timeMax = new Date(filter.timeMax);
-      filtered = filtered.filter(e => {
-        const start = e.start.dateTime ? new Date(e.start.dateTime) : new Date(e.start.date!);
-        return start <= timeMax;
-      });
-    }
+      if (filter?.timeMax) {
+        const timeMax = new Date(filter.timeMax);
+        filtered = filtered.filter((e) => {
+          const start = e.start.dateTime ? new Date(e.start.dateTime) : new Date(e.start.date!);
+          return start <= timeMax;
+        });
+      }
 
-    if (filter?.status) {
-      filtered = filtered.filter(e => e.status === filter.status);
-    }
+      if (filter?.status) {
+        filtered = filtered.filter((e) => e.status === filter.status);
+      }
 
-    if (filter?.q) {
-      const query = filter.q.toLowerCase();
-      filtered = filtered.filter(e =>
-        e.summary.toLowerCase().includes(query) ||
-        e.description?.toLowerCase().includes(query) ||
-        e.location?.toLowerCase().includes(query)
-      );
-    }
+      if (filter?.q) {
+        const query = filter.q.toLowerCase();
+        filtered = filtered.filter(
+          (e) =>
+            e.summary.toLowerCase().includes(query) ||
+            e.description?.toLowerCase().includes(query) ||
+            e.location?.toLowerCase().includes(query)
+        );
+      }
 
-    if (filter?.calendarIds && filter.calendarIds.length > 0) {
-      // Map calendar IDs to events
-      const calendarMap = new Map(calendars.map(c => [c.calendarId, c.id]));
-      filtered = filtered.filter(e => {
-        const calendar = calendars.find(c => c.provider === e.provider);
-        return calendar && filter.calendarIds!.includes(calendar.calendarId);
-      });
-    }
+      if (filter?.calendarIds && filter.calendarIds.length > 0) {
+        // Map calendar IDs to events
+        filtered = filtered.filter((e) => {
+          const calendar = calendars.find((c) => c.provider === e.provider);
+          return calendar && filter.calendarIds!.includes(calendar.calendarId);
+        });
+      }
 
-    if (filter?.orderBy === 'startTime') {
-      filtered.sort((a, b) => {
-        const aStart = a.start.dateTime ? new Date(a.start.dateTime).getTime() : new Date(a.start.date!).getTime();
-        const bStart = b.start.dateTime ? new Date(b.start.dateTime).getTime() : new Date(b.start.date!).getTime();
-        return aStart - bStart;
-      });
-    }
+      if (filter?.orderBy === 'startTime') {
+        filtered.sort((a, b) => {
+          const aStart = a.start.dateTime ? new Date(a.start.dateTime).getTime() : new Date(a.start.date!).getTime();
+          const bStart = b.start.dateTime ? new Date(b.start.dateTime).getTime() : new Date(b.start.date!).getTime();
+          return aStart - bStart;
+        });
+      }
 
-    if (filter?.maxResults) {
-      filtered = filtered.slice(0, filter.maxResults);
-    }
+      if (filter?.maxResults) {
+        filtered = filtered.slice(0, filter.maxResults);
+      }
 
-    return filtered;
-  }, [events, calendars]);
+      return filtered;
+    },
+    [events, calendars]
+  );
 
   // Calendar Statistics
   const getStatistics = useCallback((): CalendarStatistics => {
@@ -579,14 +591,14 @@ export const useCalendar = () => {
 
     const eventsByCalendar: Record<string, number> = {};
 
-    events.forEach(event => {
+    events.forEach((event) => {
       const start = event.start.dateTime ? new Date(event.start.dateTime) : new Date(event.start.date!);
 
       if (start > now) {
-upcomingEvents++;
-} else {
-pastEvents++;
-}
+        upcomingEvents++;
+      } else {
+        pastEvents++;
+      }
 
       if (start >= today && start < new Date(today.getTime() + 24 * 60 * 60 * 1000)) {
         todayEvents++;
@@ -602,7 +614,7 @@ pastEvents++;
 
       eventsByStatus[event.status]++;
 
-      const calendar = calendars.find(c => c.provider === event.provider);
+      const calendar = calendars.find((c) => c.provider === event.provider);
       if (calendar) {
         eventsByCalendar[calendar.id] = (eventsByCalendar[calendar.id] || 0) + 1;
       }
@@ -610,15 +622,12 @@ pastEvents++;
 
     // Find busiest day
     const eventsByDate: Record<string, number> = {};
-    events.forEach(event => {
-      const date = event.start.dateTime
-        ? new Date(event.start.dateTime).toDateString()
-        : event.start.date!;
+    events.forEach((event) => {
+      const date = event.start.dateTime ? new Date(event.start.dateTime).toDateString() : event.start.date!;
       eventsByDate[date] = (eventsByDate[date] || 0) + 1;
     });
 
-    const busiestDay = Object.entries(eventsByDate)
-      .sort((a, b) => b[1] - a[1])[0]?.[0] || '';
+    const busiestDay = Object.entries(eventsByDate).sort((a, b) => b[1] - a[1])[0]?.[0] || '';
 
     // Find free slots
     const freeSlots: CalendarStatistics['freeSlots'] = [];
@@ -651,9 +660,9 @@ pastEvents++;
 
   // Sync Functions
   const syncAllCalendars = useCallback(async (): Promise<boolean> => {
-    setSyncStatus(prev => ({ ...prev, isSyncing: true }));
+    setSyncStatus((prev) => ({ ...prev, isSyncing: true }));
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     setSyncStatus({
       lastSyncAt: new Date().toISOString(),
@@ -664,122 +673,125 @@ pastEvents++;
     return true;
   }, []);
 
-  const syncCalendar = useCallback(async (calendarId: string): Promise<boolean> => {
+  const syncCalendar = useCallback(async (_calendarId: string): Promise<boolean> => {
     // Mock sync for specific calendar
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
     return true;
   }, []);
 
   // Attendee Management
-  const addAttendee = useCallback(async (
-    eventId: string,
-    email: string,
-    displayName?: string
-  ): Promise<EventAttendee | null> => {
-    const newAttendee: EventAttendee = {
-      email,
-      displayName,
-      responseStatus: 'needsAction'
-    };
+  const addAttendee = useCallback(
+    async (eventId: string, email: string, displayName?: string): Promise<EventAttendee | null> => {
+      const newAttendee: EventAttendee = {
+        email,
+        displayName,
+        responseStatus: 'needsAction'
+      };
 
-    setEvents(prev => prev.map(event => {
-      if (event.id === eventId) {
-        return {
-          ...event,
-          attendees: [...(event.attendees || []), newAttendee],
-          updated: new Date().toISOString()
-        };
-      }
-      return event;
-    }));
+      setEvents((prev) =>
+        prev.map((event) => {
+          if (event.id === eventId) {
+            return {
+              ...event,
+              attendees: [...(event.attendees || []), newAttendee],
+              updated: new Date().toISOString()
+            };
+          }
+          return event;
+        })
+      );
 
-    return newAttendee;
-  }, []);
+      return newAttendee;
+    },
+    []
+  );
 
   const removeAttendee = useCallback(async (eventId: string, email: string): Promise<boolean> => {
-    setEvents(prev => prev.map(event => {
-      if (event.id === eventId) {
-        return {
-          ...event,
-          attendees: event.attendees?.filter(a => a.email !== email) || [],
-          updated: new Date().toISOString()
-        };
-      }
-      return event;
-    }));
+    setEvents((prev) =>
+      prev.map((event) => {
+        if (event.id === eventId) {
+          return {
+            ...event,
+            attendees: event.attendees?.filter((a) => a.email !== email) || [],
+            updated: new Date().toISOString()
+          };
+        }
+        return event;
+      })
+    );
 
     return true;
   }, []);
 
-  const updateAttendeeStatus = useCallback(async (
-    eventId: string,
-    email: string,
-    status: 'accepted' | 'declined' | 'tentative'
-  ): Promise<boolean> => {
-    setEvents(prev => prev.map(event => {
-      if (event.id === eventId) {
-        return {
-          ...event,
-          attendees: event.attendees?.map(a =>
-            a.email === email ? { ...a, responseStatus: status } : a
-          ),
-          updated: new Date().toISOString()
-        };
-      }
-      return event;
-    }));
+  const updateAttendeeStatus = useCallback(
+    async (eventId: string, email: string, status: 'accepted' | 'declined' | 'tentative'): Promise<boolean> => {
+      setEvents((prev) =>
+        prev.map((event) => {
+          if (event.id === eventId) {
+            return {
+              ...event,
+              attendees: event.attendees?.map((a) => (a.email === email ? { ...a, responseStatus: status } : a)),
+              updated: new Date().toISOString()
+            };
+          }
+          return event;
+        })
+      );
 
-    return true;
-  }, []);
+      return true;
+    },
+    []
+  );
 
   // Get events for specific date range
-  const getEventsForDate = useCallback((date: Date): CalendarEvent[] => {
-    const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    const endOfDay = new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000);
+  const getEventsForDate = useCallback(
+    (date: Date): CalendarEvent[] => {
+      const startOfDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      const endOfDay = new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000);
 
-    return events.filter(event => {
-      const eventStart = event.start.dateTime
-        ? new Date(event.start.dateTime)
-        : new Date(event.start.date!);
-      const eventEnd = event.end.dateTime
-        ? new Date(event.end.dateTime)
-        : new Date(event.end.date!);
+      return events.filter((event) => {
+        const eventStart = event.start.dateTime ? new Date(event.start.dateTime) : new Date(event.start.date!);
+        const eventEnd = event.end.dateTime ? new Date(event.end.dateTime) : new Date(event.end.date!);
 
-      return eventStart < endOfDay && eventEnd > startOfDay;
-    });
-  }, [events]);
+        return eventStart < endOfDay && eventEnd > startOfDay;
+      });
+    },
+    [events]
+  );
 
   // Get events for week
-  const getEventsForWeek = useCallback((date: Date): CalendarEvent[] => {
-    const startOfWeek = new Date(date);
-    startOfWeek.setDate(date.getDate() - date.getDay());
-    startOfWeek.setHours(0, 0, 0, 0);
+  const getEventsForWeek = useCallback(
+    (date: Date): CalendarEvent[] => {
+      const startOfWeek = new Date(date);
+      startOfWeek.setDate(date.getDate() - date.getDay());
+      startOfWeek.setHours(0, 0, 0, 0);
 
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 7);
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 7);
 
-    return events.filter(event => {
-      const eventStart = event.start.dateTime
-        ? new Date(event.start.dateTime)
-        : new Date(event.start.date!);
+      return events.filter((event) => {
+        const eventStart = event.start.dateTime ? new Date(event.start.dateTime) : new Date(event.start.date!);
 
-      return eventStart >= startOfWeek && eventStart < endOfWeek;
-    });
-  }, [events]);
+        return eventStart >= startOfWeek && eventStart < endOfWeek;
+      });
+    },
+    [events]
+  );
 
   // Get events for month
-  const getEventsForMonth = useCallback((date: Date): CalendarEvent[] => {
-    const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-    const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  const getEventsForMonth = useCallback(
+    (date: Date): CalendarEvent[] => {
+      const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+      const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
-    return events.filter(event => {
-      const eventStart = event.start.dateTime
-        ? new Date(event.start.dateTime)
-        : new Date(event.start.date!);
+      return events.filter((event) => {
+        const eventStart = event.start.dateTime ? new Date(event.start.dateTime) : new Date(event.start.date!);
 
-      return eventStart >= startOfMonth && eventStart <= endOfMonth;
-    });
-  }, [events]);
+        return eventStart >= startOfMonth && eventStart <= endOfMonth;
+      });
+    },
+    [events]
+  );
 
   return {
     // State

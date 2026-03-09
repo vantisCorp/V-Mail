@@ -11,7 +11,7 @@ export enum SearchScope {
   ARCHIVED = 'archived',
   SPAM = 'spam',
   TRASH = 'trash',
-  CUSTOM_FOLDER = 'custom_folder',
+  CUSTOM_FOLDER = 'custom_folder'
 }
 
 /**
@@ -27,7 +27,7 @@ export enum SearchFieldType {
   DATE = 'date',
   SIZE = 'size',
   LABELS = 'labels',
-  PRIORITY = 'priority',
+  PRIORITY = 'priority'
 }
 
 /**
@@ -40,7 +40,7 @@ export enum SortOrder {
   SIZE_DESC = 'size_desc',
   SIZE_ASC = 'size_asc',
   SENDER_ASC = 'sender_asc',
-  SENDER_DESC = 'sender_desc',
+  SENDER_DESC = 'sender_desc'
 }
 
 /**
@@ -58,7 +58,7 @@ export enum SearchOperator {
   BETWEEN = 'between',
   IN_LAST = 'in_last',
   BEFORE = 'before',
-  AFTER = 'after',
+  AFTER = 'after'
 }
 
 /**
@@ -132,7 +132,7 @@ export enum SuggestionType {
   SAVED_SEARCH = 'saved_search',
   SMART_SUGGESTION = 'smart_suggestion',
   HISTORY = 'history',
-  OPERATOR = 'operator',
+  OPERATOR = 'operator'
 }
 
 /**
@@ -146,7 +146,7 @@ export interface SearchSuggestion {
   description?: string;
   count?: number; // Number of matching emails
   score?: number; // Relevance score
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**

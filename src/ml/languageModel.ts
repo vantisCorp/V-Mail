@@ -116,7 +116,7 @@ export class LanguageModel {
 
     // Sort by confidence and limit
     const sortedSuggestions = suggestions
-      .filter(s => s.confidence >= this.config.suggestions.minConfidence)
+      .filter((s) => s.confidence >= this.config.suggestions.minConfidence)
       .sort((a, b) => {
         const priorityOrder = {
           [SuggestionPriority.HIGH]: 0,
@@ -125,8 +125,8 @@ export class LanguageModel {
         };
         const priorityDiff = priorityOrder[a.priority] - priorityOrder[b.priority];
         if (priorityDiff !== 0) {
-return priorityDiff;
-}
+          return priorityDiff;
+        }
         return b.confidence - a.confidence;
       })
       .slice(0, context.userPreferences?.maxSuggestions || 5);
@@ -202,15 +202,60 @@ return priorityDiff;
 
     // Common word completions
     const commonWords = [
-      'the', 'and', 'that', 'have', 'for', 'not', 'you', 'with', 'this', 'from',
-      'they', 'we', 'say', 'her', 'she', 'or', 'an', 'will', 'my', 'one',
-      'all', 'would', 'there', 'their', 'what', 'so', 'up', 'out', 'if', 'about',
-      'who', 'get', 'which', 'go', 'me', 'when', 'make', 'can', 'like', 'time',
-      'no', 'just', 'him', 'know', 'take', 'people', 'into', 'year', 'your', 'good'
+      'the',
+      'and',
+      'that',
+      'have',
+      'for',
+      'not',
+      'you',
+      'with',
+      'this',
+      'from',
+      'they',
+      'we',
+      'say',
+      'her',
+      'she',
+      'or',
+      'an',
+      'will',
+      'my',
+      'one',
+      'all',
+      'would',
+      'there',
+      'their',
+      'what',
+      'so',
+      'up',
+      'out',
+      'if',
+      'about',
+      'who',
+      'get',
+      'which',
+      'go',
+      'me',
+      'when',
+      'make',
+      'can',
+      'like',
+      'time',
+      'no',
+      'just',
+      'him',
+      'know',
+      'take',
+      'people',
+      'into',
+      'year',
+      'your',
+      'good'
     ];
 
     // Check for matches
-    commonWords.forEach(word => {
+    commonWords.forEach((word) => {
       if (word.startsWith(currentWord.toLowerCase()) && word !== currentWord.toLowerCase()) {
         completions.push({
           text: word,
@@ -247,7 +292,7 @@ return priorityDiff;
 
     // Check for phrase opportunities
     Object.entries(COMMON_PHRASES).forEach(([category, phraseList]) => {
-      phraseList.forEach(phrase => {
+      phraseList.forEach((phrase) => {
         const score = this.calculatePhraseMatch(recentText, phrase);
         if (score > 0.5) {
           phrases.push({
@@ -361,7 +406,7 @@ return priorityDiff;
     const { text, recipients } = context;
 
     // Suggest templates based on context
-    Object.values(EMAIL_TEMPLATES).forEach(template => {
+    Object.values(EMAIL_TEMPLATES).forEach((template) => {
       const relevanceScore = this.calculateTemplateRelevance(context, template);
       if (relevanceScore > 0.6) {
         templates.push({
@@ -384,10 +429,7 @@ return priorityDiff;
     return templates;
   }
 
-  private calculateTemplateRelevance(
-    context: WritingContext,
-    template: any
-  ): number {
+  private calculateTemplateRelevance(context: WritingContext, template: any): number {
     let score = 0.5;
 
     // Boost score if email is empty (new email)
@@ -405,7 +447,7 @@ return priorityDiff;
 
   private extractTemplateVariables(content: string): string[] {
     const matches = content.match(/\{(\w+)\}/g);
-    return matches ? matches.map(m => m.slice(1, -1)) : [];
+    return matches ? matches.map((m) => m.slice(1, -1)) : [];
   }
 
   // ============================================================================
@@ -425,7 +467,7 @@ return priorityDiff;
       { email: 'charlie.brown@example.com', name: 'Charlie Brown', frequency: 2 }
     ];
 
-    mockContacts.forEach(contact => {
+    mockContacts.forEach((contact) => {
       const score = this.calculateEmailMatch(text, contact);
       if (score > 0.5) {
         emails.push({
@@ -525,11 +567,11 @@ return priorityDiff;
       .toLowerCase()
       .replace(/[^\w\s]/g, '')
       .split(/\s+/)
-      .filter(word => word.length > 3);
+      .filter((word) => word.length > 3);
 
     // Remove common words
     const commonWords = ['this', 'that', 'with', 'from', 'have', 'will', 'your', 'about', 'which'];
-    const filtered = words.filter(word => !commonWords.includes(word));
+    const filtered = words.filter((word) => !commonWords.includes(word));
 
     // Get unique words
     return [...new Set(filtered)].slice(0, 5);
@@ -546,7 +588,7 @@ return priorityDiff;
     const words = text.split(/\s+/);
 
     // Learn individual words
-    words.forEach(word => {
+    words.forEach((word) => {
       const lowerWord = word.toLowerCase();
       if (word.length > 2) {
         this.userPatterns.set(lowerWord, (this.userPatterns.get(lowerWord) || 0) + 1);
@@ -567,17 +609,15 @@ return priorityDiff;
    * Get typing statistics
    */
   getTypingStatistics(text: string): TypingStatistics {
-    const words = text.split(/\s+/).filter(w => w.length > 0);
+    const words = text.split(/\s+/).filter((w) => w.length > 0);
     const characters = text.length;
 
-    const wordLengths = words.map(w => w.length);
-    const averageWordLength = wordLengths.length > 0
-      ? wordLengths.reduce((a, b) => a + b, 0) / wordLengths.length
-      : 0;
+    const wordLengths = words.map((w) => w.length);
+    const averageWordLength = wordLengths.length > 0 ? wordLengths.reduce((a, b) => a + b, 0) / wordLengths.length : 0;
 
     // Count common words
     const wordCounts: Record<string, number> = {};
-    words.forEach(word => {
+    words.forEach((word) => {
       const lowerWord = word.toLowerCase();
       wordCounts[lowerWord] = (wordCounts[lowerWord] || 0) + 1;
     });

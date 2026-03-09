@@ -102,21 +102,13 @@ export const EmailPreview: React.FC<EmailPreviewProps> = ({ email }) => {
                   <div className="attachment-icon">📎</div>
                   <div className="attachment-info">
                     <div className="attachment-name">{attachment.name}</div>
-                    <div className="attachment-size">
-                      {formatFileSize(attachment.size)}
-                    </div>
+                    <div className="attachment-size">{formatFileSize(attachment.size)}</div>
                   </div>
                   <div className="attachment-actions">
-                    <button
-                      className="btn btn-sm btn-secondary"
-                      onClick={() => handleAttachmentClick(attachment)}
-                    >
+                    <button className="btn btn-sm btn-secondary" onClick={() => handleAttachmentClick(attachment)}>
                       Preview
                     </button>
-                    <button
-                      className="btn btn-sm btn-primary"
-                      onClick={() => handleDownload(attachment)}
-                    >
+                    <button className="btn btn-sm btn-primary" onClick={() => handleDownload(attachment)}>
                       Download
                     </button>
                   </div>

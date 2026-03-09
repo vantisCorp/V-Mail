@@ -44,7 +44,8 @@ const generateMockEmails = (): SearchResultItem[] => {
       id: 'email-1',
       emailId: 'email-1',
       subject: 'Project Update: Q4 Goals Progress',
-      snippet: 'I wanted to share the latest updates on our Q4 goals. We have made significant progress on the product launch timeline...',
+      snippet:
+        'I wanted to share the latest updates on our Q4 goals. We have made significant progress on the product launch timeline...',
       from: { name: 'John Smith', email: 'john.smith@company.com' },
       to: [{ name: 'Team', email: 'team@company.com' }],
       date: '2025-01-20T10:30:00Z',
@@ -95,7 +96,7 @@ const generateMockEmails = (): SearchResultItem[] => {
       id: 'email-4',
       emailId: 'email-4',
       subject: 'New Feature Announcement',
-      snippet: 'We are excited to announce the release of our new features. Check out what\'s new...',
+      snippet: "We are excited to announce the release of our new features. Check out what's new...",
       from: { name: 'Product Team', email: 'product@company.com' },
       to: [{ name: 'All Users', email: 'users@company.com' }],
       date: '2025-01-18T14:00:00Z',
@@ -135,7 +136,12 @@ const generateMockSuggestions = (): SearchSuggestion[] => {
     { id: 'sug-3', text: 'meeting', type: SuggestionType.KEYWORD, count: 45 },
     { id: 'sug-4', text: 'invoice', type: SuggestionType.KEYWORD, count: 23 },
     { id: 'sug-5', text: 'Work', type: SuggestionType.LABEL, count: 156 },
-    { id: 'sug-6', text: 'has:attachment', type: SuggestionType.SMART_SUGGESTION, description: 'Emails with attachments' },
+    {
+      id: 'sug-6',
+      text: 'has:attachment',
+      type: SuggestionType.SMART_SUGGESTION,
+      description: 'Emails with attachments'
+    },
     { id: 'sug-7', text: 'is:unread', type: SuggestionType.SMART_SUGGESTION, description: 'Unread emails' },
     { id: 'sug-8', text: 'from:manager', type: SuggestionType.SMART_SUGGESTION, description: 'From manager' }
   ];
@@ -220,173 +226,167 @@ export const useEnhancedSearch = () => {
   }, []);
 
   // Simple Search
-  const simpleSearch = useCallback(async (
-    query: SimpleSearchQuery
-  ): Promise<SearchResults> => {
-    setIsLoading(true);
-    const startTime = Date.now();
+  const simpleSearch = useCallback(
+    async (query: SimpleSearchQuery): Promise<SearchResults> => {
+      setIsLoading(true);
+      const startTime = Date.now();
 
-    // Simulate search
-    await new Promise(resolve => setTimeout(resolve, 300));
+      // Simulate search
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
-    const filteredEmails = allEmails.filter(email => {
+      const filteredEmails = allEmails.filter((email) => {
+        // Text matching
+        if (query.text) {
+          const searchText = query.text.toLowerCase();
+          const matchSubject = email.subject.toLowerCase().includes(searchText);
+          const matchSnippet = email.snippet.toLowerCase().includes(searchText);
+          const matchFrom =
+            email.from.email.toLowerCase().includes(searchText) || email.from.name.toLowerCase().includes(searchText);
+          if (!matchSubject && !matchSnippet && !matchFrom) {
+            return false;
+          }
+        }
+
+        // Scope filtering
+        if (query.scope && query.scope !== SearchScope.ALL) {
+          if (query.scope === SearchScope.INBOX && email.folder !== 'Inbox') {
+            return false;
+          }
+        }
+
+        return true;
+      });
+
+      const results: SearchResults = {
+        query: query.text,
+        items: filteredEmails,
+        totalResults: filteredEmails.length,
+        page: 1,
+        pageSize: 20,
+        totalPages: Math.ceil(filteredEmails.length / 20),
+        hasMore: false,
+        executionTime: Date.now() - startTime
+      };
+
+      setSearchResults(results);
+      setIsLoading(false);
+
+      // Add to history
+      addToHistory(query.text, query.scope || SearchScope.ALL, filteredEmails.length);
+
+      return results;
+    },
+    [allEmails]
+  );
+
+  // Advanced Search
+  const advancedSearch = useCallback(
+    async (query: AdvancedSearchQuery): Promise<SearchResults> => {
+      setIsLoading(true);
+      const startTime = Date.now();
+
+      // Simulate search
+      await new Promise((resolve) => setTimeout(resolve, 400));
+
+      let filteredEmails = [...allEmails];
+
       // Text matching
       if (query.text) {
         const searchText = query.text.toLowerCase();
-        const matchSubject = email.subject.toLowerCase().includes(searchText);
-        const matchSnippet = email.snippet.toLowerCase().includes(searchText);
-        const matchFrom = email.from.email.toLowerCase().includes(searchText) ||
-          email.from.name.toLowerCase().includes(searchText);
-        if (!matchSubject && !matchSnippet && !matchFrom) {
-return false;
-}
+        filteredEmails = filteredEmails.filter((email) => {
+          const matchSubject = email.subject.toLowerCase().includes(searchText);
+          const matchSnippet = email.snippet.toLowerCase().includes(searchText);
+          const matchFrom =
+            email.from.email.toLowerCase().includes(searchText) || email.from.name.toLowerCase().includes(searchText);
+          return matchSubject || matchSnippet || matchFrom;
+        });
       }
 
-      // Scope filtering
-      if (query.scope && query.scope !== SearchScope.ALL) {
-        if (query.scope === SearchScope.INBOX && email.folder !== 'Inbox') {
-return false;
-}
+      // Apply filters
+      query.filters.forEach((filter) => {
+        filteredEmails = filteredEmails.filter((email) => {
+          return evaluateFilter(email, filter);
+        });
+      });
+
+      // Date range filter
+      if (query.dateRange) {
+        const start = new Date(query.dateRange.start).getTime();
+        const end = new Date(query.dateRange.end).getTime();
+        filteredEmails = filteredEmails.filter((email) => {
+          const emailDate = new Date(email.date).getTime();
+          return emailDate >= start && emailDate <= end;
+        });
       }
 
-      return true;
-    });
-
-    const results: SearchResults = {
-      query: query.text,
-      items: filteredEmails,
-      totalResults: filteredEmails.length,
-      page: 1,
-      pageSize: 20,
-      totalPages: Math.ceil(filteredEmails.length / 20),
-      hasMore: false,
-      executionTime: Date.now() - startTime
-    };
-
-    setSearchResults(results);
-    setIsLoading(false);
-
-    // Add to history
-    addToHistory(query.text, query.scope || SearchScope.ALL, filteredEmails.length);
-
-    return results;
-  }, [allEmails]);
-
-  // Advanced Search
-  const advancedSearch = useCallback(async (
-    query: AdvancedSearchQuery
-  ): Promise<SearchResults> => {
-    setIsLoading(true);
-    const startTime = Date.now();
-
-    // Simulate search
-    await new Promise(resolve => setTimeout(resolve, 400));
-
-    let filteredEmails = [...allEmails];
-
-    // Text matching
-    if (query.text) {
-      const searchText = query.text.toLowerCase();
-      filteredEmails = filteredEmails.filter(email => {
-        const matchSubject = email.subject.toLowerCase().includes(searchText);
-        const matchSnippet = email.snippet.toLowerCase().includes(searchText);
-        const matchFrom = email.from.email.toLowerCase().includes(searchText) ||
-          email.from.name.toLowerCase().includes(searchText);
-        return matchSubject || matchSnippet || matchFrom;
-      });
-    }
-
-    // Apply filters
-    query.filters.forEach(filter => {
-      filteredEmails = filteredEmails.filter(email => {
-        return evaluateFilter(email, filter);
-      });
-    });
-
-    // Date range filter
-    if (query.dateRange) {
-      const start = new Date(query.dateRange.start).getTime();
-      const end = new Date(query.dateRange.end).getTime();
-      filteredEmails = filteredEmails.filter(email => {
-        const emailDate = new Date(email.date).getTime();
-        return emailDate >= start && emailDate <= end;
-      });
-    }
-
-    // Attachment filter
-    if (query.hasAttachments !== undefined) {
-      filteredEmails = filteredEmails.filter(email =>
-        email.hasAttachments === query.hasAttachments
-      );
-    }
-
-    // Unread filter
-    if (query.isUnread !== undefined) {
-      filteredEmails = filteredEmails.filter(email =>
-        email.isRead !== query.isUnread
-      );
-    }
-
-    // Starred filter
-    if (query.isStarred !== undefined) {
-      filteredEmails = filteredEmails.filter(email =>
-        email.isStarred === query.isStarred
-      );
-    }
-
-    // Labels filter
-    if (query.labels && query.labels.length > 0) {
-      filteredEmails = filteredEmails.filter(email =>
-        query.labels!.some(label => email.labels.includes(label))
-      );
-    }
-
-    // Sort results
-    filteredEmails.sort((a, b) => {
-      switch (query.sortOrder) {
-        case SortOrder.DATE_DESC:
-          return new Date(b.date).getTime() - new Date(a.date).getTime();
-        case SortOrder.DATE_ASC:
-          return new Date(a.date).getTime() - new Date(b.date).getTime();
-        case SortOrder.SIZE_DESC:
-          return b.size - a.size;
-        case SortOrder.SIZE_ASC:
-          return a.size - b.size;
-        case SortOrder.SENDER_ASC:
-          return a.from.name.localeCompare(b.from.name);
-        case SortOrder.SENDER_DESC:
-          return b.from.name.localeCompare(a.from.name);
-        case SortOrder.RELEVANCE:
-        default:
-          return b.relevanceScore - a.relevanceScore;
+      // Attachment filter
+      if (query.hasAttachments !== undefined) {
+        filteredEmails = filteredEmails.filter((email) => email.hasAttachments === query.hasAttachments);
       }
-    });
 
-    // Pagination
-    const pageSize = query.pageSize || 20;
-    const page = query.page || 1;
-    const startIndex = (page - 1) * pageSize;
-    const paginatedEmails = filteredEmails.slice(startIndex, startIndex + pageSize);
+      // Unread filter
+      if (query.isUnread !== undefined) {
+        filteredEmails = filteredEmails.filter((email) => email.isRead !== query.isUnread);
+      }
 
-    const results: SearchResults = {
-      query: query.text,
-      items: paginatedEmails,
-      totalResults: filteredEmails.length,
-      page,
-      pageSize,
-      totalPages: Math.ceil(filteredEmails.length / pageSize),
-      hasMore: startIndex + pageSize < filteredEmails.length,
-      executionTime: Date.now() - startTime
-    };
+      // Starred filter
+      if (query.isStarred !== undefined) {
+        filteredEmails = filteredEmails.filter((email) => email.isStarred === query.isStarred);
+      }
 
-    setSearchResults(results);
-    setIsLoading(false);
+      // Labels filter
+      if (query.labels && query.labels.length > 0) {
+        filteredEmails = filteredEmails.filter((email) => query.labels!.some((label) => email.labels.includes(label)));
+      }
 
-    // Add to history
-    addToHistory(query.text, query.scope, filteredEmails.length);
+      // Sort results
+      filteredEmails.sort((a, b) => {
+        switch (query.sortOrder) {
+          case SortOrder.DATE_DESC:
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          case SortOrder.DATE_ASC:
+            return new Date(a.date).getTime() - new Date(b.date).getTime();
+          case SortOrder.SIZE_DESC:
+            return b.size - a.size;
+          case SortOrder.SIZE_ASC:
+            return a.size - b.size;
+          case SortOrder.SENDER_ASC:
+            return a.from.name.localeCompare(b.from.name);
+          case SortOrder.SENDER_DESC:
+            return b.from.name.localeCompare(a.from.name);
+          case SortOrder.RELEVANCE:
+          default:
+            return b.relevanceScore - a.relevanceScore;
+        }
+      });
 
-    return results;
-  }, [allEmails]);
+      // Pagination
+      const pageSize = query.pageSize || 20;
+      const page = query.page || 1;
+      const startIndex = (page - 1) * pageSize;
+      const paginatedEmails = filteredEmails.slice(startIndex, startIndex + pageSize);
+
+      const results: SearchResults = {
+        query: query.text,
+        items: paginatedEmails,
+        totalResults: filteredEmails.length,
+        page,
+        pageSize,
+        totalPages: Math.ceil(filteredEmails.length / pageSize),
+        hasMore: startIndex + pageSize < filteredEmails.length,
+        executionTime: Date.now() - startTime
+      };
+
+      setSearchResults(results);
+      setIsLoading(false);
+
+      // Add to history
+      addToHistory(query.text, query.scope, filteredEmails.length);
+
+      return results;
+    },
+    [allEmails]
+  );
 
   // Evaluate filter on email
   const evaluateFilter = (email: SearchResultItem, filter: SearchFilter): boolean => {
@@ -445,14 +445,10 @@ return false;
   };
 
   // Add to search history
-  const addToHistory = useCallback((
-    queryText: string,
-    scope: SearchScope,
-    resultCount: number
-  ): void => {
+  const addToHistory = useCallback((queryText: string, scope: SearchScope, resultCount: number): void => {
     if (!queryText.trim()) {
-return;
-}
+      return;
+    }
 
     const historyItem: SearchHistoryItem = {
       id: `history-${Date.now()}`,
@@ -462,62 +458,59 @@ return;
       resultCount
     };
 
-    setSearchHistory(prev => {
+    setSearchHistory((prev) => {
       // Remove duplicates
-      const filtered = prev.filter(h => h.query !== queryText);
+      const filtered = prev.filter((h) => h.query !== queryText);
       // Add new item at beginning and limit size
       return [historyItem, ...filtered].slice(0, MAX_HISTORY_ITEMS);
     });
   }, []);
 
   // Get suggestions
-  const getSuggestions = useCallback((
-    query: string
-  ): SearchSuggestion[] => {
-    if (!query.trim()) {
-      return suggestions.slice(0, 5);
-    }
+  const getSuggestions = useCallback(
+    (query: string): SearchSuggestion[] => {
+      if (!query.trim()) {
+        return suggestions.slice(0, 5);
+      }
 
-    const queryLower = query.toLowerCase();
+      const queryLower = query.toLowerCase();
 
-    // Combine recent searches and other suggestions
-    const historySuggestions: SearchSuggestion[] = searchHistory
-      .filter(h => h.query.toLowerCase().includes(queryLower))
-      .slice(0, 3)
-      .map(h => ({
-        id: `h-${h.id}`,
-        text: h.query,
-        type: SuggestionType.RECENT_SEARCH,
-        count: h.resultCount
-      }));
+      // Combine recent searches and other suggestions
+      const historySuggestions: SearchSuggestion[] = searchHistory
+        .filter((h) => h.query.toLowerCase().includes(queryLower))
+        .slice(0, 3)
+        .map((h) => ({
+          id: `h-${h.id}`,
+          text: h.query,
+          type: SuggestionType.RECENT_SEARCH,
+          count: h.resultCount
+        }));
 
-    const matchingSuggestions = suggestions.filter(s =>
-      s.text.toLowerCase().includes(queryLower)
-    );
+      const matchingSuggestions = suggestions.filter((s) => s.text.toLowerCase().includes(queryLower));
 
-    // Also get suggestions from the search engine service
-    const engineSuggestions = searchEngineService.getSuggestions(query, 5);
+      // Also get suggestions from the search engine service
+      const engineSuggestions = searchEngineService.getSuggestions(query, 5);
 
-    // Combine and dedupe suggestions
-    const allSuggestions = [
-      ...historySuggestions,
-      ...matchingSuggestions,
-      ...engineSuggestions.map(s => ({
-        id: s.id,
-        text: s.text,
-        type: s.type as SuggestionType,
-        description: s.description,
-        count: s.count
-      }))
-    ];
+      // Combine and dedupe suggestions
+      const allSuggestions = [
+        ...historySuggestions,
+        ...matchingSuggestions,
+        ...engineSuggestions.map((s) => ({
+          id: s.id,
+          text: s.text,
+          type: s.type as SuggestionType,
+          description: s.description,
+          count: s.count
+        }))
+      ];
 
-    return [...new Map(allSuggestions.map(s => [s.text, s])).values()].slice(0, 10);
-  }, [suggestions, searchHistory]);
+      return [...new Map(allSuggestions.map((s) => [s.text, s])).values()].slice(0, 10);
+    },
+    [suggestions, searchHistory]
+  );
 
   // Natural Language Processing
-  const parseNaturalLanguage = useCallback((
-    query: string
-  ): NaturalLanguageQuery => {
+  const parseNaturalLanguage = useCallback((query: string): NaturalLanguageQuery => {
     const original = query;
     let text = query;
     const filters: SearchFilter[] = [];
@@ -597,9 +590,7 @@ return;
   }, []);
 
   // Save Search
-  const saveSearch = useCallback((
-    payload: CreateSavedSearchPayload
-  ): SavedSearch => {
+  const saveSearch = useCallback((payload: CreateSavedSearchPayload): SavedSearch => {
     const newSavedSearch: SavedSearch = {
       id: `saved-${Date.now()}`,
       name: payload.name,
@@ -618,143 +609,146 @@ return;
       notificationFrequency: payload.notificationFrequency
     };
 
-    setSavedSearches(prev => [...prev, newSavedSearch]);
+    setSavedSearches((prev) => [...prev, newSavedSearch]);
     return newSavedSearch;
   }, []);
 
   const deleteSavedSearch = useCallback((id: string): boolean => {
-    setSavedSearches(prev => prev.filter(s => s.id !== id));
+    setSavedSearches((prev) => prev.filter((s) => s.id !== id));
     return true;
   }, []);
 
-  const updateSavedSearch = useCallback((
-    id: string,
-    updates: Partial<SavedSearch>
-  ): SavedSearch | null => {
+  const updateSavedSearch = useCallback((id: string, updates: Partial<SavedSearch>): SavedSearch | null => {
     let updated: SavedSearch | null = null;
 
-    setSavedSearches(prev => prev.map(search => {
-      if (search.id === id) {
-        updated = { ...search, ...updates, updatedAt: new Date().toISOString() };
-        return updated;
-      }
-      return search;
-    }));
+    setSavedSearches((prev) =>
+      prev.map((search) => {
+        if (search.id === id) {
+          updated = { ...search, ...updates, updatedAt: new Date().toISOString() };
+          return updated;
+        }
+        return search;
+      })
+    );
 
     return updated;
   }, []);
 
-  const runSavedSearch = useCallback(async (
-    id: string
-  ): Promise<SearchResults> => {
-    const saved = savedSearches.find(s => s.id === id);
-    if (!saved) {
-throw new Error('Saved search not found');
-}
-
-    // Update use count
-    setSavedSearches(prev => prev.map(s => {
-      if (s.id === id) {
-        return { ...s, useCount: s.useCount + 1, lastUsed: new Date().toISOString() };
+  const runSavedSearch = useCallback(
+    async (id: string): Promise<SearchResults> => {
+      const saved = savedSearches.find((s) => s.id === id);
+      if (!saved) {
+        throw new Error('Saved search not found');
       }
-      return s;
-    }));
 
-    return advancedSearch({
-      ...saved.query,
-      page: 1,
-      pageSize: 20
-    });
-  }, [savedSearches, advancedSearch]);
+      // Update use count
+      setSavedSearches((prev) =>
+        prev.map((s) => {
+          if (s.id === id) {
+            return { ...s, useCount: s.useCount + 1, lastUsed: new Date().toISOString() };
+          }
+          return s;
+        })
+      );
+
+      return advancedSearch({
+        ...saved.query,
+        page: 1,
+        pageSize: 20
+      });
+    },
+    [savedSearches, advancedSearch]
+  );
 
   // Smart Categorization
-  const categorizeEmail = useCallback((
-    emailId: string
-  ): SmartCategorization => {
-    const email = allEmails.find(e => e.id === emailId);
-    if (!email) {
+  const categorizeEmail = useCallback(
+    (emailId: string): SmartCategorization => {
+      const email = allEmails.find((e) => e.id === emailId);
+      if (!email) {
+        return {
+          emailId,
+          suggestedLabels: [],
+          category: 'primary',
+          confidence: 0,
+          reasons: ['Email not found']
+        };
+      }
+
+      // Simple rule-based categorization
+      let category: SmartCategorization['category'] = 'primary';
+      let confidence = 70;
+      const reasons: string[] = [];
+
+      if (email.from.email.includes('noreply') || email.from.email.includes('no-reply')) {
+        category = 'promotions';
+        reasons.push('Sender is a no-reply address');
+        confidence = 85;
+      } else if (email.labels.includes('Meeting')) {
+        category = 'primary';
+        reasons.push('Contains meeting label');
+        confidence = 80;
+      } else if (email.from.email.includes('linkedin') || email.from.email.includes('facebook')) {
+        category = 'social';
+        reasons.push('Social media sender');
+        confidence = 90;
+      } else if (email.subject.toLowerCase().includes('invoice') || email.subject.toLowerCase().includes('receipt')) {
+        category = 'updates';
+        reasons.push('Financial/billing email');
+        confidence = 80;
+      }
+
+      const suggestedLabels = [...new Set([...email.labels])];
+
       return {
         emailId,
-        suggestedLabels: [],
-        category: 'primary',
-        confidence: 0,
-        reasons: ['Email not found']
+        suggestedLabels,
+        category,
+        confidence,
+        reasons
       };
-    }
-
-    // Simple rule-based categorization
-    let category: SmartCategorization['category'] = 'primary';
-    let confidence = 70;
-    const reasons: string[] = [];
-
-    if (email.from.email.includes('noreply') || email.from.email.includes('no-reply')) {
-      category = 'promotions';
-      reasons.push('Sender is a no-reply address');
-      confidence = 85;
-    } else if (email.labels.includes('Meeting')) {
-      category = 'primary';
-      reasons.push('Contains meeting label');
-      confidence = 80;
-    } else if (email.from.email.includes('linkedin') || email.from.email.includes('facebook')) {
-      category = 'social';
-      reasons.push('Social media sender');
-      confidence = 90;
-    } else if (email.subject.toLowerCase().includes('invoice') ||
-               email.subject.toLowerCase().includes('receipt')) {
-      category = 'updates';
-      reasons.push('Financial/billing email');
-      confidence = 80;
-    }
-
-    const suggestedLabels = [...new Set([...email.labels])];
-
-    return {
-      emailId,
-      suggestedLabels,
-      category,
-      confidence,
-      reasons
-    };
-  }, [allEmails]);
+    },
+    [allEmails]
+  );
 
   // Auto-tagging
-  const suggestTags = useCallback((
-    emailId: string
-  ): AutoTaggingResult => {
-    const email = allEmails.find(e => e.id === emailId);
-    if (!email) {
-      return { emailId, suggestedTags: [], confidence: {} };
-    }
+  const suggestTags = useCallback(
+    (emailId: string): AutoTaggingResult => {
+      const email = allEmails.find((e) => e.id === emailId);
+      if (!email) {
+        return { emailId, suggestedTags: [], confidence: {} };
+      }
 
-    const suggestedTags: string[] = [];
-    const confidence: Record<string, number> = {};
+      const suggestedTags: string[] = [];
+      const confidence: Record<string, number> = {};
 
-    // Analyze content
-    const content = `${email.subject} ${email.snippet}`.toLowerCase();
+      // Analyze content
+      const content = `${email.subject} ${email.snippet}`.toLowerCase();
 
-    if (content.includes('project') || content.includes('deadline')) {
-      suggestedTags.push('Work');
-      confidence['Work'] = 85;
-    }
-    if (content.includes('meeting') || content.includes('schedule')) {
-      suggestedTags.push('Meeting');
-      confidence['Meeting'] = 90;
-    }
-    if (content.includes('invoice') || content.includes('payment')) {
-      suggestedTags.push('Finance');
-      confidence['Finance'] = 80;
-    }
-    if (email.hasAttachments) {
-      suggestedTags.push('Has-Attachment');
-      confidence['Has-Attachment'] = 95;
-    }
-    if (!email.isRead) {
-      suggestedTags.push('Unread');
-      confidence['Unread'] = 100;
-    }
+      if (content.includes('project') || content.includes('deadline')) {
+        suggestedTags.push('Work');
+        confidence['Work'] = 85;
+      }
+      if (content.includes('meeting') || content.includes('schedule')) {
+        suggestedTags.push('Meeting');
+        confidence['Meeting'] = 90;
+      }
+      if (content.includes('invoice') || content.includes('payment')) {
+        suggestedTags.push('Finance');
+        confidence['Finance'] = 80;
+      }
+      if (email.hasAttachments) {
+        suggestedTags.push('Has-Attachment');
+        confidence['Has-Attachment'] = 95;
+      }
+      if (!email.isRead) {
+        suggestedTags.push('Unread');
+        confidence['Unread'] = 100;
+      }
 
-    return { emailId, suggestedTags, confidence };
-  }, [allEmails]);
+      return { emailId, suggestedTags, confidence };
+    },
+    [allEmails]
+  );
 
   // Clear search
   const clearSearch = useCallback((): void => {
@@ -803,9 +797,9 @@ throw new Error('Saved search not found');
 
     // Search engine integration
     searchEngine: {
-      indexEmails: (emails: any[]) => emails.forEach(e => searchEngineService.indexEmail(e)),
-      indexContacts: (contacts: any[]) => contacts.forEach(c => searchEngineService.indexContact(c)),
-      indexEvents: (events: any[]) => events.forEach(e => searchEngineService.indexEvent(e)),
+      indexEmails: (emails: any[]) => emails.forEach((e) => searchEngineService.indexEmail(e)),
+      indexContacts: (contacts: any[]) => contacts.forEach((c) => searchEngineService.indexContact(c)),
+      indexEvents: (events: any[]) => events.forEach((e) => searchEngineService.indexEvent(e)),
       search: (query: string, scope?: SearchScope) => searchEngineService.searchAll(query, scope),
       getStats: () => searchEngineService.getStats()
     }

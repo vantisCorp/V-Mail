@@ -10,7 +10,7 @@ import {
   PermissionAuditLog,
   PermissionRequest
 } from '../types/rbac';
-import type { RBACSettings as RBACSettingsType } from '../types/rbac';
+
 import '../styles/rbac.css';
 
 const RBACSettings: React.FC = () => {
@@ -24,33 +24,26 @@ const RBACSettings: React.FC = () => {
     permissionRequests,
     settings,
     stats,
-    hasPermission,
-    hasAllPermissions,
     getRoleLevel,
-    canAssignRole,
-    assignRole,
     revokeRole,
     updatePermissions,
-    createCustomPermissionSet,
     updateCustomPermissionSet,
     deleteCustomPermissionSet,
     createAccessPolicy,
     updateAccessPolicy,
-    deleteAccessPolicy,
     approvePermissionRequest,
     rejectPermissionRequest,
     updateSettings,
-    getUsersByRole,
-    getPermissionsByCategory,
-    getFilteredAuditLogs,
-    refreshUserRoleAssignments,
-    refreshAuditLogs,
-    refreshStats
+    refreshAuditLogs
   } = useRBAC();
 
-  const [activeTab, setActiveTab] = useState<'overview' | 'roles' | 'users' | 'policies' | 'audit' | 'requests' | 'settings'>('overview');
+  const [activeTab, setActiveTab] = useState<
+    'overview' | 'roles' | 'users' | 'policies' | 'audit' | 'requests' | 'settings'
+  >('overview');
   const [selectedUser, setSelectedUser] = useState<UserRoleAssignment | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showAssignDialog, setShowAssignDialog] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showCreateRoleDialog, setShowCreateRoleDialog] = useState(false);
 
   // Sub-components
@@ -75,7 +68,9 @@ const RBACSettings: React.FC = () => {
     );
   };
 
-  const StatusBadge: React.FC<{ status: 'active' | 'inactive' | 'pending' | 'approved' | 'rejected' | 'expired' }> = ({ status }) => {
+  const StatusBadge: React.FC<{ status: 'active' | 'inactive' | 'pending' | 'approved' | 'rejected' | 'expired' }> = ({
+    status
+  }) => {
     const colors: Record<string, string> = {
       active: 'status-active',
       inactive: 'status-inactive',
@@ -87,7 +82,12 @@ const RBACSettings: React.FC = () => {
     return <span className={`status-badge ${colors[status]}`}>{status.toUpperCase()}</span>;
   };
 
-  const StatsCard: React.FC<{ title: string; value: number; description: string; icon: string }> = ({ title, value, description, icon }) => (
+  const StatsCard: React.FC<{ title: string; value: number; description: string; icon: string }> = ({
+    title,
+    value,
+    description,
+    icon
+  }) => (
     <div className="stats-card">
       <div className="stats-icon">{icon}</div>
       <div className="stats-content">
@@ -120,13 +120,16 @@ const RBACSettings: React.FC = () => {
       <div className="user-status">
         <StatusBadge status={user.isActive ? 'active' : 'inactive'} />
       </div>
-      <div className="user-expires">
-        {user.expiresAt ? new Date(user.expiresAt).toLocaleDateString() : 'Never'}
-      </div>
+      <div className="user-expires">{user.expiresAt ? new Date(user.expiresAt).toLocaleDateString() : 'Never'}</div>
       <div className="user-actions">
-        <button className="btn-icon" onClick={(e) => {
- e.stopPropagation(); /* TODO */
-}}>⚙️</button>
+        <button
+          className="btn-icon"
+          onClick={(e) => {
+            e.stopPropagation(); /* TODO */
+          }}
+        >
+          ⚙️
+        </button>
       </div>
     </div>
   );
@@ -144,10 +147,17 @@ const RBACSettings: React.FC = () => {
         </div>
         {log.reason && <div className="audit-log-reason">Reason: {log.reason}</div>}
         <div className="audit-log-changes">
-          {log.changes.role && <span>Role: <RoleBadge role={log.changes.role} /></span>}
+          {log.changes.role && (
+            <span>
+              Role: <RoleBadge role={log.changes.role} />
+            </span>
+          )}
           {log.changes.permissions && (
             <div className="permission-changes">
-              Permissions: {log.changes.permissions.map(p => <PermissionBadge key={p} permission={p} />)}
+              Permissions:{' '}
+              {log.changes.permissions.map((p) => (
+                <PermissionBadge key={p} permission={p} />
+              ))}
             </div>
           )}
         </div>
@@ -163,7 +173,9 @@ const RBACSettings: React.FC = () => {
       </div>
       <div className="request-content">
         <div className="request-permissions">
-          {request.permissions.map(p => <PermissionBadge key={p} permission={p} />)}
+          {request.permissions.map((p) => (
+            <PermissionBadge key={p} permission={p} />
+          ))}
         </div>
         <p className="request-reason">{request.reason}</p>
         <div className="request-meta">
@@ -173,8 +185,12 @@ const RBACSettings: React.FC = () => {
       </div>
       {request.status === 'pending' && (
         <div className="request-actions">
-          <button className="btn-approve" onClick={() => approvePermissionRequest(request.id)}>Approve</button>
-          <button className="btn-reject" onClick={() => rejectPermissionRequest(request.id)}>Reject</button>
+          <button className="btn-approve" onClick={() => approvePermissionRequest(request.id)}>
+            Approve
+          </button>
+          <button className="btn-reject" onClick={() => rejectPermissionRequest(request.id)}>
+            Reject
+          </button>
         </div>
       )}
     </div>
@@ -192,10 +208,16 @@ const RBACSettings: React.FC = () => {
           <strong>Resource:</strong> {policy.resource === '*' ? 'All Resources' : policy.resource}
         </div>
         <div className="policy-roles">
-          <strong>Roles:</strong> {policy.roles.map(r => <RoleBadge key={r} role={r} />)}
+          <strong>Roles:</strong>{' '}
+          {policy.roles.map((r) => (
+            <RoleBadge key={r} role={r} />
+          ))}
         </div>
         <div className="policy-permissions">
-          <strong>Permissions:</strong> {policy.permissions.slice(0, 3).map(p => <PermissionBadge key={p} permission={p} />)}
+          <strong>Permissions:</strong>{' '}
+          {policy.permissions.slice(0, 3).map((p) => (
+            <PermissionBadge key={p} permission={p} />
+          ))}
           {policy.permissions.length > 3 && <span>+{policy.permissions.length - 3} more</span>}
         </div>
         <div className="policy-priority">
@@ -218,7 +240,9 @@ const RBACSettings: React.FC = () => {
       </div>
       <p className="custom-role-description">{roleSet.description}</p>
       <div className="custom-role-permissions">
-        {roleSet.permissions.slice(0, 5).map(p => <PermissionBadge key={p} permission={p} />)}
+        {roleSet.permissions.slice(0, 5).map((p) => (
+          <PermissionBadge key={p} permission={p} />
+        ))}
         {roleSet.permissions.length > 5 && <span>+{roleSet.permissions.length - 5} more</span>}
       </div>
       <div className="custom-role-meta">
@@ -226,20 +250,16 @@ const RBACSettings: React.FC = () => {
         <span>Updated: {new Date(roleSet.updatedAt).toLocaleDateString()}</span>
       </div>
       <div className="custom-role-actions">
-        <button className="btn-secondary" onClick={() => updateCustomPermissionSet(roleSet.id, { description: 'Updated description' })}>
+        <button
+          className="btn-secondary"
+          onClick={() => updateCustomPermissionSet(roleSet.id, { description: 'Updated description' })}
+        >
           Edit
         </button>
         <button className="btn-danger" onClick={() => deleteCustomPermissionSet(roleSet.id)}>
           Delete
         </button>
       </div>
-    </div>
-  );
-
-  const ServiceHealth: React.FC<{ name: string; status: 'healthy' | 'degraded' | 'down' }> = ({ name, status }) => (
-    <div className={`service-health ${status}`}>
-      <div className="service-indicator" />
-      <div className="service-name">{name}</div>
     </div>
   );
 
@@ -297,10 +317,30 @@ const RBACSettings: React.FC = () => {
         {activeTab === 'overview' && (
           <div className="overview-section">
             <div className="stats-grid">
-              <StatsCard title="Total Users" value={stats.totalUsers} description="Users with role assignments" icon="👥" />
-              <StatsCard title="Custom Roles" value={stats.totalCustomRoles} description="Custom permission sets" icon="🎭" />
-              <StatsCard title="Active Policies" value={stats.activePolicies} description="Active access policies" icon="📋" />
-              <StatsCard title="Expiring Soon" value={stats.expiringAssignments} description="Assignments expiring in 30 days" icon="⏰" />
+              <StatsCard
+                title="Total Users"
+                value={stats.totalUsers}
+                description="Users with role assignments"
+                icon="👥"
+              />
+              <StatsCard
+                title="Custom Roles"
+                value={stats.totalCustomRoles}
+                description="Custom permission sets"
+                icon="🎭"
+              />
+              <StatsCard
+                title="Active Policies"
+                value={stats.activePolicies}
+                description="Active access policies"
+                icon="📋"
+              />
+              <StatsCard
+                title="Expiring Soon"
+                value={stats.expiringAssignments}
+                description="Assignments expiring in 30 days"
+                icon="⏰"
+              />
             </div>
 
             <div className="overview-sections">
@@ -319,7 +359,9 @@ const RBACSettings: React.FC = () => {
               <div className="overview-section-card">
                 <h3>Recent Activity</h3>
                 <div className="recent-activity">
-                  {auditLogs.slice(0, 5).map(log => <AuditLogItem key={log.id} log={log} />)}
+                  {auditLogs.slice(0, 5).map((log) => (
+                    <AuditLogItem key={log.id} log={log} />
+                  ))}
                 </div>
               </div>
             </div>
@@ -331,26 +373,22 @@ const RBACSettings: React.FC = () => {
           <div className="roles-section">
             <h2>Default Roles</h2>
             <div className="roles-grid">
-              {rolePermissions.map(rp => (
+              {rolePermissions.map((rp) => (
                 <div key={rp.role} className="default-role-card">
                   <div className="role-header">
                     <h3>{rp.displayName}</h3>
                     <RoleBadge role={rp.role} />
                   </div>
                   <p>{rp.description}</p>
-                  <div className="role-permissions-count">
-                    {rp.permissions.length} permissions
-                  </div>
-                  <div className="role-level">
-                    Level: {getRoleLevel(rp.role)}
-                  </div>
+                  <div className="role-permissions-count">{rp.permissions.length} permissions</div>
+                  <div className="role-level">Level: {getRoleLevel(rp.role)}</div>
                 </div>
               ))}
             </div>
 
             <h2>Custom Roles</h2>
             <div className="custom-roles-grid">
-              {customPermissionSets.map(roleSet => (
+              {customPermissionSets.map((roleSet) => (
                 <CustomRoleCard key={roleSet.id} roleSet={roleSet} />
               ))}
             </div>
@@ -365,8 +403,10 @@ const RBACSettings: React.FC = () => {
               <div className="users-filters">
                 <select className="filter-select">
                   <option value="">All Roles</option>
-                  {Object.values(Role).map(role => (
-                    <option key={role} value={role}>{role}</option>
+                  {Object.values(Role).map((role) => (
+                    <option key={role} value={role}>
+                      {role}
+                    </option>
                   ))}
                 </select>
                 <select className="filter-select">
@@ -378,14 +418,18 @@ const RBACSettings: React.FC = () => {
             </div>
 
             <div className="users-list">
-              {userRoleAssignments.map(user => <UserRow key={user.id} user={user} />)}
+              {userRoleAssignments.map((user) => (
+                <UserRow key={user.id} user={user} />
+              ))}
             </div>
 
             {selectedUser && (
               <div className="user-details-panel">
                 <div className="panel-header">
                   <h3>User Details</h3>
-                  <button className="btn-close" onClick={() => setSelectedUser(null)}>×</button>
+                  <button className="btn-close" onClick={() => setSelectedUser(null)}>
+                    ×
+                  </button>
                 </div>
                 <div className="panel-content">
                   <div className="user-detail-row">
@@ -412,7 +456,9 @@ const RBACSettings: React.FC = () => {
                     <div className="user-detail-row">
                       <strong>Custom Permissions:</strong>
                       <div className="custom-permissions-list">
-                        {selectedUser.customPermissions.map(p => <PermissionBadge key={p} permission={p} />)}
+                        {selectedUser.customPermissions.map((p) => (
+                          <PermissionBadge key={p} permission={p} />
+                        ))}
                       </div>
                     </div>
                   )}
@@ -421,7 +467,15 @@ const RBACSettings: React.FC = () => {
                   <button className="btn-secondary" onClick={() => revokeRole({ userId: selectedUser.userId })}>
                     Revoke Role
                   </button>
-                  <button className="btn-primary" onClick={() => updatePermissions({ userId: selectedUser.userId, permissions: selectedUser.customPermissions || [] })}>
+                  <button
+                    className="btn-primary"
+                    onClick={() =>
+                      updatePermissions({
+                        userId: selectedUser.userId,
+                        permissions: selectedUser.customPermissions || []
+                      })
+                    }
+                  >
                     Update Permissions
                   </button>
                 </div>
@@ -435,13 +489,28 @@ const RBACSettings: React.FC = () => {
           <div className="policies-section">
             <div className="policies-header">
               <h2>Access Policies</h2>
-              <button className="btn-primary" onClick={() => createAccessPolicy({ name: 'New Policy', description: '', resource: '*', permissions: [], roles: [], isActive: true, priority: 1 })}>
+              <button
+                className="btn-primary"
+                onClick={() =>
+                  createAccessPolicy({
+                    name: 'New Policy',
+                    description: '',
+                    resource: '*',
+                    permissions: [],
+                    roles: [],
+                    isActive: true,
+                    priority: 1
+                  })
+                }
+              >
                 Create Policy
               </button>
             </div>
 
             <div className="policies-grid">
-              {accessPolicies.map(policy => <PolicyCard key={policy.id} policy={policy} />)}
+              {accessPolicies.map((policy) => (
+                <PolicyCard key={policy.id} policy={policy} />
+              ))}
             </div>
           </div>
         )}
@@ -468,7 +537,9 @@ const RBACSettings: React.FC = () => {
             </div>
 
             <div className="audit-logs-list">
-              {auditLogs.map(log => <AuditLogItem key={log.id} log={log} />)}
+              {auditLogs.map((log) => (
+                <AuditLogItem key={log.id} log={log} />
+              ))}
             </div>
           </div>
         )}
@@ -487,7 +558,9 @@ const RBACSettings: React.FC = () => {
             </div>
 
             <div className="requests-grid">
-              {permissionRequests.map(request => <RequestCard key={request.id} request={request} />)}
+              {permissionRequests.map((request) => (
+                <RequestCard key={request.id} request={request} />
+              ))}
             </div>
           </div>
         )}
@@ -540,8 +613,10 @@ const RBACSettings: React.FC = () => {
                   value={settings.defaultRole}
                   onChange={(e) => updateSettings({ defaultRole: e.target.value as Role })}
                 >
-                  {Object.values(Role).map(role => (
-                    <option key={role} value={role}>{role}</option>
+                  {Object.values(Role).map((role) => (
+                    <option key={role} value={role}>
+                      {role}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -569,7 +644,12 @@ const RBACSettings: React.FC = () => {
               </div>
 
               <div className="form-actions">
-                <button className="btn-primary" onClick={() => {}}>
+                <button
+                  className="btn-primary"
+                  onClick={() => {
+                    /* noop */
+                  }}
+                >
                   Save Settings
                 </button>
               </div>

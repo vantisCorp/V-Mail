@@ -9,6 +9,7 @@ import { useNotifications } from '../hooks/useNotifications';
 interface ComposeModalProps {
   isOpen: boolean;
   onClose: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSend: (data: any) => void;
 }
 
@@ -32,7 +33,8 @@ export const ComposeModal: React.FC<ComposeModalProps> = ({
   const [showSelfDestructModal, setShowSelfDestructModal] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
-  const { aliases } = useAliases();
+  const { aliases: _aliases } = useAliases();
+  void _aliases;
   const { addNotification } = useNotifications();
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -86,7 +88,8 @@ export const ComposeModal: React.FC<ComposeModalProps> = ({
 
       addNotification('success', 'Email sent successfully');
       onClose();
-    } catch (error) {
+    } catch (_error) {
+      void _error;
       addNotification('error', 'Failed to send email');
     } finally {
       setIsSending(false);

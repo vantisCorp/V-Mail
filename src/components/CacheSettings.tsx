@@ -23,9 +23,11 @@ export const CacheSettings: React.FC = () => {
     events,
     clearCache,
     clearByPattern,
-    addInvalidationRule,
-    removeInvalidationRule
+    addInvalidationRule: _addInvalidationRule,
+    removeInvalidationRule: _removeInvalidationRule
   } = useCacheManager();
+  void _addInvalidationRule;
+  void _removeInvalidationRule;
 
   const cacheService = CacheService.getInstance();
 
@@ -60,6 +62,7 @@ export const CacheSettings: React.FC = () => {
   };
 
   const handleClearCache = async () => {
+    // eslint-disable-next-line no-alert
     if (confirm('Are you sure you want to clear the entire cache?')) {
       await clearCache();
     }

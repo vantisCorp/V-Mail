@@ -68,10 +68,10 @@
     "npm": ">=9.0.0"
   },
   "lint-staged": {
-    "*.{js,css,html,json,md}": [
+    "*.{js,ts,tsx,css,html,json,md}": [
       "prettier --write"
     ],
-    "*.js": [
+    "*.{js,ts,tsx}": [
       "eslint --fix"
     ]
   },

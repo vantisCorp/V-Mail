@@ -1,12 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useAnomalyDetection } from '../../src/hooks/useAnomalyDetection';
-import {
-  AnomalyType,
-  AnomalySeverity,
-  DetectionStatus,
-  RiskLevel
-} from '../../src/types/anomalyDetection';
+import { AnomalyType, AnomalySeverity, DetectionStatus, RiskLevel } from '../../src/types/anomalyDetection';
 import { AnomalyDetectionService } from '../../src/services/anomalyDetectionService';
 
 // Mock the AnomalyDetectionService
@@ -47,6 +42,7 @@ describe('useAnomalyDetection', () => {
       clearCache: vi.fn()
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(AnomalyDetectionService.getInstance).mockReturnValue(mockService as any);
   });
 
@@ -134,19 +130,26 @@ describe('useAnomalyDetection', () => {
 
     it('should set isAnalyzing to true during analysis', async () => {
       mockService.detectAnomalies.mockImplementation(
-        () => new Promise((resolve) => setTimeout(() => resolve({
-          id: '1',
-          emailId: 'email-1',
-          type: AnomalyType.UNKNOWN,
-          severity: AnomalySeverity.INFO,
-          riskScore: 0.1,
-          confidence: 0.5,
-          status: DetectionStatus.COMPLETED,
-          timestamp: Date.now(),
-          description: 'No anomalies',
-          indicators: [],
-          recommendedActions: []
-        }), 100))
+        () =>
+          new Promise((resolve) =>
+            setTimeout(
+              () =>
+                resolve({
+                  id: '1',
+                  emailId: 'email-1',
+                  type: AnomalyType.UNKNOWN,
+                  severity: AnomalySeverity.INFO,
+                  riskScore: 0.1,
+                  confidence: 0.5,
+                  status: DetectionStatus.COMPLETED,
+                  timestamp: Date.now(),
+                  description: 'No anomalies',
+                  indicators: [],
+                  recommendedActions: []
+                }),
+              100
+            )
+          )
       );
 
       const { result } = renderHook(() => useAnomalyDetection());
@@ -196,9 +199,7 @@ describe('useAnomalyDetection', () => {
         }
       ];
 
-      mockService.detectAnomalies
-        .mockResolvedValueOnce(mockResults[0])
-        .mockResolvedValueOnce(mockResults[1]);
+      mockService.detectAnomalies.mockResolvedValueOnce(mockResults[0]).mockResolvedValueOnce(mockResults[1]);
 
       const { result } = renderHook(() => useAnomalyDetection());
 
@@ -222,9 +223,7 @@ describe('useAnomalyDetection', () => {
 
       const { result } = renderHook(() => useAnomalyDetection());
 
-      const emails = [
-        { id: 'email-1', subject: 'Test', body: 'Body', sender: { email: 'test@example.com' } }
-      ];
+      const emails = [{ id: 'email-1', subject: 'Test', body: 'Body', sender: { email: 'test@example.com' } }];
 
       let results;
       await act(async () => {
@@ -357,7 +356,12 @@ describe('useAnomalyDetection', () => {
 
       const { result } = renderHook(() => useAnomalyDetection());
 
-      const email = { id: 'email-1', subject: 'Urgent: Verify your account', body: 'Click here to verify', sender: { email: 'phish@badsite.com' } };
+      const email = {
+        id: 'email-1',
+        subject: 'Urgent: Verify your account',
+        body: 'Click here to verify',
+        sender: { email: 'phish@badsite.com' }
+      };
 
       // Detect anomalies
       let detectionResult;

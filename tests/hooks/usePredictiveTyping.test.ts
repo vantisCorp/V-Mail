@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { usePredictiveTyping } from '../../src/hooks/usePredictiveTyping';
-import { WritingContext, SuggestionType, SuggestionPriority } from '../../src/types/predictiveTyping';
+import { WritingContext, SuggestionType } from '../../src/types/predictiveTyping';
 
 // ============================================================================
 // Mock Contexts
@@ -125,9 +125,7 @@ describe('usePredictiveTyping', () => {
       expect(suggestionsResult).toBeDefined();
       expect(suggestionsResult.suggestions).toBeDefined();
 
-      const emailSuggestions = suggestionsResult.suggestions.filter(
-        s => s.type === SuggestionType.EMAIL
-      );
+      const emailSuggestions = suggestionsResult.suggestions.filter((s) => s.type === SuggestionType.EMAIL);
       expect(emailSuggestions.length).toBeGreaterThan(0);
     });
 
@@ -139,9 +137,7 @@ describe('usePredictiveTyping', () => {
       expect(suggestionsResult).toBeDefined();
       expect(suggestionsResult.suggestions).toBeDefined();
 
-      const subjectSuggestions = suggestionsResult.suggestions.filter(
-        s => s.type === SuggestionType.SUBJECT
-      );
+      const subjectSuggestions = suggestionsResult.suggestions.filter((s) => s.type === SuggestionType.SUBJECT);
       expect(subjectSuggestions.length).toBeGreaterThan(0);
     });
 
@@ -160,10 +156,8 @@ describe('usePredictiveTyping', () => {
 
       const suggestionsResult = result.current.getSuggestions(mockBodyContext);
 
-      suggestionsResult.suggestions.forEach(suggestion => {
-        expect(suggestion.confidence).toBeGreaterThanOrEqual(
-          mockBodyContext.userPreferences?.minConfidence || 0.3
-        );
+      suggestionsResult.suggestions.forEach((suggestion) => {
+        expect(suggestion.confidence).toBeGreaterThanOrEqual(mockBodyContext.userPreferences?.minConfidence || 0.3);
       });
     });
 
@@ -205,9 +199,7 @@ describe('usePredictiveTyping', () => {
 
       const suggestionsResult = result.current.getSuggestions(contextWithBetterWord);
 
-      const completions = suggestionsResult.suggestions.filter(
-        s => s.type === SuggestionType.COMPLETION
-      );
+      const completions = suggestionsResult.suggestions.filter((s) => s.type === SuggestionType.COMPLETION);
       expect(completions.length).toBeGreaterThan(0);
     });
 
@@ -216,9 +208,7 @@ describe('usePredictiveTyping', () => {
 
       const suggestionsResult = result.current.getSuggestions(mockLongTextContext);
 
-      const phrases = suggestionsResult.suggestions.filter(
-        s => s.type === SuggestionType.PHRASE
-      );
+      const phrases = suggestionsResult.suggestions.filter((s) => s.type === SuggestionType.PHRASE);
       // Phrases might not be generated for all contexts
       expect(Array.isArray(phrases)).toBe(true);
     });
@@ -234,9 +224,7 @@ describe('usePredictiveTyping', () => {
 
       const suggestionsResult = result.current.getSuggestions(contextWithGrammar);
 
-      const grammar = suggestionsResult.suggestions.filter(
-        s => s.type === SuggestionType.GRAMMAR
-      );
+      const grammar = suggestionsResult.suggestions.filter((s) => s.type === SuggestionType.GRAMMAR);
       expect(grammar.length).toBeGreaterThan(0);
     });
 

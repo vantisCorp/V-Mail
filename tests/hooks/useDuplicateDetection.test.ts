@@ -1,16 +1,19 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useDuplicateDetection } from '../../src/hooks/useDuplicateDetection';
-import { DuplicateType, DuplicateSeverity, DuplicateAction, SimilarityAlgorithm } from '../../src/types/duplicateDetection';
+import { DuplicateType, DuplicateAction, SimilarityAlgorithm } from '../../src/types/duplicateDetection';
 
 describe('useDuplicateDetection', () => {
-  const createEmail = (id: string, overrides: Partial<{
-    subject: string;
-    body: string;
-    from: string;
-    to: string[];
-    date: string;
-  }> = {}) => ({
+  const createEmail = (
+    id: string,
+    overrides: Partial<{
+      subject: string;
+      body: string;
+      from: string;
+      to: string[];
+      date: string;
+    }> = {}
+  ) => ({
     id,
     subject: overrides.subject || 'Test Subject',
     body: overrides.body || 'This is a test email body with some content.',
@@ -48,11 +51,13 @@ describe('useDuplicateDetection', () => {
     });
 
     it('should initialize with custom config', () => {
-      const { result } = renderHook(() => useDuplicateDetection({
-        minSimilarityThreshold: 0.8,
-        algorithm: SimilarityAlgorithm.JACCARD,
-        defaultAction: DuplicateAction.MARK_READ
-      }));
+      const { result } = renderHook(() =>
+        useDuplicateDetection({
+          minSimilarityThreshold: 0.8,
+          algorithm: SimilarityAlgorithm.JACCARD,
+          defaultAction: DuplicateAction.MARK_READ
+        })
+      );
 
       expect(result.current.config.minSimilarityThreshold).toBe(0.8);
       expect(result.current.config.algorithm).toBe(SimilarityAlgorithm.JACCARD);
@@ -74,9 +79,11 @@ describe('useDuplicateDetection', () => {
     });
 
     it('should detect near duplicates', async () => {
-      const { result } = renderHook(() => useDuplicateDetection({
-        minSimilarityThreshold: 0.7
-      }));
+      const { result } = renderHook(() =>
+        useDuplicateDetection({
+          minSimilarityThreshold: 0.7
+        })
+      );
 
       const emails = [
         createEmail('1', { subject: 'Project Update', body: 'This is the quarterly project update for our team.' }),
@@ -134,9 +141,11 @@ describe('useDuplicateDetection', () => {
     });
 
     it('should respect similarity threshold', async () => {
-      const { result } = renderHook(() => useDuplicateDetection({
-        minSimilarityThreshold: 1.0 // Exact match only
-      }));
+      const { result } = renderHook(() =>
+        useDuplicateDetection({
+          minSimilarityThreshold: 1.0 // Exact match only
+        })
+      );
 
       const emails = [
         createEmail('1', { subject: 'Test', body: 'Body one' }),
@@ -192,9 +201,11 @@ describe('useDuplicateDetection', () => {
 
   describe('Action Suggestions', () => {
     it('should suggest auto-delete for high severity duplicates', async () => {
-      const { result } = renderHook(() => useDuplicateDetection({
-        autoDeduplicate: true
-      }));
+      const { result } = renderHook(() =>
+        useDuplicateDetection({
+          autoDeduplicate: true
+        })
+      );
 
       await act(async () => {
         await result.current.detect({ emails: duplicateEmails });
@@ -207,10 +218,12 @@ describe('useDuplicateDetection', () => {
     });
 
     it('should suggest manual review for low severity duplicates', async () => {
-      const { result } = renderHook(() => useDuplicateDetection({
-        minSimilarityThreshold: 0.5,
-        autoDeduplicate: false
-      }));
+      const { result } = renderHook(() =>
+        useDuplicateDetection({
+          minSimilarityThreshold: 0.5,
+          autoDeduplicate: false
+        })
+      );
 
       const lowSimilarityEmails = [
         createEmail('1', { subject: 'Subject A', body: 'This is completely different content from the other email.' }),
@@ -236,9 +249,11 @@ describe('useDuplicateDetection', () => {
 
   describe('Feedback and Learning', () => {
     it('should record user feedback', () => {
-      const { result } = renderHook(() => useDuplicateDetection({
-        enableLearning: true
-      }));
+      const { result } = renderHook(() =>
+        useDuplicateDetection({
+          enableLearning: true
+        })
+      );
 
       act(() => {
         result.current.recordFeedback({
@@ -291,9 +306,11 @@ describe('useDuplicateDetection', () => {
 
   describe('Caching', () => {
     it('should cache detection results', async () => {
-      const { result } = renderHook(() => useDuplicateDetection({
-        enableCache: true
-      }));
+      const { result } = renderHook(() =>
+        useDuplicateDetection({
+          enableCache: true
+        })
+      );
 
       await act(async () => {
         await result.current.detect({ emails: duplicateEmails });
@@ -303,9 +320,11 @@ describe('useDuplicateDetection', () => {
     });
 
     it('should clear cache', async () => {
-      const { result } = renderHook(() => useDuplicateDetection({
-        enableCache: true
-      }));
+      const { result } = renderHook(() =>
+        useDuplicateDetection({
+          enableCache: true
+        })
+      );
 
       await act(async () => {
         await result.current.detect({ emails: duplicateEmails });
@@ -337,10 +356,12 @@ describe('useDuplicateDetection', () => {
     });
 
     it('should preserve existing config when updating partially', () => {
-      const { result } = renderHook(() => useDuplicateDetection({
-        minSimilarityThreshold: 0.7,
-        algorithm: SimilarityAlgorithm.JACCARD
-      }));
+      const { result } = renderHook(() =>
+        useDuplicateDetection({
+          minSimilarityThreshold: 0.7,
+          algorithm: SimilarityAlgorithm.JACCARD
+        })
+      );
 
       act(() => {
         result.current.updateConfig({
@@ -385,9 +406,11 @@ describe('useDuplicateDetection', () => {
 
   describe('Reset', () => {
     it('should reset all state', async () => {
-      const { result } = renderHook(() => useDuplicateDetection({
-        enableCache: true
-      }));
+      const { result } = renderHook(() =>
+        useDuplicateDetection({
+          enableCache: true
+        })
+      );
 
       await act(async () => {
         await result.current.detect({ emails: duplicateEmails });
@@ -409,9 +432,11 @@ describe('useDuplicateDetection', () => {
 
   describe('Time Difference', () => {
     it('should not detect duplicates with large time difference', async () => {
-      const { result } = renderHook(() => useDuplicateDetection({
-        maxTimeDifference: 24 // 24 hours
-      }));
+      const { result } = renderHook(() =>
+        useDuplicateDetection({
+          maxTimeDifference: 24 // 24 hours
+        })
+      );
 
       const emails = [
         createEmail('1', {
@@ -434,9 +459,11 @@ describe('useDuplicateDetection', () => {
     });
 
     it('should detect duplicates within time threshold', async () => {
-      const { result } = renderHook(() => useDuplicateDetection({
-        maxTimeDifference: 168 // 7 days
-      }));
+      const { result } = renderHook(() =>
+        useDuplicateDetection({
+          maxTimeDifference: 168 // 7 days
+        })
+      );
 
       const emails = [
         createEmail('1', {

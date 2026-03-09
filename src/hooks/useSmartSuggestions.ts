@@ -59,6 +59,7 @@ const initialStatistics: SuggestionStatistics = {
   acceptanceRate: 0,
   avgConfidence: 0,
   avgResponseTime: 0,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   byType: {} as any,
   byCategory: {},
   topSuggestions: [],

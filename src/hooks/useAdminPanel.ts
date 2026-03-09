@@ -4,7 +4,7 @@
  * Comprehensive hook for admin panel operations.
  */
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useNotifications } from './useNotifications';
 import type {
   AdminUser,
@@ -21,8 +21,10 @@ import type {
   AdminUserFilter,
   BulkOperationResult,
   ExportConfig,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   AdminAction,
   AuditLogSeverity,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   AdminUserRole,
   UserStatus
 } from '../types/adminPanel';
@@ -428,7 +430,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
         setAlerts(generateMockAlerts());
         setStats(generateMockStats());
         setSettings(generateMockSettings());
-      } catch (err) {
+      } catch {
         setError('Failed to load admin panel data');
       } finally {
         setIsLoading(false);
@@ -489,7 +491,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
         addNotification('success', `User "${payload.name}" has been created successfully.`);
 
         return newUser;
-      } catch (err) {
+      } catch {
         setError('Failed to create user');
         addNotification('error', 'Failed to create user. Please try again.');
         return null;
@@ -522,7 +524,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
         addNotification('success', `User "${updatedUser.name}" has been updated successfully.`);
 
         return updatedUser;
-      } catch (err) {
+      } catch {
         setError('Failed to update user');
         addNotification('error', 'Failed to update user. Please try again.');
         return null;
@@ -543,7 +545,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
         addNotification('success', 'User has been deleted successfully.');
 
         return true;
-      } catch (err) {
+      } catch {
         addNotification('error', 'Failed to delete user. Please try again.');
         return false;
       }
@@ -563,7 +565,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
         addNotification('warning', 'User has been suspended successfully.');
 
         return true;
-      } catch (err) {
+      } catch {
         addNotification('error', 'Failed to suspend user. Please try again.');
         return false;
       }
@@ -583,7 +585,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
         addNotification('success', 'User has been reactivated successfully.');
 
         return true;
-      } catch (err) {
+      } catch {
         addNotification('error', 'Failed to reactivate user. Please try again.');
         return false;
       }
@@ -604,7 +606,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
           await new Promise((resolve) => setTimeout(resolve, 100));
           setUsers((prev) => prev.map((u) => (u.id === userId ? { ...u, ...payload, updatedAt: new Date() } : u)));
           result.successful.push(userId);
-        } catch (err) {
+        } catch {
           result.failed.push({ id: userId, error: 'Failed to update user' });
         }
       }
@@ -629,7 +631,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
           await new Promise((resolve) => setTimeout(resolve, 100));
           setUsers((prev) => prev.filter((u) => u.id !== userId));
           result.successful.push(userId);
-        } catch (err) {
+        } catch {
           result.failed.push({ id: userId, error: 'Failed to delete user' });
         }
       }
@@ -646,8 +648,10 @@ export function useAdminPanel(): UseAdminPanelReturn {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       const data = users.map((u) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const row: Record<string, any> = {};
         config.fields.forEach((field) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           row[field] = (u as any)[field];
         });
         return row;
@@ -686,8 +690,10 @@ export function useAdminPanel(): UseAdminPanelReturn {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       const data = auditLogs.map((l) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const row: Record<string, any> = {};
         config.fields.forEach((field) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           row[field] = (l as any)[field];
         });
         return row;
@@ -738,7 +744,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
         addNotification('success', 'The alert has been resolved successfully.');
 
         return true;
-      } catch (err) {
+      } catch {
         addNotification('error', 'Failed to resolve alert. Please try again.');
         return false;
       }
@@ -753,7 +759,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
       setAlerts((prev) => prev.map((a) => (a.id === alertId ? { ...a, isRead: true } : a)));
 
       return true;
-    } catch (err) {
+    } catch {
       return false;
     }
   }, []);
@@ -782,7 +788,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
         addNotification('success', 'Admin settings have been updated successfully.');
 
         return updatedSettings;
-      } catch (err) {
+      } catch {
         addNotification('error', 'Failed to update settings. Please try again.');
         return null;
       }
@@ -812,7 +818,7 @@ export function useAdminPanel(): UseAdminPanelReturn {
         addNotification('info', `Maintenance window scheduled for ${new Date(window.startTime).toLocaleDateString()}.`);
 
         return newWindow;
-      } catch (err) {
+      } catch {
         addNotification('error', 'Failed to schedule maintenance. Please try again.');
         return null;
       }
@@ -821,14 +827,14 @@ export function useAdminPanel(): UseAdminPanelReturn {
   );
 
   const cancelMaintenance = useCallback(
-    async (maintenanceId: string): Promise<boolean> => {
+    async (_maintenanceId: string): Promise<boolean> => {
       try {
         await new Promise((resolve) => setTimeout(resolve, 300));
 
         addNotification('info', 'Maintenance window has been cancelled.');
 
         return true;
-      } catch (err) {
+      } catch {
         return false;
       }
     },

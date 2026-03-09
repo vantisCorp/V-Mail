@@ -1,6 +1,6 @@
 /**
  * Mobile App Enhancements Hook
- * 
+ *
  * Provides enhanced mobile app features including:
  * - Gesture support (swipe, long press, double tap)
  * - Offline mode and sync
@@ -22,6 +22,7 @@ import {
   PullToRefreshConfig,
   InfiniteScrollConfig,
   SyncStatus,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   OfflineDataType,
   OfflineDataItem,
   ConflictResolutionStrategy,
@@ -39,7 +40,7 @@ import {
   OptimizationSettings,
   GestureResult,
   SyncResult,
-  MobileEnhancements,
+  MobileEnhancements
 } from '../types/mobileEnhancements';
 
 /**
@@ -51,29 +52,29 @@ const DEFAULT_GESTURE_CONFIG: EmailGestureConfig = {
     action: GestureAction.ARCHIVE,
     isEnabled: true,
     requiresConfirmation: false,
-    hapticFeedback: true,
+    hapticFeedback: true
   },
   swipeRight: {
     gesture: GestureType.SWIPE_RIGHT,
     action: GestureAction.MARK_READ,
     isEnabled: true,
     requiresConfirmation: false,
-    hapticFeedback: true,
+    hapticFeedback: true
   },
   longPress: {
     gesture: GestureType.LONG_PRESS,
     action: GestureAction.NONE,
     isEnabled: true,
     requiresConfirmation: false,
-    hapticFeedback: false,
+    hapticFeedback: false
   },
   doubleTap: {
     gesture: GestureType.DOUBLE_TAP,
     action: GestureAction.STAR,
     isEnabled: true,
     requiresConfirmation: false,
-    hapticFeedback: true,
-  },
+    hapticFeedback: true
+  }
 };
 
 /**
@@ -83,7 +84,7 @@ const DEFAULT_ANIMATION: AnimationConfig = {
   type: AnimationType.SLIDE,
   duration: 300,
   delay: 0,
-  easing: 'ease-in-out',
+  easing: 'ease-in-out'
 };
 
 /**
@@ -93,8 +94,9 @@ const DEFAULT_PULL_TO_REFRESH: PullToRefreshConfig = {
   isEnabled: true,
   threshold: 80,
   animation: DEFAULT_ANIMATION,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   refreshAction: async () => {},
-  showRefreshingIndicator: true,
+  showRefreshingIndicator: true
 };
 
 /**
@@ -103,8 +105,9 @@ const DEFAULT_PULL_TO_REFRESH: PullToRefreshConfig = {
 const DEFAULT_INFINITE_SCROLL: InfiniteScrollConfig = {
   isEnabled: true,
   threshold: 200,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   loadMoreAction: async () => {},
-  showLoadingIndicator: true,
+  showLoadingIndicator: true
 };
 
 /**
@@ -116,32 +119,32 @@ const DEFAULT_NOTIFICATION_SETTINGS: NotificationSettings = {
     enabled: true,
     sound: 'default',
     vibration: true,
-    priority: NotificationPriority.HIGH,
+    priority: NotificationPriority.HIGH
   },
   [NotificationType.EMAIL_SENT]: {
     enabled: false,
     sound: 'default',
     vibration: false,
-    priority: NotificationPriority.NORMAL,
+    priority: NotificationPriority.NORMAL
   },
   [NotificationType.CALENDAR_EVENT]: {
     enabled: true,
     sound: 'default',
     vibration: true,
-    priority: NotificationPriority.NORMAL,
+    priority: NotificationPriority.NORMAL
   },
   [NotificationType.TASK_ASSIGNED]: {
     enabled: true,
     sound: 'default',
     vibration: true,
-    priority: NotificationPriority.HIGH,
+    priority: NotificationPriority.HIGH
   },
   quietHours: {
     enabled: false,
     startTime: '22:00',
     endTime: '08:00',
-    allowUrgent: true,
-  },
+    allowUrgent: true
+  }
 };
 
 /**
@@ -151,7 +154,7 @@ const DEFAULT_DARK_MODE: DarkModeConfig = {
   mode: 'system',
   useSystemTheme: true,
   reduceAnimations: false,
-  highContrastMode: false,
+  highContrastMode: false
 };
 
 /**
@@ -163,7 +166,7 @@ const DEFAULT_ACCESSIBILITY: AccessibilitySettings = {
   reduceMotion: false,
   highContrast: false,
   screenReader: false,
-  touchTargetsSize: 44,
+  touchTargetsSize: 44
 };
 
 /**
@@ -176,7 +179,7 @@ const DEFAULT_OPTIMIZATION: OptimizationSettings = {
   enableVirtualScrolling: true,
   enableImageCompression: true,
   imageQuality: 0.8,
-  prefetchStrategy: 'moderate',
+  prefetchStrategy: 'moderate'
 };
 
 /**
@@ -191,7 +194,7 @@ const generateMockStorageStats = (): OfflineStorageStats => {
     attachmentsCount: 85,
     attachmentsSize: 95 * 1024 * 1024, // 95MB
     lastSyncTime: new Date().toISOString(),
-    syncStatus: SyncStatus.IDLE,
+    syncStatus: SyncStatus.IDLE
   };
 };
 
@@ -206,7 +209,7 @@ const generateMockPerformanceMetrics = (): PerformanceMetrics => {
     batteryUsage: 2.5, // % per hour
     networkRequests: 156,
     cacheHitRate: 87, // %
-    lastUpdated: new Date().toISOString(),
+    lastUpdated: new Date().toISOString()
   };
 };
 
@@ -229,6 +232,7 @@ export const useMobileEnhancements = () => {
   // Offline mode state
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(SyncStatus.IDLE);
   const [storageStats, setStorageStats] = useState<OfflineStorageStats>(generateMockStorageStats);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [offlineData, setOfflineData] = useState<OfflineDataItem[]>([]);
   const [syncConflicts, setSyncConflicts] = useState<SyncConflict[]>([]);
 
@@ -247,6 +251,7 @@ export const useMobileEnhancements = () => {
   const [accessibility, setAccessibility] = useState<AccessibilitySettings>(DEFAULT_ACCESSIBILITY);
 
   // Performance state
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [performance, setPerformance] = useState<PerformanceMetrics>(generateMockPerformanceMetrics);
 
   // Optimization state
@@ -262,7 +267,7 @@ export const useMobileEnhancements = () => {
         title: 'Unread Emails',
         position: 0,
         size: 'small',
-        refreshInterval: 300, // 5 minutes
+        refreshInterval: 300 // 5 minutes
       },
       {
         id: 'widget-2',
@@ -270,7 +275,7 @@ export const useMobileEnhancements = () => {
         title: 'Starred',
         position: 1,
         size: 'medium',
-        refreshInterval: 600, // 10 minutes
+        refreshInterval: 600 // 10 minutes
       },
       {
         id: 'widget-3',
@@ -278,8 +283,8 @@ export const useMobileEnhancements = () => {
         title: 'Quick Compose',
         position: 2,
         size: 'small',
-        refreshInterval: 0,
-      },
+        refreshInterval: 0
+      }
     ]);
 
     // Check system dark mode preference
@@ -292,47 +297,50 @@ export const useMobileEnhancements = () => {
   /**
    * Handle gesture execution
    */
-  const executeGesture = useCallback(async (gesture: GestureType, emailId: string): Promise<GestureResult> => {
-    let action: GestureAction = GestureAction.NONE;
+  const executeGesture = useCallback(
+    async (gesture: GestureType, _emailId: string): Promise<GestureResult> => {
+      let action: GestureAction = GestureAction.NONE;
 
-    // Find the action for the gesture
-    switch (gesture) {
-      case GestureType.SWIPE_LEFT:
-        action = gestureConfig.swipeLeft.action;
-        break;
-      case GestureType.SWIPE_RIGHT:
-        action = gestureConfig.swipeRight.action;
-        break;
-      case GestureType.LONG_PRESS:
-        action = gestureConfig.longPress.action;
-        break;
-      case GestureType.DOUBLE_TAP:
-        action = gestureConfig.doubleTap.action;
-        break;
-    }
+      // Find the action for the gesture
+      switch (gesture) {
+        case GestureType.SWIPE_LEFT:
+          action = gestureConfig.swipeLeft.action;
+          break;
+        case GestureType.SWIPE_RIGHT:
+          action = gestureConfig.swipeRight.action;
+          break;
+        case GestureType.LONG_PRESS:
+          action = gestureConfig.longPress.action;
+          break;
+        case GestureType.DOUBLE_TAP:
+          action = gestureConfig.doubleTap.action;
+          break;
+      }
 
-    const config = Object.values(gestureConfig).find(c => c.gesture === gesture);
-    const feedback = config?.hapticFeedback ? HapticFeedbackType.LIGHT : undefined;
+      const config = Object.values(gestureConfig).find((c) => c.gesture === gesture);
+      const feedback = config?.hapticFeedback ? HapticFeedbackType.LIGHT : undefined;
 
-    // Simulate action execution
-    await new Promise(resolve => setTimeout(resolve, 100));
+      // Simulate action execution
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
-    const result: GestureResult = {
-      gesture,
-      action,
-      success: action !== GestureAction.NONE,
-      feedback,
-    };
+      const result: GestureResult = {
+        gesture,
+        action,
+        success: action !== GestureAction.NONE,
+        feedback
+      };
 
-    setLastGesture(result);
-    return result;
-  }, [gestureConfig]);
+      setLastGesture(result);
+      return result;
+    },
+    [gestureConfig]
+  );
 
   /**
    * Update gesture configuration
    */
   const updateGestureConfig = useCallback((gesture: GestureType, updates: Partial<GestureConfig>) => {
-    setGestureConfig(prev => {
+    setGestureConfig((prev) => {
       let gestureKey: keyof EmailGestureConfig;
       switch (gesture) {
         case GestureType.SWIPE_LEFT:
@@ -352,7 +360,7 @@ export const useMobileEnhancements = () => {
       }
       return {
         ...prev,
-        [gestureKey]: { ...prev[gestureKey], ...updates },
+        [gestureKey]: { ...prev[gestureKey], ...updates }
       };
     });
   }, []);
@@ -361,7 +369,9 @@ export const useMobileEnhancements = () => {
    * Execute pull to refresh
    */
   const executePullToRefresh = useCallback(async () => {
-    if (!pullToRefresh.isEnabled || isRefreshing) return;
+    if (!pullToRefresh.isEnabled || isRefreshing) {
+      return;
+    }
 
     setIsRefreshing(true);
     await pullToRefresh.refreshAction();
@@ -372,7 +382,9 @@ export const useMobileEnhancements = () => {
    * Execute infinite scroll load more
    */
   const executeLoadMore = useCallback(async () => {
-    if (!infiniteScroll.isEnabled || isLoadingMore) return;
+    if (!infiniteScroll.isEnabled || isLoadingMore) {
+      return;
+    }
 
     setIsLoadingMore(true);
     await infiniteScroll.loadMoreAction();
@@ -386,13 +398,13 @@ export const useMobileEnhancements = () => {
     setSyncStatus(SyncStatus.SYNCING);
 
     // Simulate sync process
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     // Update storage stats
-    setStorageStats(prev => ({
+    setStorageStats((prev) => ({
       ...prev,
       lastSyncTime: new Date().toISOString(),
-      syncStatus: SyncStatus.SUCCESS,
+      syncStatus: SyncStatus.SUCCESS
     }));
 
     setSyncStatus(SyncStatus.IDLE);
@@ -402,7 +414,7 @@ export const useMobileEnhancements = () => {
       itemsSynced: 45,
       itemsFailed: 0,
       duration: 2000,
-      conflicts: [],
+      conflicts: []
     };
   }, []);
 
@@ -411,20 +423,20 @@ export const useMobileEnhancements = () => {
    */
   const clearOfflineData = useCallback(async () => {
     setOfflineData([]);
-    setStorageStats(prev => ({
+    setStorageStats((prev) => ({
       ...prev,
       usedSize: 0,
       emailsCount: 0,
       attachmentsCount: 0,
-      attachmentsSize: 0,
+      attachmentsSize: 0
     }));
   }, []);
 
   /**
    * Resolve sync conflict
    */
-  const resolveConflict = useCallback(async (conflictId: string, resolution: ConflictResolutionStrategy) => {
-    setSyncConflicts(prev => prev.filter(c => c.id !== conflictId));
+  const resolveConflict = useCallback(async (conflictId: string, _resolution: ConflictResolutionStrategy) => {
+    setSyncConflicts((prev) => prev.filter((c) => c.id !== conflictId));
   }, []);
 
   /**
@@ -435,19 +447,17 @@ export const useMobileEnhancements = () => {
       ...notification,
       id: `notif-${Date.now()}`,
       timestamp: new Date().toISOString(),
-      isRead: false,
+      isRead: false
     };
 
-    setNotifications(prev => [newNotification, ...prev].slice(0, 100));
+    setNotifications((prev) => [newNotification, ...prev].slice(0, 100));
   }, []);
 
   /**
    * Mark notification as read
    */
   const markNotificationAsRead = useCallback((notificationId: string) => {
-    setNotifications(prev => prev.map(n => 
-      n.id === notificationId ? { ...n, isRead: true } : n
-    ));
+    setNotifications((prev) => prev.map((n) => (n.id === notificationId ? { ...n, isRead: true } : n)));
   }, []);
 
   /**
@@ -463,93 +473,94 @@ export const useMobileEnhancements = () => {
   const addWidget = useCallback((widget: Omit<WidgetConfig, 'id'>) => {
     const newWidget: WidgetConfig = {
       ...widget,
-      id: `widget-${Date.now()}`,
+      id: `widget-${Date.now()}`
     };
 
-    setWidgets(prev => [...prev, newWidget]);
+    setWidgets((prev) => [...prev, newWidget]);
   }, []);
 
   /**
    * Remove widget
    */
   const removeWidget = useCallback((widgetId: string) => {
-    setWidgets(prev => prev.filter(w => w.id !== widgetId));
+    setWidgets((prev) => prev.filter((w) => w.id !== widgetId));
   }, []);
 
   /**
    * Update widget
    */
   const updateWidget = useCallback((widgetId: string, updates: Partial<WidgetConfig>) => {
-    setWidgets(prev => prev.map(w => 
-      w.id === widgetId ? { ...w, ...updates } : w
-    ));
+    setWidgets((prev) => prev.map((w) => (w.id === widgetId ? { ...w, ...updates } : w)));
   }, []);
 
   /**
    * Toggle dark mode
    */
   const toggleDarkMode = useCallback(() => {
-    setIsDarkMode(prev => !prev);
+    setIsDarkMode((prev) => !prev);
   }, []);
 
   /**
    * Update accessibility settings
    */
   const updateAccessibility = useCallback((updates: Partial<AccessibilitySettings>) => {
-    setAccessibility(prev => ({ ...prev, ...updates }));
+    setAccessibility((prev) => ({ ...prev, ...updates }));
   }, []);
 
   /**
    * Update notification settings
    */
   const updateNotificationSettings = useCallback((updates: Partial<NotificationSettings>) => {
-    setNotificationSettings(prev => ({ ...prev, ...updates }));
+    setNotificationSettings((prev) => ({ ...prev, ...updates }));
   }, []);
 
   /**
    * Get unread notification count
    */
   const unreadNotificationCount = useMemo(() => {
-    return notifications.filter(n => !n.isRead).length;
+    return notifications.filter((n) => !n.isRead).length;
   }, [notifications]);
 
   /**
    * Get all mobile enhancements state
    */
-  const enhancements: MobileEnhancements = useMemo(() => ({
-    gestures: gestureConfig,
-    pullToRefresh,
-    infiniteScroll,
-    offlineMode: {
-      isEnabled: true,
+  const enhancements: MobileEnhancements = useMemo(
+    () => ({
+      gestures: gestureConfig,
+      pullToRefresh,
+      infiniteScroll,
+      offlineMode: {
+        isEnabled: true,
+        syncStatus,
+        storageStats,
+        conflicts: syncConflicts
+      },
+      notifications: {
+        settings: notificationSettings,
+        history: notifications
+      },
+      widgets,
+      darkMode,
+      accessibility,
+      performance,
+      optimization
+    }),
+    [
+      gestureConfig,
+      pullToRefresh,
+      infiniteScroll,
       syncStatus,
       storageStats,
-      conflicts: syncConflicts,
-    },
-    notifications: {
-      settings: notificationSettings,
-      history: notifications,
-    },
-    widgets,
-    darkMode,
-    accessibility,
-    performance,
-    optimization,
-  }), [
-    gestureConfig,
-    pullToRefresh,
-    infiniteScroll,
-    syncStatus,
-    storageStats,
-    syncConflicts,
-    notificationSettings,
-    notifications,
-    widgets,
-    darkMode,
-    accessibility,
-    performance,
-    optimization,
-  ]);
+      syncConflicts,
+      notificationSettings,
+      notifications,
+      widgets,
+      darkMode,
+      accessibility,
+      performance,
+      optimization
+    ]
+  );
 
   return {
     // State
@@ -594,6 +605,6 @@ export const useMobileEnhancements = () => {
     setPullToRefresh,
     setInfiniteScroll,
     setDarkMode,
-    setOptimization,
+    setOptimization
   };
 };

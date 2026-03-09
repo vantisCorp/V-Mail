@@ -18,7 +18,7 @@ describe('useKeyboardShortcuts', () => {
   it('should group shortcuts by category', () => {
     const { result } = renderHook(() => useKeyboardShortcuts());
 
-    const navigationGroup = result.current.shortcutGroups.find(g => g.category === 'navigation');
+    const navigationGroup = result.current.shortcutGroups.find((g) => g.category === 'navigation');
     expect(navigationGroup).toBeDefined();
     expect(navigationGroup?.title).toBe('Navigation');
     expect(navigationGroup?.shortcuts.length).toBeGreaterThan(0);
@@ -42,7 +42,7 @@ describe('useKeyboardShortcuts', () => {
     });
 
     expect(result.current.shortcuts.length).toBe(initialCount + 1);
-    expect(result.current.shortcuts.find(s => s.id === 'test-shortcut')).toBeDefined();
+    expect(result.current.shortcuts.find((s) => s.id === 'test-shortcut')).toBeDefined();
   });
 
   it('should unregister shortcuts', () => {
@@ -67,7 +67,7 @@ describe('useKeyboardShortcuts', () => {
     });
 
     expect(result.current.shortcuts.length).toBe(countWithShortcut - 1);
-    expect(result.current.shortcuts.find(s => s.id === 'test-shortcut')).toBeUndefined();
+    expect(result.current.shortcuts.find((s) => s.id === 'test-shortcut')).toBeUndefined();
   });
 
   it('should enable/disable shortcuts', () => {
@@ -116,6 +116,7 @@ describe('useKeyboardShortcuts', () => {
 
   it('should call action handler when shortcut is triggered', () => {
     const actionHandler = vi.fn();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { result } = renderHook(() => useKeyboardShortcuts(actionHandler));
 
     // The action handler is called through the keyboard event
@@ -126,7 +127,7 @@ describe('useKeyboardShortcuts', () => {
   it('should have all required categories', () => {
     const { result } = renderHook(() => useKeyboardShortcuts());
 
-    const categories = result.current.shortcutGroups.map(g => g.category);
+    const categories = result.current.shortcutGroups.map((g) => g.category);
     expect(categories).toContain('navigation');
     expect(categories).toContain('compose');
     expect(categories).contain('email-actions');
@@ -159,7 +160,7 @@ describe('useKeyboardShortcuts', () => {
       });
     });
 
-    const updatedShortcut = result.current.shortcuts.find(s => s.id === initialShortcut.id);
+    const updatedShortcut = result.current.shortcuts.find((s) => s.id === initialShortcut.id);
     expect(updatedShortcut?.description).toBe('Updated description');
     expect(updatedShortcut?.description).not.toBe(initialDescription);
   });
@@ -167,7 +168,7 @@ describe('useKeyboardShortcuts', () => {
   it('should have proper shortcut structure', () => {
     const { result } = renderHook(() => useKeyboardShortcuts());
 
-    result.current.shortcuts.forEach(shortcut => {
+    result.current.shortcuts.forEach((shortcut) => {
       expect(shortcut.id).toBeDefined();
       expect(shortcut.key).toBeDefined();
       expect(shortcut.modifiers).toBeDefined();
@@ -181,7 +182,7 @@ describe('useKeyboardShortcuts', () => {
   it('should have unique shortcut IDs', () => {
     const { result } = renderHook(() => useKeyboardShortcuts());
 
-    const ids = result.current.shortcuts.map(s => s.id);
+    const ids = result.current.shortcuts.map((s) => s.id);
     const uniqueIds = new Set(ids);
     expect(ids.length).toBe(uniqueIds.size);
   });

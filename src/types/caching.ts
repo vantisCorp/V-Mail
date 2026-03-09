@@ -9,6 +9,7 @@ export type CachePolicy = 'cache-first' | 'network-first' | 'stale-while-revalid
 
 export type CachePriority = 'low' | 'normal' | 'high' | 'critical';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface CacheEntry<T = any> {
   key: string;
   value: T;
@@ -18,6 +19,7 @@ export interface CacheEntry<T = any> {
   hits: number;
   lastAccessed: number;
   tags: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   metadata?: Record<string, any>;
 }
 
@@ -58,6 +60,7 @@ export interface CacheEvent {
   key: string;
   timestamp: number;
   size?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   metadata?: Record<string, any>;
 }
 

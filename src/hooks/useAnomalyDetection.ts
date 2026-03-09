@@ -16,7 +16,9 @@ export interface UseAnomalyDetectionReturn {
   error: string | null;
   config: AnomalyDetectionConfig;
   statistics: AnomalyDetectionStatistics;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   detectAnomalies: (email: any) => Promise<AnomalyDetectionResult>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   analyzeMultiple: (emails: any[]) => Promise<AnomalyDetectionResult[]>;
   getRiskLevel: (riskScore: number) => RiskLevel;
   updateConfig: (config: Partial<AnomalyDetectionConfig>) => void;
@@ -47,6 +49,7 @@ export function useAnomalyDetection(initialConfig?: Partial<AnomalyDetectionConf
 
   const serviceRef = useRef<AnomalyDetectionService>(AnomalyDetectionService.getInstance(config));
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const detectAnomalies = useCallback(async (email: any): Promise<AnomalyDetectionResult> => {
     setIsAnalyzing(true);
     setError(null);
@@ -78,6 +81,7 @@ export function useAnomalyDetection(initialConfig?: Partial<AnomalyDetectionConf
     }
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const analyzeMultiple = useCallback(async (emails: any[]): Promise<AnomalyDetectionResult[]> => {
     setIsAnalyzing(true);
     setError(null);

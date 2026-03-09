@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { useSentimentAnalysis } from '../../src/hooks/useSentimentAnalysis';
-import { Sentiment, Emotion, Tone } from '../../src/types/sentimentAnalysis';
+import { Sentiment, Tone } from '../../src/types/sentimentAnalysis';
 
 // ============================================================================
 // Mock Contexts
@@ -136,7 +136,7 @@ describe('useSentimentAnalysis', () => {
 
       expect(analysisResult).toBeDefined();
       expect(analysisResult.tone).toBeDefined();
-      const formalTone = analysisResult.tone.find(t => t.tone === Tone.FORMAL);
+      const formalTone = analysisResult.tone.find((t) => t.tone === Tone.FORMAL);
       expect(formalTone).toBeDefined();
     });
 
@@ -187,11 +187,7 @@ describe('useSentimentAnalysis', () => {
 
       let results;
       await act(async () => {
-        results = await result.current.analyzeBatch([
-          mockPositiveContext,
-          mockNegativeContext,
-          mockUrgentContext
-        ]);
+        results = await result.current.analyzeBatch([mockPositiveContext, mockNegativeContext, mockUrgentContext]);
       });
 
       expect(results).toBeDefined();
@@ -376,11 +372,7 @@ describe('useSentimentAnalysis', () => {
 
       let results;
       await act(async () => {
-        results = await result.current.analyzeBatch([
-          mockPositiveContext,
-          mockNegativeContext,
-          mockPositiveContext
-        ]);
+        results = await result.current.analyzeBatch([mockPositiveContext, mockNegativeContext, mockPositiveContext]);
       });
 
       const stats = result.current.calculateStatistics(results);
@@ -400,10 +392,7 @@ describe('useSentimentAnalysis', () => {
         await result.current.analyze(mockPositiveContext);
       });
 
-      const trend = result.current.getTrend([
-        'email-positive-1',
-        'email-negative-1'
-      ]);
+      const trend = result.current.getTrend(['email-positive-1', 'email-negative-1']);
       expect(trend).toBeDefined();
       expect(trend.averageScore).toBeDefined();
       expect(['improving', 'declining', 'stable']).toContain(trend.trend);
@@ -527,14 +516,16 @@ describe('useSentimentAnalysis', () => {
     it('should batch process efficiently', async () => {
       const { result } = renderHook(() => useSentimentAnalysis());
 
-      const contexts = Array(10).fill(null).map((_, i) => ({
-        emailId: `email-${i}`,
-        subject: `Test ${i}`,
-        body: `Test email content number ${i}. This is a positive message with good vibes.`,
-        sender: `sender${i}@test.com`,
-        recipients: ['test@example.com'],
-        timestamp: new Date()
-      }));
+      const contexts = Array(10)
+        .fill(null)
+        .map((_, i) => ({
+          emailId: `email-${i}`,
+          subject: `Test ${i}`,
+          body: `Test email content number ${i}. This is a positive message with good vibes.`,
+          sender: `sender${i}@test.com`,
+          recipients: ['test@example.com'],
+          timestamp: new Date()
+        }));
 
       const start = performance.now();
       await act(async () => {

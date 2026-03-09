@@ -1,11 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { useVoiceAssistant } from '../../src/hooks/useVoiceAssistant';
 import {
   VoiceCommandType,
   VoiceRecognitionStatus,
   SpeechSynthesisStatus,
   VoiceLanguage,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   MarkAction
 } from '../../src/types/voiceAssistant';
 import { VoiceAssistantService } from '../../src/services/voiceAssistantService';
@@ -66,6 +67,7 @@ describe('useVoiceAssistant', () => {
       off: vi.fn()
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(VoiceAssistantService.getInstance).mockReturnValue(mockService as any);
   });
 
@@ -232,6 +234,7 @@ describe('useVoiceAssistant', () => {
 
       const { result } = renderHook(() => useVoiceAssistant());
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let command: any;
       await act(async () => {
         command = await result.current.recognizeCommand('Compose email to John');
@@ -246,6 +249,7 @@ describe('useVoiceAssistant', () => {
 
       const { result } = renderHook(() => useVoiceAssistant());
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let command: any;
       await act(async () => {
         command = await result.current.recognizeCommand('Test command');
@@ -408,6 +412,7 @@ describe('useVoiceAssistant', () => {
       expect(mockService.startListening).toHaveBeenCalled();
 
       // Recognize command
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let command: any;
       await act(async () => {
         command = await result.current.recognizeCommand('Search for emails from John');
@@ -460,7 +465,13 @@ describe('useVoiceAssistant', () => {
 
     it('should handle multiple commands sequentially', async () => {
       const commands = [
-        { id: '1', type: VoiceCommandType.COMPOSE, transcript: 'Compose email', confidence: 0.8, timestamp: Date.now() },
+        {
+          id: '1',
+          type: VoiceCommandType.COMPOSE,
+          transcript: 'Compose email',
+          confidence: 0.8,
+          timestamp: Date.now()
+        },
         { id: '2', type: VoiceCommandType.SEARCH, transcript: 'Search emails', confidence: 0.9, timestamp: Date.now() },
         { id: '3', type: VoiceCommandType.ARCHIVE, transcript: 'Archive this', confidence: 0.85, timestamp: Date.now() }
       ];
@@ -472,6 +483,7 @@ describe('useVoiceAssistant', () => {
       const { result } = renderHook(() => useVoiceAssistant());
 
       for (const expectedCmd of commands) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let command: any;
         await act(async () => {
           command = await result.current.recognizeCommand(expectedCmd.transcript);

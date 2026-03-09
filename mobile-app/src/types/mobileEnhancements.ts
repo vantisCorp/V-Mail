@@ -1,6 +1,6 @@
 /**
  * Mobile App Enhancements Type Definitions
- * 
+ *
  * Provides types for enhanced mobile app features including gestures,
  * offline support, push notifications, and native integrations.
  */
@@ -17,7 +17,7 @@ export enum GestureType {
   DOUBLE_TAP = 'double_tap',
   LONG_PRESS = 'long_press',
   PINCH = 'pinch',
-  SPREAD = 'spread',
+  SPREAD = 'spread'
 }
 
 /**
@@ -37,7 +37,7 @@ export enum GestureAction {
   REPLY = 'reply',
   REPLY_ALL = 'reply_all',
   SNOOZE = 'snooze',
-  NONE = 'none',
+  NONE = 'none'
 }
 
 /**
@@ -72,7 +72,7 @@ export enum HapticFeedbackType {
   WARNING = 'warning',
   ERROR = 'error',
   SELECTION = 'selection',
-  IMPACT = 'impact',
+  IMPACT = 'impact'
 }
 
 /**
@@ -85,7 +85,7 @@ export enum AnimationType {
   ROTATE = 'rotate',
   BOUNCE = 'bounce',
   ELASTIC = 'elastic',
-  SPRING = 'spring',
+  SPRING = 'spring'
 }
 
 /**
@@ -127,7 +127,7 @@ export enum SyncStatus {
   SYNCING = 'syncing',
   SUCCESS = 'success',
   ERROR = 'error',
-  OFFLINE = 'offline',
+  OFFLINE = 'offline'
 }
 
 /**
@@ -139,7 +139,7 @@ export enum OfflineDataType {
   LABELS = 'labels',
   CONTACTS = 'contacts',
   SETTINGS = 'settings',
-  ATTACHMENTS = 'attachments',
+  ATTACHMENTS = 'attachments'
 }
 
 /**
@@ -148,6 +148,7 @@ export enum OfflineDataType {
 export interface OfflineDataItem {
   id: string;
   type: OfflineDataType;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
   lastModified: string;
   size: number;
@@ -161,7 +162,7 @@ export enum ConflictResolutionStrategy {
   SERVER_WINS = 'server_wins',
   LOCAL_WINS = 'local_wins',
   MANUAL = 'manual',
-  MERGE = 'merge',
+  MERGE = 'merge'
 }
 
 /**
@@ -171,7 +172,9 @@ export interface SyncConflict {
   id: string;
   dataType: OfflineDataType;
   itemId: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   localVersion: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   serverVersion: any;
   conflictType: 'modification' | 'deletion' | 'creation';
   timestamp: string;
@@ -202,7 +205,7 @@ export enum NotificationType {
   CALENDAR_EVENT = 'calendar_event',
   TASK_ASSIGNED = 'task_assigned',
   SYSTEM = 'system',
-  REMINDER = 'reminder',
+  REMINDER = 'reminder'
 }
 
 /**
@@ -212,7 +215,7 @@ export enum NotificationPriority {
   LOW = 'low',
   NORMAL = 'normal',
   HIGH = 'high',
-  URGENT = 'urgent',
+  URGENT = 'urgent'
 }
 
 /**
@@ -223,6 +226,7 @@ export interface PushNotification {
   type: NotificationType;
   title: string;
   body: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: Record<string, any>;
   priority: NotificationPriority;
   timestamp: string;
@@ -281,7 +285,7 @@ export enum WidgetType {
   UPCOMING_EVENTS = 'upcoming_events',
   TASKS = 'tasks',
   FOLDER = 'folder',
-  CUSTOM = 'custom',
+  CUSTOM = 'custom'
 }
 
 /**
@@ -294,6 +298,7 @@ export interface WidgetConfig {
   position: number;
   size: 'small' | 'medium' | 'large';
   refreshInterval: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: Record<string, any>;
 }
 

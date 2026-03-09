@@ -330,6 +330,7 @@ export class CalendarService {
         if (payload.attendees) {
           event.attendees = payload.attendees.map((attendee) => ({
             ...attendee,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             responseStatus: (attendee.responseStatus as any) || 'needsAction',
             optional: false,
             isSelf: false
@@ -399,6 +400,7 @@ export class CalendarService {
   /**
    * Create event from email
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async createEventFromEmail(email: any, options: EmailToEventOptions): Promise<CalendarEvent> {
     const calendar = this.getPrimaryCalendar();
     if (!calendar) {
@@ -438,6 +440,7 @@ export class CalendarService {
 
       // Add recipients as attendees
       if (email.to) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         email.to.forEach((recipient: any) => {
           if (recipient.email) {
             attendees.push({
@@ -480,6 +483,7 @@ export class CalendarService {
    * Extract dates from email
    */
   private async extractDatesFromEmail(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     email: any,
     options: EmailToEventOptions
   ): Promise<{ start: { dateTime: string }; end: { dateTime: string } }> {
@@ -499,7 +503,7 @@ export class CalendarService {
             end: { dateTime: endOfMeeting.toISOString() }
           };
         }
-      } catch (error) {
+      } catch {
         // Use default if extraction fails
       }
     }

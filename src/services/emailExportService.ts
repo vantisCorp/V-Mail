@@ -4,6 +4,7 @@
  */
 
 import type {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ExportFormat,
   ExportOptions,
   ExportProgress,
@@ -22,6 +23,7 @@ class EmailExportService {
   /**
    * Export a single email
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static async exportSingleEmail(email: any, options: ExportOptions): Promise<ExportResult> {
     const startTime = Date.now();
 
@@ -81,6 +83,7 @@ class EmailExportService {
    * Export multiple emails
    */
   static async exportMultipleEmails(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     emails: any[],
     options: ExportOptions,
     onProgress?: (progress: ExportProgress) => void
@@ -158,8 +161,10 @@ class EmailExportService {
   /**
    * Export email to PDF format
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static async exportToPDF(email: any, includeHeaders: boolean): Promise<Blob> {
     // Create HTML content for PDF
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     const html = `
       <!DOCTYPE html>
       <html>
@@ -192,6 +197,7 @@ class EmailExportService {
       </body>
       </html>
     `;
+    /* eslint-enable @typescript-eslint/no-explicit-any */
 
     // In a real implementation, use a library like html2pdf or jsPDF
     // For now, return HTML as a blob
@@ -201,9 +207,11 @@ class EmailExportService {
   /**
    * Export email to EML format
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static async exportToEML(email: any): Promise<Blob> {
     const emlContent = [
       `From: ${email.from?.email}`,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       `To: ${email.to?.map((t: any) => t.email).join(', ')}`,
       `Subject: ${email.subject}`,
       `Date: ${new Date(email.date).toUTCString()}`,
@@ -218,6 +226,7 @@ class EmailExportService {
   /**
    * Export email to MSG format
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static async exportToMSG(email: any): Promise<Blob> {
     // MSG is a complex binary format
     // For simplicity, export as EML with .msg extension
@@ -228,6 +237,7 @@ class EmailExportService {
   /**
    * Export email to JSON format
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static async exportToJSON(email: any, includeMetadata: boolean): Promise<Blob> {
     const data = {
       id: email.id,
@@ -283,7 +293,7 @@ class EmailExportService {
         request.result = result;
         request.status = result.success ? 'completed' : 'failed';
         request.completedAt = Date.now();
-      } catch (error) {
+      } catch {
         request.status = 'failed';
         request.completedAt = Date.now();
       }

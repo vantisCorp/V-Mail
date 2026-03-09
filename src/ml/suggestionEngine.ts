@@ -417,7 +417,7 @@ export class SuggestionEngine {
     return explanations[category];
   }
 
-  private generatePersonalizedReplies(context: SuggestionContext): ReplySuggestion[] {
+  private generatePersonalizedReplies(_context: SuggestionContext): ReplySuggestion[] {
     const suggestions: ReplySuggestion[] = [];
 
     if (!this.userBehavior) {
@@ -443,7 +443,7 @@ export class SuggestionEngine {
     return suggestions;
   }
 
-  private generateBehaviorBasedActions(context: SuggestionContext): QuickActionSuggestion[] {
+  private generateBehaviorBasedActions(_context: SuggestionContext): QuickActionSuggestion[] {
     const suggestions: QuickActionSuggestion[] = [];
 
     if (!this.userBehavior) {
@@ -514,7 +514,9 @@ export class SuggestionEngine {
   }
 
   private calculateMetadata(suggestions: Suggestion[]) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const byType: Record<SuggestionType, number> = {} as any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const byPriority: Record<SuggestionPriority, number> = {} as any;
     let totalConfidence = 0;
 
@@ -556,6 +558,7 @@ export class SuggestionEngine {
   private updateUserBehavior(feedback: TrainingExample): void {
     if (!this.userBehavior) {
       this.userBehavior = {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         commonActions: {} as any,
         frequentRecipients: [],
         commonLabels: [],

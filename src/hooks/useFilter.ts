@@ -56,12 +56,13 @@ export const useFilter = (emails: Email[]) => {
       const currentValue = prev[key];
       if (currentValue === true) {
         return { ...prev, [key]: false };
-      } if (currentValue === false) {
+      }
+      if (currentValue === false) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { [key]: _, ...rest } = prev;
         return rest;
       }
       return { ...prev, [key]: true };
-
     });
   }, []);
 

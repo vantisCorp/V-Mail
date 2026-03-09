@@ -10,9 +10,6 @@ import {
   ContactSortOptions,
   ContactStatistics,
   EmailToContactOptions,
-  ContactImportOptions,
-  ContactExportOptions,
-  ContactExportResult,
   ContactSearchResult,
   ContactMergeSuggestion,
   ContactSyncStatus,
@@ -44,13 +41,13 @@ interface UseContactsReturn {
   updateContact: (payload: UpdateContactPayload) => Promise<Contact>;
   deleteContact: (contactId: string) => Promise<void>;
   searchContacts: (query: string) => ContactSearchResult[];
-  createContactFromEmail: (email: any, options: EmailToContactOptions) => Promise<Contact>;
+  createContactFromEmail: (email: unknown, options: EmailToContactOptions) => Promise<Contact>;
   getFilteredContacts: (filters?: ContactFilterOptions, sort?: ContactSortOptions) => Contact[];
   findDuplicateContacts: () => Promise<ContactMergeSuggestion[]>;
   mergeContacts: (primaryId: string, duplicateIds: string[]) => Promise<Contact>;
   getGroup: (groupId: string) => ContactGroup | undefined;
   createGroup: (name: string, description?: string, color?: string) => Promise<ContactGroup>;
-  updateGroup: (groupId: string, updates: any) => Promise<ContactGroup>;
+  updateGroup: (groupId: string, updates: unknown) => Promise<ContactGroup>;
   deleteGroup: (groupId: string) => Promise<void>;
   addContactToGroup: (contactId: string, groupId: string) => Promise<void>;
   removeContactFromGroup: (contactId: string, groupId: string) => Promise<void>;
@@ -84,7 +81,7 @@ export function useContacts(): UseContactsReturn {
     duplicateCheckEnabled: true,
     emailTrackingEnabled: true
   });
-  const [syncStatus, setSyncStatus] = useState<Map<string, ContactSyncStatus>>(new Map());
+  const [syncStatus] = useState<Map<string, ContactSyncStatus>>(new Map());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -148,9 +145,7 @@ export function useContacts(): UseContactsReturn {
   /**
    * Create a new contact
    */
-  const createContact = useCallback(async (
-    payload: CreateContactPayload
-  ): Promise<Contact> => {
+  const createContact = useCallback(async (payload: CreateContactPayload): Promise<Contact> => {
     setLoading(true);
     setError(null);
 
@@ -176,9 +171,7 @@ export function useContacts(): UseContactsReturn {
   /**
    * Update an existing contact
    */
-  const updateContact = useCallback(async (
-    payload: UpdateContactPayload
-  ): Promise<Contact> => {
+  const updateContact = useCallback(async (payload: UpdateContactPayload): Promise<Contact> => {
     setLoading(true);
     setError(null);
 
@@ -186,11 +179,7 @@ export function useContacts(): UseContactsReturn {
       const updatedContact = await contactsService.updateContact(payload);
 
       // Update contacts list
-      setContacts((prev) =>
-        prev.map((contact) =>
-          contact.id === updatedContact.id ? updatedContact : contact
-        )
-      );
+      setContacts((prev) => prev.map((contact) => (contact.id === updatedContact.id ? updatedContact : contact)));
 
       // Refresh statistics
       const stats = await contactsService.getStatistics();
@@ -239,47 +228,44 @@ export function useContacts(): UseContactsReturn {
   /**
    * Create contact from email
    */
-  const createContactFromEmail = useCallback(async (
-    email: any,
-    options: EmailToContactOptions
-  ): Promise<Contact> => {
-    setLoading(true);
-    setError(null);
+  const createContactFromEmail = useCallback(
+    async (email: unknown, options: EmailToContactOptions): Promise<Contact> => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      const contact = await contactsService.createContactFromEmail(email, options);
+      try {
+        const contact = await contactsService.createContactFromEmail(email, options);
 
-      // Update contacts list
-      setContacts((prev) => {
-        const existingIndex = prev.findIndex((c) => c.id === contact.id);
-        if (existingIndex !== -1) {
-          const updated = [...prev];
-          updated[existingIndex] = contact;
-          return updated;
-        }
-        return [...prev, contact];
-      });
+        // Update contacts list
+        setContacts((prev) => {
+          const existingIndex = prev.findIndex((c) => c.id === contact.id);
+          if (existingIndex !== -1) {
+            const updated = [...prev];
+            updated[existingIndex] = contact;
+            return updated;
+          }
+          return [...prev, contact];
+        });
 
-      // Refresh statistics
-      const stats = await contactsService.getStatistics();
-      setStatistics(stats);
+        // Refresh statistics
+        const stats = await contactsService.getStatistics();
+        setStatistics(stats);
 
-      return contact;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create contact from email');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+        return contact;
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to create contact from email');
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
   /**
    * Get filtered contacts
    */
-  const getFilteredContacts = useCallback((
-    filters?: ContactFilterOptions,
-    sort?: ContactSortOptions
-  ): Contact[] => {
+  const getFilteredContacts = useCallback((filters?: ContactFilterOptions, sort?: ContactSortOptions): Contact[] => {
     return contactsService.getContacts(filters, sort);
   }, []);
 
@@ -304,10 +290,7 @@ export function useContacts(): UseContactsReturn {
   /**
    * Merge contacts
    */
-  const mergeContacts = useCallback(async (
-    primaryId: string,
-    duplicateIds: string[]
-  ): Promise<Contact> => {
+  const mergeContacts = useCallback(async (primaryId: string, duplicateIds: string[]): Promise<Contact> => {
     setLoading(true);
     setError(null);
 
@@ -316,9 +299,9 @@ export function useContacts(): UseContactsReturn {
 
       // Update contacts list
       setContacts((prev) =>
-        prev.map((contact) =>
-          contact.id === mergedContact.id ? mergedContact : contact
-        ).filter((contact) => !duplicateIds.includes(contact.id))
+        prev
+          .map((contact) => (contact.id === mergedContact.id ? mergedContact : contact))
+          .filter((contact) => !duplicateIds.includes(contact.id))
       );
 
       // Refresh statistics
@@ -344,11 +327,7 @@ export function useContacts(): UseContactsReturn {
   /**
    * Create a new group
    */
-  const createGroup = useCallback(async (
-    name: string,
-    description?: string,
-    color?: string
-  ): Promise<ContactGroup> => {
+  const createGroup = useCallback(async (name: string, description?: string, color?: string): Promise<ContactGroup> => {
     setLoading(true);
     setError(null);
 
@@ -370,10 +349,7 @@ export function useContacts(): UseContactsReturn {
   /**
    * Update a group
    */
-  const updateGroup = useCallback(async (
-    groupId: string,
-    updates: any
-  ): Promise<ContactGroup> => {
+  const updateGroup = useCallback(async (groupId: string, updates: unknown): Promise<ContactGroup> => {
     setLoading(true);
     setError(null);
 
@@ -381,11 +357,7 @@ export function useContacts(): UseContactsReturn {
       const updatedGroup = await contactsService.updateGroup(groupId, updates);
 
       // Update groups list
-      setGroups((prev) =>
-        prev.map((group) =>
-          group.id === updatedGroup.id ? updatedGroup : group
-        )
-      );
+      setGroups((prev) => prev.map((group) => (group.id === updatedGroup.id ? updatedGroup : group)));
 
       return updatedGroup;
     } catch (err) {
@@ -423,10 +395,7 @@ export function useContacts(): UseContactsReturn {
   /**
    * Add contact to group
    */
-  const addContactToGroup = useCallback(async (
-    contactId: string,
-    groupId: string
-  ): Promise<void> => {
+  const addContactToGroup = useCallback(async (contactId: string, groupId: string): Promise<void> => {
     setLoading(true);
     setError(null);
 
@@ -449,10 +418,7 @@ export function useContacts(): UseContactsReturn {
   /**
    * Remove contact from group
    */
-  const removeContactFromGroup = useCallback(async (
-    contactId: string,
-    groupId: string
-  ): Promise<void> => {
+  const removeContactFromGroup = useCallback(async (contactId: string, groupId: string): Promise<void> => {
     setLoading(true);
     setError(null);
 
@@ -475,22 +441,25 @@ export function useContacts(): UseContactsReturn {
   /**
    * Sync contacts with provider
    */
-  const syncContacts = useCallback(async (accountId?: string): Promise<void> => {
-    setLoading(true);
-    setError(null);
+  const syncContacts = useCallback(
+    async (accountId?: string): Promise<void> => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      await contactsService.syncContacts(accountId);
+      try {
+        await contactsService.syncContacts(accountId);
 
-      // Refresh contacts
-      await refreshContacts();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to sync contacts');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, [refreshContacts]);
+        // Refresh contacts
+        await refreshContacts();
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to sync contacts');
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [refreshContacts]
+  );
 
   /**
    * Update preferences

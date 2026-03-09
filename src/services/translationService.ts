@@ -4,7 +4,6 @@
  */
 
 import {
-  EmailForTranslation,
   Translation,
   EmailTranslationResult,
   TranslationMemory,
@@ -19,7 +18,6 @@ import {
   TranslationStatus,
   TranslationSource,
   TranslationAlternative,
-  TranslationMetadata,
   DEFAULT_TRANSLATION_CONFIG,
   LANGUAGE_PATTERNS,
   PROFESSIONAL_INDICATORS,
@@ -58,7 +56,7 @@ export class TranslationService {
     const { email, targetLanguage, sourceLanguage, tone, quality } = context;
 
     const target = targetLanguage || this.config.defaultTargetLanguage;
-    const source = sourceLanguage || await this.detectLanguage(email.body);
+    const source = sourceLanguage || (await this.detectLanguage(email.body));
     const translationTone = tone || this.config.defaultTone;
     const translationQuality = quality || this.config.quality;
 
@@ -72,13 +70,7 @@ export class TranslationService {
     );
 
     // Translate body
-    const bodyTranslation = await this.translateText(
-      email.body,
-      source,
-      target,
-      translationTone,
-      translationQuality
-    );
+    const bodyTranslation = await this.translateText(email.body, source, target, translationTone, translationQuality);
 
     const endTime = performance.now();
     const overallConfidence = (subjectTranslation.confidence + bodyTranslation.confidence) / 2;
@@ -130,13 +122,7 @@ export class TranslationService {
     this.statistics.cacheMisses++;
 
     // Perform translation
-    const translatedText = await this.performTranslation(
-      text,
-      sourceLanguage,
-      targetLanguage,
-      tone,
-      quality
-    );
+    const translatedText = await this.performTranslation(text, sourceLanguage, targetLanguage, tone, quality);
 
     // Generate alternatives if enabled
     const alternatives = this.config.enableAlternatives
@@ -309,320 +295,308 @@ export class TranslationService {
   }
 
   // ============================================================================
-// Private Helper Methods
-// ============================================================================
+  // Private Helper Methods
+  // ============================================================================
 
-private async performTranslation(
-  text: string,
-  sourceLanguage: SupportedLanguage,
-  targetLanguage: SupportedLanguage,
-  tone: TranslationTone,
-  quality: TranslationQuality
-): Promise<string> {
-  // Simulate translation with language-specific patterns
-  // In a real implementation, this would call an external translation API
+  private async performTranslation(
+    text: string,
+    sourceLanguage: SupportedLanguage,
+    targetLanguage: SupportedLanguage,
+    tone: TranslationTone,
+    quality: TranslationQuality
+  ): Promise<string> {
+    // Simulate translation with language-specific patterns
+    // In a real implementation, this would call an external translation API
 
-  // Check for common phrases first
-  const lowerText = text.toLowerCase();
-  const phrases = COMMON_PHRASES[lowerText];
-  if (phrases && phrases[targetLanguage]) {
-    return phrases[targetLanguage][0];
+    // Check for common phrases first
+    const lowerText = text.toLowerCase();
+    const phrases = COMMON_PHRASES[lowerText];
+    if (phrases && phrases[targetLanguage]) {
+      return phrases[targetLanguage][0];
+    }
+
+    // Apply tone-specific adjustments
+    let translatedText = this.applyTranslationRules(text, sourceLanguage, targetLanguage, tone);
+
+    // Apply quality-based processing
+    if (quality === TranslationQuality.HIGH) {
+      translatedText = this.enhanceTranslation(translatedText, targetLanguage, tone);
+    }
+
+    return translatedText;
   }
 
-  // Apply tone-specific adjustments
-  let translatedText = this.applyTranslationRules(text, sourceLanguage, targetLanguage, tone);
+  private applyTranslationRules(
+    text: string,
+    sourceLanguage: SupportedLanguage,
+    targetLanguage: SupportedLanguage,
+    _tone: TranslationTone
+  ): string {
+    // Simulated translation logic
+    // In production, this would use actual translation APIs
 
-  // Apply quality-based processing
-  if (quality === TranslationQuality.HIGH) {
-    translatedText = this.enhanceTranslation(translatedText, targetLanguage, tone);
-  }
+    let result = text;
 
-  return translatedText;
-}
-
-private applyTranslationRules(
-  text: string,
-  sourceLanguage: SupportedLanguage,
-  targetLanguage: SupportedLanguage,
-  tone: TranslationTone
-): string {
-  // Simulated translation logic
-  // In production, this would use actual translation APIs
-
-  let result = text;
-
-  // Apply common phrase translations
-  const phrases = Object.keys(COMMON_PHRASES);
-  for (const phrase of phrases) {
-    if (text.toLowerCase().includes(phrase)) {
-      const translations = COMMON_PHRASES[phrase];
-      if (translations && translations[targetLanguage]) {
-        const replacement = translations[targetLanguage][0];
-        result = result.replace(new RegExp(phrase, 'gi'), replacement);
+    // Apply common phrase translations
+    const phrases = Object.keys(COMMON_PHRASES);
+    for (const phrase of phrases) {
+      if (text.toLowerCase().includes(phrase)) {
+        const translations = COMMON_PHRASES[phrase];
+        if (translations && translations[targetLanguage]) {
+          const replacement = translations[targetLanguage][0];
+          result = result.replace(new RegExp(phrase, 'gi'), replacement);
+        }
       }
     }
+
+    // If no specific translations found, add language indicator
+    if (result === text && sourceLanguage !== targetLanguage) {
+      // Simulate basic word order and structure changes
+      result = this.simulateTranslation(text, sourceLanguage, targetLanguage);
+    }
+
+    return result;
   }
 
-  // If no specific translations found, add language indicator
-  if (result === text && sourceLanguage !== targetLanguage) {
-    // Simulate basic word order and structure changes
-    result = this.simulateTranslation(text, sourceLanguage, targetLanguage);
+  private simulateTranslation(
+    text: string,
+    sourceLanguage: SupportedLanguage,
+    targetLanguage: SupportedLanguage
+  ): string {
+    // Simulate translation based on language patterns
+    const languagePrefix = this.getLanguagePrefix(targetLanguage);
+    return `[${languagePrefix}] ${text}`;
   }
 
-  return result;
-}
+  private getLanguagePrefix(lang: SupportedLanguage): string {
+    const prefixes: Partial<Record<SupportedLanguage, string>> = {
+      [SupportedLanguage.SPANISH]: 'ES',
+      [SupportedLanguage.FRENCH]: 'FR',
+      [SupportedLanguage.GERMAN]: 'DE',
+      [SupportedLanguage.ITALIAN]: 'IT',
+      [SupportedLanguage.PORTUGUESE]: 'PT',
+      [SupportedLanguage.RUSSIAN]: 'RU',
+      [SupportedLanguage.CHINESE]: 'ZH',
+      [SupportedLanguage.JAPANESE]: 'JA',
+      [SupportedLanguage.KOREAN]: 'KO',
+      [SupportedLanguage.ARABIC]: 'AR'
+    };
+    return prefixes[lang] || 'TR';
+  }
 
-private simulateTranslation(
-  text: string,
-  sourceLanguage: SupportedLanguage,
-  targetLanguage: SupportedLanguage
-): string {
-  // Simulate translation based on language patterns
-  const languagePrefix = this.getLanguagePrefix(targetLanguage);
-  return `[${languagePrefix}] ${text}`;
-}
-
-private getLanguagePrefix(lang: SupportedLanguage): string {
-  const prefixes: Partial<Record<SupportedLanguage, string>> = {
-    [SupportedLanguage.SPANISH]: 'ES',
-    [SupportedLanguage.FRENCH]: 'FR',
-    [SupportedLanguage.GERMAN]: 'DE',
-    [SupportedLanguage.ITALIAN]: 'IT',
-    [SupportedLanguage.PORTUGUESE]: 'PT',
-    [SupportedLanguage.RUSSIAN]: 'RU',
-    [SupportedLanguage.CHINESE]: 'ZH',
-    [SupportedLanguage.JAPANESE]: 'JA',
-    [SupportedLanguage.KOREAN]: 'KO',
-    [SupportedLanguage.ARABIC]: 'AR'
-  };
-  return prefixes[lang] || 'TR';
-}
-
-private enhanceTranslation(
-  text: string,
-  targetLanguage: SupportedLanguage,
-  tone: TranslationTone
-): string {
-  // Apply tone-specific enhancements
-  if (tone === TranslationTone.PROFESSIONAL || tone === TranslationTone.FORMAL) {
+  private enhanceTranslation(text: string, targetLanguage: SupportedLanguage, tone: TranslationTone): string {
+    // Apply tone-specific enhancements
+    if (tone === TranslationTone.PROFESSIONAL || tone === TranslationTone.FORMAL) {
+      return text;
+    }
     return text;
   }
-  return text;
-}
 
-private async generateAlternatives(
-  text: string,
-  sourceLanguage: SupportedLanguage,
-  targetLanguage: SupportedLanguage,
-  tone: TranslationTone
-): Promise<TranslationAlternative[]> {
-  const alternatives: TranslationAlternative[] = [];
+  private async generateAlternatives(
+    text: string,
+    sourceLanguage: SupportedLanguage,
+    targetLanguage: SupportedLanguage,
+    tone: TranslationTone
+  ): Promise<TranslationAlternative[]> {
+    const alternatives: TranslationAlternative[] = [];
 
-  // Generate alternative with different tone
-  const alternativeTone = tone === TranslationTone.CASUAL
-    ? TranslationTone.PROFESSIONAL
-    : TranslationTone.CASUAL;
+    // Generate alternative with different tone
+    const alternativeTone = tone === TranslationTone.CASUAL ? TranslationTone.PROFESSIONAL : TranslationTone.CASUAL;
 
-  const alternativeText = await this.performTranslation(
-    text,
-    sourceLanguage,
-    targetLanguage,
-    alternativeTone,
-    TranslationQuality.STANDARD
-  );
-
-  alternatives.push({
-    text: alternativeText,
-    tone: alternativeTone,
-    confidence: 0.85
-  });
-
-  return alternatives;
-}
-
-private calculateConfidence(
-  originalText: string,
-  translatedText: string,
-  sourceLanguage: SupportedLanguage,
-  targetLanguage: SupportedLanguage
-): number {
-  // Base confidence on various factors
-  let confidence = 0.8;
-
-  // Check if translation was actually performed
-  if (originalText === translatedText && sourceLanguage !== targetLanguage) {
-    confidence -= 0.3;
-  }
-
-  // Check for common phrases (higher confidence)
-  const lowerText = originalText.toLowerCase();
-  if (COMMON_PHRASES[lowerText]) {
-    confidence += 0.15;
-  }
-
-  // Ensure confidence is within bounds
-  return Math.min(1, Math.max(0, confidence));
-}
-
-private detectToneMatch(text: string, expectedTone: TranslationTone): number {
-  const detectedTone = this.detectTone(text);
-  return detectedTone === expectedTone ? 1.0 : 0.7;
-}
-
-private calculateContextScore(text: string): number {
-  // Simple context score based on text structure
-  const hasParagraphs = text.includes('\n\n');
-  const hasListItems = text.includes('\n-') || text.includes('\n*');
-  const hasQuestions = text.includes('?');
-
-  let score = 0.5;
-  if (hasParagraphs) {
-score += 0.2;
-}
-  if (hasListItems) {
-score += 0.15;
-}
-  if (hasQuestions) {
-score += 0.15;
-}
-
-  return Math.min(1, score);
-}
-
-private countWords(text: string): number {
-  return text.split(/\s+/).filter(word => word.length > 0).length;
-}
-
-private getFromMemory(
-  text: string,
-  sourceLanguage: SupportedLanguage,
-  targetLanguage: SupportedLanguage
-): Translation | null {
-  const key = this.getMemoryKey(text, sourceLanguage, targetLanguage);
-  const cached = this.memory.get(key);
-
-  if (cached) {
-    return {
-      id: `cached-${Date.now()}`,
-      originalText: text,
-      translatedText: cached.translatedText,
+    const alternativeText = await this.performTranslation(
+      text,
       sourceLanguage,
       targetLanguage,
-      tone: TranslationTone.NEUTRAL,
-      quality: TranslationQuality.STANDARD,
-      status: TranslationStatus.COMPLETED,
-      source: TranslationSource.CACHE,
-      confidence: cached.quality,
-      metadata: {
-        processingTime: 0,
-        wordCount: this.countWords(text),
-        characterCount: text.length,
-        toneMatch: 1,
-        contextScore: 1,
-        modelVersion: this.modelVersion
+      alternativeTone,
+      TranslationQuality.STANDARD
+    );
+
+    alternatives.push({
+      text: alternativeText,
+      tone: alternativeTone,
+      confidence: 0.85
+    });
+
+    return alternatives;
+  }
+
+  private calculateConfidence(
+    originalText: string,
+    translatedText: string,
+    sourceLanguage: SupportedLanguage,
+    targetLanguage: SupportedLanguage
+  ): number {
+    // Base confidence on various factors
+    let confidence = 0.8;
+
+    // Check if translation was actually performed
+    if (originalText === translatedText && sourceLanguage !== targetLanguage) {
+      confidence -= 0.3;
+    }
+
+    // Check for common phrases (higher confidence)
+    const lowerText = originalText.toLowerCase();
+    if (COMMON_PHRASES[lowerText]) {
+      confidence += 0.15;
+    }
+
+    // Ensure confidence is within bounds
+    return Math.min(1, Math.max(0, confidence));
+  }
+
+  private detectToneMatch(text: string, expectedTone: TranslationTone): number {
+    const detectedTone = this.detectTone(text);
+    return detectedTone === expectedTone ? 1.0 : 0.7;
+  }
+
+  private calculateContextScore(text: string): number {
+    // Simple context score based on text structure
+    const hasParagraphs = text.includes('\n\n');
+    const hasListItems = text.includes('\n-') || text.includes('\n*');
+    const hasQuestions = text.includes('?');
+
+    let score = 0.5;
+    if (hasParagraphs) {
+      score += 0.2;
+    }
+    if (hasListItems) {
+      score += 0.15;
+    }
+    if (hasQuestions) {
+      score += 0.15;
+    }
+
+    return Math.min(1, score);
+  }
+
+  private countWords(text: string): number {
+    return text.split(/\s+/).filter((word) => word.length > 0).length;
+  }
+
+  private getFromMemory(
+    text: string,
+    sourceLanguage: SupportedLanguage,
+    targetLanguage: SupportedLanguage
+  ): Translation | null {
+    const key = this.getMemoryKey(text, sourceLanguage, targetLanguage);
+    const cached = this.memory.get(key);
+
+    if (cached) {
+      return {
+        id: `cached-${Date.now()}`,
+        originalText: text,
+        translatedText: cached.translatedText,
+        sourceLanguage,
+        targetLanguage,
+        tone: TranslationTone.NEUTRAL,
+        quality: TranslationQuality.STANDARD,
+        status: TranslationStatus.COMPLETED,
+        source: TranslationSource.CACHE,
+        confidence: cached.quality,
+        metadata: {
+          processingTime: 0,
+          wordCount: this.countWords(text),
+          characterCount: text.length,
+          toneMatch: 1,
+          contextScore: 1,
+          modelVersion: this.modelVersion
+        },
+        timestamp: new Date().toISOString()
+      };
+    }
+
+    return null;
+  }
+
+  private storeInMemory(
+    originalText: string,
+    translatedText: string,
+    sourceLanguage: SupportedLanguage,
+    targetLanguage: SupportedLanguage
+  ): void {
+    const key = this.getMemoryKey(originalText, sourceLanguage, targetLanguage);
+    const existing = this.memory.get(key);
+
+    const memory: TranslationMemory = {
+      id: `mem-${Date.now()}`,
+      sourceText: originalText,
+      translatedText,
+      sourceLanguage,
+      targetLanguage,
+      frequency: existing ? existing.frequency + 1 : 1,
+      lastUsed: new Date().toISOString(),
+      quality: existing ? existing.quality : 0.9
+    };
+
+    this.memory.set(key, memory);
+  }
+
+  private getMemoryKey(text: string, sourceLanguage: SupportedLanguage, targetLanguage: SupportedLanguage): string {
+    return `${sourceLanguage}-${targetLanguage}-${text.substring(0, 100)}`;
+  }
+
+  private updateStatistics(result: EmailTranslationResult): void {
+    this.statistics.totalTranslations++;
+    this.statistics.totalWordsTranslated += result.metadata.totalWordCount;
+    this.statistics.totalCharactersTranslated +=
+      result.subjectTranslation.originalText.length + result.bodyTranslation.originalText.length;
+
+    // Update language counts
+    const langKey = `${result.sourceLanguage}-${result.targetLanguage}`;
+    this.statistics.translationsByLanguage[langKey] = (this.statistics.translationsByLanguage[langKey] || 0) + 1;
+
+    // Update tone counts
+    this.statistics.translationsByTone[result.tone]++;
+
+    // Update source counts
+    this.statistics.translationsBySource[result.metadata.translationSource]++;
+  }
+
+  private initStatistics(): TranslationStatistics {
+    return {
+      totalTranslations: 0,
+      totalWordsTranslated: 0,
+      totalCharactersTranslated: 0,
+      averageProcessingTime: 0,
+      averageConfidence: 0,
+      translationsByLanguage: {},
+      translationsByTone: {
+        [TranslationTone.PROFESSIONAL]: 0,
+        [TranslationTone.CASUAL]: 0,
+        [TranslationTone.FORMAL]: 0,
+        [TranslationTone.NEUTRAL]: 0
       },
-      timestamp: new Date().toISOString()
+      translationsBySource: {
+        [TranslationSource.ORIGINAL]: 0,
+        [TranslationSource.AI]: 0,
+        [TranslationSource.HUMAN]: 0,
+        [TranslationSource.CACHE]: 0
+      },
+      cacheHits: 0,
+      cacheMisses: 0,
+      memorySize: 0
     };
   }
 
-  return null;
-}
+  // ============================================================================
+  // Public Utility Methods
+  // ============================================================================
 
-private storeInMemory(
-  originalText: string,
-  translatedText: string,
-  sourceLanguage: SupportedLanguage,
-  targetLanguage: SupportedLanguage
-): void {
-  const key = this.getMemoryKey(originalText, sourceLanguage, targetLanguage);
-  const existing = this.memory.get(key);
+  updateConfig(config: Partial<TranslationConfig>): void {
+    this.config = { ...this.config, ...config };
+  }
 
-  const memory: TranslationMemory = {
-    id: `mem-${Date.now()}`,
-    sourceText: originalText,
-    translatedText,
-    sourceLanguage,
-    targetLanguage,
-    frequency: existing ? existing.frequency + 1 : 1,
-    lastUsed: new Date().toISOString(),
-    quality: existing ? existing.quality : 0.9
-  };
+  clearMemory(): void {
+    this.memory.clear();
+  }
 
-  this.memory.set(key, memory);
-}
+  clearCorrections(): void {
+    this.corrections = [];
+  }
 
-private getMemoryKey(
-  text: string,
-  sourceLanguage: SupportedLanguage,
-  targetLanguage: SupportedLanguage
-): string {
-  return `${sourceLanguage}-${targetLanguage}-${text.substring(0, 100)}`;
-}
-
-private updateStatistics(result: EmailTranslationResult): void {
-  this.statistics.totalTranslations++;
-  this.statistics.totalWordsTranslated += result.metadata.totalWordCount;
-  this.statistics.totalCharactersTranslated +=
-    result.subjectTranslation.originalText.length +
-    result.bodyTranslation.originalText.length;
-
-  // Update language counts
-  const langKey = `${result.sourceLanguage}-${result.targetLanguage}`;
-  this.statistics.translationsByLanguage[langKey] =
-    (this.statistics.translationsByLanguage[langKey] || 0) + 1;
-
-  // Update tone counts
-  this.statistics.translationsByTone[result.tone]++;
-
-  // Update source counts
-  this.statistics.translationsBySource[result.metadata.translationSource]++;
-}
-
-private initStatistics(): TranslationStatistics {
-  return {
-    totalTranslations: 0,
-    totalWordsTranslated: 0,
-    totalCharactersTranslated: 0,
-    averageProcessingTime: 0,
-    averageConfidence: 0,
-    translationsByLanguage: {},
-    translationsByTone: {
-      [TranslationTone.PROFESSIONAL]: 0,
-      [TranslationTone.CASUAL]: 0,
-      [TranslationTone.FORMAL]: 0,
-      [TranslationTone.NEUTRAL]: 0
-    },
-    translationsBySource: {
-      [TranslationSource.ORIGINAL]: 0,
-      [TranslationSource.AI]: 0,
-      [TranslationSource.HUMAN]: 0,
-      [TranslationSource.CACHE]: 0
-    },
-    cacheHits: 0,
-    cacheMisses: 0,
-    memorySize: 0
-  };
-}
-
-// ============================================================================
-// Public Utility Methods
-// ============================================================================
-
-updateConfig(config: Partial<TranslationConfig>): void {
-  this.config = { ...this.config, ...config };
-}
-
-clearMemory(): void {
-  this.memory.clear();
-}
-
-clearCorrections(): void {
-  this.corrections = [];
-}
-
-resetStatistics(): void {
-  this.statistics = this.initStatistics();
-}
+  resetStatistics(): void {
+    this.statistics = this.initStatistics();
+  }
 }
 
 // ============================================================================

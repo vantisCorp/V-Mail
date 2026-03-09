@@ -110,7 +110,7 @@ describe('TwoFactorAuthService Integration', () => {
         expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
       };
 
-      TwoFactorAuthService.addTrustedDevice(device as any);
+      TwoFactorAuthService.addTrustedDevice(device as unknown);
 
       const settings = TwoFactorAuthService.loadSettings();
 
@@ -177,8 +177,6 @@ describe('TwoFactorAuthService Integration', () => {
 
       expect(newCodes).toBeDefined();
       expect(newCodes.length).toBe(10);
-
-      const settings = TwoFactorAuthService.loadSettings();
 
       // regenerateBackupCodes only saves if settings already exist
       // Since we're starting fresh, settings will be null

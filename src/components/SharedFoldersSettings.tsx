@@ -1,11 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useSharedFolders } from '../hooks/useSharedFolders';
-import type {
-  FolderPermission,
-  ShareTargetType,
-  SharedFolder,
-  SharedFolderParticipant
-} from '../types/sharedFolders';
+import type { FolderPermission, ShareTargetType, SharedFolder, SharedFolderParticipant } from '../types/sharedFolders';
 
 interface SharedFoldersSettingsProps {
   currentUserId: string;
@@ -29,11 +24,7 @@ const PermissionBadge: React.FC<{ permission: FolderPermission }> = ({ permissio
     admin: 'Admin'
   };
 
-  return (
-    <span className={`px-2 py-1 rounded text-xs font-medium ${colors[permission]}`}>
-      {labels[permission]}
-    </span>
-  );
+  return <span className={`px-2 py-1 rounded text-xs font-medium ${colors[permission]}`}>{labels[permission]}</span>;
 };
 
 const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
@@ -71,7 +62,14 @@ const PermissionSelect: React.FC<{
 const ShareDialog: React.FC<{
   isOpen: boolean;
   onClose: () => void;
-  onShare: (targetType: ShareTargetType, targetId: string, targetName: string, targetEmail: string, permission: FolderPermission, message?: string) => void;
+  onShare: (
+    targetType: ShareTargetType,
+    targetId: string,
+    targetName: string,
+    targetEmail: string,
+    permission: FolderPermission,
+    message?: string
+  ) => void;
   folderId: string;
 }> = ({ isOpen, onClose, onShare }) => {
   const [targetType, setTargetType] = useState<ShareTargetType>('user');
@@ -82,14 +80,14 @@ const ShareDialog: React.FC<{
   const [message, setMessage] = useState('');
 
   if (!isOpen) {
-return null;
-}
+    return null;
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!targetId || !targetName) {
-return;
-}
+      return;
+    }
     onShare(targetType, targetId, targetName, targetEmail, permission, message || undefined);
     // Reset form
     setTargetId('');
@@ -218,10 +216,7 @@ const ParticipantRow: React.FC<{
 
     <div className="flex items-center gap-2">
       {isOwner && participant.status === 'accepted' && (
-        <PermissionSelect
-          value={participant.permission}
-          onChange={onPermissionChange}
-        />
+        <PermissionSelect value={participant.permission} onChange={onPermissionChange} />
       )}
       {isOwner && (
         <button
@@ -295,9 +290,7 @@ const FolderCard: React.FC<{
                 onRemove={() => onRemove(participant.id)}
               />
             ))}
-            {folder.participants.length === 0 && (
-              <div className="text-gray-500 text-sm py-2">No participants yet</div>
-            )}
+            {folder.participants.length === 0 && <div className="text-gray-500 text-sm py-2">No participants yet</div>}
           </div>
 
           <div className="mt-4 pt-4 border-t border-gray-700">
@@ -318,11 +311,10 @@ const FolderCard: React.FC<{
 export const SharedFoldersSettings: React.FC<SharedFoldersSettingsProps> = ({
   currentUserId,
   currentUserName,
-  currentUserEmail,
+  _currentUserEmail,
   onClose
 }) => {
   const {
-    sharedFolders,
     activities,
     invitations,
     stats,
@@ -342,7 +334,10 @@ export const SharedFoldersSettings: React.FC<SharedFoldersSettingsProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
 
   const myFolders = useMemo(() => getFoldersOwnedByUser(currentUserId), [getFoldersOwnedByUser, currentUserId]);
-  const sharedWithMe = useMemo(() => getFoldersSharedWithUser(currentUserId), [getFoldersSharedWithUser, currentUserId]);
+  const sharedWithMe = useMemo(
+    () => getFoldersSharedWithUser(currentUserId),
+    [getFoldersSharedWithUser, currentUserId]
+  );
 
   const handleShare = (
     targetType: ShareTargetType,
@@ -353,8 +348,8 @@ export const SharedFoldersSettings: React.FC<SharedFoldersSettingsProps> = ({
     message?: string
   ) => {
     if (!selectedFolderId) {
-return;
-}
+      return;
+    }
 
     shareFolder(
       {
@@ -372,11 +367,7 @@ return;
   };
 
   const handleUpdatePermission = (folderId: string, participantId: string, permission: FolderPermission) => {
-    updatePermission(
-      { folderId, participantId, newPermission: permission },
-      currentUserId,
-      currentUserName
-    );
+    updatePermission({ folderId, participantId, newPermission: permission }, currentUserId, currentUserName);
   };
 
   const handleRevoke = (folderId: string, participantId: string) => {
@@ -390,7 +381,7 @@ return;
   const tabs: { id: TabType; label: string; count?: number }[] = [
     { id: 'my-shares', label: 'My Shared Folders', count: myFolders.length },
     { id: 'shared-with-me', label: 'Shared with Me', count: sharedWithMe.length },
-    { id: 'invitations', label: 'Invitations', count: invitations.filter(i => i.status === 'pending').length },
+    { id: 'invitations', label: 'Invitations', count: invitations.filter((i) => i.status === 'pending').length },
     { id: 'activity', label: 'Activity' }
   ];
 
@@ -399,10 +390,7 @@ return;
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold text-gray-100">Shared Folders</h2>
         {onClose && (
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-200 text-2xl"
-          >
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-200 text-2xl">
             ×
           </button>
         )}
@@ -435,16 +423,12 @@ return;
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`px-4 py-2 text-sm font-medium transition-colors relative ${
-              activeTab === tab.id
-                ? 'text-blue-400 border-b-2 border-blue-400'
-                : 'text-gray-400 hover:text-gray-200'
+              activeTab === tab.id ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-400 hover:text-gray-200'
             }`}
           >
             {tab.label}
             {tab.count !== undefined && tab.count > 0 && (
-              <span className="ml-2 px-1.5 py-0.5 bg-blue-500/20 text-blue-400 text-xs rounded-full">
-                {tab.count}
-              </span>
+              <span className="ml-2 px-1.5 py-0.5 bg-blue-500/20 text-blue-400 text-xs rounded-full">{tab.count}</span>
             )}
           </button>
         ))}
@@ -466,7 +450,7 @@ return;
         {activeTab === 'my-shares' && (
           <>
             {myFolders
-              .filter(f => f.folderName.toLowerCase().includes(searchQuery.toLowerCase()))
+              .filter((f) => f.folderName.toLowerCase().includes(searchQuery.toLowerCase()))
               .map((folder) => (
                 <FolderCard
                   key={folder.id}
@@ -496,16 +480,24 @@ return;
         {activeTab === 'shared-with-me' && (
           <>
             {sharedWithMe
-              .filter(f => f.folderName.toLowerCase().includes(searchQuery.toLowerCase()))
+              .filter((f) => f.folderName.toLowerCase().includes(searchQuery.toLowerCase()))
               .map((folder) => (
                 <FolderCard
                   key={folder.id}
                   folder={folder}
                   isOwner={false}
-                  onShare={() => {}}
-                  onUpdatePermission={() => {}}
-                  onRevoke={() => {}}
-                  onRemove={() => {}}
+                  onShare={() => {
+                    /* noop */
+                  }}
+                  onUpdatePermission={() => {
+                    /* noop */
+                  }}
+                  onRevoke={() => {
+                    /* noop */
+                  }}
+                  onRemove={() => {
+                    /* noop */
+                  }}
                 />
               ))}
             {sharedWithMe.length === 0 && (
@@ -520,7 +512,7 @@ return;
         {activeTab === 'invitations' && (
           <>
             {invitations
-              .filter(i => i.status === 'pending')
+              .filter((i) => i.status === 'pending')
               .map((invitation) => (
                 <div key={invitation.id} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
                   <div className="flex items-center justify-between">
@@ -533,9 +525,7 @@ return;
                         Permission: <PermissionBadge permission={invitation.permission} />
                       </div>
                       {invitation.message && (
-                        <div className="text-sm text-gray-500 mt-2 italic">
-                          "{invitation.message}"
-                        </div>
+                        <div className="text-sm text-gray-500 mt-2 italic">"{invitation.message}"</div>
                       )}
                     </div>
                     <div className="flex gap-2">
@@ -555,7 +545,7 @@ return;
                   </div>
                 </div>
               ))}
-            {invitations.filter(i => i.status === 'pending').length === 0 && (
+            {invitations.filter((i) => i.status === 'pending').length === 0 && (
               <div className="text-center py-8 text-gray-500">
                 <div className="text-4xl mb-2">✉️</div>
                 <div>No pending invitations</div>
@@ -567,16 +557,15 @@ return;
         {activeTab === 'activity' && (
           <>
             {activities.slice(0, 20).map((activity) => (
-              <div key={activity.id} className="bg-gray-800 rounded-lg p-3 border border-gray-700 flex items-center gap-3">
-                <div className="text-gray-500 text-sm">
-                  {new Date(activity.timestamp).toLocaleString()}
-                </div>
+              <div
+                key={activity.id}
+                className="bg-gray-800 rounded-lg p-3 border border-gray-700 flex items-center gap-3"
+              >
+                <div className="text-gray-500 text-sm">{new Date(activity.timestamp).toLocaleString()}</div>
                 <div className="text-gray-300">
                   <span className="font-medium">{activity.performedByName}</span>
                   <span className="text-gray-500"> {activity.type.replace(/_/g, ' ')} </span>
-                  {activity.targetName && (
-                    <span className="text-blue-400">{activity.targetName}</span>
-                  )}
+                  {activity.targetName && <span className="text-blue-400">{activity.targetName}</span>}
                 </div>
               </div>
             ))}

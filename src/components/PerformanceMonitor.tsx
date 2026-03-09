@@ -18,8 +18,7 @@ export const PerformanceMonitor: React.FC = () => {
 
   useEffect(() => {
     // Measure page load time
-    const loadTime =
-      performance.timing.loadEventEnd - performance.timing.navigationStart;
+    const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
     setMetrics((prev) => ({ ...prev, loadTime }));
 
     // FPS counter
@@ -46,7 +45,7 @@ export const PerformanceMonitor: React.FC = () => {
     let memoryInterval: NodeJS.Timeout | null = null;
     if ('memory' in performance) {
       const measureMemory = () => {
-        const memory = (performance as any).memory;
+        const memory = (performance as unknown).memory;
         if (memory) {
           setMetrics((prev) => ({
             ...prev,
@@ -89,7 +88,7 @@ export const PerformanceMonitor: React.FC = () => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  if (!isVisible || (import.meta as any).env?.DEV) {
+  if (!isVisible || (import.meta as unknown).env?.DEV) {
     return null;
   }
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useEmails } from '../hooks/useEmails';
-import { useNotifications } from '../hooks/useNotifications';
 
 interface SidebarProps {
   onCompose: () => void;
@@ -29,7 +28,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onKeyboardShortcuts
 }) => {
   const { folders } = useEmails();
-  const { addNotification } = useNotifications();
+
   const location = useLocation();
 
   const getFolderPath = (folderId: string): string => {
@@ -66,9 +65,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               >
                 <span className="folder-icon">{folder.icon}</span>
                 <span className="folder-name">{folder.name}</span>
-                {folder.count > 0 && (
-                  <span className="folder-count">{folder.count}</span>
-                )}
+                {folder.count > 0 && <span className="folder-count">{folder.count}</span>}
               </Link>
             </li>
           ))}
@@ -82,86 +79,50 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         <div className="sidebar-actions">
-          <button
-            className="action-btn"
-            onClick={onPhantom}
-            title="Manage Phantom Aliases"
-          >
+          <button className="action-btn" onClick={onPhantom} title="Manage Phantom Aliases">
             <span>👻</span>
             <span>Phantom</span>
           </button>
-          <button
-            className="action-btn"
-            onClick={onSelfDestruct}
-            title="Self-Destruct Options"
-          >
+          <button className="action-btn" onClick={onSelfDestruct} title="Self-Destruct Options">
             <span>⏰</span>
             <span>Destruct</span>
           </button>
-          <button
-            className="action-btn panic-btn"
-            onClick={onPanic}
-            title="Panic Mode"
-          >
+          <button className="action-btn panic-btn" onClick={onPanic} title="Panic Mode">
             <span>🚨</span>
             <span>Panic</span>
           </button>
           {onAutoReplySettings && (
-            <button
-              className="action-btn"
-              onClick={onAutoReplySettings}
-              title="Auto-Reply Settings"
-            >
+            <button className="action-btn" onClick={onAutoReplySettings} title="Auto-Reply Settings">
               <span>↩️</span>
               <span>Auto-Reply</span>
             </button>
           )}
           {onFilterSettings && (
-            <button
-              className="action-btn"
-              onClick={onFilterSettings}
-              title="Email Filters"
-            >
+            <button className="action-btn" onClick={onFilterSettings} title="Email Filters">
               <span>🔍</span>
               <span>Filters</span>
             </button>
           )}
           {onLabelSettings && (
-            <button
-              className="action-btn"
-              onClick={onLabelSettings}
-              title="Email Labels"
-            >
+            <button className="action-btn" onClick={onLabelSettings} title="Email Labels">
               <span>🏷️</span>
               <span>Labels</span>
             </button>
           )}
           {onAdvancedSearch && (
-            <button
-              className="action-btn"
-              onClick={onAdvancedSearch}
-              title="Advanced Search"
-            >
+            <button className="action-btn" onClick={onAdvancedSearch} title="Advanced Search">
               <span>🔬</span>
               <span>Search</span>
             </button>
           )}
           {onStatistics && (
-            <button
-              className="action-btn"
-              onClick={onStatistics}
-              title="Email Statistics"
-            >
+            <button className="action-btn" onClick={onStatistics} title="Email Statistics">
               <span>📊</span>
               <span>Stats</span>
             </button>
           )}
           {onKeyboardShortcuts && (
-            <button
-              className="action-btn"
-              onClick={onKeyboardShortcuts}
-              title="Keyboard Shortcuts"
-            >
+            <button className="action-btn" onClick={onKeyboardShortcuts} title="Keyboard Shortcuts">
               <span>⌨️</span>
               <span>Shortcuts</span>
             </button>

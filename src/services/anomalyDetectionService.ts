@@ -7,30 +7,21 @@ import {
   AnomalyDetectionResult,
   AnomalyType,
   AnomalySeverity,
-  RiskLevel,
   DetectionStatus,
   AnomalyIndicator,
   RecommendedAction,
   ActionType,
   AnomalyDetectionConfig,
   AnomalyDetectionStatistics,
-  PhishingIndicator,
   PhishingIndicatorType,
-  SpamIndicator,
   SpamIndicatorType,
   SenderReputation,
-  SenderCategory,
-  TrustLevel,
-  SenderHistoricalData,
   SenderFlag,
-  BehavioralAnalysis,
-  BehavioralPattern,
   PatternType,
   BehavioralBaseline,
   LinkAnalysis,
   LinkCategory,
   AttachmentAnalysis,
-  AttachmentIndicator,
   DEFAULT_ANOMALY_CONFIG,
   PHISHING_INDICATOR_WEIGHTS,
   SPAM_INDICATOR_WEIGHTS,
@@ -67,19 +58,18 @@ export class AnomalyDetectionService {
       spamDetected: 0,
       falsePositives: 0,
       avgAnalysisTime: 0,
-      detectionsByType: {} as any,
-      detectionsBySeverity: {} as any,
+      detectionsByType: {} as unknown,
+      detectionsBySeverity: {} as unknown,
       accuracy: 0,
       lastReset: Date.now()
     };
   }
 
-  async detectAnomalies(email: any): Promise<AnomalyDetectionResult> {
+  async detectAnomalies(email: unknown): Promise<AnomalyDetectionResult> {
     const startTime = Date.now();
     this.statistics.totalAnalyzed++;
 
     // Check cache
-    const cacheKey = `${email.id}-${Date.now()}`;
     if (this.cache.has(email.id)) {
       return this.cache.get(email.id)!;
     }
@@ -177,7 +167,6 @@ export class AnomalyDetectionService {
       if (this.cache.size < this.config.cacheSize) {
         this.cache.set(email.id, result);
       }
-
     } catch (error) {
       result.status = DetectionStatus.FAILED;
       result.description = error instanceof Error ? error.message : 'Analysis failed';
@@ -189,7 +178,9 @@ export class AnomalyDetectionService {
     return result;
   }
 
-  private async detectPhishing(email: any): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
+  private async detectPhishing(
+    email: unknown
+  ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     const indicators: AnomalyIndicator[] = [];
     let totalScore = 0;
     let indicatorCount = 0;
@@ -237,8 +228,8 @@ export class AnomalyDetectionService {
     }
 
     if (indicatorCount === 0) {
-return null;
-}
+      return null;
+    }
 
     const riskScore = totalScore / indicatorCount;
     const confidence = Math.min(riskScore + 0.1, 1);
@@ -246,7 +237,9 @@ return null;
     return { riskScore, confidence, indicators };
   }
 
-  private async detectSpam(email: any): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
+  private async detectSpam(
+    email: unknown
+  ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     const indicators: AnomalyIndicator[] = [];
     let totalScore = 0;
     let indicatorCount = 0;
@@ -284,8 +277,8 @@ return null;
     }
 
     if (indicatorCount === 0) {
-return null;
-}
+      return null;
+    }
 
     const riskScore = totalScore / indicatorCount;
     const confidence = Math.min(riskScore + 0.1, 1);
@@ -293,10 +286,12 @@ return null;
     return { riskScore, confidence, indicators };
   }
 
-  private async analyzeSenderReputation(email: any): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
+  private async analyzeSenderReputation(
+    email: unknown
+  ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     if (!email.sender || !email.sender.email) {
-return null;
-}
+      return null;
+    }
 
     const senderEmail = email.sender.email;
     const domain = senderEmail.split('@')[1];
@@ -330,23 +325,25 @@ return null;
     }
 
     if (indicators.length === 0) {
-return null;
-}
+      return null;
+    }
 
     return { riskScore, confidence, indicators };
   }
 
-  private async analyzeBehavior(email: any): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
+  private async analyzeBehavior(
+    email: unknown
+  ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     if (!email.sender || !email.sender.email) {
-return null;
-}
+      return null;
+    }
 
     const senderEmail = email.sender.email;
     const baseline = this.behavioralBaselines.get(senderEmail);
 
     if (!baseline) {
-return null;
-}
+      return null;
+    }
 
     const indicators: AnomalyIndicator[] = [];
     let totalDeviation = 0;
@@ -361,8 +358,8 @@ return null;
     }
 
     if (indicatorCount === 0) {
-return null;
-}
+      return null;
+    }
 
     const riskScore = totalDeviation / indicatorCount;
     const confidence = 0.7;
@@ -370,14 +367,16 @@ return null;
     return { riskScore, confidence, indicators };
   }
 
-  private async scanLinks(email: any): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
+  private async scanLinks(
+    email: unknown
+  ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     const body = email.body || '';
     const urlRegex = /https?:\/\/[^\s<>"{}|\\^`[\]]+/g;
     const urls = body.match(urlRegex);
 
     if (!urls || urls.length === 0) {
-return null;
-}
+      return null;
+    }
 
     const indicators: AnomalyIndicator[] = [];
     let riskScore = 0;
@@ -398,16 +397,18 @@ return null;
     }
 
     if (indicators.length === 0) {
-return null;
-}
+      return null;
+    }
 
     return { riskScore, confidence, indicators };
   }
 
-  private async scanAttachments(email: any): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
+  private async scanAttachments(
+    email: unknown
+  ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     if (!email.attachments || email.attachments.length === 0) {
-return null;
-}
+      return null;
+    }
 
     const indicators: AnomalyIndicator[] = [];
     let riskScore = 0;
@@ -428,8 +429,8 @@ return null;
     }
 
     if (indicators.length === 0) {
-return null;
-}
+      return null;
+    }
 
     return { riskScore, confidence, indicators };
   }
@@ -469,8 +470,7 @@ return null;
         result.categories.push(LinkCategory.SHORTENER);
         result.riskScore += 0.2;
       }
-
-    } catch (error) {
+    } catch {
       // Invalid URL
       result.riskScore = 0.1;
     }
@@ -478,7 +478,7 @@ return null;
     return result;
   }
 
-  private analyzeAttachment(attachment: any): AttachmentAnalysis {
+  private analyzeAttachment(attachment: unknown): AttachmentAnalysis {
     const result: AttachmentAnalysis = {
       filename: attachment.filename || 'unknown',
       mimeType: attachment.mimeType || 'application/octet-stream',
@@ -517,10 +517,10 @@ return null;
     return result;
   }
 
-  private checkDomainMismatch(email: any): AnomalyIndicator | null {
+  private checkDomainMismatch(email: unknown): AnomalyIndicator | null {
     if (!email.sender || !email.sender.name || !email.sender.email) {
-return null;
-}
+      return null;
+    }
 
     const senderName = email.sender.name.toLowerCase();
     const senderEmail = email.sender.email.toLowerCase();
@@ -539,7 +539,7 @@ return null;
     return null;
   }
 
-  private checkUrgencyLanguage(email: any): AnomalyIndicator | null {
+  private checkUrgencyLanguage(email: unknown): AnomalyIndicator | null {
     const subject = (email.subject || '').toLowerCase();
     const body = (email.body || '').toLowerCase();
     const combined = subject + ' ' + body;
@@ -558,7 +558,7 @@ return null;
     return null;
   }
 
-  private checkCredentialRequests(email: any): AnomalyIndicator | null {
+  private checkCredentialRequests(email: unknown): AnomalyIndicator | null {
     const body = (email.body || '').toLowerCase();
     const credentialWords = ['password', 'username', 'credential', 'social security', 'credit card', 'bank account'];
 
@@ -576,14 +576,14 @@ return null;
     return null;
   }
 
-  private checkSuspiciousUrls(email: any): AnomalyIndicator[] {
+  private checkSuspiciousUrls(email: unknown): AnomalyIndicator[] {
     const body = email.body || '';
     const urlRegex = /https?:\/\/[^\s<>"{}|\\^`[\]]+/g;
     const urls = body.match(urlRegex);
 
     if (!urls) {
-return [];
-}
+      return [];
+    }
 
     const indicators: AnomalyIndicator[] = [];
     for (const url of urls) {
@@ -601,7 +601,7 @@ return [];
     return indicators;
   }
 
-  private checkGenericGreeting(email: any): AnomalyIndicator | null {
+  private checkGenericGreeting(email: unknown): AnomalyIndicator | null {
     const body = (email.body || '').toLowerCase();
     const genericGreetings = ['dear customer', 'dear user', 'dear sir', 'dear madam', 'dear valued customer'];
 
@@ -619,7 +619,7 @@ return [];
     return null;
   }
 
-  private checkPromotionalLanguage(email: any): AnomalyIndicator | null {
+  private checkPromotionalLanguage(email: unknown): AnomalyIndicator | null {
     const subject = (email.subject || '').toLowerCase();
     const body = (email.body || '').toLowerCase();
     const combined = subject + ' ' + body;
@@ -629,8 +629,8 @@ return [];
     let count = 0;
     for (const word of promoWords) {
       if (combined.includes(word)) {
-count++;
-}
+        count++;
+      }
     }
 
     if (count >= 3) {
@@ -645,7 +645,7 @@ count++;
     return null;
   }
 
-  private checkExcessiveCaps(email: any): AnomalyIndicator | null {
+  private checkExcessiveCaps(email: unknown): AnomalyIndicator | null {
     const subject = email.subject || '';
     const body = email.body || '';
     const combined = subject + body;
@@ -665,7 +665,7 @@ count++;
     return null;
   }
 
-  private checkExcessivePunctuation(email: any): AnomalyIndicator | null {
+  private checkExcessivePunctuation(email: unknown): AnomalyIndicator | null {
     const subject = email.subject || '';
     const body = email.body || '';
     const combined = subject + body;
@@ -684,7 +684,7 @@ count++;
     return null;
   }
 
-  private checkPriceMentions(email: any): AnomalyIndicator | null {
+  private checkPriceMentions(email: unknown): AnomalyIndicator | null {
     const subject = email.subject || '';
     const body = email.body || '';
     const combined = subject + body;
@@ -706,7 +706,7 @@ count++;
 
   private isSuspiciousDomain(domain: string): boolean {
     const suspiciousDomains = ['tempmail.com', 'throwaway.email', 'guerrillamail.com'];
-    return suspiciousDomains.some(d => domain.includes(d));
+    return suspiciousDomains.some((d) => domain.includes(d));
   }
 
   private checkEmailVolume(senderEmail: string, baseline: BehavioralBaseline): AnomalyIndicator | null {
@@ -726,7 +726,11 @@ count++;
     return null;
   }
 
-  private determineAnomalyType(result: AnomalyDetectionResult): { type: AnomalyType; severity: AnomalySeverity; description: string } {
+  private determineAnomalyType(result: AnomalyDetectionResult): {
+    type: AnomalyType;
+    severity: AnomalySeverity;
+    description: string;
+  } {
     if (result.riskScore < 0.3) {
       return {
         type: AnomalyType.UNKNOWN,
@@ -736,15 +740,15 @@ count++;
     }
 
     // Determine type based on indicators
-    const phishingCount = result.indicators.filter(i => i.source === 'phishing-detection').length;
-    const spamCount = result.indicators.filter(i => i.source === 'spam-detection').length;
-    const linkCount = result.indicators.filter(i => i.source === 'link-scan').length;
-    const attachmentCount = result.indicators.filter(i => i.source === 'attachment-scan').length;
+    const phishingCount = result.indicators.filter((i) => i.source === 'phishing-detection').length;
+    const spamCount = result.indicators.filter((i) => i.source === 'spam-detection').length;
+    const linkCount = result.indicators.filter((i) => i.source === 'link-scan').length;
+    const attachmentCount = result.indicators.filter((i) => i.source === 'attachment-scan').length;
 
     let type = AnomalyType.UNKNOWN;
     let description = 'Potential security threat detected';
 
-    if (phishingCount >= 2 || phishingCount > 0 && result.riskScore >= 0.7) {
+    if (phishingCount >= 2 || (phishingCount > 0 && result.riskScore >= 0.7)) {
       type = AnomalyType.PHISHING;
       description = 'Phishing attempt detected';
     } else if (spamCount >= 2) {
@@ -761,12 +765,12 @@ count++;
     // Determine severity
     let severity = AnomalySeverity.LOW;
     if (result.riskScore >= 0.8) {
-severity = AnomalySeverity.CRITICAL;
-} else if (result.riskScore >= 0.6) {
-severity = AnomalySeverity.HIGH;
-} else if (result.riskScore >= 0.4) {
-severity = AnomalySeverity.MEDIUM;
-}
+      severity = AnomalySeverity.CRITICAL;
+    } else if (result.riskScore >= 0.6) {
+      severity = AnomalySeverity.HIGH;
+    } else if (result.riskScore >= 0.4) {
+      severity = AnomalySeverity.MEDIUM;
+    }
 
     return { type, severity, description };
   }

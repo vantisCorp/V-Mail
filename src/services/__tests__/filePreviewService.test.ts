@@ -3,12 +3,7 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import {
-  PreviewFileType,
-  PreviewQuality,
-  PreviewStatus,
-  SecurityStatus
-} from '../../types/filePreview';
+import { PreviewFileType, PreviewQuality, PreviewStatus, SecurityStatus } from '../../types/filePreview';
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -16,14 +11,14 @@ const localStorageMock = (() => {
   return {
     getItem: (key: string) => store[key] || null,
     setItem: (key: string, value: string) => {
- store[key] = value.toString();
-},
+      store[key] = value.toString();
+    },
     removeItem: (key: string) => {
- delete store[key];
-},
+      delete store[key];
+    },
     clear: () => {
- store = {};
-}
+      store = {};
+    }
   };
 })();
 
@@ -36,7 +31,7 @@ let objectUrlCounter = 0;
 const createdUrls: string[] = [];
 const revokedUrls: string[] = [];
 
-URL.createObjectURL = vi.fn((blob: Blob) => {
+URL.createObjectURL = vi.fn((_blob: Blob) => {
   const url = `blob:test-${objectUrlCounter++}`;
   createdUrls.push(url);
   return url;
@@ -60,20 +55,22 @@ const mockImageLoad = (width: number, height: number) => {
       constructor() {
         setTimeout(() => {
           if (this.onload) {
-this.onload();
-}
+            this.onload();
+          }
         }, 0);
       }
     }
   });
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const mockVideoLoad = (width: number, height: number, duration: number) => {
   window.HTMLVideoElement.prototype.videoWidth = width;
   window.HTMLVideoElement.prototype.videoHeight = height;
   window.HTMLVideoElement.prototype.duration = duration;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const mockAudioLoad = (duration: number) => {
   window.HTMLAudioElement.prototype.duration = duration;
 };
@@ -81,7 +78,7 @@ const mockAudioLoad = (duration: number) => {
 // Mock canvas for thumbnail generation
 HTMLCanvasElement.prototype.getContext = vi.fn(() => ({
   drawImage: vi.fn()
-})) as any;
+})) as unknown;
 
 HTMLCanvasElement.prototype.toBlob = vi.fn((callback: (blob: Blob | null) => void) => {
   callback(new Blob(['thumbnail-data'], { type: 'image/jpeg' }));
@@ -133,12 +130,16 @@ describe('FilePreviewService', () => {
 
     it('should return DOCUMENT for document MIME types', () => {
       expect(service.getFileType('application/msword')).toBe(PreviewFileType.DOCUMENT);
-      expect(service.getFileType('application/vnd.openxmlformats-officedocument.wordprocessingml.document')).toBe(PreviewFileType.DOCUMENT);
+      expect(service.getFileType('application/vnd.openxmlformats-officedocument.wordprocessingml.document')).toBe(
+        PreviewFileType.DOCUMENT
+      );
     });
 
     it('should return SPREADSHEET for spreadsheet MIME types', () => {
       expect(service.getFileType('application/vnd.ms-excel')).toBe(PreviewFileType.SPREADSHEET);
-      expect(service.getFileType('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')).toBe(PreviewFileType.SPREADSHEET);
+      expect(service.getFileType('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')).toBe(
+        PreviewFileType.SPREADSHEET
+      );
     });
 
     it('should return ARCHIVE for archive MIME types', () => {
@@ -287,8 +288,8 @@ describe('FilePreviewService', () => {
           constructor() {
             setTimeout(() => {
               if (this.onerror) {
-this.onerror();
-}
+                this.onerror();
+              }
             }, 0);
           }
         }
@@ -436,7 +437,7 @@ this.onerror();
       });
 
       // Need to wait for async thumbnail generation
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       const thumbnail = service.getThumbnail(preview.id, PreviewQuality.THUMBNAIL);
       // Thumbnail might exist if generated

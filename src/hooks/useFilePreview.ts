@@ -3,17 +3,13 @@
  * React hook for managing file previews
  */
 
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   PreviewFileType,
   PreviewQuality,
-  PreviewStatus,
-  SecurityStatus,
   FilePreview,
   FileThumbnail,
-  FileAttachment,
   PreviewOptions,
-  ThumbnailOptions,
   SecurityScanResult,
   PreviewStats,
   CreatePreviewPayload,
@@ -83,10 +79,9 @@ export function useFilePreview(): UseFilePreviewReturn {
    * Refresh previews list from service
    */
   const refreshPreviews = useCallback(() => {
-    const stats = filePreviewService.getStats();
     // Since the service doesn't have a getAllPreviews method, we'll use the stats
     // to determine if we need to refresh
-    setPreviews(prev => [...prev]); // Trigger re-render
+    setPreviews((prev) => [...prev]); // Trigger re-render
   }, []);
 
   /**
@@ -98,7 +93,7 @@ export function useFilePreview(): UseFilePreviewReturn {
 
     try {
       const preview = await filePreviewService.createPreview(payload);
-      setPreviews(prev => [...prev, preview]);
+      setPreviews((prev) => [...prev, preview]);
       return preview;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to create preview';
@@ -126,16 +121,19 @@ export function useFilePreview(): UseFilePreviewReturn {
   /**
    * Delete a preview
    */
-  const deletePreview = useCallback(async (previewId: string): Promise<boolean> => {
-    const success = filePreviewService.deletePreview(previewId);
-    if (success) {
-      setPreviews(prev => prev.filter(p => p.id !== previewId));
-      if (currentPreview?.id === previewId) {
-        setCurrentPreview(null);
+  const deletePreview = useCallback(
+    async (previewId: string): Promise<boolean> => {
+      const success = filePreviewService.deletePreview(previewId);
+      if (success) {
+        setPreviews((prev) => prev.filter((p) => p.id !== previewId));
+        if (currentPreview?.id === previewId) {
+          setCurrentPreview(null);
+        }
       }
-    }
-    return success;
-  }, [currentPreview]);
+      return success;
+    },
+    [currentPreview]
+  );
 
   /**
    * Clear all previews
@@ -149,17 +147,23 @@ export function useFilePreview(): UseFilePreviewReturn {
   /**
    * Get thumbnail
    */
-  const getThumbnail = useCallback((previewId: string, quality: PreviewQuality = PreviewQuality.MEDIUM): FileThumbnail | null => {
-    return filePreviewService.getThumbnail(previewId, quality);
-  }, []);
+  const getThumbnail = useCallback(
+    (previewId: string, quality: PreviewQuality = PreviewQuality.MEDIUM): FileThumbnail | null => {
+      return filePreviewService.getThumbnail(previewId, quality);
+    },
+    []
+  );
 
   /**
    * Get thumbnail URL
    */
-  const getThumbnailUrl = useCallback((previewId: string, quality: PreviewQuality = PreviewQuality.THUMBNAIL): string | null => {
-    const thumbnail = filePreviewService.getThumbnail(previewId, quality);
-    return thumbnail?.url || null;
-  }, []);
+  const getThumbnailUrl = useCallback(
+    (previewId: string, quality: PreviewQuality = PreviewQuality.THUMBNAIL): string | null => {
+      const thumbnail = filePreviewService.getThumbnail(previewId, quality);
+      return thumbnail?.url || null;
+    },
+    []
+  );
 
   /**
    * Get preview URL
@@ -171,32 +175,38 @@ export function useFilePreview(): UseFilePreviewReturn {
   /**
    * Download a file
    */
-  const downloadFile = useCallback(async (previewId: string, fileName?: string): Promise<void> => {
-    const preview = getPreview(previewId);
-    if (!preview) {
-      throw new Error('Preview not found');
-    }
+  const downloadFile = useCallback(
+    async (previewId: string, fileName?: string): Promise<void> => {
+      const preview = getPreview(previewId);
+      if (!preview) {
+        throw new Error('Preview not found');
+      }
 
-    const url = preview.originalUrl;
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = fileName || preview.fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }, [getPreview]);
+      const url = preview.originalUrl;
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName || preview.fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
+    [getPreview]
+  );
 
   /**
    * Perform security scan
    */
-  const performSecurityScan = useCallback(async (previewId: string): Promise<SecurityScanResult | null> => {
-    const preview = getPreview(previewId);
-    if (!preview) {
-return null;
-}
+  const performSecurityScan = useCallback(
+    async (previewId: string): Promise<SecurityScanResult | null> => {
+      const preview = getPreview(previewId);
+      if (!preview) {
+        return null;
+      }
 
-    return filePreviewService.performSecurityScan(preview);
-  }, [getPreview]);
+      return filePreviewService.performSecurityScan(preview);
+    },
+    [getPreview]
+  );
 
   /**
    * Get file type
@@ -236,29 +246,32 @@ return null;
   /**
    * Filter previews
    */
-  const filterPreviews = useCallback((options: PreviewFilterOptions): FilePreview[] => {
-    return previews.filter(preview => {
-      if (options.fileType !== undefined && preview.fileType !== options.fileType) {
-        return false;
-      }
-      if (options.status !== undefined && preview.status !== options.status) {
-        return false;
-      }
-      if (options.securityStatus !== undefined && preview.securityStatus !== options.securityStatus) {
-        return false;
-      }
-      if (options.mimeType !== undefined && !preview.mimeType.includes(options.mimeType)) {
-        return false;
-      }
-      if (options.searchQuery) {
-        const query = options.searchQuery.toLowerCase();
-        if (!preview.fileName.toLowerCase().includes(query)) {
+  const filterPreviews = useCallback(
+    (options: PreviewFilterOptions): FilePreview[] => {
+      return previews.filter((preview) => {
+        if (options.fileType !== undefined && preview.fileType !== options.fileType) {
           return false;
         }
-      }
-      return true;
-    });
-  }, [previews]);
+        if (options.status !== undefined && preview.status !== options.status) {
+          return false;
+        }
+        if (options.securityStatus !== undefined && preview.securityStatus !== options.securityStatus) {
+          return false;
+        }
+        if (options.mimeType !== undefined && !preview.mimeType.includes(options.mimeType)) {
+          return false;
+        }
+        if (options.searchQuery) {
+          const query = options.searchQuery.toLowerCase();
+          if (!preview.fileName.toLowerCase().includes(query)) {
+            return false;
+          }
+        }
+        return true;
+      });
+    },
+    [previews]
+  );
 
   /**
    * Get statistics
@@ -270,45 +283,48 @@ return null;
   /**
    * Preview a file by ID
    */
-  const previewFile = useCallback(async (fileId: string, fileData?: ArrayBuffer | Blob): Promise<FilePreview | null> => {
-    // Check if preview already exists
-    const existingPreview = getPreviewByFileId(fileId);
-    if (existingPreview) {
-      setCurrentPreview(existingPreview);
-      return existingPreview;
-    }
+  const previewFile = useCallback(
+    async (fileId: string, fileData?: ArrayBuffer | Blob): Promise<FilePreview | null> => {
+      // Check if preview already exists
+      const existingPreview = getPreviewByFileId(fileId);
+      if (existingPreview) {
+        setCurrentPreview(existingPreview);
+        return existingPreview;
+      }
 
-    // If no file data provided, we can't create a preview
-    if (!fileData) {
-      setError('No file data provided for preview');
-      return null;
-    }
+      // If no file data provided, we can't create a preview
+      if (!fileData) {
+        setError('No file data provided for preview');
+        return null;
+      }
 
-    // Create new preview
-    setIsLoading(true);
-    setError(null);
+      // Create new preview
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      const preview = await filePreviewService.createPreview({
-        fileId,
-        fileName: `file-${fileId}`,
-        mimeType: 'application/octet-stream',
-        fileData,
-        generateThumbnails: true,
-        performSecurityScan: true
-      });
+      try {
+        const preview = await filePreviewService.createPreview({
+          fileId,
+          fileName: `file-${fileId}`,
+          mimeType: 'application/octet-stream',
+          fileData,
+          generateThumbnails: true,
+          performSecurityScan: true
+        });
 
-      setPreviews(prev => [...prev, preview]);
-      setCurrentPreview(preview);
-      return preview;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to create preview';
-      setError(errorMessage);
-      return null;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [getPreviewByFileId]);
+        setPreviews((prev) => [...prev, preview]);
+        setCurrentPreview(preview);
+        return preview;
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to create preview';
+        setError(errorMessage);
+        return null;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [getPreviewByFileId]
+  );
 
   return {
     // State

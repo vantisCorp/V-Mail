@@ -24,26 +24,22 @@ export type AdminAction =
   | 'permission_revoke';
 
 export type AuditLogSeverity =
-  | 'info'       // Informational events
-  | 'warning'    // Warning events
-  | 'error'      // Error events
-  | 'critical';  // Critical security events
+  | 'info' // Informational events
+  | 'warning' // Warning events
+  | 'error' // Error events
+  | 'critical'; // Critical security events
 
 export type SystemHealthStatus =
-  | 'healthy'    // All systems operational
-  | 'degraded'   // Some services degraded
-  | 'outage';    // Major outage
+  | 'healthy' // All systems operational
+  | 'degraded' // Some services degraded
+  | 'outage'; // Major outage
 
 export type AdminUserRole =
-  | 'super_admin'   // Full system access
-  | 'admin'         // Administrative access
-  | 'support';      // Support staff access
+  | 'super_admin' // Full system access
+  | 'admin' // Administrative access
+  | 'support'; // Support staff access
 
-export type UserStatus =
-  | 'active'
-  | 'suspended'
-  | 'deleted'
-  | 'pending';
+export type UserStatus = 'active' | 'suspended' | 'deleted' | 'pending';
 
 /**
  * Admin user interface
@@ -81,7 +77,7 @@ export interface AuditLogEntry {
   targetType?: 'user' | 'team' | 'system' | 'billing';
   targetName?: string;
   details: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   ipAddress: string;
   userAgent: string;
   timestamp: Date;
@@ -219,7 +215,7 @@ export interface SystemAlert {
   createdAt: Date;
   resolvedAt?: Date;
   resolvedBy?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**

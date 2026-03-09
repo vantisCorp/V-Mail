@@ -8,9 +8,6 @@ import { ThreadAlgorithm } from '../services/threadAlgorithm';
 import {
   Email,
   EmailThread,
-  ThreadViewMode,
-  ThreadExpandMode,
-  ThreadSortOrder,
   ThreadPreferences,
   ThreadFilter,
   ThreadNavigation,
@@ -191,9 +188,7 @@ export const useEmailThreading = (emails: Email[]) => {
           if (emailId) {
             return {
               ...thread,
-              messages: thread.messages.map((email) =>
-                email.id === emailId ? { ...email, isStarred: true } : email
-              )
+              messages: thread.messages.map((email) => (email.id === emailId ? { ...email, isStarred: true } : email))
             };
           } else {
             return {
@@ -215,9 +210,7 @@ export const useEmailThreading = (emails: Email[]) => {
           if (emailId) {
             return {
               ...thread,
-              messages: thread.messages.map((email) =>
-                email.id === emailId ? { ...email, isStarred: false } : email
-              )
+              messages: thread.messages.map((email) => (email.id === emailId ? { ...email, isStarred: false } : email))
             };
           } else {
             return {
@@ -232,28 +225,31 @@ export const useEmailThreading = (emails: Email[]) => {
   }, []);
 
   // Execute thread action
-  const executeThreadAction = useCallback((action: ThreadAction) => {
-    switch (action.type) {
-      case 'mark-read':
-        markThreadAsRead(action.threadId);
-        break;
-      case 'mark-unread':
-        markThreadAsUnread(action.threadId);
-        break;
-      case 'archive':
-        archiveThread(action.threadId);
-        break;
-      case 'delete':
-        deleteThread(action.threadId);
-        break;
-      case 'star':
-        starThread(action.threadId, action.emailIds?.[0]);
-        break;
-      case 'unstar':
-        unstarThread(action.threadId, action.emailIds?.[0]);
-        break;
-    }
-  }, [markThreadAsRead, markThreadAsUnread, archiveThread, deleteThread, starThread, unstarThread]);
+  const executeThreadAction = useCallback(
+    (action: ThreadAction) => {
+      switch (action.type) {
+        case 'mark-read':
+          markThreadAsRead(action.threadId);
+          break;
+        case 'mark-unread':
+          markThreadAsUnread(action.threadId);
+          break;
+        case 'archive':
+          archiveThread(action.threadId);
+          break;
+        case 'delete':
+          deleteThread(action.threadId);
+          break;
+        case 'star':
+          starThread(action.threadId, action.emailIds?.[0]);
+          break;
+        case 'unstar':
+          unstarThread(action.threadId, action.emailIds?.[0]);
+          break;
+      }
+    },
+    [markThreadAsRead, markThreadAsUnread, archiveThread, deleteThread, starThread, unstarThread]
+  );
 
   // Update preferences
   const updatePreferences = useCallback((newPreferences: Partial<ThreadPreferences>) => {
@@ -271,23 +267,29 @@ export const useEmailThreading = (emails: Email[]) => {
   }, []);
 
   // Check if thread is expanded
-  const isThreadExpanded = useCallback((threadId: string) => {
-    switch (preferences.expandMode) {
-      case 'never':
-        return false;
-      case 'first':
-        return expandedThreads.has(threadId);
-      case 'always':
-        return true;
-      default:
-        return expandedThreads.has(threadId);
-    }
-  }, [preferences.expandMode, expandedThreads]);
+  const isThreadExpanded = useCallback(
+    (threadId: string) => {
+      switch (preferences.expandMode) {
+        case 'never':
+          return false;
+        case 'first':
+          return expandedThreads.has(threadId);
+        case 'always':
+          return true;
+        default:
+          return expandedThreads.has(threadId);
+      }
+    },
+    [preferences.expandMode, expandedThreads]
+  );
 
   // Get thread by ID
-  const getThreadById = useCallback((threadId: string): EmailThread | undefined => {
-    return threads.find((t) => t.id === threadId);
-  }, [threads]);
+  const getThreadById = useCallback(
+    (threadId: string): EmailThread | undefined => {
+      return threads.find((t) => t.id === threadId);
+    },
+    [threads]
+  );
 
   return {
     // State

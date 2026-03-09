@@ -69,14 +69,10 @@ export class SentimentModel {
     const sentimentConfidence = this.calculateSentimentConfidence(sentimentScore, words);
 
     // Calculate emotions
-    const emotions = this.config.enableEmotionDetection
-      ? this.detectEmotions(words)
-      : [];
+    const emotions = this.config.enableEmotionDetection ? this.detectEmotions(words) : [];
 
     // Calculate tones
-    const tones = this.config.enableToneAnalysis
-      ? this.detectTones(words, fullText)
-      : [];
+    const tones = this.config.enableToneAnalysis ? this.detectTones(words, fullText) : [];
 
     const endTime = performance.now();
     const processingTime = endTime - startTime;
@@ -104,7 +100,7 @@ export class SentimentModel {
    * Analyze multiple emails
    */
   analyzeBatch(contexts: SentimentContext[]): SentimentAnalysisResult[] {
-    return contexts.map(context => this.analyze(context));
+    return contexts.map((context) => this.analyze(context));
   }
 
   // ============================================================================
@@ -118,7 +114,7 @@ export class SentimentModel {
     return text
       .replace(/[^\w\s]/g, ' ')
       .split(/\s+/)
-      .filter(word => word.length > 0);
+      .filter((word) => word.length > 0);
   }
 
   /**
@@ -130,7 +126,7 @@ export class SentimentModel {
     let total = 0;
 
     // Count positive and negative words
-    words.forEach(word => {
+    words.forEach((word) => {
       if (POSITIVE_WORDS.includes(word)) {
         positiveCount++;
         total++;
@@ -161,11 +157,11 @@ export class SentimentModel {
    */
   private determineSentiment(score: SentimentScore): Sentiment {
     if (score > 0.1) {
-return Sentiment.POSITIVE;
-}
+      return Sentiment.POSITIVE;
+    }
     if (score < -0.1) {
-return Sentiment.NEGATIVE;
-}
+      return Sentiment.NEGATIVE;
+    }
     return Sentiment.NEUTRAL;
   }
 
@@ -177,13 +173,11 @@ return Sentiment.NEGATIVE;
     let confidence = Math.abs(score);
 
     // Boost confidence if there are many sentiment words
-    const sentimentWords = words.filter(
-      w => POSITIVE_WORDS.includes(w) || NEGATIVE_WORDS.includes(w)
-    );
+    const sentimentWords = words.filter((w) => POSITIVE_WORDS.includes(w) || NEGATIVE_WORDS.includes(w));
     const wordRatio = Math.min(1, sentimentWords.length / 5);
 
     // Combine factors
-    confidence = (confidence * 0.7) + (wordRatio * 0.3);
+    confidence = confidence * 0.7 + wordRatio * 0.3;
 
     return Math.max(0.3, Math.min(0.99, confidence));
   }
@@ -199,12 +193,12 @@ return Sentiment.NEGATIVE;
     const emotionScores: Map<Emotion, { count: number; total: number }> = new Map();
 
     // Initialize all emotions
-    Object.values(Emotion).forEach(emotion => {
+    Object.values(Emotion).forEach((emotion) => {
       emotionScores.set(emotion, { count: 0, total: 0 });
     });
 
     // Count emotion words
-    words.forEach(word => {
+    words.forEach((word) => {
       Object.entries(EMOTION_WORDS).forEach(([emotion, emotionWords]) => {
         if (emotionWords.includes(word)) {
           const current = emotionScores.get(emotion as Emotion)!;
@@ -243,11 +237,11 @@ return Sentiment.NEGATIVE;
   /**
    * Detect tones in text
    */
-  private detectTones(words: string[], fullText: string): ToneScore[] {
+  private detectTones(words: string[], _fullText: string): ToneScore[] {
     const tones: ToneScore[] = [];
 
     // Check for formal tone
-    const formalCount = words.filter(w => FORMAL_WORDS.includes(w)).length;
+    const formalCount = words.filter((w) => FORMAL_WORDS.includes(w)).length;
     if (formalCount > 2) {
       tones.push({
         tone: Tone.FORMAL,
@@ -257,7 +251,7 @@ return Sentiment.NEGATIVE;
     }
 
     // Check for casual tone
-    const casualCount = words.filter(w => CASUAL_WORDS.includes(w)).length;
+    const casualCount = words.filter((w) => CASUAL_WORDS.includes(w)).length;
     if (casualCount > 2) {
       tones.push({
         tone: Tone.CASUAL,
@@ -267,7 +261,7 @@ return Sentiment.NEGATIVE;
     }
 
     // Check for urgent tone
-    const urgentCount = words.filter(w => URGENT_WORDS.includes(w)).length;
+    const urgentCount = words.filter((w) => URGENT_WORDS.includes(w)).length;
     if (urgentCount > 0) {
       tones.push({
         tone: Tone.URGENT,
@@ -277,7 +271,7 @@ return Sentiment.NEGATIVE;
     }
 
     // Check for aggressive tone
-    const aggressiveCount = words.filter(w => AGGRESSIVE_WORDS.includes(w)).length;
+    const aggressiveCount = words.filter((w) => AGGRESSIVE_WORDS.includes(w)).length;
     if (aggressiveCount > 2) {
       tones.push({
         tone: Tone.AGGRESSIVE,
@@ -288,7 +282,7 @@ return Sentiment.NEGATIVE;
 
     // Check for polite tone
     const politenessMarkers = ['please', 'thank', 'thanks', 'kindly', 'appreciate'];
-    const politeCount = words.filter(w => politenessMarkers.includes(w)).length;
+    const politeCount = words.filter((w) => politenessMarkers.includes(w)).length;
     if (politeCount > 1) {
       tones.push({
         tone: Tone.POLITE,
@@ -336,19 +330,19 @@ return Sentiment.NEGATIVE;
     let example: string;
 
     // Determine recommended reply tone based on incoming email
-    if (tone.find(t => t.tone === Tone.URGENT)) {
+    if (tone.find((t) => t.tone === Tone.URGENT)) {
       recommendedTone = Tone.URGENT;
       reason = 'The incoming email indicates urgency. Respond promptly and prioritize.';
       example = REPLY_TONE_EXAMPLES[Tone.URGENT][0];
-    } else if (tone.find(t => t.tone === Tone.AGGRESSIVE)) {
+    } else if (tone.find((t) => t.tone === Tone.AGGRESSIVE)) {
       recommendedTone = Tone.POLITE;
       reason = 'The incoming email has an aggressive tone. Respond calmly and professionally.';
       example = REPLY_TONE_EXAMPLES[Tone.POLITE][0];
-    } else if (tone.find(t => t.tone === Tone.FORMAL)) {
+    } else if (tone.find((t) => t.tone === Tone.FORMAL)) {
       recommendedTone = Tone.FORMAL;
       reason = 'The incoming email is formal. Match the formality level in your response.';
       example = REPLY_TONE_EXAMPLES[Tone.FORMAL][0];
-    } else if (tone.find(t => t.tone === Tone.CASUAL)) {
+    } else if (tone.find((t) => t.tone === Tone.CASUAL)) {
       recommendedTone = Tone.CASUAL;
       reason = 'The incoming email is casual. Feel free to respond in a relaxed manner.';
       example = REPLY_TONE_EXAMPLES[Tone.CASUAL][0];
@@ -389,16 +383,16 @@ return Sentiment.NEGATIVE;
     // Generate recommendations based on analysis
     if (overall === Sentiment.NEGATIVE) {
       recommendations.push('Consider responding with empathy and understanding.');
-      if (emotions.find(e => e.emotion === Emotion.ANGER)) {
+      if (emotions.find((e) => e.emotion === Emotion.ANGER)) {
         warnings.push('This email contains expressions of anger. Handle with care.');
       }
     }
 
-    if (tone.find(t => t.tone === Tone.URGENT)) {
+    if (tone.find((t) => t.tone === Tone.URGENT)) {
       recommendations.push('This email appears urgent. Consider prioritizing your response.');
     }
 
-    if (tone.find(t => t.tone === Tone.AGGRESSIVE)) {
+    if (tone.find((t) => t.tone === Tone.AGGRESSIVE)) {
       warnings.push('The tone may be perceived as aggressive. Consider a calm response.');
     }
 
@@ -438,7 +432,7 @@ return Sentiment.NEGATIVE;
       return { averageScore: 0, trend: 'stable' };
     }
 
-    const scores = results.map(r => r.score);
+    const scores = results.map((r) => r.score);
     const averageScore = scores.reduce((a, b) => a + b, 0) / scores.length;
 
     // Calculate trend from first half to second half
@@ -506,10 +500,7 @@ export function createSentimentModel(config?: Partial<SentimentConfig>): Sentime
 /**
  * Analyze sentiment of a single text
  */
-export function analyzeSentiment(
-  text: string,
-  config?: Partial<SentimentConfig>
-): SentimentAnalysisResult {
+export function analyzeSentiment(text: string, config?: Partial<SentimentConfig>): SentimentAnalysisResult {
   const model = createSentimentModel(config);
   const context: SentimentContext = {
     emailId: 'single-analysis',

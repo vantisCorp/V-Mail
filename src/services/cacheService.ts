@@ -6,11 +6,9 @@
 import type {
   CacheStrategy,
   CachePolicy,
-  CachePriority,
   CacheEntry,
   CacheOptions,
   CacheConfig,
-  CacheMetrics,
   CacheEvent,
   CacheStats,
   CacheAdapter,
@@ -76,8 +74,8 @@ class CacheService {
       get: async (key) => {
         const entry = this.cache.get(key);
         if (!entry) {
-return null;
-}
+          return null;
+        }
         if (Date.now() > entry.expiresAt) {
           this.cache.delete(key);
           return null;
@@ -104,8 +102,8 @@ return null;
       get: async (key) => {
         const data = localStorage.getItem(`cache_${key}`);
         if (!data) {
-return null;
-}
+          return null;
+        }
         try {
           const entry = JSON.parse(data) as CacheEntry;
           if (Date.now() > entry.expiresAt) {
@@ -134,8 +132,7 @@ return null;
         Object.keys(localStorage)
           .filter((k) => k.startsWith('cache_'))
           .map((k) => k.replace('cache_', '')),
-      size: async () =>
-        Object.keys(localStorage).filter((k) => k.startsWith('cache_')).length
+      size: async () => Object.keys(localStorage).filter((k) => k.startsWith('cache_')).length
     });
 
     // SessionStorage adapter
@@ -143,8 +140,8 @@ return null;
       get: async (key) => {
         const data = sessionStorage.getItem(`cache_${key}`);
         if (!data) {
-return null;
-}
+          return null;
+        }
         try {
           const entry = JSON.parse(data) as CacheEntry;
           if (Date.now() > entry.expiresAt) {
@@ -173,19 +170,14 @@ return null;
         Object.keys(sessionStorage)
           .filter((k) => k.startsWith('cache_'))
           .map((k) => k.replace('cache_', '')),
-      size: async () =>
-        Object.keys(sessionStorage).filter((k) => k.startsWith('cache_')).length
+      size: async () => Object.keys(sessionStorage).filter((k) => k.startsWith('cache_')).length
     });
   }
 
   /**
    * Create a cache entry
    */
-  private createEntry<T>(
-    key: string,
-    value: T,
-    options?: CacheOptions
-  ): CacheEntry<T> {
+  private createEntry<T>(key: string, value: T, options?: CacheOptions): CacheEntry<T> {
     const now = Date.now();
     const ttl = options?.ttl || 300000; // 5 minutes default
     const serialized = JSON.stringify(value);
@@ -208,7 +200,6 @@ return null;
    * Get value from cache
    */
   async get<T>(key: string, policy?: CachePolicy): Promise<T | null> {
-    const startTime = Date.now();
     const effectivePolicy = policy || this.config.defaultPolicy;
 
     // For network-only policy, skip cache
@@ -343,20 +334,17 @@ return null;
    * Evict entries based on LRU
    */
   private async evictEntries(targetSize: number): Promise<void> {
-    const entries = Array.from(this.cache.values()).sort(
-      (a, b) => a.lastAccessed - b.lastAccessed
-    );
+    const entries = Array.from(this.cache.values()).sort((a, b) => a.lastAccessed - b.lastAccessed);
 
     const adapter = this.adapters.get(this.config.strategy);
     if (!adapter) {
-return;
-}
+      return;
+    }
 
-    let evicted = 0;
     for (const entry of entries) {
-      if (await this.size() <= targetSize) {
-break;
-}
+      if ((await this.size()) <= targetSize) {
+        break;
+      }
 
       await adapter.delete(entry.key);
       this.metrics.evictions++;
@@ -366,7 +354,6 @@ break;
         timestamp: Date.now(),
         size: entry.size
       });
-      evicted++;
     }
   }
 
@@ -388,7 +375,7 @@ break;
   /**
    * Record cache miss
    */
-  private recordMiss(key: string): void {
+  private recordMiss(_key: string): void {
     this.metrics.misses++;
     this.updateMetrics();
   }
@@ -485,8 +472,8 @@ break;
     const adapter = this.adapters.get(this.config.strategy);
 
     if (!adapter) {
-return;
-}
+      return;
+    }
 
     for (const key of keys) {
       const entry = this.cache.get(key);
@@ -504,8 +491,8 @@ return;
     const adapter = this.adapters.get(this.config.strategy);
 
     if (!adapter) {
-return;
-}
+      return;
+    }
 
     for (const key of keys) {
       if (pattern.test(key)) {
@@ -521,6 +508,7 @@ return;
     // This would typically trigger a network request
     // Implementation depends on specific use case
     // For now, just log the refresh
+    // eslint-disable-next-line no-console
     console.log(`Background refresh triggered for key: ${key}`);
   }
 
@@ -552,8 +540,8 @@ return;
     const adapter = this.adapters.get(this.config.strategy);
 
     if (!adapter) {
-return;
-}
+      return;
+    }
 
     for (const key of keys) {
       const entry = this.cache.get(key);
@@ -565,7 +553,7 @@ return;
     this.metrics.lastCleanup = now;
 
     // Ensure capacity
-    if (await this.size() > this.config.maxEntries) {
+    if ((await this.size()) > this.config.maxEntries) {
       await this.evictEntries(this.config.maxEntries * 0.8);
     }
   }
@@ -573,10 +561,10 @@ return;
   /**
    * Prewarm cache
    */
-  async prewarm(config: CachePrewarmConfig, dataFetcher: (key: string) => Promise<any>): Promise<void> {
+  async prewarm(config: CachePrewarmConfig, dataFetcher: (key: string) => Promise<unknown>): Promise<void> {
     if (!config.enabled) {
-return;
-}
+      return;
+    }
 
     for (let i = 0; i < config.keys.length; i++) {
       const key = config.keys[i];

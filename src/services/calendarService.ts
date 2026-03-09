@@ -89,18 +89,9 @@ export class CalendarService {
    */
   private saveToStorage(): void {
     try {
-      localStorage.setItem(
-        'vmail_calendar_accounts',
-        JSON.stringify(Array.from(this.accounts.values()))
-      );
-      localStorage.setItem(
-        'vmail_calendars',
-        JSON.stringify(Array.from(this.calendars.values()))
-      );
-      localStorage.setItem(
-        'vmail_calendar_events',
-        JSON.stringify(Object.fromEntries(this.events))
-      );
+      localStorage.setItem('vmail_calendar_accounts', JSON.stringify(Array.from(this.accounts.values())));
+      localStorage.setItem('vmail_calendars', JSON.stringify(Array.from(this.calendars.values())));
+      localStorage.setItem('vmail_calendar_events', JSON.stringify(Object.fromEntries(this.events)));
     } catch (error) {
       console.error('Error saving calendar data:', error);
     }
@@ -141,9 +132,7 @@ export class CalendarService {
     }
 
     // Remove all calendars for this account
-    const calendarsToRemove = Array.from(this.calendars.values()).filter(
-      (cal) => cal.accountId === accountId
-    );
+    const calendarsToRemove = Array.from(this.calendars.values()).filter((cal) => cal.accountId === accountId);
 
     calendarsToRemove.forEach((calendar) => {
       this.calendars.delete(calendar.id);
@@ -191,9 +180,7 @@ export class CalendarService {
   /**
    * Fetch calendars from provider (simulated)
    */
-  private async fetchCalendarsFromProvider(
-    account: CalendarAccount
-  ): Promise<Calendar[]> {
+  private async fetchCalendarsFromProvider(account: CalendarAccount): Promise<Calendar[]> {
     // This would make actual API calls to Google Calendar or Microsoft Graph
     // For demonstration, we'll return mock data
 
@@ -222,27 +209,20 @@ export class CalendarService {
   /**
    * Get events for a calendar
    */
-  public async getEvents(
-    calendarId: string,
-    filters?: EventFilterOptions
-  ): Promise<CalendarEvent[]> {
+  public async getEvents(calendarId: string, filters?: EventFilterOptions): Promise<CalendarEvent[]> {
     let events = this.events.get(calendarId) || [];
 
     // Apply filters
     if (filters) {
       if (filters.timeMin) {
         events = events.filter(
-          (event) =>
-            event.start.dateTime! >= filters.timeMin! ||
-            event.start.date! >= filters.timeMin!
+          (event) => event.start.dateTime! >= filters.timeMin! || event.start.date! >= filters.timeMin!
         );
       }
 
       if (filters.timeMax) {
         events = events.filter(
-          (event) =>
-            event.end.dateTime! <= filters.timeMax! ||
-            event.end.date! <= filters.timeMax!
+          (event) => event.end.dateTime! <= filters.timeMax! || event.end.date! <= filters.timeMax!
         );
       }
 
@@ -267,9 +247,7 @@ export class CalendarService {
   /**
    * Create a new event
    */
-  public async createEvent(
-    payload: CreateEventPayload
-  ): Promise<CalendarEvent> {
+  public async createEvent(payload: CreateEventPayload): Promise<CalendarEvent> {
     const calendar = this.calendars.get(payload.calendarId);
     if (!calendar) {
       throw new Error('Calendar not found');
@@ -323,10 +301,7 @@ export class CalendarService {
   /**
    * Update an existing event
    */
-  public async updateEvent(
-    eventId: string,
-    payload: UpdateEventPayload
-  ): Promise<CalendarEvent> {
+  public async updateEvent(eventId: string, payload: UpdateEventPayload): Promise<CalendarEvent> {
     // Find event in all calendars
     for (const [calendarId, events] of this.events.entries()) {
       const eventIndex = events.findIndex((e) => e.id === eventId);
@@ -335,27 +310,27 @@ export class CalendarService {
 
         // Update event fields
         if (payload.summary) {
-event.summary = payload.summary;
-}
+          event.summary = payload.summary;
+        }
         if (payload.description) {
-event.description = payload.description;
-}
+          event.description = payload.description;
+        }
         if (payload.location) {
-event.location = payload.location;
-}
+          event.location = payload.location;
+        }
         if (payload.start) {
-event.start = payload.start;
-}
+          event.start = payload.start;
+        }
         if (payload.end) {
-event.end = payload.end;
-}
+          event.end = payload.end;
+        }
         if (payload.status) {
-event.status = payload.status;
-}
+          event.status = payload.status;
+        }
         if (payload.attendees) {
           event.attendees = payload.attendees.map((attendee) => ({
             ...attendee,
-            responseStatus: attendee.responseStatus as any || 'needsAction',
+            responseStatus: (attendee.responseStatus as unknown) || 'needsAction',
             optional: false,
             isSelf: false
           }));
@@ -367,8 +342,8 @@ event.status = payload.status;
           }));
         }
         if (payload.visibility) {
-event.visibility = payload.visibility;
-}
+          event.visibility = payload.visibility;
+        }
 
         event.updated = new Date().toISOString();
 
@@ -402,11 +377,7 @@ event.visibility = payload.visibility;
   /**
    * Get events for a specific date range
    */
-  public async getEventsInRange(
-    start: Date,
-    end: Date,
-    calendarIds?: string[]
-  ): Promise<CalendarEvent[]> {
+  public async getEventsInRange(start: Date, end: Date, calendarIds?: string[]): Promise<CalendarEvent[]> {
     const events: CalendarEvent[] = [];
     const calendarsToQuery = calendarIds || Array.from(this.calendars.keys());
 
@@ -419,28 +390,23 @@ event.visibility = payload.visibility;
       events.push(...calendarEvents);
     }
 
-    return events.sort((a, b) =>
-      new Date(a.start.dateTime || a.start.date!).getTime() -
-      new Date(b.start.dateTime || b.start.date!).getTime()
+    return events.sort(
+      (a, b) =>
+        new Date(a.start.dateTime || a.start.date!).getTime() - new Date(b.start.dateTime || b.start.date!).getTime()
     );
   }
 
   /**
    * Create event from email
    */
-  public async createEventFromEmail(
-    email: any,
-    options: EmailToEventOptions
-  ): Promise<CalendarEvent> {
+  public async createEventFromEmail(email: unknown, options: EmailToEventOptions): Promise<CalendarEvent> {
     const calendar = this.getPrimaryCalendar();
     if (!calendar) {
       throw new Error('No primary calendar found');
     }
 
     // Extract event details from email
-    const summary = options.extractTitleFromSubject
-      ? email.subject || 'Meeting'
-      : 'Meeting';
+    const summary = options.extractTitleFromSubject ? email.subject || 'Meeting' : 'Meeting';
 
     let description = '';
     if (options.extractDescriptionFromBody) {
@@ -472,7 +438,7 @@ event.visibility = payload.visibility;
 
       // Add recipients as attendees
       if (email.to) {
-        email.to.forEach((recipient: any) => {
+        email.to.forEach((recipient: unknown) => {
           if (recipient.email) {
             attendees.push({
               email: recipient.email,
@@ -514,7 +480,7 @@ event.visibility = payload.visibility;
    * Extract dates from email
    */
   private async extractDatesFromEmail(
-    email: any,
+    email: unknown,
     options: EmailToEventOptions
   ): Promise<{ start: { dateTime: string }; end: { dateTime: string } }> {
     // Try to extract date from subject or body
@@ -527,15 +493,13 @@ event.visibility = payload.visibility;
       try {
         const extractedDate = new Date(dateMatch[1]);
         if (!isNaN(extractedDate.getTime())) {
-          const endOfMeeting = new Date(
-            extractedDate.getTime() + options.defaultDuration * 60000
-          );
+          const endOfMeeting = new Date(extractedDate.getTime() + options.defaultDuration * 60000);
           return {
             start: { dateTime: extractedDate.toISOString() },
             end: { dateTime: endOfMeeting.toISOString() }
           };
         }
-      } catch (error) {
+      } catch {
         // Use default if extraction fails
       }
     }
@@ -558,9 +522,7 @@ event.visibility = payload.visibility;
       cancelled: 0
     };
 
-    const calendarsToQuery = calendarId
-      ? [calendarId]
-      : Array.from(this.calendars.keys());
+    const calendarsToQuery = calendarId ? [calendarId] : Array.from(this.calendars.keys());
 
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -580,9 +542,7 @@ event.visibility = payload.visibility;
       });
     }
 
-    const upcomingEvents = allEvents.filter(
-      (e) => new Date(e.start.dateTime || e.start.date!) > now
-    );
+    const upcomingEvents = allEvents.filter((e) => new Date(e.start.dateTime || e.start.date!) > now);
 
     const todayEvents = allEvents.filter((e) => {
       const eventDate = new Date(e.start.dateTime || e.start.date!);

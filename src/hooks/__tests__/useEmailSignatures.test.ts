@@ -5,12 +5,7 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { describe, test, expect, beforeEach, vi } from 'vitest';
 import { useEmailSignatures } from '../useEmailSignatures';
-import {
-  SignatureType,
-  SignaturePosition,
-  SignatureProvider,
-  EmailSignature
-} from '../../types/emailSignatures';
+import { SignatureType, SignaturePosition, SignatureProvider } from '../../types/emailSignatures';
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -213,9 +208,7 @@ describe('useEmailSignatures', () => {
 
       expect(result.current.signatures.length).toBe(2);
       expect(result.current.signatures[1].name).toContain('Copy');
-      expect(result.current.signatures[1].htmlContent).toBe(
-        result.current.signatures[0].htmlContent
-      );
+      expect(result.current.signatures[1].htmlContent).toBe(result.current.signatures[0].htmlContent);
     });
 
     test('should create signature even with minimal data', async () => {
@@ -322,9 +315,7 @@ describe('useEmailSignatures', () => {
         });
       });
 
-      const gmailSignatures = result.current.getSignaturesByProvider(
-        SignatureProvider.GMAIL
-      );
+      const gmailSignatures = result.current.getSignaturesByProvider(SignatureProvider.GMAIL);
 
       expect(gmailSignatures.length).toBe(1);
       expect(gmailSignatures[0].provider).toBe(SignatureProvider.GMAIL);
@@ -334,6 +325,7 @@ describe('useEmailSignatures', () => {
       const { result } = renderHook(() => useEmailSignatures());
       await waitFor(() => !result.current.isLoading);
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       let firstId: string = '';
       let secondId: string = '';
 
@@ -520,7 +512,7 @@ describe('useEmailSignatures', () => {
         await result.current.setDefaultSignature(firstId);
       });
 
-      const firstSig = result.current.signatures.find(s => s.id === firstId);
+      const firstSig = result.current.signatures.find((s) => s.id === firstId);
       expect(firstSig?.isDefault).toBe(true);
 
       // Set second as default
@@ -528,8 +520,8 @@ describe('useEmailSignatures', () => {
         await result.current.setDefaultSignature(secondId);
       });
 
-      const firstSigAfter = result.current.signatures.find(s => s.id === firstId);
-      const secondSigAfter = result.current.signatures.find(s => s.id === secondId);
+      const firstSigAfter = result.current.signatures.find((s) => s.id === firstId);
+      const secondSigAfter = result.current.signatures.find((s) => s.id === secondId);
       expect(firstSigAfter?.isDefault).toBe(false);
       expect(secondSigAfter?.isDefault).toBe(true);
     });
@@ -631,13 +623,10 @@ describe('useEmailSignatures', () => {
         expect(result.current.isLoading).toBe(false);
       });
 
-      const preview = result.current.previewSignature(
-        '<p>{{fullName}} - {{title}}</p>',
-        {
-          fullName: 'Jane Doe',
-          title: 'Manager'
-        }
-      );
+      const preview = result.current.previewSignature('<p>{{fullName}} - {{title}}</p>', {
+        fullName: 'Jane Doe',
+        title: 'Manager'
+      });
 
       expect(preview).toContain('Jane Doe');
       expect(preview).toContain('Manager');
@@ -813,10 +802,8 @@ describe('useEmailSignatures', () => {
         expect(result.current.isLoading).toBe(false);
       });
 
-      let signature: EmailSignature | null;
-
       await act(async () => {
-        signature = await result.current.createFromTemplate('non-existent', {
+        await result.current.createFromTemplate('non-existent', {
           fullName: 'Test'
         });
       });
@@ -1107,7 +1094,7 @@ describe('useEmailSignatures', () => {
 
       // Get the last call arguments
       const calls = localStorageMock.setItem.mock.calls;
-      const signatureCall = calls.find(call => call[0] === 'v-mail-signatures');
+      const signatureCall = calls.find((call) => call[0] === 'v-mail-signatures');
       expect(signatureCall).toBeDefined();
 
       const savedData = JSON.parse(signatureCall![1]);

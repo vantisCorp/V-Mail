@@ -11,8 +11,7 @@ import type {
   CacheStats,
   CacheEvent,
   CacheInvalidationRule,
-  CachePrewarmConfig,
-  CacheConfig
+  CachePrewarmConfig
 } from '../types/caching';
 
 interface UseCacheOptions {
@@ -22,7 +21,7 @@ interface UseCacheOptions {
   cacheTime?: number;
 }
 
-export function useCache<T = any>(options: UseCacheOptions) {
+export function useCache<T = unknown>(options: UseCacheOptions) {
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -156,7 +155,7 @@ export function useCacheManager() {
   }, []);
 
   const prewarmCache = useCallback(
-    async (config: CachePrewarmConfig, dataFetcher: (key: string) => Promise<any>) => {
+    async (config: CachePrewarmConfig, dataFetcher: (key: string) => Promise<unknown>) => {
       await cacheService.current.prewarm(config, dataFetcher);
     },
     []
@@ -177,7 +176,7 @@ export function useCacheManager() {
 /**
  * Hook for cached data fetching
  */
-export function useCachedFetch<T = any>(
+export function useCachedFetch<T = unknown>(
   key: string,
   fetcher: () => Promise<T>,
   options?: {
@@ -201,12 +200,6 @@ export function useCachedFetch<T = any>(
       const data = await fetchRef.current();
       await cache.set(data);
       return data;
-    } catch (err) {
-      // Set the error state from the cache hook
-      const errorMessage = err instanceof Error ? err.message : 'Fetch failed';
-      // We need to trigger the error state - useCache doesn't expose setError directly
-      // So we'll just re-throw and let the caller handle it
-      throw err;
     } finally {
       setIsFetching(false);
     }

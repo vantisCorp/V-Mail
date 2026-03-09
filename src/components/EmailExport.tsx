@@ -5,11 +5,11 @@
 
 import React, { useState, useMemo } from 'react';
 import { useEmailExport } from '../hooks/useEmailExport';
-import type { ExportFormat, ExportOptions, ExportHistory } from '../types/emailExport';
+import type { ExportFormat, ExportOptions } from '../types/emailExport';
 import './emailExport.css';
 
 interface EmailExportProps {
-  emails: any[];
+  emails: unknown[];
   onClose?: () => void;
 }
 
@@ -17,12 +17,10 @@ export const EmailExport: React.FC<EmailExportProps> = ({ emails, onClose }) => 
   const {
     isExporting,
     exportProgress,
-    exportHistory,
     exportStatistics,
     exportSingleEmail,
     exportMultipleEmails,
     queueExport,
-    processQueue,
     clearExportHistory,
     getRecentExports
   } = useEmailExport();
@@ -48,6 +46,7 @@ export const EmailExport: React.FC<EmailExportProps> = ({ emails, onClose }) => 
 
   const handleExport = async () => {
     if (selectedEmails.length === 0) {
+      // eslint-disable-next-line no-alert
       alert('Please select at least one email to export');
       return;
     }
@@ -63,6 +62,7 @@ export const EmailExport: React.FC<EmailExportProps> = ({ emails, onClose }) => 
 
   const handleQueueExport = async () => {
     if (selectedEmails.length === 0) {
+      // eslint-disable-next-line no-alert
       alert('Please select at least one email to export');
       return;
     }
@@ -94,22 +94,13 @@ export const EmailExport: React.FC<EmailExportProps> = ({ emails, onClose }) => 
 
       {/* Tabs */}
       <div className="export-tabs">
-        <button
-          className={`tab ${activeTab === 'export' ? 'active' : ''}`}
-          onClick={() => setActiveTab('export')}
-        >
+        <button className={`tab ${activeTab === 'export' ? 'active' : ''}`} onClick={() => setActiveTab('export')}>
           Export
         </button>
-        <button
-          className={`tab ${activeTab === 'history' ? 'active' : ''}`}
-          onClick={() => setActiveTab('history')}
-        >
+        <button className={`tab ${activeTab === 'history' ? 'active' : ''}`} onClick={() => setActiveTab('history')}>
           History
         </button>
-        <button
-          className={`tab ${activeTab === 'stats' ? 'active' : ''}`}
-          onClick={() => setActiveTab('stats')}
-        >
+        <button className={`tab ${activeTab === 'stats' ? 'active' : ''}`} onClick={() => setActiveTab('stats')}>
           Statistics
         </button>
       </div>
@@ -152,11 +143,7 @@ export const EmailExport: React.FC<EmailExportProps> = ({ emails, onClose }) => 
 
             <div className="option-group checkbox">
               <label>
-                <input
-                  type="checkbox"
-                  checked={includeHeaders}
-                  onChange={(e) => setIncludeHeaders(e.target.checked)}
-                />
+                <input type="checkbox" checked={includeHeaders} onChange={(e) => setIncludeHeaders(e.target.checked)} />
                 Include Headers
               </label>
             </div>
@@ -173,9 +160,7 @@ export const EmailExport: React.FC<EmailExportProps> = ({ emails, onClose }) => 
                 />
                 Select All ({emails.length} emails)
               </label>
-              <span className="selected-count">
-                {selectedEmails.length} selected
-              </span>
+              <span className="selected-count">{selectedEmails.length} selected</span>
             </div>
 
             <div className="email-list">
@@ -205,10 +190,7 @@ export const EmailExport: React.FC<EmailExportProps> = ({ emails, onClose }) => 
           {exportProgress && (
             <div className="export-progress">
               <div className="progress-bar">
-                <div
-                  className="progress-fill"
-                  style={{ width: `${exportProgress.percentage}%` }}
-                />
+                <div className="progress-fill" style={{ width: `${exportProgress.percentage}%` }} />
               </div>
               <div className="progress-text">
                 Exporting {exportProgress.currentEmail} of {exportProgress.totalEmails} emails
@@ -255,16 +237,10 @@ export const EmailExport: React.FC<EmailExportProps> = ({ emails, onClose }) => 
                   <div className="history-info">
                     <div className="history-format">{entry.format.toUpperCase()}</div>
                     <div className="history-count">{entry.emailCount} emails</div>
-                    <div className="history-size">
-                      {(entry.fileSize / 1024).toFixed(2)} KB
-                    </div>
-                    <div className="history-time">
-                      {new Date(entry.timestamp).toLocaleString()}
-                    </div>
+                    <div className="history-size">{(entry.fileSize / 1024).toFixed(2)} KB</div>
+                    <div className="history-time">{new Date(entry.timestamp).toLocaleString()}</div>
                   </div>
-                  <div
-                    className={`history-status ${entry.success ? 'success' : 'failed'}`}
-                  >
+                  <div className={`history-status ${entry.success ? 'success' : 'failed'}`}>
                     {entry.success ? '✓' : '✗'}
                   </div>
                 </div>
@@ -290,15 +266,11 @@ export const EmailExport: React.FC<EmailExportProps> = ({ emails, onClose }) => 
             </div>
             <div className="stat-card">
               <div className="stat-label">Total File Size</div>
-              <div className="stat-value">
-                {(exportStatistics.totalFileSize / 1024 / 1024).toFixed(2)} MB
-              </div>
+              <div className="stat-value">{(exportStatistics.totalFileSize / 1024 / 1024).toFixed(2)} MB</div>
             </div>
             <div className="stat-card">
               <div className="stat-label">Average Export Time</div>
-              <div className="stat-value">
-                {exportStatistics.averageExportTime.toFixed(2)}s
-              </div>
+              <div className="stat-value">{exportStatistics.averageExportTime.toFixed(2)}s</div>
             </div>
             <div className="stat-card">
               <div className="stat-label">Successful</div>

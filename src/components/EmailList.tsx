@@ -15,10 +15,7 @@ interface EmailListProps {
   selectedEmailId: string | null;
 }
 
-export const EmailList: React.FC<EmailListProps> = ({
-  onEmailSelect,
-  selectedEmailId
-}) => {
+export const EmailList: React.FC<EmailListProps> = ({ onEmailSelect, selectedEmailId }) => {
   const { getFilteredEmails, markAsRead, toggleStar, deleteEmail } = useEmails();
   const emails = getFilteredEmails();
 
@@ -30,27 +27,11 @@ export const EmailList: React.FC<EmailListProps> = ({
     clearSearch
   } = useSearch(emails);
 
-  const {
-    filters,
-    filteredEmails: filteredEmails,
-    activeFilterCount,
-    toggleFilter,
-    clearFilters
-  } = useFilter(searchedEmails);
+  const { filteredEmails: filteredEmails, activeFilterCount, toggleFilter, clearFilters } = useFilter(searchedEmails);
 
-  const {
-    sortOptions,
-    sortedEmails,
-    setSortField
-  } = useSort(filteredEmails);
+  const { sortOptions, sortedEmails, setSortField } = useSort(filteredEmails);
 
-  const {
-    currentPage,
-    totalPages,
-    startIndex,
-    endIndex,
-    goToPage
-  } = usePagination({
+  const { currentPage, totalPages, startIndex, endIndex, goToPage } = usePagination({
     totalItems: sortedEmails.length,
     itemsPerPage: 10
   });
@@ -71,6 +52,7 @@ export const EmailList: React.FC<EmailListProps> = ({
 
   const handleDeleteClick = (e: React.MouseEvent, emailId: string) => {
     e.stopPropagation();
+    // eslint-disable-next-line no-alert
     if (window.confirm('Are you sure you want to delete this email?')) {
       deleteEmail(emailId);
     }
@@ -83,13 +65,14 @@ export const EmailList: React.FC<EmailListProps> = ({
 
     if (days === 0) {
       return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    } if (days === 1) {
+    }
+    if (days === 1) {
       return 'Yesterday';
-    } if (days < 7) {
+    }
+    if (days < 7) {
       return date.toLocaleDateString([], { weekday: 'short' });
     }
     return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
-
   };
 
   return (
@@ -107,11 +90,7 @@ export const EmailList: React.FC<EmailListProps> = ({
             onToggleFilter={toggleFilter}
             onClearFilters={clearFilters}
           />
-          <SortBar
-            sortField={sortOptions.field}
-            sortOrder={sortOptions.order}
-            onSortChange={setSortField}
-          />
+          <SortBar sortField={sortOptions.field} sortOrder={sortOptions.order} onSortChange={setSortField} />
         </div>
       </div>
 
@@ -136,9 +115,7 @@ export const EmailList: React.FC<EmailListProps> = ({
                   <div className="email-item-date">{formatDate(email.date)}</div>
                 </div>
                 <div className="email-item-subject">{email.subject}</div>
-                <div className="email-item-preview">
-                  {email.body.substring(0, 100)}...
-                </div>
+                <div className="email-item-preview">{email.body.substring(0, 100)}...</div>
                 <div className="email-item-footer">
                   <div className="email-item-badges">
                     {email.encrypted && (
@@ -187,11 +164,7 @@ export const EmailList: React.FC<EmailListProps> = ({
 
       {totalPages > 1 && (
         <div className="email-list-footer">
-          <Pagination
-            totalItems={sortedEmails.length}
-            currentPage={currentPage}
-            onPageChange={goToPage}
-          />
+          <Pagination totalItems={sortedEmails.length} currentPage={currentPage} onPageChange={goToPage} />
         </div>
       )}
     </div>

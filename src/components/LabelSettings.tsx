@@ -56,8 +56,8 @@ export const LabelSettings: React.FC<LabelSettingsProps> = ({ onClose }) => {
 
   const handleSaveEdit = () => {
     if (!editingLabel) {
-return;
-}
+      return;
+    }
 
     if (!editName.trim()) {
       addNotification('error', 'Label name is required');
@@ -84,6 +84,7 @@ return;
   };
 
   const handleDeleteLabel = (label: Label) => {
+    // eslint-disable-next-line no-alert
     if (window.confirm(`Are you sure you want to delete the label "${label.name}"?`)) {
       deleteLabel(label.id);
     }
@@ -135,11 +136,7 @@ return;
                 title="Choose label color"
               />
             </div>
-            <button
-              className="add-label-btn"
-              onClick={handleAddLabel}
-              disabled={!newLabelName.trim()}
-            >
+            <button className="add-label-btn" onClick={handleAddLabel} disabled={!newLabelName.trim()}>
               Add
             </button>
           </div>
@@ -215,25 +212,14 @@ return;
                     </div>
                   ) : (
                     <>
-                      <div
-                        className="label-color-badge"
-                        style={{ backgroundColor: label.color }}
-                      />
+                      <div className="label-color-badge" style={{ backgroundColor: label.color }} />
                       <div className="label-info">
                         <div className="label-name">{label.name}</div>
-                        {label.description && (
-                          <div className="label-description">{label.description}</div>
-                        )}
+                        {label.description && <div className="label-description">{label.description}</div>}
                       </div>
-                      <div className="label-count">
-                        {label.emailCount ?? 0} emails
-                      </div>
+                      <div className="label-count">{label.emailCount ?? 0} emails</div>
                       <div className="label-actions">
-                        <button
-                          className="label-action-btn"
-                          onClick={() => handleStartEdit(label)}
-                          title="Edit label"
-                        >
+                        <button className="label-action-btn" onClick={() => handleStartEdit(label)} title="Edit label">
                           ✏️
                         </button>
                         <button

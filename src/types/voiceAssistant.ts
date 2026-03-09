@@ -28,7 +28,7 @@ export enum VoiceCommandType {
   /** Open/read an email */
   OPEN = 'OPEN',
   /** Unknown command */
-  UNKNOWN = 'UNKNOWN',
+  UNKNOWN = 'UNKNOWN'
 }
 
 /**
@@ -40,7 +40,7 @@ export enum MarkAction {
   STAR = 'star',
   UNSTAR = 'unstar',
   IMPORTANT = 'important',
-  UNIMPORTANT = 'unimportant',
+  UNIMPORTANT = 'unimportant'
 }
 
 /**
@@ -58,7 +58,7 @@ export enum VoiceRecognitionStatus {
   /** Recognition failed */
   ERROR = 'error',
   /** Recognition timeout */
-  TIMEOUT = 'timeout',
+  TIMEOUT = 'timeout'
 }
 
 /**
@@ -72,7 +72,7 @@ export enum SpeechSynthesisStatus {
   /** Paused */
   PAUSED = 'paused',
   /** Failed to speak */
-  ERROR = 'error',
+  ERROR = 'error'
 }
 
 /**
@@ -91,7 +91,7 @@ export enum VoiceLanguage {
   JAPANESE = 'ja-JP',
   KOREAN = 'ko-KR',
   ARABIC = 'ar-SA',
-  HINDI = 'hi-IN',
+  HINDI = 'hi-IN'
 }
 
 /**
@@ -112,7 +112,7 @@ export interface VoiceCommand {
   labelId?: string;
   searchQuery?: string;
   markAction?: MarkAction;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -236,7 +236,7 @@ export enum VoiceEventType {
   /** Started speaking */
   SPEAKING_STARTED = 'SPEAKING_STARTED',
   /** Stopped speaking */
-  SPEAKING_STOPPED = 'SPEAKING_STOPPED',
+  SPEAKING_STOPPED = 'SPEAKING_STOPPED'
 }
 
 /**
@@ -245,7 +245,7 @@ export enum VoiceEventType {
 export interface VoiceEvent {
   type: VoiceEventType;
   timestamp: number;
-  data?: any;
+  data?: unknown;
 }
 
 // Constants
@@ -275,11 +275,7 @@ export const VOICE_PHRASE_PATTERNS: VoicePhrasePattern[] = [
       /new\s+email\s+(?:to\s+)?(.+)?/i,
       /send\s+(?:an? )?email\s+(?:to\s+)?(.+)?/i
     ],
-    examples: [
-      'Compose an email to John',
-      'Write a new email',
-      'Send email to mary@example.com'
-    ]
+    examples: ['Compose an email to John', 'Write a new email', 'Send email to mary@example.com']
   },
   {
     type: VoiceCommandType.REPLY,
@@ -288,11 +284,7 @@ export const VOICE_PHRASE_PATTERNS: VoicePhrasePattern[] = [
       /reply\s+(?:to\s+)?(.+)/i,
       /respond\s+(?:to\s+)?(?:this\s+)?email/i
     ],
-    examples: [
-      'Reply to this email',
-      'Reply to John',
-      'Respond to this message'
-    ]
+    examples: ['Reply to this email', 'Reply to John', 'Respond to this message']
   },
   {
     type: VoiceCommandType.FORWARD,
@@ -301,37 +293,17 @@ export const VOICE_PHRASE_PATTERNS: VoicePhrasePattern[] = [
       /forward\s+(?:to\s+)?(.+)/i,
       /send\s+this\s+to\s+(.+)/i
     ],
-    examples: [
-      'Forward this email to John',
-      'Forward to team@example.com',
-      'Send this to Sarah'
-    ]
+    examples: ['Forward this email to John', 'Forward to team@example.com', 'Send this to Sarah']
   },
   {
     type: VoiceCommandType.ARCHIVE,
-    patterns: [
-      /archive\s+(?:this\s+)?email/i,
-      /archive\s+it/i,
-      /move\s+(?:this\s+)?email\s+to\s+archive/i
-    ],
-    examples: [
-      'Archive this email',
-      'Archive it',
-      'Move to archive'
-    ]
+    patterns: [/archive\s+(?:this\s+)?email/i, /archive\s+it/i, /move\s+(?:this\s+)?email\s+to\s+archive/i],
+    examples: ['Archive this email', 'Archive it', 'Move to archive']
   },
   {
     type: VoiceCommandType.DELETE,
-    patterns: [
-      /delete\s+(?:this\s+)?email/i,
-      /delete\s+it/i,
-      /remove\s+(?:this\s+)?email/i
-    ],
-    examples: [
-      'Delete this email',
-      'Delete it',
-      'Remove this message'
-    ]
+    patterns: [/delete\s+(?:this\s+)?email/i, /delete\s+it/i, /remove\s+(?:this\s+)?email/i],
+    examples: ['Delete this email', 'Delete it', 'Remove this message']
   },
   {
     type: VoiceCommandType.MARK,
@@ -342,12 +314,7 @@ export const VOICE_PHRASE_PATTERNS: VoicePhrasePattern[] = [
       /mark\s+(?:as\s+)?important/i,
       /un(?:star|important)/i
     ],
-    examples: [
-      'Mark as read',
-      'Mark as unread',
-      'Star this email',
-      'Mark as important'
-    ]
+    examples: ['Mark as read', 'Mark as unread', 'Star this email', 'Mark as important']
   },
   {
     type: VoiceCommandType.SEARCH,
@@ -357,25 +324,12 @@ export const VOICE_PHRASE_PATTERNS: VoicePhrasePattern[] = [
       /look\s+(?:for\s+)?(.+)/i,
       /show\s+me\s+(.+)/i
     ],
-    examples: [
-      'Search for emails from John',
-      'Find emails about project',
-      'Show me unread emails'
-    ]
+    examples: ['Search for emails from John', 'Find emails about project', 'Show me unread emails']
   },
   {
     type: VoiceCommandType.NAVIGATE,
-    patterns: [
-      /go\s+to\s+(.+)/i,
-      /navigate\s+to\s+(.+)/i,
-      /open\s+(?:folder\s+)?(.+)/i,
-      /show\s+(?:folder\s+)?(.+)/i
-    ],
-    examples: [
-      'Go to inbox',
-      'Navigate to sent folder',
-      'Open spam folder'
-    ]
+    patterns: [/go\s+to\s+(.+)/i, /navigate\s+to\s+(.+)/i, /open\s+(?:folder\s+)?(.+)/i, /show\s+(?:folder\s+)?(.+)/i],
+    examples: ['Go to inbox', 'Navigate to sent folder', 'Open spam folder']
   },
   {
     type: VoiceCommandType.LABEL,
@@ -384,11 +338,7 @@ export const VOICE_PHRASE_PATTERNS: VoicePhrasePattern[] = [
       /add\s+label\s+(.+)/i,
       /tag\s+(?:this\s+)?(?:email\s+)?(?:with\s+)?(.+)/i
     ],
-    examples: [
-      'Label this as important',
-      'Add label project',
-      'Tag this with work'
-    ]
+    examples: ['Label this as important', 'Add label project', 'Tag this with work']
   },
   {
     type: VoiceCommandType.OPEN,
@@ -397,11 +347,7 @@ export const VOICE_PHRASE_PATTERNS: VoicePhrasePattern[] = [
       /read\s+(?:email\s+)?(?:from\s+)?(.+)/i,
       /show\s+(?:email\s+)?(?:from\s+)?(.+)/i
     ],
-    examples: [
-      'Open email from John',
-      'Read email from Mary',
-      'Show me the latest email'
-    ]
+    examples: ['Open email from John', 'Read email from Mary', 'Show me the latest email']
   }
 ];
 
@@ -432,25 +378,16 @@ export const CONFIRMATION_PHRASES = [
 ];
 
 /** Cancellation phrases */
-export const CANCELLATION_PHRASES = [
-  'no',
-  'nope',
-  'cancel',
-  'stop',
-  'don\'t',
-  'never mind',
-  'forget it',
-  'abort'
-];
+export const CANCELLATION_PHRASES = ['no', 'nope', 'cancel', 'stop', "don't", 'never mind', 'forget it', 'abort'];
 
 /** Voice feedback messages */
 export const VOICE_FEEDBACK_MESSAGES = {
-  listening: 'I\'m listening',
+  listening: "I'm listening",
   processing: 'Processing your command',
   confirmation: 'Are you sure you want to do that?',
   commandExecuted: 'Command executed',
-  commandFailed: 'Sorry, I couldn\'t execute that command',
-  unrecognized: 'Sorry, I didn\'t catch that',
-  timeout: 'I didn\' hear anything',
+  commandFailed: "Sorry, I couldn't execute that command",
+  unrecognized: "Sorry, I didn't catch that",
+  timeout: "I didn' hear anything",
   error: 'An error occurred'
 };

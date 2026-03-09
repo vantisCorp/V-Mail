@@ -5,12 +5,7 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useFilePreview } from '../useFilePreview';
-import {
-  PreviewFileType,
-  PreviewQuality,
-  PreviewStatus,
-  SecurityStatus
-} from '../../types/filePreview';
+import { PreviewFileType, PreviewQuality, SecurityStatus } from '../../types/filePreview';
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -18,14 +13,14 @@ const localStorageMock = (() => {
   return {
     getItem: (key: string) => store[key] || null,
     setItem: (key: string, value: string) => {
- store[key] = value.toString();
-},
+      store[key] = value.toString();
+    },
     removeItem: (key: string) => {
- delete store[key];
-},
+      delete store[key];
+    },
     clear: () => {
- store = {};
-}
+      store = {};
+    }
   };
 })();
 
@@ -35,7 +30,7 @@ Object.defineProperty(window, 'localStorage', {
 
 // Mock URL.createObjectURL and URL.revokeObjectURL
 let objectUrlCounter = 0;
-URL.createObjectURL = vi.fn((blob: Blob) => `blob:test-${objectUrlCounter++}`);
+URL.createObjectURL = vi.fn((_blob: Blob) => `blob:test-${objectUrlCounter++}`);
 URL.revokeObjectURL = vi.fn();
 
 // Mock Image
@@ -51,8 +46,8 @@ Object.defineProperty(window, 'Image', {
     constructor() {
       setTimeout(() => {
         if (this.onload) {
-this.onload();
-}
+          this.onload();
+        }
       }, 0);
     }
   }
@@ -61,7 +56,7 @@ this.onload();
 // Mock canvas
 HTMLCanvasElement.prototype.getContext = vi.fn(() => ({
   drawImage: vi.fn()
-})) as any;
+})) as unknown;
 
 HTMLCanvasElement.prototype.toBlob = vi.fn((callback: (blob: Blob | null) => void) => {
   callback(new Blob(['thumbnail-data'], { type: 'image/jpeg' }));
@@ -126,7 +121,7 @@ describe('useFilePreview', () => {
 
       const fileData = new ArrayBuffer(1024);
 
-      let preview: any;
+      let preview: unknown;
       await act(async () => {
         preview = await result.current.createPreview({
           fileId: 'file-1',
@@ -154,7 +149,7 @@ describe('useFilePreview', () => {
       const fileData = new ArrayBuffer(1024);
 
       // Start creation (don't await immediately)
-      let creationPromise: Promise<any>;
+      let creationPromise: Promise<unknown>;
       act(() => {
         creationPromise = result.current.createPreview({
           fileId: 'file-2',
@@ -188,8 +183,8 @@ describe('useFilePreview', () => {
           constructor() {
             setTimeout(() => {
               if (this.onerror) {
-this.onerror();
-}
+                this.onerror();
+              }
             }, 0);
           }
         }
@@ -218,7 +213,7 @@ this.onerror();
 
       const fileData = new ArrayBuffer(1024);
 
-      let created: any;
+      let created: unknown;
       await act(async () => {
         created = await result.current.createPreview({
           fileId: 'file-4',
@@ -268,7 +263,7 @@ this.onerror();
 
       const fileData = new ArrayBuffer(1024);
 
-      let created: any;
+      let created: unknown;
       await act(async () => {
         created = await result.current.createPreview({
           fileId: 'file-6',
@@ -297,7 +292,7 @@ this.onerror();
 
       const fileData = new ArrayBuffer(1024);
 
-      let created: any;
+      let created: unknown;
       await act(async () => {
         created = await result.current.createPreview({
           fileId: 'file-7',
@@ -364,7 +359,7 @@ this.onerror();
 
       const fileData = new ArrayBuffer(1024);
 
-      let created: any;
+      let created: unknown;
       await act(async () => {
         created = await result.current.createPreview({
           fileId: 'file-10',
@@ -387,7 +382,7 @@ this.onerror();
 
       const fileData = new ArrayBuffer(1024);
 
-      let created: any;
+      let created: unknown;
       await act(async () => {
         created = await result.current.createPreview({
           fileId: 'file-11',
@@ -535,7 +530,7 @@ this.onerror();
 
       const fileData = new ArrayBuffer(2048);
 
-      let created: any;
+      let created: unknown;
       await act(async () => {
         created = await result.current.createPreview({
           fileId: 'file-19',
@@ -559,7 +554,7 @@ this.onerror();
 
       const fileData = new ArrayBuffer(1024);
 
-      let created: any;
+      let created: unknown;
       await act(async () => {
         created = await result.current.createPreview({
           fileId: 'file-20',
@@ -581,7 +576,7 @@ this.onerror();
 
       const fileData = new ArrayBuffer(1024);
 
-      let created: any;
+      let created: unknown;
       await act(async () => {
         created = await result.current.createPreview({
           fileId: 'file-21',
@@ -610,7 +605,7 @@ this.onerror();
 
       const fileData = new ArrayBuffer(512);
 
-      let created: any;
+      let created: unknown;
       await act(async () => {
         created = await result.current.createPreview({
           fileId: 'file-22',
@@ -639,7 +634,7 @@ this.onerror();
 
       const fileData = new ArrayBuffer(1024);
 
-      let preview: any;
+      let preview: unknown;
       await act(async () => {
         preview = await result.current.previewFile('file-23', fileData);
       });
@@ -654,7 +649,7 @@ this.onerror();
 
       const fileData = new ArrayBuffer(1024);
 
-      let created: any;
+      let created: unknown;
       await act(async () => {
         created = await result.current.createPreview({
           fileId: 'file-24',
@@ -664,7 +659,7 @@ this.onerror();
         });
       });
 
-      let preview: any;
+      let preview: unknown;
       await act(async () => {
         preview = await result.current.previewFile('file-24');
       });

@@ -10,24 +10,13 @@ import {
   WritingContext,
   SuggestionsResult,
   Suggestion,
-  CompletionSuggestion,
-  PhraseSuggestion,
-  GrammarSuggestion,
-  StyleSuggestion,
-  TemplateSuggestion,
-  EmailSuggestion,
-  SubjectSuggestion,
-  SuggestionType,
   UserPreferences,
   DEFAULT_USER_PREFERENCES,
   TypingStatistics,
   PredictiveTypingConfig,
   DEFAULT_PREDICTIVE_TYPING_CONFIG
 } from '../types/predictiveTyping';
-import {
-  LanguageModel,
-  createLanguageModel
-} from '../ml/languageModel';
+import { LanguageModel, createLanguageModel } from '../ml/languageModel';
 
 // ============================================================================
 // Hook State Types
@@ -120,11 +109,11 @@ export function usePredictiveTyping(
     }
 
     try {
-      setState(prev => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       const result = modelRef.current.getSuggestions(context);
 
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         isLoading: false,
         currentSuggestions: result
@@ -133,7 +122,7 @@ export function usePredictiveTyping(
       return result;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to get suggestions';
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         isLoading: false,
         error: errorMessage
@@ -151,24 +140,27 @@ export function usePredictiveTyping(
   /**
    * Accept a suggestion
    */
-  const acceptSuggestion = useCallback((suggestionId: string): void => {
-    if (!state.currentSuggestions) {
-return;
-}
-
-    const suggestion = state.currentSuggestions.suggestions.find(s => s.id === suggestionId);
-    if (suggestion) {
-      // Learn from accepted suggestion
-      if (modelRef.current) {
-        modelRef.current.learnFromUser(suggestion.text, suggestion);
+  const acceptSuggestion = useCallback(
+    (suggestionId: string): void => {
+      if (!state.currentSuggestions) {
+        return;
       }
-    }
-  }, [state.currentSuggestions]);
+
+      const suggestion = state.currentSuggestions.suggestions.find((s) => s.id === suggestionId);
+      if (suggestion) {
+        // Learn from accepted suggestion
+        if (modelRef.current) {
+          modelRef.current.learnFromUser(suggestion.text, suggestion);
+        }
+      }
+    },
+    [state.currentSuggestions]
+  );
 
   /**
    * Reject a suggestion
    */
-  const rejectSuggestion = useCallback((suggestionId: string): void => {
+  const rejectSuggestion = useCallback((_suggestionId: string): void => {
     // Could track rejection for learning in future
     // For now, just ignore the suggestion
   }, []);
@@ -182,11 +174,11 @@ return;
    */
   const analyzeText = useCallback((text: string): void => {
     if (!modelRef.current) {
-return;
-}
+      return;
+    }
 
     const statistics = modelRef.current.getTypingStatistics(text);
-    setState(prev => ({ ...prev, statistics }));
+    setState((prev) => ({ ...prev, statistics }));
   }, []);
 
   /**
@@ -194,8 +186,8 @@ return;
    */
   const learnFromText = useCallback((text: string, acceptedSuggestion?: Suggestion): void => {
     if (!modelRef.current) {
-return;
-}
+      return;
+    }
 
     modelRef.current.learnFromUser(text, acceptedSuggestion);
   }, []);
@@ -207,6 +199,7 @@ return;
   /**
    * Get suggestions with debouncing
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getSuggestionsDebounced = useCallback(
     (context: WritingContext, debounceMs?: number): void => {
       const delay = debounceMs ?? configRef.current.performance.debounceMs;
@@ -298,7 +291,7 @@ return;
   const clearCache = useCallback((): void => {
     if (modelRef.current) {
       modelRef.current.clearCache();
-      setState(prev => ({ ...prev, currentSuggestions: null }));
+      setState((prev) => ({ ...prev, currentSuggestions: null }));
     }
   }, []);
 

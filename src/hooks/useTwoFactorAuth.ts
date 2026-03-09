@@ -5,14 +5,12 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { TwoFactorAuthService } from '../services/twoFactorAuthService';
-import { TOTPService } from '../services/totpService';
+
 import {
   TwoFactorAuthState,
   TwoFactorAuthSetup,
   TwoFactorAuthVerifyRequest,
-  TwoFactorAuthSettings,
   TwoFactorAuthMethod,
-  TwoFactorAuthStatus,
   TrustedDevice
 } from '../types/twoFactorAuth';
 
@@ -30,7 +28,7 @@ export const useTwoFactorAuth = (username: string = 'user@example.com') => {
   useEffect(() => {
     const settings = TwoFactorAuthService.loadSettings();
     if (settings) {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         settings,
         status: settings.enabled ? 'enabled' : 'disabled'
@@ -41,87 +39,74 @@ export const useTwoFactorAuth = (username: string = 'user@example.com') => {
   /**
    * Initialize 2FA setup
    */
-  const initializeSetup = useCallback(async (
-    method: TwoFactorAuthMethod,
-    phoneNumber?: string
-  ): Promise<TwoFactorAuthSetup | null> => {
-    setLoading(true);
-    setError(null);
+  const initializeSetup = useCallback(
+    async (method: TwoFactorAuthMethod, phoneNumber?: string): Promise<TwoFactorAuthSetup | null> => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      const setupData = await TwoFactorAuthService.initializeSetup(
-        method,
-        username,
-        phoneNumber
-      );
+      try {
+        const setupData = await TwoFactorAuthService.initializeSetup(method, username, phoneNumber);
 
-      setState(prev => ({
-        ...prev,
-        setupData,
-        isSetupPending: true
-      }));
+        setState((prev) => ({
+          ...prev,
+          setupData,
+          isSetupPending: true
+        }));
 
-      return setupData;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to initialize 2FA setup';
-      setError(errorMessage);
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [username]);
+        return setupData;
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to initialize 2FA setup';
+        setError(errorMessage);
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [username]
+  );
 
   /**
    * Verify and enable 2FA
    */
-  const verifyAndEnable = useCallback(async (
-    request: TwoFactorAuthVerifyRequest,
-    secret?: string,
-    backupCodes?: string[]
-  ): Promise<boolean> => {
-    setLoading(true);
-    setError(null);
+  const verifyAndEnable = useCallback(
+    async (request: TwoFactorAuthVerifyRequest, secret?: string, backupCodes?: string[]): Promise<boolean> => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      const result = TwoFactorAuthService.verifyCode(
-        request,
-        secret || '',
-        backupCodes || []
-      );
+      try {
+        const result = TwoFactorAuthService.verifyCode(request, secret || '', backupCodes || []);
 
-      if (result.success) {
-        TwoFactorAuthService.enable2FA(
-          request.method,
-          secret,
-          state.setupData?.phoneNumber
-        );
+        if (result.success) {
+          TwoFactorAuthService.enable2FA(request.method, secret, state.setupData?.phoneNumber);
 
-        setState(prev => ({
-          ...prev,
-          status: 'enabled',
-          settings: {
-            ...prev.settings,
-            enabled: true,
-            defaultMethod: request.method,
-            backupCodesRemaining: backupCodes?.length || 10
-          },
-          isSetupPending: false,
-          setupData: undefined
-        }));
+          setState((prev) => ({
+            ...prev,
+            status: 'enabled',
+            settings: {
+              ...prev.settings,
+              enabled: true,
+              defaultMethod: request.method,
+              backupCodesRemaining: backupCodes?.length || 10
+            },
+            isSetupPending: false,
+            setupData: undefined
+          }));
 
-        return true;
-      } else {
-        setError(result.message);
+          return true;
+        } else {
+          setError(result.message);
+          return false;
+        }
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Verification failed';
+        setError(errorMessage);
         return false;
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Verification failed';
-      setError(errorMessage);
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  }, [state.setupData]);
+    },
+    [state.setupData]
+  );
 
   /**
    * Disable 2FA
@@ -129,7 +114,7 @@ export const useTwoFactorAuth = (username: string = 'user@example.com') => {
   const disable2FA = useCallback((): void => {
     TwoFactorAuthService.disable2FA();
 
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       status: 'disabled',
       settings: {
@@ -145,7 +130,7 @@ export const useTwoFactorAuth = (username: string = 'user@example.com') => {
   const regenerateBackupCodes = useCallback((): string[] => {
     const newCodes = TwoFactorAuthService.regenerateBackupCodes();
 
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       settings: {
         ...prev.settings,
@@ -162,7 +147,7 @@ export const useTwoFactorAuth = (username: string = 'user@example.com') => {
   const addTrustedDevice = useCallback((device: TrustedDevice): void => {
     TwoFactorAuthService.addTrustedDevice(device);
 
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       settings: {
         ...prev.settings,
@@ -177,11 +162,11 @@ export const useTwoFactorAuth = (username: string = 'user@example.com') => {
   const removeTrustedDevice = useCallback((deviceId: string): void => {
     TwoFactorAuthService.removeTrustedDevice(deviceId);
 
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       settings: {
         ...prev.settings,
-        trustedDevices: prev.settings.trustedDevices.filter(d => d.id !== deviceId)
+        trustedDevices: prev.settings.trustedDevices.filter((d) => d.id !== deviceId)
       }
     }));
   }, []);
@@ -197,7 +182,7 @@ export const useTwoFactorAuth = (username: string = 'user@example.com') => {
    * Cancel setup
    */
   const cancelSetup = useCallback((): void => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       isSetupPending: false,
       setupData: undefined

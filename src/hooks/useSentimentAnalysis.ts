@@ -21,10 +21,7 @@ import {
   SentimentFeedback,
   SentimentFeedbackRecord
 } from '../types/sentimentAnalysis';
-import {
-  SentimentModel,
-  createSentimentModel
-} from '../ml/sentimentModel';
+import { SentimentModel, createSentimentModel } from '../ml/sentimentModel';
 
 // ============================================================================
 // Hook State Types
@@ -79,9 +76,7 @@ interface UseSentimentAnalysisReturn {
 // Hook Implementation
 // ============================================================================
 
-export function useSentimentAnalysis(
-  initialConfig?: Partial<SentimentConfig>
-): UseSentimentAnalysisReturn {
+export function useSentimentAnalysis(initialConfig?: Partial<SentimentConfig>): UseSentimentAnalysisReturn {
   // State
   const [state, setState] = useState<UseSentimentAnalysisState>({
     isLoading: false,
@@ -107,90 +102,84 @@ export function useSentimentAnalysis(
   /**
    * Analyze sentiment of email
    */
-  const analyze = useCallback(
-    async (context: SentimentContext): Promise<SentimentAnalysisResult> => {
-      if (!modelRef.current) {
-        throw new Error('Sentiment model not initialized');
-      }
+  const analyze = useCallback(async (context: SentimentContext): Promise<SentimentAnalysisResult> => {
+    if (!modelRef.current) {
+      throw new Error('Sentiment model not initialized');
+    }
 
-      // Check cache
-      const cached = resultsCache.current.get(context.emailId);
-      if (cached) {
-        setState(prev => ({
-          ...prev,
-          currentResult: cached
-        }));
-        return cached;
-      }
+    // Check cache
+    const cached = resultsCache.current.get(context.emailId);
+    if (cached) {
+      setState((prev) => ({
+        ...prev,
+        currentResult: cached
+      }));
+      return cached;
+    }
 
-      setState(prev => ({ ...prev, isLoading: true, error: null }));
+    setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
-      try {
-        const result = modelRef.current.analyze(context);
-        resultsCache.current.set(context.emailId, result);
+    try {
+      const result = modelRef.current.analyze(context);
+      resultsCache.current.set(context.emailId, result);
 
-        setState(prev => ({
-          ...prev,
-          isLoading: false,
-          currentResult: result
-        }));
+      setState((prev) => ({
+        ...prev,
+        isLoading: false,
+        currentResult: result
+      }));
 
-        return result;
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        setState(prev => ({
-          ...prev,
-          isLoading: false,
-          error: errorMessage
-        }));
-        throw error;
-      }
-    },
-    []
-  );
+      return result;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      setState((prev) => ({
+        ...prev,
+        isLoading: false,
+        error: errorMessage
+      }));
+      throw error;
+    }
+  }, []);
 
   /**
    * Analyze multiple emails
    */
-  const analyzeBatch = useCallback(
-    async (contexts: SentimentContext[]): Promise<SentimentAnalysisResult[]> => {
-      if (!modelRef.current) {
-        throw new Error('Sentiment model not initialized');
-      }
+  const analyzeBatch = useCallback(async (contexts: SentimentContext[]): Promise<SentimentAnalysisResult[]> => {
+    if (!modelRef.current) {
+      throw new Error('Sentiment model not initialized');
+    }
 
-      setState(prev => ({ ...prev, isLoading: true, error: null }));
+    setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
-      try {
-        const results: SentimentAnalysisResult[] = [];
+    try {
+      const results: SentimentAnalysisResult[] = [];
 
-        for (const context of contexts) {
-          let result = resultsCache.current.get(context.emailId);
-          if (!result) {
-            result = modelRef.current!.analyze(context);
-            resultsCache.current.set(context.emailId, result);
-          }
-          results.push(result);
+      for (const context of contexts) {
+        let result = resultsCache.current.get(context.emailId);
+        if (!result) {
+          result = modelRef.current!.analyze(context);
+          resultsCache.current.set(context.emailId, result);
         }
-
-        setState(prev => ({
-          ...prev,
-          isLoading: false,
-          currentResult: results[results.length - 1] || null
-        }));
-
-        return results;
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        setState(prev => ({
-          ...prev,
-          isLoading: false,
-          error: errorMessage
-        }));
-        throw error;
+        results.push(result);
       }
-    },
-    []
-  );
+
+      setState((prev) => ({
+        ...prev,
+        isLoading: false,
+        currentResult: results[results.length - 1] || null
+      }));
+
+      return results;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      setState((prev) => ({
+        ...prev,
+        isLoading: false,
+        error: errorMessage
+      }));
+      throw error;
+    }
+  }, []);
 
   /**
    * Analyze a single text string
@@ -229,8 +218,8 @@ export function useSentimentAnalysis(
   const getEmotion = useCallback((emailId: string): Emotion | null => {
     const result = resultsCache.current.get(emailId);
     if (!result || result.emotions.length === 0) {
-return null;
-}
+      return null;
+    }
     return result.emotions[0].emotion;
   }, []);
 
@@ -240,8 +229,8 @@ return null;
   const getTone = useCallback((emailId: string): Tone | null => {
     const result = resultsCache.current.get(emailId);
     if (!result || result.tone.length === 0) {
-return null;
-}
+      return null;
+    }
     return result.tone[0].tone;
   }, []);
 
@@ -260,32 +249,34 @@ return null;
   /**
    * Get reply tone suggestion for an email
    */
-  const getReplyToneSuggestion = useCallback((emailId?: string): ReplyToneSuggestion | null => {
-    const result = emailId
-      ? resultsCache.current.get(emailId)
-      : state.currentResult;
+  const getReplyToneSuggestion = useCallback(
+    (emailId?: string): ReplyToneSuggestion | null => {
+      const result = emailId ? resultsCache.current.get(emailId) : state.currentResult;
 
-    if (!result || !modelRef.current) {
-return null;
-}
+      if (!result || !modelRef.current) {
+        return null;
+      }
 
-    return modelRef.current.suggestReplyTone(result);
-  }, [state.currentResult]);
+      return modelRef.current.suggestReplyTone(result);
+    },
+    [state.currentResult]
+  );
 
   /**
    * Get sentiment feedback for an email
    */
-  const getSentimentFeedback = useCallback((emailId?: string): SentimentFeedback | null => {
-    const result = emailId
-      ? resultsCache.current.get(emailId)
-      : state.currentResult;
+  const getSentimentFeedback = useCallback(
+    (emailId?: string): SentimentFeedback | null => {
+      const result = emailId ? resultsCache.current.get(emailId) : state.currentResult;
 
-    if (!result || !modelRef.current) {
-return null;
-}
+      if (!result || !modelRef.current) {
+        return null;
+      }
 
-    return modelRef.current.generateFeedback(result);
-  }, [state.currentResult]);
+      return modelRef.current.generateFeedback(result);
+    },
+    [state.currentResult]
+  );
 
   // ============================================================================
   // Statistics
@@ -294,22 +285,20 @@ return null;
   /**
    * Calculate statistics from results
    */
-  const calculateStatistics = useCallback((
-    results: SentimentAnalysisResult[]
-  ): SentimentStatistics => {
+  const calculateStatistics = useCallback((results: SentimentAnalysisResult[]): SentimentStatistics => {
     const sentimentDistribution: Record<Sentiment, number> = {
       [Sentiment.POSITIVE]: 0,
       [Sentiment.NEUTRAL]: 0,
       [Sentiment.NEGATIVE]: 0
     };
 
-    const emotionDistribution: Record<Emotion, number> = {} as any;
-    Object.values(Emotion).forEach(e => {
+    const emotionDistribution: Record<Emotion, number> = {} as unknown;
+    Object.values(Emotion).forEach((e) => {
       emotionDistribution[e] = 0;
     });
 
-    const toneDistribution: Record<Tone, number> = {} as any;
-    Object.values(Tone).forEach(t => {
+    const toneDistribution: Record<Tone, number> = {} as unknown;
+    Object.values(Tone).forEach((t) => {
       toneDistribution[t] = 0;
     });
 
@@ -321,12 +310,12 @@ return null;
       sentimentDistribution[result.overall]++;
 
       // Emotion distribution
-      result.emotions.forEach(e => {
+      result.emotions.forEach((e) => {
         emotionDistribution[e.emotion]++;
       });
 
       // Tone distribution
-      result.tone.forEach(t => {
+      result.tone.forEach((t) => {
         toneDistribution[t.tone]++;
       });
 
@@ -354,8 +343,8 @@ return null;
       trend.push({
         date,
         averageScore: averageScore,
-        sentiment: averageScore > 0.1 ? Sentiment.POSITIVE :
-                   averageScore < -0.1 ? Sentiment.NEGATIVE : Sentiment.NEUTRAL,
+        sentiment:
+          averageScore > 0.1 ? Sentiment.POSITIVE : averageScore < -0.1 ? Sentiment.NEGATIVE : Sentiment.NEUTRAL,
         emailCount: Math.floor(results.length / 7)
       });
     }
@@ -367,8 +356,11 @@ return null;
       toneDistribution,
       averageSentimentScore: averageScore,
       sentimentTrend: trend,
-      topPositiveEmails: entries.filter(e => e.sentiment === Sentiment.POSITIVE).slice(0, 5),
-      topNegativeEmails: entries.filter(e => e.sentiment === Sentiment.NEGATIVE).slice(-5).reverse(),
+      topPositiveEmails: entries.filter((e) => e.sentiment === Sentiment.POSITIVE).slice(0, 5),
+      topNegativeEmails: entries
+        .filter((e) => e.sentiment === Sentiment.NEGATIVE)
+        .slice(-5)
+        .reverse(),
       period: {
         start: trend[0].date,
         end: trend[trend.length - 1].date
@@ -379,24 +371,25 @@ return null;
   /**
    * Get sentiment trend for multiple emails
    */
-  const getTrend = useCallback((
-    emailIds: string[]
-  ): { averageScore: number; trend: 'improving' | 'declining' | 'stable' } => {
-    const results: SentimentAnalysisResult[] = [];
+  const getTrend = useCallback(
+    (emailIds: string[]): { averageScore: number; trend: 'improving' | 'declining' | 'stable' } => {
+      const results: SentimentAnalysisResult[] = [];
 
-    emailIds.forEach(id => {
-      const result = resultsCache.current.get(id);
-      if (result) {
-results.push(result);
-}
-    });
+      emailIds.forEach((id) => {
+        const result = resultsCache.current.get(id);
+        if (result) {
+          results.push(result);
+        }
+      });
 
-    if (!modelRef.current) {
-      return { averageScore: 0, trend: 'stable' };
-    }
+      if (!modelRef.current) {
+        return { averageScore: 0, trend: 'stable' };
+      }
 
-    return modelRef.current.calculateTrend(results);
-  }, []);
+      return modelRef.current.calculateTrend(results);
+    },
+    []
+  );
 
   // ============================================================================
   // Configuration
@@ -444,7 +437,7 @@ results.push(result);
   const clearCache = useCallback(() => {
     resultsCache.current.clear();
     modelRef.current?.clearCache();
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       currentResult: null,
       statistics: null

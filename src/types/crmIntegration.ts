@@ -9,7 +9,7 @@ export enum CRMProvider {
   PIPEDRIVE = 'pipedrive',
   ZOHO = 'zoho',
   MICROSOFT_DYNAMICS = 'microsoft_dynamics',
-  CUSTOM = 'custom',
+  CUSTOM = 'custom'
 }
 
 /**
@@ -21,7 +21,7 @@ export enum ContactStatus {
   PROSPECT = 'prospect',
   CUSTOMER = 'customer',
   LEAD = 'lead',
-  OPPORTUNITY = 'opportunity',
+  OPPORTUNITY = 'opportunity'
 }
 
 /**
@@ -32,7 +32,7 @@ export enum DealStage {
   PROPOSAL = 'proposal',
   NEGOTIATION = 'negotiation',
   WON = 'won',
-  LOST = 'lost',
+  LOST = 'lost'
 }
 
 /**
@@ -42,7 +42,7 @@ export enum SyncStatus {
   PENDING = 'pending',
   IN_PROGRESS = 'in_progress',
   COMPLETED = 'completed',
-  FAILED = 'failed',
+  FAILED = 'failed'
 }
 
 /**
@@ -57,7 +57,7 @@ export enum FieldType {
   BOOLEAN = 'boolean',
   SELECT = 'select',
   MULTISELECT = 'multiselect',
-  URL = 'url',
+  URL = 'url'
 }
 
 /**
@@ -99,7 +99,7 @@ export interface CRMContact {
   status: ContactStatus;
   source?: string; // Where the contact came from
   lastContacted?: string;
-  customFields: Record<string, any>;
+  customFields: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
   syncedAt?: string;
@@ -122,7 +122,7 @@ export interface CRMDeal {
   probability: number; // 0-100
   description?: string;
   source?: string;
-  customFields: Record<string, any>;
+  customFields: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
   syncedAt?: string;
@@ -228,7 +228,7 @@ export interface CreateContactPayload {
   company?: string;
   title?: string;
   status?: ContactStatus;
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 }
 
 /**
@@ -245,7 +245,7 @@ export interface CreateDealPayload {
   expectedCloseDate?: string;
   probability?: number;
   description?: string;
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 }
 
 /**
@@ -259,7 +259,7 @@ export interface UpdateContactPayload {
   company?: string;
   title?: string;
   status?: ContactStatus;
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 }
 
 /**
@@ -273,7 +273,7 @@ export interface UpdateDealPayload {
   expectedCloseDate?: string;
   probability?: number;
   description?: string;
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 }
 
 /**

@@ -1,9 +1,8 @@
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   CRMAccount,
   CRMContact,
   CRMDeal,
-  SyncConfiguration,
   SyncJob,
   EmailActivity,
   ConnectCRMAccountPayload,
@@ -13,15 +12,13 @@ import {
   UpdateDealPayload,
   ContactFilter,
   DealFilter,
-  FieldMapping,
   CRMStatistics,
   EmailContactMatch,
   ContactLookupResult,
   CRMProvider,
   ContactStatus,
   DealStage,
-  SyncStatus,
-  FieldType
+  SyncStatus
 } from '../types/crmIntegration';
 
 /**
@@ -34,8 +31,8 @@ import {
  * - Email to CRM logging
  * - Field mapping
  */
-
-const currentUser = {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _currentUser = {
   id: 'user-1',
   name: 'Current User'
 };
@@ -208,9 +205,7 @@ export const useCrmIntegration = () => {
   }, []);
 
   // Account Management
-  const connectAccount = useCallback(async (
-    payload: ConnectCRMAccountPayload
-  ): Promise<CRMAccount | null> => {
+  const connectAccount = useCallback(async (payload: ConnectCRMAccountPayload): Promise<CRMAccount | null> => {
     const newAccount: CRMAccount = {
       id: `acc-${Date.now()}`,
       provider: payload.provider,
@@ -223,45 +218,51 @@ export const useCrmIntegration = () => {
       updatedAt: new Date().toISOString()
     };
 
-    setAccounts(prev => [...prev, newAccount]);
+    setAccounts((prev) => [...prev, newAccount]);
     return newAccount;
   }, []);
 
   const disconnectAccount = useCallback(async (accountId: string): Promise<boolean> => {
-    setAccounts(prev => prev.map(acc => {
-      if (acc.id === accountId) {
-        return { ...acc, isConnected: false, isActive: false };
-      }
-      return acc;
-    }));
+    setAccounts((prev) =>
+      prev.map((acc) => {
+        if (acc.id === accountId) {
+          return { ...acc, isConnected: false, isActive: false };
+        }
+        return acc;
+      })
+    );
     return true;
   }, []);
 
-  const refreshAccountToken = useCallback(async (
-    accountId: string
-  ): Promise<boolean> => {
-    const account = accounts.find(a => a.id === accountId);
-    if (!account) {
-return false;
-}
-
-    setAccounts(prev => prev.map(acc => {
-      if (acc.id === accountId) {
-        return { ...acc, updatedAt: new Date().toISOString() };
+  const refreshAccountToken = useCallback(
+    async (accountId: string): Promise<boolean> => {
+      const account = accounts.find((a) => a.id === accountId);
+      if (!account) {
+        return false;
       }
-      return acc;
-    }));
-    return true;
-  }, [accounts]);
 
-  const getAccountById = useCallback((accountId: string): CRMAccount | null => {
-    return accounts.find(a => a.id === accountId) || null;
-  }, [accounts]);
+      setAccounts((prev) =>
+        prev.map((acc) => {
+          if (acc.id === accountId) {
+            return { ...acc, updatedAt: new Date().toISOString() };
+          }
+          return acc;
+        })
+      );
+      return true;
+    },
+    [accounts]
+  );
+
+  const getAccountById = useCallback(
+    (accountId: string): CRMAccount | null => {
+      return accounts.find((a) => a.id === accountId) || null;
+    },
+    [accounts]
+  );
 
   // Contact Management
-  const createContact = useCallback(async (
-    payload: CreateContactPayload
-  ): Promise<CRMContact | null> => {
+  const createContact = useCallback(async (payload: CreateContactPayload): Promise<CRMContact | null> => {
     const newContact: CRMContact = {
       id: `con-${Date.now()}`,
       provider: payload.provider,
@@ -278,410 +279,433 @@ return false;
       updatedAt: new Date().toISOString()
     };
 
-    setContacts(prev => [...prev, newContact]);
+    setContacts((prev) => [...prev, newContact]);
     return newContact;
   }, []);
 
-  const updateContact = useCallback(async (
-    contactId: string,
-    payload: UpdateContactPayload
-  ): Promise<CRMContact | null> => {
-    let updatedContact: CRMContact | null = null;
+  const updateContact = useCallback(
+    async (contactId: string, payload: UpdateContactPayload): Promise<CRMContact | null> => {
+      let updatedContact: CRMContact | null = null;
 
-    setContacts(prev => prev.map(contact => {
-      if (contact.id === contactId) {
-        updatedContact = {
-          ...contact,
-          ...payload,
-          updatedAt: new Date().toISOString()
-        };
-        return updatedContact;
-      }
-      return contact;
-    }));
+      setContacts((prev) =>
+        prev.map((contact) => {
+          if (contact.id === contactId) {
+            updatedContact = {
+              ...contact,
+              ...payload,
+              updatedAt: new Date().toISOString()
+            };
+            return updatedContact;
+          }
+          return contact;
+        })
+      );
 
-    return updatedContact;
-  }, []);
+      return updatedContact;
+    },
+    []
+  );
 
   const deleteContact = useCallback(async (contactId: string): Promise<boolean> => {
-    setContacts(prev => prev.filter(c => c.id !== contactId));
+    setContacts((prev) => prev.filter((c) => c.id !== contactId));
     return true;
   }, []);
 
-  const getContactById = useCallback((contactId: string): CRMContact | null => {
-    return contacts.find(c => c.id === contactId) || null;
-  }, [contacts]);
+  const getContactById = useCallback(
+    (contactId: string): CRMContact | null => {
+      return contacts.find((c) => c.id === contactId) || null;
+    },
+    [contacts]
+  );
 
-  const getContactByEmail = useCallback((email: string): CRMContact | null => {
-    return contacts.find(c => c.email.toLowerCase() === email.toLowerCase()) || null;
-  }, [contacts]);
+  const getContactByEmail = useCallback(
+    (email: string): CRMContact | null => {
+      return contacts.find((c) => c.email.toLowerCase() === email.toLowerCase()) || null;
+    },
+    [contacts]
+  );
 
   // Deal Management
-  const createDeal = useCallback(async (
-    payload: CreateDealPayload
-  ): Promise<CRMDeal | null> => {
-    const contact = payload.contactId ? getContactById(payload.contactId) : null;
+  const createDeal = useCallback(
+    async (payload: CreateDealPayload): Promise<CRMDeal | null> => {
+      const contact = payload.contactId ? getContactById(payload.contactId) : null;
 
-    const newDeal: CRMDeal = {
-      id: `deal-${Date.now()}`,
-      provider: payload.provider,
-      providerDealId: `local-${Date.now()}`,
-      contactId: payload.contactId || '',
-      contactName: contact ? `${contact.firstName} ${contact.lastName}` : '',
-      dealName: payload.dealName,
-      value: payload.value,
-      currency: payload.currency,
-      stage: payload.stage || DealStage.QUALIFIED,
-      expectedCloseDate: payload.expectedCloseDate,
-      probability: payload.probability || 10,
-      description: payload.description,
-      customFields: payload.customFields || {},
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
+      const newDeal: CRMDeal = {
+        id: `deal-${Date.now()}`,
+        provider: payload.provider,
+        providerDealId: `local-${Date.now()}`,
+        contactId: payload.contactId || '',
+        contactName: contact ? `${contact.firstName} ${contact.lastName}` : '',
+        dealName: payload.dealName,
+        value: payload.value,
+        currency: payload.currency,
+        stage: payload.stage || DealStage.QUALIFIED,
+        expectedCloseDate: payload.expectedCloseDate,
+        probability: payload.probability || 10,
+        description: payload.description,
+        customFields: payload.customFields || {},
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
 
-    setDeals(prev => [...prev, newDeal]);
-    return newDeal;
-  }, [getContactById]);
+      setDeals((prev) => [...prev, newDeal]);
+      return newDeal;
+    },
+    [getContactById]
+  );
 
-  const updateDeal = useCallback(async (
-    dealId: string,
-    payload: UpdateDealPayload
-  ): Promise<CRMDeal | null> => {
+  const updateDeal = useCallback(async (dealId: string, payload: UpdateDealPayload): Promise<CRMDeal | null> => {
     let updatedDeal: CRMDeal | null = null;
 
-    setDeals(prev => prev.map(deal => {
-      if (deal.id === dealId) {
-        updatedDeal = {
-          ...deal,
-          ...payload,
-          updatedAt: new Date().toISOString()
-        };
-        return updatedDeal;
-      }
-      return deal;
-    }));
+    setDeals((prev) =>
+      prev.map((deal) => {
+        if (deal.id === dealId) {
+          updatedDeal = {
+            ...deal,
+            ...payload,
+            updatedAt: new Date().toISOString()
+          };
+          return updatedDeal;
+        }
+        return deal;
+      })
+    );
 
     return updatedDeal;
   }, []);
 
   const deleteDeal = useCallback(async (dealId: string): Promise<boolean> => {
-    setDeals(prev => prev.filter(d => d.id !== dealId));
+    setDeals((prev) => prev.filter((d) => d.id !== dealId));
     return true;
   }, []);
 
-  const getDealById = useCallback((dealId: string): CRMDeal | null => {
-    return deals.find(d => d.id === dealId) || null;
-  }, [deals]);
+  const getDealById = useCallback(
+    (dealId: string): CRMDeal | null => {
+      return deals.find((d) => d.id === dealId) || null;
+    },
+    [deals]
+  );
 
   // Email to CRM
-  const logEmailToCRM = useCallback(async (
-    emailData: {
-      id: string;
-      subject: string;
-      body?: string;
-      from: string;
-      fromName?: string;
-      to: string[];
-      cc?: string[];
-      sentAt: string;
-    },
-    provider: CRMProvider,
-    contactId?: string,
-    dealId?: string
-  ): Promise<EmailActivity | null> => {
-    const activity: EmailActivity = {
-      id: `act-${Date.now()}`,
-      provider,
-      emailId: emailData.id,
-      emailSubject: emailData.subject,
-      emailBody: emailData.body,
-      fromEmail: emailData.from,
-      fromName: emailData.fromName,
-      toEmails: emailData.to,
-      ccEmails: emailData.cc,
-      sentAt: emailData.sentAt,
-      contactId,
-      dealId,
-      activityType: 'email_sent',
-      synced: true,
-      syncedAt: new Date().toISOString()
-    };
-
-    setEmailActivities(prev => [...prev, activity]);
-    return activity;
-  }, []);
-
-  const matchEmailToContact = useCallback((
-    email: string
-  ): EmailContactMatch => {
-    const contact = getContactByEmail(email);
-
-    if (contact) {
-      return {
-        matched: true,
-        contact,
-        confidence: 100,
-        matchReasons: ['Email address matched exactly']
+  const logEmailToCRM = useCallback(
+    async (
+      emailData: {
+        id: string;
+        subject: string;
+        body?: string;
+        from: string;
+        fromName?: string;
+        to: string[];
+        cc?: string[];
+        sentAt: string;
+      },
+      provider: CRMProvider,
+      contactId?: string,
+      dealId?: string
+    ): Promise<EmailActivity | null> => {
+      const activity: EmailActivity = {
+        id: `act-${Date.now()}`,
+        provider,
+        emailId: emailData.id,
+        emailSubject: emailData.subject,
+        emailBody: emailData.body,
+        fromEmail: emailData.from,
+        fromName: emailData.fromName,
+        toEmails: emailData.to,
+        ccEmails: emailData.cc,
+        sentAt: emailData.sentAt,
+        contactId,
+        dealId,
+        activityType: 'email_sent',
+        synced: true,
+        syncedAt: new Date().toISOString()
       };
-    }
 
-    // Try partial match by domain
-    const domain = email.split('@')[1];
-    const partialMatch = contacts.find(c =>
-      c.email.toLowerCase().endsWith(domain.toLowerCase())
-    );
+      setEmailActivities((prev) => [...prev, activity]);
+      return activity;
+    },
+    []
+  );
 
-    if (partialMatch) {
+  const matchEmailToContact = useCallback(
+    (email: string): EmailContactMatch => {
+      const contact = getContactByEmail(email);
+
+      if (contact) {
+        return {
+          matched: true,
+          contact,
+          confidence: 100,
+          matchReasons: ['Email address matched exactly']
+        };
+      }
+
+      // Try partial match by domain
+      const domain = email.split('@')[1];
+      const partialMatch = contacts.find((c) => c.email.toLowerCase().endsWith(domain.toLowerCase()));
+
+      if (partialMatch) {
+        return {
+          matched: false,
+          confidence: 30,
+          matchReasons: ['Domain matched with existing contact']
+        };
+      }
+
       return {
         matched: false,
-        confidence: 30,
-        matchReasons: ['Domain matched with existing contact']
+        confidence: 0,
+        matchReasons: []
       };
-    }
+    },
+    [contacts, getContactByEmail]
+  );
 
-    return {
-      matched: false,
-      confidence: 0,
-      matchReasons: []
-    };
-  }, [contacts, getContactByEmail]);
+  const createContactFromEmail = useCallback(
+    async (email: string, name?: string, provider?: CRMProvider): Promise<CRMContact | null> => {
+      const existingContact = getContactByEmail(email);
+      if (existingContact) {
+        return existingContact;
+      }
 
-  const createContactFromEmail = useCallback(async (
-    email: string,
-    name?: string,
-    provider?: CRMProvider
-  ): Promise<CRMContact | null> => {
-    const existingContact = getContactByEmail(email);
-    if (existingContact) {
-return existingContact;
-}
+      // Parse name
+      let firstName = '';
+      let lastName = '';
+      if (name) {
+        const nameParts = name.split(' ');
+        firstName = nameParts[0];
+        lastName = nameParts.slice(1).join(' ');
+      }
 
-    // Parse name
-    let firstName = '';
-    let lastName = '';
-    if (name) {
-      const nameParts = name.split(' ');
-      firstName = nameParts[0];
-      lastName = nameParts.slice(1).join(' ');
-    }
-
-    return createContact({
-      provider: provider || CRMProvider.SALESFORCE,
-      accountId: accounts[0]?.id || '',
-      firstName: firstName || 'Unknown',
-      lastName: lastName || 'Contact',
-      email,
-      status: ContactStatus.LEAD
-    });
-  }, [accounts, getContactByEmail, createContact]);
+      return createContact({
+        provider: provider || CRMProvider.SALESFORCE,
+        accountId: accounts[0]?.id || '',
+        firstName: firstName || 'Unknown',
+        lastName: lastName || 'Contact',
+        email,
+        status: ContactStatus.LEAD
+      });
+    },
+    [accounts, getContactByEmail, createContact]
+  );
 
   // Contact Lookup
-  const lookupContact = useCallback((
-    email: string
-  ): ContactLookupResult => {
-    const matchingContacts = contacts.filter(c =>
-      c.email.toLowerCase().includes(email.toLowerCase())
-    );
+  const lookupContact = useCallback(
+    (email: string): ContactLookupResult => {
+      const matchingContacts = contacts.filter((c) => c.email.toLowerCase().includes(email.toLowerCase()));
 
-    const providers = [...new Set(matchingContacts.map(c => c.provider))];
-
-    return {
-      found: matchingContacts.length > 0,
-      contacts: matchingContacts,
-      email,
-      providers
-    };
-  }, [contacts]);
-
-  // Filtering
-  const getFilteredContacts = useCallback((filter: ContactFilter): CRMContact[] => {
-    return contacts.filter(contact => {
-      if (filter.provider && contact.provider !== filter.provider) {
-return false;
-}
-      if (filter.accountId) {
-        // In real implementation, would check account association
-      }
-      if (filter.status && contact.status !== filter.status) {
-return false;
-}
-      if (filter.company && !contact.company?.toLowerCase().includes(filter.company.toLowerCase())) {
-return false;
-}
-
-      if (filter.searchQuery) {
-        const query = filter.searchQuery.toLowerCase();
-        const matchFirstName = contact.firstName.toLowerCase().includes(query);
-        const matchLastName = contact.lastName.toLowerCase().includes(query);
-        const matchEmail = contact.email.toLowerCase().includes(query);
-        const matchCompany = contact.company?.toLowerCase().includes(query);
-        if (!matchFirstName && !matchLastName && !matchEmail && !matchCompany) {
-return false;
-}
-      }
-
-      return true;
-    });
-  }, [contacts]);
-
-  const getFilteredDeals = useCallback((filter: DealFilter): CRMDeal[] => {
-    return deals.filter(deal => {
-      if (filter.provider && deal.provider !== filter.provider) {
-return false;
-}
-      if (filter.stage && deal.stage !== filter.stage) {
-return false;
-}
-      if (filter.contactId && deal.contactId !== filter.contactId) {
-return false;
-}
-      if (filter.minValue !== undefined && deal.value < filter.minValue) {
-return false;
-}
-      if (filter.maxValue !== undefined && deal.value > filter.maxValue) {
-return false;
-}
-
-      return true;
-    });
-  }, [deals]);
-
-  // Statistics
-  const getStatistics = useCallback((accountId?: string): CRMStatistics[] => {
-    const relevantAccounts = accountId
-      ? accounts.filter(a => a.id === accountId)
-      : accounts;
-
-    return relevantAccounts.map(account => {
-      const accountContacts = contacts.filter(c => c.provider === account.provider);
-      const accountDeals = deals.filter(d => d.provider === account.provider);
-
-      const wonDeals = accountDeals.filter(d => d.stage === DealStage.WON);
-      const openDeals = accountDeals.filter(d =>
-        d.stage !== DealStage.WON && d.stage !== DealStage.LOST
-      );
-
-      const topContacts = accountContacts
-        .map(contact => {
-          const contactDeals = accountDeals.filter(d => d.contactId === contact.id);
-          return {
-            id: contact.id,
-            name: `${contact.firstName} ${contact.lastName}`,
-            company: contact.company || '',
-            dealCount: contactDeals.length
-          };
-        })
-        .sort((a, b) => b.dealCount - a.dealCount)
-        .slice(0, 5);
+      const providers = [...new Set(matchingContacts.map((c) => c.provider))];
 
       return {
-        provider: account.provider,
-        accountId: account.id,
-        totalContacts: accountContacts.length,
-        totalDeals: accountDeals.length,
-        totalValue: accountDeals.reduce((sum, d) => sum + d.value, 0),
-        wonDeals: wonDeals.length,
-        wonValue: wonDeals.reduce((sum, d) => sum + d.value, 0),
-        openDeals: openDeals.length,
-        openValue: openDeals.reduce((sum, d) => sum + d.value, 0),
-        lastSyncAt: account.lastSyncAt,
-        syncSuccessRate: 98.5,
-        topContacts
+        found: matchingContacts.length > 0,
+        contacts: matchingContacts,
+        email,
+        providers
       };
-    });
-  }, [accounts, contacts, deals]);
+    },
+    [contacts]
+  );
+
+  // Filtering
+  const getFilteredContacts = useCallback(
+    (filter: ContactFilter): CRMContact[] => {
+      return contacts.filter((contact) => {
+        if (filter.provider && contact.provider !== filter.provider) {
+          return false;
+        }
+        if (filter.accountId) {
+          // In real implementation, would check account association
+        }
+        if (filter.status && contact.status !== filter.status) {
+          return false;
+        }
+        if (filter.company && !contact.company?.toLowerCase().includes(filter.company.toLowerCase())) {
+          return false;
+        }
+
+        if (filter.searchQuery) {
+          const query = filter.searchQuery.toLowerCase();
+          const matchFirstName = contact.firstName.toLowerCase().includes(query);
+          const matchLastName = contact.lastName.toLowerCase().includes(query);
+          const matchEmail = contact.email.toLowerCase().includes(query);
+          const matchCompany = contact.company?.toLowerCase().includes(query);
+          if (!matchFirstName && !matchLastName && !matchEmail && !matchCompany) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+    },
+    [contacts]
+  );
+
+  const getFilteredDeals = useCallback(
+    (filter: DealFilter): CRMDeal[] => {
+      return deals.filter((deal) => {
+        if (filter.provider && deal.provider !== filter.provider) {
+          return false;
+        }
+        if (filter.stage && deal.stage !== filter.stage) {
+          return false;
+        }
+        if (filter.contactId && deal.contactId !== filter.contactId) {
+          return false;
+        }
+        if (filter.minValue !== undefined && deal.value < filter.minValue) {
+          return false;
+        }
+        if (filter.maxValue !== undefined && deal.value > filter.maxValue) {
+          return false;
+        }
+
+        return true;
+      });
+    },
+    [deals]
+  );
+
+  // Statistics
+  const getStatistics = useCallback(
+    (accountId?: string): CRMStatistics[] => {
+      const relevantAccounts = accountId ? accounts.filter((a) => a.id === accountId) : accounts;
+
+      return relevantAccounts.map((account) => {
+        const accountContacts = contacts.filter((c) => c.provider === account.provider);
+        const accountDeals = deals.filter((d) => d.provider === account.provider);
+
+        const wonDeals = accountDeals.filter((d) => d.stage === DealStage.WON);
+        const openDeals = accountDeals.filter((d) => d.stage !== DealStage.WON && d.stage !== DealStage.LOST);
+
+        const topContacts = accountContacts
+          .map((contact) => {
+            const contactDeals = accountDeals.filter((d) => d.contactId === contact.id);
+            return {
+              id: contact.id,
+              name: `${contact.firstName} ${contact.lastName}`,
+              company: contact.company || '',
+              dealCount: contactDeals.length
+            };
+          })
+          .sort((a, b) => b.dealCount - a.dealCount)
+          .slice(0, 5);
+
+        return {
+          provider: account.provider,
+          accountId: account.id,
+          totalContacts: accountContacts.length,
+          totalDeals: accountDeals.length,
+          totalValue: accountDeals.reduce((sum, d) => sum + d.value, 0),
+          wonDeals: wonDeals.length,
+          wonValue: wonDeals.reduce((sum, d) => sum + d.value, 0),
+          openDeals: openDeals.length,
+          openValue: openDeals.reduce((sum, d) => sum + d.value, 0),
+          lastSyncAt: account.lastSyncAt,
+          syncSuccessRate: 98.5,
+          topContacts
+        };
+      });
+    },
+    [accounts, contacts, deals]
+  );
 
   // Sync Operations
-  const syncContacts = useCallback(async (
-    accountId: string
-  ): Promise<SyncJob> => {
-    const account = accounts.find(a => a.id === accountId);
-    if (!account) {
-throw new Error('Account not found');
-}
-
-    const job: SyncJob = {
-      id: `job-${Date.now()}`,
-      accountId,
-      provider: account.provider,
-      type: 'contact_sync',
-      status: SyncStatus.COMPLETED,
-      startedAt: new Date().toISOString(),
-      completedAt: new Date().toISOString(),
-      recordsProcessed: contacts.length,
-      recordsSucceeded: contacts.length,
-      recordsFailed: 0
-    };
-
-    setSyncJobs(prev => [...prev, job]);
-    setAccounts(prev => prev.map(acc => {
-      if (acc.id === accountId) {
-        return { ...acc, lastSyncAt: new Date().toISOString() };
+  const syncContacts = useCallback(
+    async (accountId: string): Promise<SyncJob> => {
+      const account = accounts.find((a) => a.id === accountId);
+      if (!account) {
+        throw new Error('Account not found');
       }
-      return acc;
-    }));
 
-    return job;
-  }, [accounts, contacts]);
+      const job: SyncJob = {
+        id: `job-${Date.now()}`,
+        accountId,
+        provider: account.provider,
+        type: 'contact_sync',
+        status: SyncStatus.COMPLETED,
+        startedAt: new Date().toISOString(),
+        completedAt: new Date().toISOString(),
+        recordsProcessed: contacts.length,
+        recordsSucceeded: contacts.length,
+        recordsFailed: 0
+      };
 
-  const syncDeals = useCallback(async (
-    accountId: string
-  ): Promise<SyncJob> => {
-    const account = accounts.find(a => a.id === accountId);
-    if (!account) {
-throw new Error('Account not found');
-}
+      setSyncJobs((prev) => [...prev, job]);
+      setAccounts((prev) =>
+        prev.map((acc) => {
+          if (acc.id === accountId) {
+            return { ...acc, lastSyncAt: new Date().toISOString() };
+          }
+          return acc;
+        })
+      );
 
-    const job: SyncJob = {
-      id: `job-${Date.now()}`,
-      accountId,
-      provider: account.provider,
-      type: 'deal_sync',
-      status: SyncStatus.COMPLETED,
-      startedAt: new Date().toISOString(),
-      completedAt: new Date().toISOString(),
-      recordsProcessed: deals.length,
-      recordsSucceeded: deals.length,
-      recordsFailed: 0
-    };
+      return job;
+    },
+    [accounts, contacts]
+  );
 
-    setSyncJobs(prev => [...prev, job]);
-    return job;
-  }, [accounts, deals]);
-
-  const syncAll = useCallback(async (
-    accountId: string
-  ): Promise<SyncJob> => {
-    const account = accounts.find(a => a.id === accountId);
-    if (!account) {
-throw new Error('Account not found');
-}
-
-    const totalRecords = contacts.length + deals.length;
-    const job: SyncJob = {
-      id: `job-${Date.now()}`,
-      accountId,
-      provider: account.provider,
-      type: 'full_sync',
-      status: SyncStatus.COMPLETED,
-      startedAt: new Date().toISOString(),
-      completedAt: new Date().toISOString(),
-      recordsProcessed: totalRecords,
-      recordsSucceeded: totalRecords,
-      recordsFailed: 0
-    };
-
-    setSyncJobs(prev => [...prev, job]);
-    setAccounts(prev => prev.map(acc => {
-      if (acc.id === accountId) {
-        return { ...acc, lastSyncAt: new Date().toISOString() };
+  const syncDeals = useCallback(
+    async (accountId: string): Promise<SyncJob> => {
+      const account = accounts.find((a) => a.id === accountId);
+      if (!account) {
+        throw new Error('Account not found');
       }
-      return acc;
-    }));
 
-    return job;
-  }, [accounts, contacts, deals]);
+      const job: SyncJob = {
+        id: `job-${Date.now()}`,
+        accountId,
+        provider: account.provider,
+        type: 'deal_sync',
+        status: SyncStatus.COMPLETED,
+        startedAt: new Date().toISOString(),
+        completedAt: new Date().toISOString(),
+        recordsProcessed: deals.length,
+        recordsSucceeded: deals.length,
+        recordsFailed: 0
+      };
+
+      setSyncJobs((prev) => [...prev, job]);
+      return job;
+    },
+    [accounts, deals]
+  );
+
+  const syncAll = useCallback(
+    async (accountId: string): Promise<SyncJob> => {
+      const account = accounts.find((a) => a.id === accountId);
+      if (!account) {
+        throw new Error('Account not found');
+      }
+
+      const totalRecords = contacts.length + deals.length;
+      const job: SyncJob = {
+        id: `job-${Date.now()}`,
+        accountId,
+        provider: account.provider,
+        type: 'full_sync',
+        status: SyncStatus.COMPLETED,
+        startedAt: new Date().toISOString(),
+        completedAt: new Date().toISOString(),
+        recordsProcessed: totalRecords,
+        recordsSucceeded: totalRecords,
+        recordsFailed: 0
+      };
+
+      setSyncJobs((prev) => [...prev, job]);
+      setAccounts((prev) =>
+        prev.map((acc) => {
+          if (acc.id === accountId) {
+            return { ...acc, lastSyncAt: new Date().toISOString() };
+          }
+          return acc;
+        })
+      );
+
+      return job;
+    },
+    [accounts, contacts, deals]
+  );
 
   return {
     // State

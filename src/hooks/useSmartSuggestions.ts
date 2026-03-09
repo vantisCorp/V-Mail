@@ -16,10 +16,7 @@ import {
   SuggestionStatistics,
   TrainingExample
 } from '../types/smartSuggestions';
-import {
-  SuggestionEngine,
-  createSuggestionEngine
-} from '../ml/suggestionEngine';
+import { SuggestionEngine, createSuggestionEngine } from '../ml/suggestionEngine';
 
 interface UseSmartSuggestionsState {
   isLoading: boolean;
@@ -62,15 +59,13 @@ const initialStatistics: SuggestionStatistics = {
   acceptanceRate: 0,
   avgConfidence: 0,
   avgResponseTime: 0,
-  byType: {} as any,
+  byType: {} as unknown,
   byCategory: {},
   topSuggestions: [],
   recentFeedback: []
 };
 
-export function useSmartSuggestions(
-  initialConfig?: Partial<SuggestionConfig>
-): UseSmartSuggestionsReturn {
+export function useSmartSuggestions(initialConfig?: Partial<SuggestionConfig>): UseSmartSuggestionsReturn {
   const [state, setState] = useState<UseSmartSuggestionsState>({
     isLoading: false,
     error: null,
@@ -88,267 +83,270 @@ export function useSmartSuggestions(
     engineRef.current = createSuggestionEngine(initialConfig);
   }, [initialConfig]);
 
-  const generateSuggestions = useCallback(
-    async (context: SuggestionContext): Promise<SuggestionResult> => {
-      if (!engineRef.current) {
-        throw new Error('Suggestion engine not initialized');
-      }
+  const generateSuggestions = useCallback(async (context: SuggestionContext): Promise<SuggestionResult> => {
+    if (!engineRef.current) {
+      throw new Error('Suggestion engine not initialized');
+    }
 
-      const cachedResult = suggestionsCache.current.get(context.emailId);
-      if (cachedResult) {
-        setState(prev => ({
-          ...prev,
-          currentSuggestions: cachedResult.suggestions,
-          lastResult: cachedResult
-        }));
-        return cachedResult;
-      }
+    const cachedResult = suggestionsCache.current.get(context.emailId);
+    if (cachedResult) {
+      setState((prev) => ({
+        ...prev,
+        currentSuggestions: cachedResult.suggestions,
+        lastResult: cachedResult
+      }));
+      return cachedResult;
+    }
 
-      setState(prev => ({ ...prev, isLoading: true, error: null }));
+    setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
-      try {
-        const result = engineRef.current.generateSuggestions(context);
-        suggestionsCache.current.set(context.emailId, result);
+    try {
+      const result = engineRef.current.generateSuggestions(context);
+      suggestionsCache.current.set(context.emailId, result);
 
-        setState(prev => ({
-          ...prev,
-          isLoading: false,
-          currentSuggestions: result.suggestions,
-          lastResult: result,
-          statistics: updateStatistics(prev.statistics, result)
-        }));
+      setState((prev) => ({
+        ...prev,
+        isLoading: false,
+        currentSuggestions: result.suggestions,
+        lastResult: result,
+        statistics: updateStatistics(prev.statistics, result)
+      }));
 
-        return result;
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        setState(prev => ({
-          ...prev,
-          isLoading: false,
-          error: errorMessage
-        }));
-        throw error;
-      }
-    },
-    []
-  );
+      return result;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      setState((prev) => ({
+        ...prev,
+        isLoading: false,
+        error: errorMessage
+      }));
+      throw error;
+    }
+  }, []);
 
-  const batchGenerateSuggestions = useCallback(
-    async (contexts: SuggestionContext[]): Promise<SuggestionResult[]> => {
-      if (!engineRef.current) {
-        throw new Error('Suggestion engine not initialized');
-      }
+  const batchGenerateSuggestions = useCallback(async (contexts: SuggestionContext[]): Promise<SuggestionResult[]> => {
+    if (!engineRef.current) {
+      throw new Error('Suggestion engine not initialized');
+    }
 
-      setState(prev => ({ ...prev, isLoading: true, error: null }));
+    setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
-      try {
-        const results: SuggestionResult[] = [];
+    try {
+      const results: SuggestionResult[] = [];
 
-        for (const context of contexts) {
-          let result = suggestionsCache.current.get(context.emailId);
-          if (!result) {
-            result = engineRef.current.generateSuggestions(context);
-            suggestionsCache.current.set(context.emailId, result);
-          }
-          results.push(result);
+      for (const context of contexts) {
+        let result = suggestionsCache.current.get(context.emailId);
+        if (!result) {
+          result = engineRef.current.generateSuggestions(context);
+          suggestionsCache.current.set(context.emailId, result);
         }
-
-        const lastResult = results[results.length - 1];
-        setState(prev => ({
-          ...prev,
-          isLoading: false,
-          currentSuggestions: lastResult?.suggestions || [],
-          lastResult
-        }));
-
-        return results;
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        setState(prev => ({
-          ...prev,
-          isLoading: false,
-          error: errorMessage
-        }));
-        throw error;
+        results.push(result);
       }
-    },
-    []
-  );
+
+      const lastResult = results[results.length - 1];
+      setState((prev) => ({
+        ...prev,
+        isLoading: false,
+        currentSuggestions: lastResult?.suggestions || [],
+        lastResult
+      }));
+
+      return results;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      setState((prev) => ({
+        ...prev,
+        isLoading: false,
+        error: errorMessage
+      }));
+      throw error;
+    }
+  }, []);
 
   const getReplySuggestions = useCallback((emailId: string): ReplySuggestion[] => {
     const cached = suggestionsCache.current.get(emailId);
     if (!cached) {
-return [];
-}
+      return [];
+    }
     return cached.suggestions.filter((s): s is ReplySuggestion => s.type === SuggestionType.REPLY);
   }, []);
 
   const getQuickActionSuggestions = useCallback((emailId: string): QuickActionSuggestion[] => {
     const cached = suggestionsCache.current.get(emailId);
     if (!cached) {
-return [];
-}
+      return [];
+    }
     return cached.suggestions.filter((s): s is QuickActionSuggestion => s.type === SuggestionType.QUICK_ACTION);
   }, []);
 
   const getFollowUpSuggestions = useCallback((emailId: string): FollowUpSuggestion[] => {
     const cached = suggestionsCache.current.get(emailId);
     if (!cached) {
-return [];
-}
+      return [];
+    }
     return cached.suggestions.filter((s): s is FollowUpSuggestion => s.type === SuggestionType.FOLLOW_UP);
   }, []);
 
   const getAttachmentSuggestions = useCallback((emailId: string): AttachmentSuggestion[] => {
     const cached = suggestionsCache.current.get(emailId);
     if (!cached) {
-return [];
-}
+      return [];
+    }
     return cached.suggestions.filter((s): s is AttachmentSuggestion => s.type === SuggestionType.ATTACHMENT);
   }, []);
 
   const getRecipientSuggestions = useCallback((emailId: string): RecipientSuggestion[] => {
     const cached = suggestionsCache.current.get(emailId);
     if (!cached) {
-return [];
-}
+      return [];
+    }
     return cached.suggestions.filter((s): s is RecipientSuggestion => s.type === SuggestionType.RECIPIENT);
   }, []);
 
   const getLabelSuggestions = useCallback((emailId: string): LabelSuggestion[] => {
     const cached = suggestionsCache.current.get(emailId);
     if (!cached) {
-return [];
-}
+      return [];
+    }
     return cached.suggestions.filter((s): s is LabelSuggestion => s.type === SuggestionType.LABEL);
   }, []);
 
   const findSuggestionById = useCallback((id: string): Suggestion | null => {
     for (const [, result] of suggestionsCache.current) {
-      const suggestion = result.suggestions.find(s => s.id === id);
+      const suggestion = result.suggestions.find((s) => s.id === id);
       if (suggestion) {
-return suggestion;
-}
+        return suggestion;
+      }
     }
     return null;
   }, []);
 
-  const acceptSuggestion = useCallback((suggestionId: string) => {
-    const suggestion = findSuggestionById(suggestionId);
-    if (!suggestion) {
-return;
-}
-
-    const feedback: SuggestionFeedback = {
-      suggestionId,
-      accepted: true,
-      timestamp: new Date(),
-      rating: 5
-    };
-
-    feedbackHistory.current.push(feedback);
-
-    if (state.lastResult) {
-      const example: TrainingExample = {
-        suggestion,
-        feedback,
-        emailContext: state.lastResult.context,
-        outcome: 'positive'
-      };
-      trainingExamples.current.push(example);
-      engineRef.current?.addTrainingExample(example);
-    }
-
-    setState(prev => ({
-      ...prev,
-      statistics: {
-        ...prev.statistics,
-        acceptedSuggestions: prev.statistics.acceptedSuggestions + 1,
-        acceptanceRate: calculateAcceptanceRate(
-          prev.statistics.acceptedSuggestions + 1,
-          prev.statistics.rejectedSuggestions
-        ),
-        recentFeedback: [...prev.statistics.recentFeedback.slice(-9), feedback]
+  const acceptSuggestion = useCallback(
+    (suggestionId: string) => {
+      const suggestion = findSuggestionById(suggestionId);
+      if (!suggestion) {
+        return;
       }
-    }));
-  }, [state.lastResult, findSuggestionById]);
 
-  const rejectSuggestion = useCallback((suggestionId: string) => {
-    const suggestion = findSuggestionById(suggestionId);
-    if (!suggestion) {
-return;
-}
-
-    const feedback: SuggestionFeedback = {
-      suggestionId,
-      accepted: false,
-      timestamp: new Date(),
-      rating: 1
-    };
-
-    feedbackHistory.current.push(feedback);
-
-    if (state.lastResult) {
-      const example: TrainingExample = {
-        suggestion,
-        feedback,
-        emailContext: state.lastResult.context,
-        outcome: 'negative'
+      const feedback: SuggestionFeedback = {
+        suggestionId,
+        accepted: true,
+        timestamp: new Date(),
+        rating: 5
       };
-      trainingExamples.current.push(example);
-      engineRef.current?.addTrainingExample(example);
-    }
 
-    setState(prev => ({
-      ...prev,
-      statistics: {
-        ...prev.statistics,
-        rejectedSuggestions: prev.statistics.rejectedSuggestions + 1,
-        acceptanceRate: calculateAcceptanceRate(
-          prev.statistics.acceptedSuggestions,
-          prev.statistics.rejectedSuggestions + 1
-        ),
-        recentFeedback: [...prev.statistics.recentFeedback.slice(-9), feedback]
+      feedbackHistory.current.push(feedback);
+
+      if (state.lastResult) {
+        const example: TrainingExample = {
+          suggestion,
+          feedback,
+          emailContext: state.lastResult.context,
+          outcome: 'positive'
+        };
+        trainingExamples.current.push(example);
+        engineRef.current?.addTrainingExample(example);
       }
-    }));
-  }, [state.lastResult, findSuggestionById]);
 
-  const addFeedback = useCallback((suggestionId: string, feedback: SuggestionFeedback) => {
-    const suggestion = findSuggestionById(suggestionId);
-    if (!suggestion) {
-return;
-}
+      setState((prev) => ({
+        ...prev,
+        statistics: {
+          ...prev.statistics,
+          acceptedSuggestions: prev.statistics.acceptedSuggestions + 1,
+          acceptanceRate: calculateAcceptanceRate(
+            prev.statistics.acceptedSuggestions + 1,
+            prev.statistics.rejectedSuggestions
+          ),
+          recentFeedback: [...prev.statistics.recentFeedback.slice(-9), feedback]
+        }
+      }));
+    },
+    [state.lastResult, findSuggestionById]
+  );
 
-    feedbackHistory.current.push(feedback);
+  const rejectSuggestion = useCallback(
+    (suggestionId: string) => {
+      const suggestion = findSuggestionById(suggestionId);
+      if (!suggestion) {
+        return;
+      }
 
-    let outcome: 'positive' | 'negative' | 'neutral' = 'neutral';
-    if (feedback.rating && feedback.rating >= 4) {
-      outcome = 'positive';
-    } else if (feedback.rating && feedback.rating <= 2) {
-      outcome = 'negative';
-    }
-
-    if (state.lastResult) {
-      const example: TrainingExample = {
-        suggestion,
-        feedback,
-        emailContext: state.lastResult.context,
-        outcome
+      const feedback: SuggestionFeedback = {
+        suggestionId,
+        accepted: false,
+        timestamp: new Date(),
+        rating: 1
       };
-      trainingExamples.current.push(example);
-      engineRef.current?.addTrainingExample(example);
-    }
 
-    setState(prev => ({
-      ...prev,
-      statistics: {
-        ...prev.statistics,
-        recentFeedback: [...prev.statistics.recentFeedback.slice(-9), feedback]
+      feedbackHistory.current.push(feedback);
+
+      if (state.lastResult) {
+        const example: TrainingExample = {
+          suggestion,
+          feedback,
+          emailContext: state.lastResult.context,
+          outcome: 'negative'
+        };
+        trainingExamples.current.push(example);
+        engineRef.current?.addTrainingExample(example);
       }
-    }));
-  }, [state.lastResult, findSuggestionById]);
+
+      setState((prev) => ({
+        ...prev,
+        statistics: {
+          ...prev.statistics,
+          rejectedSuggestions: prev.statistics.rejectedSuggestions + 1,
+          acceptanceRate: calculateAcceptanceRate(
+            prev.statistics.acceptedSuggestions,
+            prev.statistics.rejectedSuggestions + 1
+          ),
+          recentFeedback: [...prev.statistics.recentFeedback.slice(-9), feedback]
+        }
+      }));
+    },
+    [state.lastResult, findSuggestionById]
+  );
+
+  const addFeedback = useCallback(
+    (suggestionId: string, feedback: SuggestionFeedback) => {
+      const suggestion = findSuggestionById(suggestionId);
+      if (!suggestion) {
+        return;
+      }
+
+      feedbackHistory.current.push(feedback);
+
+      let outcome: 'positive' | 'negative' | 'neutral' = 'neutral';
+      if (feedback.rating && feedback.rating >= 4) {
+        outcome = 'positive';
+      } else if (feedback.rating && feedback.rating <= 2) {
+        outcome = 'negative';
+      }
+
+      if (state.lastResult) {
+        const example: TrainingExample = {
+          suggestion,
+          feedback,
+          emailContext: state.lastResult.context,
+          outcome
+        };
+        trainingExamples.current.push(example);
+        engineRef.current?.addTrainingExample(example);
+      }
+
+      setState((prev) => ({
+        ...prev,
+        statistics: {
+          ...prev.statistics,
+          recentFeedback: [...prev.statistics.recentFeedback.slice(-9), feedback]
+        }
+      }));
+    },
+    [state.lastResult, findSuggestionById]
+  );
 
   const clearSuggestions = useCallback(() => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       currentSuggestions: [],
       lastResult: null
@@ -374,7 +372,7 @@ return;
     suggestionsCache.current.clear();
     engineRef.current?.clearTrainingData();
     engineRef.current?.resetUserBehavior();
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       statistics: { ...initialStatistics }
     }));
@@ -385,7 +383,7 @@ return;
   }, [state.statistics]);
 
   const resetStatistics = useCallback(() => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       statistics: { ...initialStatistics }
     }));
@@ -418,16 +416,13 @@ return;
   };
 }
 
-function updateStatistics(
-  stats: SuggestionStatistics,
-  result: SuggestionResult
-): SuggestionStatistics {
+function updateStatistics(stats: SuggestionStatistics, result: SuggestionResult): SuggestionStatistics {
   const newStats = { ...stats };
   newStats.totalSuggestions += result.suggestions.length;
   newStats.avgConfidence = result.metadata.avgConfidence;
   newStats.avgResponseTime = result.processingTime;
 
-  result.suggestions.forEach(suggestion => {
+  result.suggestions.forEach((suggestion) => {
     if (!newStats.byType[suggestion.type]) {
       newStats.byType[suggestion.type] = { total: 0, accepted: 0, acceptanceRate: 0 };
     }

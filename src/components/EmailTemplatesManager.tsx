@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 import { useEmailTemplates } from '../hooks/useEmailTemplates';
-import {
-  TemplateType,
-  TemplatePermission,
-  EmailTemplate,
-  TemplateCategory,
-  CreateTemplatePayload,
-  UpdateTemplatePayload
-} from '../types/emailTemplates';
+import { TemplateType, EmailTemplate, TemplateCategory } from '../types/emailTemplates';
 import '../styles/email-templates.css';
 
 const EmailTemplatesManager: React.FC = () => {
@@ -16,28 +9,15 @@ const EmailTemplatesManager: React.FC = () => {
     templates,
     categories,
     usageLogs,
-    createTemplate,
-    updateTemplate,
     deleteTemplate,
     cloneTemplate,
-    previewTemplate,
-    validateTemplate,
     getFilteredTemplates,
     toggleFavorite,
-    createVersion,
-    restoreVersion,
-    getTemplateAnalytics,
-    getTemplateById,
-    getTemplatesByCategory,
-    getFavorites,
-    getSystemTemplates,
-    getUserTemplates
+    getTemplatesByCategory
   } = useEmailTemplates();
 
   const [activeTab, setActiveTab] = useState<'templates' | 'categories' | 'analytics' | 'usage'>('templates');
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate | null>(null);
-  const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [selectedType, setSelectedType] = useState<TemplateType | ''>('');
@@ -45,7 +25,10 @@ const EmailTemplatesManager: React.FC = () => {
 
   // Sub-components
   const TemplateCard: React.FC<{ template: EmailTemplate }> = ({ template }) => (
-    <div className={`template-card ${selectedTemplate?.id === template.id ? 'selected' : ''}`} onClick={() => setSelectedTemplate(template)}>
+    <div
+      className={`template-card ${selectedTemplate?.id === template.id ? 'selected' : ''}`}
+      onClick={() => setSelectedTemplate(template)}
+    >
       <div className="template-header">
         <div className="template-title">
           <h3>{template.name}</h3>
@@ -55,9 +38,13 @@ const EmailTemplatesManager: React.FC = () => {
             {template.isFavorite && <span className="favorite-badge">★</span>}
           </div>
         </div>
-        <button className="btn-favorite" onClick={(e) => {
- e.stopPropagation(); toggleFavorite(template.id);
-}}>
+        <button
+          className="btn-favorite"
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleFavorite(template.id);
+          }}
+        >
           {template.isFavorite ? '★' : '☆'}
         </button>
       </div>
@@ -77,19 +64,41 @@ const EmailTemplatesManager: React.FC = () => {
         </span>
       </div>
       <div className="template-tags">
-        {template.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
+        {template.tags.map((tag) => (
+          <span key={tag} className="tag">
+            {tag}
+          </span>
+        ))}
       </div>
       <div className="template-actions">
-        <button className="btn-icon" onClick={(e) => {
- e.stopPropagation(); setShowPreview(true);
-}}>👁️</button>
-        <button className="btn-icon" onClick={(e) => {
- e.stopPropagation(); cloneTemplate({ sourceTemplateId: template.id, name: `Copy of ${template.name}` });
-}}>📋</button>
+        <button
+          className="btn-icon"
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowPreview(true);
+          }}
+        >
+          👁️
+        </button>
+        <button
+          className="btn-icon"
+          onClick={(e) => {
+            e.stopPropagation();
+            cloneTemplate({ sourceTemplateId: template.id, name: `Copy of ${template.name}` });
+          }}
+        >
+          📋
+        </button>
         {!template.isSystem && (
-          <button className="btn-icon danger" onClick={(e) => {
- e.stopPropagation(); deleteTemplate(template.id);
-}}>🗑️</button>
+          <button
+            className="btn-icon danger"
+            onClick={(e) => {
+              e.stopPropagation();
+              deleteTemplate(template.id);
+            }}
+          >
+            🗑️
+          </button>
         )}
       </div>
     </div>
@@ -99,7 +108,9 @@ const EmailTemplatesManager: React.FC = () => {
     const count = getTemplatesByCategory(category.id).length;
     return (
       <div className="category-card">
-        <div className="category-icon" style={{ background: category.color }}>{category.icon}</div>
+        <div className="category-icon" style={{ background: category.color }}>
+          {category.icon}
+        </div>
         <div className="category-info">
           <h4>{category.name}</h4>
           <p>{category.description}</p>
@@ -132,7 +143,7 @@ const EmailTemplatesManager: React.FC = () => {
     </div>
   );
 
-  const UsageLogItem: React.FC<{ log: typeof usageLogs[0] }> = ({ log }) => (
+  const UsageLogItem: React.FC<{ log: (typeof usageLogs)[0] }> = ({ log }) => (
     <div className="usage-log-item">
       <div className="log-info">
         <span className="log-template">{log.templateName}</span>
@@ -167,13 +178,22 @@ const EmailTemplatesManager: React.FC = () => {
       </div>
 
       <div className="templates-tabs">
-        <button className={`tab ${activeTab === 'templates' ? 'active' : ''}`} onClick={() => setActiveTab('templates')}>
+        <button
+          className={`tab ${activeTab === 'templates' ? 'active' : ''}`}
+          onClick={() => setActiveTab('templates')}
+        >
           Templates
         </button>
-        <button className={`tab ${activeTab === 'categories' ? 'active' : ''}`} onClick={() => setActiveTab('categories')}>
+        <button
+          className={`tab ${activeTab === 'categories' ? 'active' : ''}`}
+          onClick={() => setActiveTab('categories')}
+        >
           Categories
         </button>
-        <button className={`tab ${activeTab === 'analytics' ? 'active' : ''}`} onClick={() => setActiveTab('analytics')}>
+        <button
+          className={`tab ${activeTab === 'analytics' ? 'active' : ''}`}
+          onClick={() => setActiveTab('analytics')}
+        >
           Analytics
         </button>
         <button className={`tab ${activeTab === 'usage' ? 'active' : ''}`} onClick={() => setActiveTab('usage')}>
@@ -198,8 +218,10 @@ const EmailTemplatesManager: React.FC = () => {
                 className="filter-select"
               >
                 <option value="">All Categories</option>
-                {categories.map(cat => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
                 ))}
               </select>
               <select
@@ -208,8 +230,10 @@ const EmailTemplatesManager: React.FC = () => {
                 className="filter-select"
               >
                 <option value="">All Types</option>
-                {Object.values(TemplateType).map(type => (
-                  <option key={type} value={type}>{type.replace('_', ' ')}</option>
+                {Object.values(TemplateType).map((type) => (
+                  <option key={type} value={type}>
+                    {type.replace('_', ' ')}
+                  </option>
                 ))}
               </select>
               <label className="filter-checkbox">
@@ -230,7 +254,7 @@ const EmailTemplatesManager: React.FC = () => {
                 isFavorite: filterFavorites || undefined,
                 sortBy: 'name',
                 sortOrder: 'asc'
-              }).map(template => (
+              }).map((template) => (
                 <TemplateCard key={template.id} template={template} />
               ))}
             </div>
@@ -239,7 +263,9 @@ const EmailTemplatesManager: React.FC = () => {
               <div className="template-detail-panel">
                 <div className="panel-header">
                   <h3>Template Details</h3>
-                  <button className="btn-close" onClick={() => setSelectedTemplate(null)}>×</button>
+                  <button className="btn-close" onClick={() => setSelectedTemplate(null)}>
+                    ×
+                  </button>
                 </div>
                 <div className="panel-content">
                   <div className="detail-row">
@@ -261,7 +287,7 @@ const EmailTemplatesManager: React.FC = () => {
                     <strong>Variables:</strong>
                   </div>
                   <div className="variables-list">
-                    {selectedTemplate.variables.map(variable => (
+                    {selectedTemplate.variables.map((variable) => (
                       <div key={variable.id} className="variable-item">
                         <code>{variable.key}</code>
                         <span>{variable.description}</span>
@@ -272,7 +298,11 @@ const EmailTemplatesManager: React.FC = () => {
                     <strong>Tags:</strong>
                   </div>
                   <div className="tags-list">
-                    {selectedTemplate.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
+                    {selectedTemplate.tags.map((tag) => (
+                      <span key={tag} className="tag">
+                        {tag}
+                      </span>
+                    ))}
                   </div>
                   <div className="detail-row">
                     <strong>Usage Stats:</strong>
@@ -291,7 +321,9 @@ const EmailTemplatesManager: React.FC = () => {
         {activeTab === 'categories' && (
           <div className="categories-section">
             <div className="categories-grid">
-              {categories.map(category => <CategoryCard key={category.id} category={category} />)}
+              {categories.map((category) => (
+                <CategoryCard key={category.id} category={category} />
+              ))}
             </div>
           </div>
         )}
@@ -302,7 +334,9 @@ const EmailTemplatesManager: React.FC = () => {
               {templates
                 .sort((a, b) => b.analytics.totalUses - a.analytics.totalUses)
                 .slice(0, 10)
-                .map(template => <AnalyticsCard key={template.id} template={template} />)}
+                .map((template) => (
+                  <AnalyticsCard key={template.id} template={template} />
+                ))}
             </div>
           </div>
         )}
@@ -312,7 +346,9 @@ const EmailTemplatesManager: React.FC = () => {
             <div className="usage-logs-list">
               {usageLogs
                 .sort((a, b) => new Date(b.usedAt).getTime() - new Date(a.usedAt).getTime())
-                .map(log => <UsageLogItem key={log.id} log={log} />)}
+                .map((log) => (
+                  <UsageLogItem key={log.id} log={log} />
+                ))}
             </div>
           </div>
         )}

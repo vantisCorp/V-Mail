@@ -1,11 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useEmailDelegation } from '../hooks/useEmailDelegation';
-import type {
-  Delegation,
-  DelegationPermission,
-  DelegationStatus,
-  DelegationInvitation
-} from '../types/delegation';
+import type { Delegation, DelegationPermission, DelegationStatus, DelegationInvitation } from '../types/delegation';
 
 interface DelegationSettingsProps {
   currentUserId: string;
@@ -29,11 +24,7 @@ const PermissionBadge: React.FC<{ permission: DelegationPermission }> = ({ permi
     manage: 'Full Management'
   };
 
-  return (
-    <span className={`px-2 py-1 rounded text-xs font-medium ${colors[permission]}`}>
-      {labels[permission]}
-    </span>
-  );
+  return <span className={`px-2 py-1 rounded text-xs font-medium ${colors[permission]}`}>{labels[permission]}</span>;
 };
 
 const StatusBadge: React.FC<{ status: DelegationStatus }> = ({ status }) => {
@@ -45,11 +36,7 @@ const StatusBadge: React.FC<{ status: DelegationStatus }> = ({ status }) => {
     expired: 'bg-gray-500/20 text-gray-400'
   };
 
-  return (
-    <span className={`px-2 py-1 rounded text-xs font-medium capitalize ${colors[status]}`}>
-      {status}
-    </span>
-  );
+  return <span className={`px-2 py-1 rounded text-xs font-medium capitalize ${colors[status]}`}>{status}</span>;
 };
 
 const PermissionSelect: React.FC<{
@@ -87,14 +74,14 @@ const GrantDialog: React.FC<{
   const [notes, setNotes] = useState('');
 
   if (!isOpen) {
-return null;
-}
+    return null;
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!delegateEmail || !delegateName || !delegateId) {
-return;
-}
+      return;
+    }
     onGrant(delegateEmail, delegateName, delegateId, permission, notes || undefined);
     // Reset form
     setDelegateEmail('');
@@ -151,9 +138,15 @@ return;
               <label className="block text-sm text-gray-400 mb-1">Permission Level</label>
               <PermissionSelect value={permission} onChange={setPermission} />
               <div className="mt-2 text-xs text-gray-500">
-                <div><strong>Send As:</strong> Send emails appearing from your address</div>
-                <div><strong>Send On Behalf:</strong> Send with "on behalf of" indicator</div>
-                <div><strong>Full Management:</strong> Complete inbox management</div>
+                <div>
+                  <strong>Send As:</strong> Send emails appearing from your address
+                </div>
+                <div>
+                  <strong>Send On Behalf:</strong> Send with "on behalf of" indicator
+                </div>
+                <div>
+                  <strong>Full Management:</strong> Complete inbox management
+                </div>
               </div>
             </div>
 
@@ -211,12 +204,8 @@ const DelegationCard: React.FC<{
             {isOwner ? delegation.delegateName.charAt(0) : delegation.ownerName.charAt(0)}
           </div>
           <div>
-            <div className="text-gray-100 font-medium">
-              {isOwner ? delegation.delegateName : delegation.ownerName}
-            </div>
-            <div className="text-gray-500 text-sm">
-              {isOwner ? delegation.delegateEmail : delegation.ownerEmail}
-            </div>
+            <div className="text-gray-100 font-medium">{isOwner ? delegation.delegateName : delegation.ownerName}</div>
+            <div className="text-gray-500 text-sm">{isOwner ? delegation.delegateEmail : delegation.ownerEmail}</div>
           </div>
           <PermissionBadge permission={delegation.permission} />
           <StatusBadge status={delegation.status} />
@@ -290,12 +279,8 @@ const DelegationCard: React.FC<{
 
           <div className="text-xs text-gray-500">
             <div>Granted: {new Date(delegation.grantedAt).toLocaleDateString()}</div>
-            {delegation.acceptedAt && (
-              <div>Accepted: {new Date(delegation.acceptedAt).toLocaleDateString()}</div>
-            )}
-            {delegation.expiresAt && (
-              <div>Expires: {new Date(delegation.expiresAt).toLocaleDateString()}</div>
-            )}
+            {delegation.acceptedAt && <div>Accepted: {new Date(delegation.acceptedAt).toLocaleDateString()}</div>}
+            {delegation.expiresAt && <div>Expires: {new Date(delegation.expiresAt).toLocaleDateString()}</div>}
           </div>
 
           {delegation.allowedActions && delegation.allowedActions.length > 0 && (
@@ -353,9 +338,7 @@ const InvitationCard: React.FC<{
     </div>
 
     {invitation.message && (
-      <div className="mt-3 pt-3 border-t border-gray-700 text-sm text-gray-400 italic">
-        "{invitation.message}"
-      </div>
+      <div className="mt-3 pt-3 border-t border-gray-700 text-sm text-gray-400 italic">"{invitation.message}"</div>
     )}
   </div>
 );
@@ -391,7 +374,10 @@ export const DelegationSettings: React.FC<DelegationSettingsProps> = ({
 
   const myDelegates = useMemo(() => getDelegationsOwned(currentUserId), [getDelegationsOwned, currentUserId]);
   const myAccess = useMemo(() => getDelegationsAsDelegate(currentUserId), [getDelegationsAsDelegate, currentUserId]);
-  const myInvitations = useMemo(() => getPendingInvitations(currentUserEmail), [getPendingInvitations, currentUserEmail]);
+  const myInvitations = useMemo(
+    () => getPendingInvitations(currentUserEmail),
+    [getPendingInvitations, currentUserEmail]
+  );
 
   const handleGrant = (
     delegateEmail: string,
@@ -409,8 +395,8 @@ export const DelegationSettings: React.FC<DelegationSettingsProps> = ({
   };
 
   const tabs: { id: TabType; label: string; count?: number }[] = [
-    { id: 'my-delegates', label: 'My Delegates', count: myDelegates.filter(d => d.status === 'active').length },
-    { id: 'my-access', label: 'My Access', count: myAccess.filter(d => d.status === 'active').length },
+    { id: 'my-delegates', label: 'My Delegates', count: myDelegates.filter((d) => d.status === 'active').length },
+    { id: 'my-access', label: 'My Access', count: myAccess.filter((d) => d.status === 'active').length },
     { id: 'invitations', label: 'Invitations', count: myInvitations.length },
     { id: 'activity', label: 'Activity' }
   ];
@@ -427,10 +413,7 @@ export const DelegationSettings: React.FC<DelegationSettingsProps> = ({
             + Grant Access
           </button>
           {onClose && (
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-200 text-2xl"
-            >
+            <button onClick={onClose} className="text-gray-400 hover:text-gray-200 text-2xl">
               ×
             </button>
           )}
@@ -464,16 +447,12 @@ export const DelegationSettings: React.FC<DelegationSettingsProps> = ({
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`px-4 py-2 text-sm font-medium transition-colors relative ${
-              activeTab === tab.id
-                ? 'text-blue-400 border-b-2 border-blue-400'
-                : 'text-gray-400 hover:text-gray-200'
+              activeTab === tab.id ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-400 hover:text-gray-200'
             }`}
           >
             {tab.label}
             {tab.count !== undefined && tab.count > 0 && (
-              <span className="ml-2 px-1.5 py-0.5 bg-blue-500/20 text-blue-400 text-xs rounded-full">
-                {tab.count}
-              </span>
+              <span className="ml-2 px-1.5 py-0.5 bg-blue-500/20 text-blue-400 text-xs rounded-full">{tab.count}</span>
             )}
           </button>
         ))}
@@ -495,9 +474,10 @@ export const DelegationSettings: React.FC<DelegationSettingsProps> = ({
         {activeTab === 'my-delegates' && (
           <>
             {myDelegates
-              .filter(d =>
-                d.delegateName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                d.delegateEmail.toLowerCase().includes(searchQuery.toLowerCase())
+              .filter(
+                (d) =>
+                  d.delegateName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  d.delegateEmail.toLowerCase().includes(searchQuery.toLowerCase())
               )
               .map((delegation) => (
                 <DelegationCard
@@ -505,11 +485,7 @@ export const DelegationSettings: React.FC<DelegationSettingsProps> = ({
                   delegation={delegation}
                   isOwner={true}
                   onUpdatePermission={(permission) =>
-                    updateDelegation(
-                      { delegationId: delegation.id, permission },
-                      currentUserId,
-                      currentUserName
-                    )
+                    updateDelegation({ delegationId: delegation.id, permission }, currentUserId, currentUserName)
                   }
                   onSuspend={() => suspendDelegation(delegation.id, currentUserId, currentUserName)}
                   onResume={() => resumeDelegation(delegation.id, currentUserId, currentUserName)}
@@ -529,9 +505,10 @@ export const DelegationSettings: React.FC<DelegationSettingsProps> = ({
         {activeTab === 'my-access' && (
           <>
             {myAccess
-              .filter(d =>
-                d.ownerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                d.ownerEmail.toLowerCase().includes(searchQuery.toLowerCase())
+              .filter(
+                (d) =>
+                  d.ownerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  d.ownerEmail.toLowerCase().includes(searchQuery.toLowerCase())
               )
               .map((delegation) => (
                 <DelegationCard
@@ -580,10 +557,11 @@ export const DelegationSettings: React.FC<DelegationSettingsProps> = ({
         {activeTab === 'activity' && (
           <>
             {activities.slice(0, 20).map((activity) => (
-              <div key={activity.id} className="bg-gray-800 rounded-lg p-3 border border-gray-700 flex items-center gap-3">
-                <div className="text-gray-500 text-sm">
-                  {new Date(activity.timestamp).toLocaleString()}
-                </div>
+              <div
+                key={activity.id}
+                className="bg-gray-800 rounded-lg p-3 border border-gray-700 flex items-center gap-3"
+              >
+                <div className="text-gray-500 text-sm">{new Date(activity.timestamp).toLocaleString()}</div>
                 <div className="text-gray-300">
                   <span className="font-medium">{activity.performedByName}</span>
                   <span className="text-gray-500"> {activity.type.replace(/_/g, ' ')} </span>
@@ -601,11 +579,7 @@ export const DelegationSettings: React.FC<DelegationSettingsProps> = ({
       </div>
 
       {/* Grant Dialog */}
-      <GrantDialog
-        isOpen={grantDialogOpen}
-        onClose={() => setGrantDialogOpen(false)}
-        onGrant={handleGrant}
-      />
+      <GrantDialog isOpen={grantDialogOpen} onClose={() => setGrantDialogOpen(false)} onGrant={handleGrant} />
     </div>
   );
 };

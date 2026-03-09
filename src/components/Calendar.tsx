@@ -5,12 +5,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useCalendar } from '../hooks/useCalendar';
-import {
-  CalendarProvider,
-  EventStatus,
-  CalendarEvent,
-  CreateEventPayload
-} from '../types/calendar';
+import { CalendarProvider, EventStatus, CalendarEvent, CreateEventPayload } from '../types/calendar';
 
 interface CalendarProps {
   onEventSelect?: (event: CalendarEvent) => void;
@@ -52,7 +47,6 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
   void _addAttendee;
 
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showConvertModal, setShowConvertModal] = useState(false);
   void setShowConvertModal;
   const [showConnectModal, setShowConnectModal] = useState(false);
   const [newEventForm, setNewEventForm] = useState({
@@ -76,7 +70,8 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
       case 'month':
         return getEventsForMonth(selectedDate);
       case 'agenda':
-        return events.filter(e => new Date(e.start.dateTime || e.start.date!) >= new Date())
+        return events
+          .filter((e) => new Date(e.start.dateTime || e.start.date!) >= new Date())
           .sort((a, b) => {
             const aStart = new Date(a.start.dateTime || a.start.date!).getTime();
             const bStart = new Date(b.start.dateTime || b.start.date!).getTime();
@@ -91,20 +86,28 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
   // Get status badge color
   const getStatusColor = (status: EventStatus) => {
     switch (status) {
-      case EventStatus.CONFIRMED: return 'status-confirmed';
-      case EventStatus.TENTATIVE: return 'status-tentative';
-      case EventStatus.CANCELLED: return 'status-cancelled';
-      default: return '';
+      case EventStatus.CONFIRMED:
+        return 'status-confirmed';
+      case EventStatus.TENTATIVE:
+        return 'status-tentative';
+      case EventStatus.CANCELLED:
+        return 'status-cancelled';
+      default:
+        return '';
     }
   };
 
   // Get provider badge color
   const getProviderColor = (provider: CalendarProvider) => {
     switch (provider) {
-      case CalendarProvider.GOOGLE: return '#4285F4';
-      case CalendarProvider.OUTLOOK: return '#0078D4';
-      case CalendarProvider.EXCHANGE: return '#0078D4';
-      default: return '#666';
+      case CalendarProvider.GOOGLE:
+        return '#4285F4';
+      case CalendarProvider.OUTLOOK:
+        return '#0078D4';
+      case CalendarProvider.EXCHANGE:
+        return '#0078D4';
+      default:
+        return '#666';
     }
   };
 
@@ -136,7 +139,7 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
         newDate.setDate(newDate.getDate() + amount);
         break;
       case 'week':
-        newDate.setDate(newDate.getDate() + (amount * 7));
+        newDate.setDate(newDate.getDate() + amount * 7);
         break;
       case 'month':
         newDate.setMonth(newDate.getMonth() + amount);
@@ -157,7 +160,7 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
     endDate.setHours(endHour, endMin, 0, 0);
 
     const payload: CreateEventPayload = {
-      calendarId: calendars.find(c => c.primary)?.calendarId || 'primary',
+      calendarId: calendars.find((c) => c.primary)?.calendarId || 'primary',
       summary: newEventForm.summary,
       description: newEventForm.description,
       location: newEventForm.location,
@@ -188,8 +191,8 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleConvertEmail = async () => {
     if (!emailData) {
-return;
-}
+      return;
+    }
 
     await convertEmailToEvent('email-id', emailData, {
       extractTitleFromSubject: true,
@@ -230,10 +233,7 @@ return;
         <div className="week-header">
           <div className="time-column-header"></div>
           {days.map((day, i) => (
-            <div
-              key={i}
-              className={`day-header ${day.toDateString() === new Date().toDateString() ? 'today' : ''}`}
-            >
+            <div key={i} className={`day-header ${day.toDateString() === new Date().toDateString() ? 'today' : ''}`}>
               <div className="day-name">{day.toLocaleDateString('en-US', { weekday: 'short' })}</div>
               <div className="day-number">{day.getDate()}</div>
             </div>
@@ -241,7 +241,7 @@ return;
         </div>
         <div className="week-body">
           <div className="time-column">
-            {hours.slice(6, 22).map(hour => (
+            {hours.slice(6, 22).map((hour) => (
               <div key={hour} className="time-slot">
                 {hour === 0 ? '12 AM' : hour < 12 ? `${hour} AM` : hour === 12 ? '12 PM' : `${hour - 12} PM`}
               </div>
@@ -249,12 +249,12 @@ return;
           </div>
           {days.map((day, dayIndex) => (
             <div key={dayIndex} className="day-column">
-              {hours.slice(6, 22).map(hour => (
+              {hours.slice(6, 22).map((hour) => (
                 <div key={hour} className="hour-cell"></div>
               ))}
               {getEventsForDate(day)
-                .filter(e => e.start.dateTime)
-                .map(event => {
+                .filter((e) => e.start.dateTime)
+                .map((event) => {
                   const startHour = new Date(event.start.dateTime!).getHours();
                   const startMin = new Date(event.start.dateTime!).getMinutes();
                   const endHour = new Date(event.end.dateTime!).getHours();
@@ -331,8 +331,10 @@ return;
     return (
       <div className="calendar-month-view">
         <div className="month-header">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} className="weekday-header">{day}</div>
+          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+            <div key={day} className="weekday-header">
+              {day}
+            </div>
           ))}
         </div>
         <div className="month-body">
@@ -351,7 +353,7 @@ return;
                   >
                     <div className="day-number">{day.getDate()}</div>
                     <div className="day-events">
-                      {dayEvents.slice(0, 3).map(event => (
+                      {dayEvents.slice(0, 3).map((event) => (
                         <div
                           key={event.id}
                           className="month-event"
@@ -365,9 +367,7 @@ return;
                           {event.summary}
                         </div>
                       ))}
-                      {dayEvents.length > 3 && (
-                        <div className="more-events">+{dayEvents.length - 3} more</div>
-                      )}
+                      {dayEvents.length > 3 && <div className="more-events">+{dayEvents.length - 3} more</div>}
                     </div>
                   </div>
                 );
@@ -393,19 +393,19 @@ return;
         </div>
         <div className="day-body">
           <div className="time-column">
-            {hours.slice(6, 22).map(hour => (
+            {hours.slice(6, 22).map((hour) => (
               <div key={hour} className="time-slot">
                 {hour === 0 ? '12 AM' : hour < 12 ? `${hour} AM` : hour === 12 ? '12 PM' : `${hour - 12} PM`}
               </div>
             ))}
           </div>
           <div className="day-content">
-            {hours.slice(6, 22).map(hour => (
+            {hours.slice(6, 22).map((hour) => (
               <div key={hour} className="hour-cell"></div>
             ))}
             {dayEvents
-              .filter(e => e.start.dateTime)
-              .map(event => {
+              .filter((e) => e.start.dateTime)
+              .map((event) => {
                 const startHour = new Date(event.start.dateTime!).getHours();
                 const startMin = new Date(event.start.dateTime!).getMinutes();
                 const endHour = new Date(event.end.dateTime!).getHours();
@@ -435,8 +435,8 @@ return;
                 );
               })}
             {dayEvents
-              .filter(e => e.start.date)
-              .map(event => (
+              .filter((e) => e.start.date)
+              .map((event) => (
                 <div
                   key={event.id}
                   className="all-day-event"
@@ -463,7 +463,7 @@ return;
           <h3>Upcoming Events</h3>
         </div>
         <div className="agenda-body">
-          {displayedEvents.map(event => (
+          {displayedEvents.map((event) => (
             <div
               key={event.id}
               className="agenda-event"
@@ -489,22 +489,15 @@ return;
                 <div className="event-time">{formatEventTime(event)}</div>
                 {event.location && <div className="event-location">📍 {event.location}</div>}
                 <div className="event-meta">
-                  <span
-                    className="provider-badge"
-                    style={{ backgroundColor: getProviderColor(event.provider) }}
-                  >
+                  <span className="provider-badge" style={{ backgroundColor: getProviderColor(event.provider) }}>
                     {event.provider}
                   </span>
-                  <span className={`status-badge ${getStatusColor(event.status)}`}>
-                    {event.status}
-                  </span>
+                  <span className={`status-badge ${getStatusColor(event.status)}`}>{event.status}</span>
                 </div>
               </div>
             </div>
           ))}
-          {displayedEvents.length === 0 && (
-            <div className="no-events">No upcoming events</div>
-          )}
+          {displayedEvents.length === 0 && <div className="no-events">No upcoming events</div>}
         </div>
       </div>
     );
@@ -513,14 +506,16 @@ return;
   // Render event detail panel
   const renderEventDetail = () => {
     if (!selectedEvent) {
-return null;
-}
+      return null;
+    }
 
     return (
       <div className="event-detail-panel">
         <div className="detail-header">
           <h3>{selectedEvent.summary}</h3>
-          <button className="close-btn" onClick={() => setSelectedEvent(null)}>×</button>
+          <button className="close-btn" onClick={() => setSelectedEvent(null)}>
+            ×
+          </button>
         </div>
         <div className="detail-body">
           <div className="detail-row">
@@ -546,9 +541,7 @@ return null;
                 {selectedEvent.attendees.map((attendee, i) => (
                   <div key={i} className="attendee">
                     <span className="name">{attendee.displayName || attendee.email}</span>
-                    <span className={`response ${attendee.responseStatus}`}>
-                      {attendee.responseStatus}
-                    </span>
+                    <span className={`response ${attendee.responseStatus}`}>{attendee.responseStatus}</span>
                   </div>
                 ))}
               </div>
@@ -558,9 +551,7 @@ return null;
             <button className="btn-secondary" onClick={() => deleteEvent(selectedEvent.id)}>
               Delete
             </button>
-            <button className="btn-primary">
-              Edit
-            </button>
+            <button className="btn-primary">Edit</button>
           </div>
         </div>
       </div>
@@ -570,28 +561,24 @@ return null;
   // Render connect modal
   const renderConnectModal = () => {
     if (!showConnectModal) {
-return null;
-}
+      return null;
+    }
 
     return (
       <div className="modal-overlay" onClick={() => setShowConnectModal(false)}>
-        <div className="modal" onClick={e => e.stopPropagation()}>
+        <div className="modal" onClick={(e) => e.stopPropagation()}>
           <div className="modal-header">
             <h3>Connect Calendar</h3>
-            <button className="close-btn" onClick={() => setShowConnectModal(false)}>×</button>
+            <button className="close-btn" onClick={() => setShowConnectModal(false)}>
+              ×
+            </button>
           </div>
           <div className="modal-body">
-            <button
-              className="provider-btn google"
-              onClick={() => handleConnectCalendar(CalendarProvider.GOOGLE)}
-            >
+            <button className="provider-btn google" onClick={() => handleConnectCalendar(CalendarProvider.GOOGLE)}>
               <span className="provider-icon">📅</span>
               Connect Google Calendar
             </button>
-            <button
-              className="provider-btn outlook"
-              onClick={() => handleConnectCalendar(CalendarProvider.OUTLOOK)}
-            >
+            <button className="provider-btn outlook" onClick={() => handleConnectCalendar(CalendarProvider.OUTLOOK)}>
               <span className="provider-icon">📅</span>
               Connect Outlook Calendar
             </button>
@@ -604,15 +591,17 @@ return null;
   // Render create modal
   const renderCreateModal = () => {
     if (!showCreateModal) {
-return null;
-}
+      return null;
+    }
 
     return (
       <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
-        <div className="modal" onClick={e => e.stopPropagation()}>
+        <div className="modal" onClick={(e) => e.stopPropagation()}>
           <div className="modal-header">
             <h3>Create Event</h3>
-            <button className="close-btn" onClick={() => setShowCreateModal(false)}>×</button>
+            <button className="close-btn" onClick={() => setShowCreateModal(false)}>
+              ×
+            </button>
           </div>
           <div className="modal-body">
             <div className="form-group">
@@ -620,7 +609,7 @@ return null;
               <input
                 type="text"
                 value={newEventForm.summary}
-                onChange={e => setNewEventForm({ ...newEventForm, summary: e.target.value })}
+                onChange={(e) => setNewEventForm({ ...newEventForm, summary: e.target.value })}
                 placeholder="Event title"
               />
             </div>
@@ -628,7 +617,7 @@ return null;
               <label>Description</label>
               <textarea
                 value={newEventForm.description}
-                onChange={e => setNewEventForm({ ...newEventForm, description: e.target.value })}
+                onChange={(e) => setNewEventForm({ ...newEventForm, description: e.target.value })}
                 placeholder="Event description"
               />
             </div>
@@ -637,7 +626,7 @@ return null;
               <input
                 type="text"
                 value={newEventForm.location}
-                onChange={e => setNewEventForm({ ...newEventForm, location: e.target.value })}
+                onChange={(e) => setNewEventForm({ ...newEventForm, location: e.target.value })}
                 placeholder="Event location"
               />
             </div>
@@ -647,7 +636,7 @@ return null;
                 <input
                   type="date"
                   value={newEventForm.startDate}
-                  onChange={e => setNewEventForm({ ...newEventForm, startDate: e.target.value })}
+                  onChange={(e) => setNewEventForm({ ...newEventForm, startDate: e.target.value })}
                 />
               </div>
               <div className="form-group">
@@ -655,7 +644,7 @@ return null;
                 <input
                   type="time"
                   value={newEventForm.startTime}
-                  onChange={e => setNewEventForm({ ...newEventForm, startTime: e.target.value })}
+                  onChange={(e) => setNewEventForm({ ...newEventForm, startTime: e.target.value })}
                   disabled={newEventForm.allDay}
                 />
               </div>
@@ -666,7 +655,7 @@ return null;
                 <input
                   type="date"
                   value={newEventForm.endDate}
-                  onChange={e => setNewEventForm({ ...newEventForm, endDate: e.target.value })}
+                  onChange={(e) => setNewEventForm({ ...newEventForm, endDate: e.target.value })}
                 />
               </div>
               <div className="form-group">
@@ -674,7 +663,7 @@ return null;
                 <input
                   type="time"
                   value={newEventForm.endTime}
-                  onChange={e => setNewEventForm({ ...newEventForm, endTime: e.target.value })}
+                  onChange={(e) => setNewEventForm({ ...newEventForm, endTime: e.target.value })}
                   disabled={newEventForm.allDay}
                 />
               </div>
@@ -684,7 +673,7 @@ return null;
                 <input
                   type="checkbox"
                   checked={newEventForm.allDay}
-                  onChange={e => setNewEventForm({ ...newEventForm, allDay: e.target.checked })}
+                  onChange={(e) => setNewEventForm({ ...newEventForm, allDay: e.target.checked })}
                 />
                 All day event
               </label>
@@ -749,19 +738,13 @@ return null;
 
       {/* Calendar Accounts */}
       <div className="calendar-accounts">
-        {accounts.map(account => (
+        {accounts.map((account) => (
           <div key={account.id} className="account-chip">
-            <span
-              className="provider-icon"
-              style={{ backgroundColor: getProviderColor(account.provider) }}
-            >
+            <span className="provider-icon" style={{ backgroundColor: getProviderColor(account.provider) }}>
               {account.provider === CalendarProvider.GOOGLE ? 'G' : 'O'}
             </span>
             <span className="account-email">{account.email}</span>
-            <button
-              className="disconnect-btn"
-              onClick={() => disconnectCalendar(account.id)}
-            >
+            <button className="disconnect-btn" onClick={() => disconnectCalendar(account.id)}>
               ×
             </button>
           </div>
@@ -771,9 +754,15 @@ return null;
       {/* Navigation */}
       <div className="calendar-nav">
         <div className="nav-left">
-          <button className="nav-btn" onClick={() => navigateDate('prev')}>◀</button>
-          <button className="nav-btn today" onClick={() => navigateDate('today')}>Today</button>
-          <button className="nav-btn" onClick={() => navigateDate('next')}>▶</button>
+          <button className="nav-btn" onClick={() => navigateDate('prev')}>
+            ◀
+          </button>
+          <button className="nav-btn today" onClick={() => navigateDate('today')}>
+            Today
+          </button>
+          <button className="nav-btn" onClick={() => navigateDate('next')}>
+            ▶
+          </button>
           <span className="current-period">
             {viewMode === 'month'
               ? selectedDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
@@ -782,7 +771,7 @@ return null;
         </div>
         <div className="nav-right">
           <div className="view-toggle">
-            {(['day', 'week', 'month', 'agenda'] as const).map(mode => (
+            {(['day', 'week', 'month', 'agenda'] as const).map((mode) => (
               <button
                 key={mode}
                 className={`view-btn ${viewMode === mode ? 'active' : ''}`}

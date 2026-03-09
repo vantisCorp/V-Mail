@@ -2,12 +2,11 @@
  * useTwoFactorAuth Hook Tests
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useTwoFactorAuth } from '../useTwoFactorAuth';
 import { TwoFactorAuthService } from '../../services/twoFactorAuthService';
 import { TOTPService } from '../../services/totpService';
-import { TwoFactorAuthMethod } from '../../types/twoFactorAuth';
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -15,14 +14,14 @@ const localStorageMock = (() => {
   return {
     getItem: (key: string) => store[key] || null,
     setItem: (key: string, value: string) => {
- store[key] = value.toString();
-},
+      store[key] = value.toString();
+    },
     removeItem: (key: string) => {
- delete store[key];
-},
+      delete store[key];
+    },
     clear: () => {
- store = {};
-}
+      store = {};
+    }
   };
 })();
 

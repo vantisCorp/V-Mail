@@ -3,9 +3,9 @@
  */
 
 import { renderHook, act, waitFor } from '@testing-library/react';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { useEmailThreading } from '../useEmailThreading';
-import { Email, ThreadedEmail } from '../../types/emailThreading';
+import { Email } from '../../types/emailThreading';
 
 const createMockEmail = (overrides: Partial<Email> = {}): Email => ({
   id: `email-${Math.random()}`,

@@ -3,12 +3,11 @@
  * Manages automation rules, conditions, actions, and execution
  */
 
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   AutomationRule,
   RuleCondition,
   RuleAction,
-  ConditionGroup,
   TriggerType,
   ActionType,
   ConditionOperator,
@@ -385,7 +384,7 @@ export const useEmailAutomation = () => {
   // Initialize data
   useEffect(() => {
     const initialize = async () => {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setRules(generateMockRules());
       setExecutionLogs(generateMockExecutionLogs());
       setIsLoading(false);
@@ -405,114 +404,141 @@ export const useEmailAutomation = () => {
       failureCount: 0
     };
 
-    setRules(prev => [...prev, newRule]);
+    setRules((prev) => [...prev, newRule]);
     return newRule;
   }, []);
 
-  const updateRule = useCallback(async (id: string, payload: UpdateRulePayload): Promise<AutomationRule | null> => {
-    setRules(prev => prev.map(rule => {
-      if (rule.id === id) {
-        return {
-          ...rule,
-          ...payload,
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return rule;
-    }));
+  const updateRule = useCallback(
+    async (id: string, payload: UpdateRulePayload): Promise<AutomationRule | null> => {
+      setRules((prev) =>
+        prev.map((rule) => {
+          if (rule.id === id) {
+            return {
+              ...rule,
+              ...payload,
+              updatedAt: new Date().toISOString()
+            };
+          }
+          return rule;
+        })
+      );
 
-    return rules.find(r => r.id === id) || null;
-  }, [rules]);
+      return rules.find((r) => r.id === id) || null;
+    },
+    [rules]
+  );
 
   const deleteRule = useCallback(async (id: string): Promise<boolean> => {
-    setRules(prev => prev.filter(rule => rule.id !== id));
+    setRules((prev) => prev.filter((rule) => rule.id !== id));
     return true;
   }, []);
 
-  const duplicateRule = useCallback(async (ruleId: string, newName?: string): Promise<AutomationRule | null> => {
-    const originalRule = rules.find(r => r.id === ruleId);
-    if (!originalRule) {
-return null;
-}
+  const duplicateRule = useCallback(
+    async (ruleId: string, newName?: string): Promise<AutomationRule | null> => {
+      const originalRule = rules.find((r) => r.id === ruleId);
+      if (!originalRule) {
+        return null;
+      }
 
-    const newRule: AutomationRule = {
-      ...originalRule,
-      id: generateId(),
-      name: newName || `${originalRule.name} (Copy)`,
-      status: RuleStatus.DISABLED,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      executionCount: 0,
-      successCount: 0,
-      failureCount: 0,
-      lastExecutedAt: undefined
-    };
+      const newRule: AutomationRule = {
+        ...originalRule,
+        id: generateId(),
+        name: newName || `${originalRule.name} (Copy)`,
+        status: RuleStatus.DISABLED,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        executionCount: 0,
+        successCount: 0,
+        failureCount: 0,
+        lastExecutedAt: undefined
+      };
 
-    setRules(prev => [...prev, newRule]);
-    return newRule;
-  }, [rules]);
+      setRules((prev) => [...prev, newRule]);
+      return newRule;
+    },
+    [rules]
+  );
 
   // Rule status management
-  const activateRule = useCallback(async (id: string): Promise<boolean> => {
-    return (await updateRule(id, { status: RuleStatus.ACTIVE })) !== null;
-  }, [updateRule]);
+  const activateRule = useCallback(
+    async (id: string): Promise<boolean> => {
+      return (await updateRule(id, { status: RuleStatus.ACTIVE })) !== null;
+    },
+    [updateRule]
+  );
 
-  const pauseRule = useCallback(async (id: string): Promise<boolean> => {
-    return (await updateRule(id, { status: RuleStatus.PAUSED })) !== null;
-  }, [updateRule]);
+  const pauseRule = useCallback(
+    async (id: string): Promise<boolean> => {
+      return (await updateRule(id, { status: RuleStatus.PAUSED })) !== null;
+    },
+    [updateRule]
+  );
 
-  const disableRule = useCallback(async (id: string): Promise<boolean> => {
-    return (await updateRule(id, { status: RuleStatus.DISABLED })) !== null;
-  }, [updateRule]);
+  const disableRule = useCallback(
+    async (id: string): Promise<boolean> => {
+      return (await updateRule(id, { status: RuleStatus.DISABLED })) !== null;
+    },
+    [updateRule]
+  );
 
   // Condition management
-  const addCondition = useCallback(async (ruleId: string, condition: CreateConditionPayload): Promise<RuleCondition | null> => {
-    const newCondition: RuleCondition = {
-      ...condition,
-      id: generateId()
-    };
+  const addCondition = useCallback(
+    async (ruleId: string, condition: CreateConditionPayload): Promise<RuleCondition | null> => {
+      const newCondition: RuleCondition = {
+        ...condition,
+        id: generateId()
+      };
 
-    setRules(prev => prev.map(rule => {
-      if (rule.id === ruleId) {
-        return {
-          ...rule,
-          conditions: [...rule.conditions, newCondition],
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return rule;
-    }));
+      setRules((prev) =>
+        prev.map((rule) => {
+          if (rule.id === ruleId) {
+            return {
+              ...rule,
+              conditions: [...rule.conditions, newCondition],
+              updatedAt: new Date().toISOString()
+            };
+          }
+          return rule;
+        })
+      );
 
-    return newCondition;
-  }, []);
+      return newCondition;
+    },
+    []
+  );
 
-  const updateCondition = useCallback(async (ruleId: string, conditionId: string, updates: Partial<RuleCondition>): Promise<boolean> => {
-    setRules(prev => prev.map(rule => {
-      if (rule.id === ruleId) {
-        return {
-          ...rule,
-          conditions: rule.conditions.map(c =>
-            c.id === conditionId ? { ...c, ...updates } : c
-          ),
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return rule;
-    }));
-    return true;
-  }, []);
+  const updateCondition = useCallback(
+    async (ruleId: string, conditionId: string, updates: Partial<RuleCondition>): Promise<boolean> => {
+      setRules((prev) =>
+        prev.map((rule) => {
+          if (rule.id === ruleId) {
+            return {
+              ...rule,
+              conditions: rule.conditions.map((c) => (c.id === conditionId ? { ...c, ...updates } : c)),
+              updatedAt: new Date().toISOString()
+            };
+          }
+          return rule;
+        })
+      );
+      return true;
+    },
+    []
+  );
 
   const removeCondition = useCallback(async (ruleId: string, conditionId: string): Promise<boolean> => {
-    setRules(prev => prev.map(rule => {
-      if (rule.id === ruleId) {
-        return {
-          ...rule,
-          conditions: rule.conditions.filter(c => c.id !== conditionId),
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return rule;
-    }));
+    setRules((prev) =>
+      prev.map((rule) => {
+        if (rule.id === ruleId) {
+          return {
+            ...rule,
+            conditions: rule.conditions.filter((c) => c.id !== conditionId),
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return rule;
+      })
+    );
     return true;
   }, []);
 
@@ -523,123 +549,135 @@ return null;
       id: generateId()
     };
 
-    setRules(prev => prev.map(rule => {
-      if (rule.id === ruleId) {
-        return {
-          ...rule,
-          actions: [...rule.actions, newAction],
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return rule;
-    }));
+    setRules((prev) =>
+      prev.map((rule) => {
+        if (rule.id === ruleId) {
+          return {
+            ...rule,
+            actions: [...rule.actions, newAction],
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return rule;
+      })
+    );
 
     return newAction;
   }, []);
 
-  const updateAction = useCallback(async (ruleId: string, actionId: string, updates: Partial<RuleAction>): Promise<boolean> => {
-    setRules(prev => prev.map(rule => {
-      if (rule.id === ruleId) {
-        return {
-          ...rule,
-          actions: rule.actions.map(a =>
-            a.id === actionId ? { ...a, ...updates } : a
-          ),
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return rule;
-    }));
-    return true;
-  }, []);
+  const updateAction = useCallback(
+    async (ruleId: string, actionId: string, updates: Partial<RuleAction>): Promise<boolean> => {
+      setRules((prev) =>
+        prev.map((rule) => {
+          if (rule.id === ruleId) {
+            return {
+              ...rule,
+              actions: rule.actions.map((a) => (a.id === actionId ? { ...a, ...updates } : a)),
+              updatedAt: new Date().toISOString()
+            };
+          }
+          return rule;
+        })
+      );
+      return true;
+    },
+    []
+  );
 
   const removeAction = useCallback(async (ruleId: string, actionId: string): Promise<boolean> => {
-    setRules(prev => prev.map(rule => {
-      if (rule.id === ruleId) {
-        return {
-          ...rule,
-          actions: rule.actions.filter(a => a.id !== actionId),
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return rule;
-    }));
+    setRules((prev) =>
+      prev.map((rule) => {
+        if (rule.id === ruleId) {
+          return {
+            ...rule,
+            actions: rule.actions.filter((a) => a.id !== actionId),
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return rule;
+      })
+    );
     return true;
   }, []);
 
   // Reorder actions
   const reorderActions = useCallback(async (ruleId: string, actionIds: string[]): Promise<boolean> => {
-    setRules(prev => prev.map(rule => {
-      if (rule.id === ruleId) {
-        const actionMap = new Map(rule.actions.map(a => [a.id, a]));
-        const reorderedActions = actionIds.map(id => actionMap.get(id)!).filter(Boolean);
+    setRules((prev) =>
+      prev.map((rule) => {
+        if (rule.id === ruleId) {
+          const actionMap = new Map(rule.actions.map((a) => [a.id, a]));
+          const reorderedActions = actionIds.map((id) => actionMap.get(id)!).filter(Boolean);
 
-        return {
-          ...rule,
-          actions: reorderedActions,
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return rule;
-    }));
+          return {
+            ...rule,
+            actions: reorderedActions,
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return rule;
+      })
+    );
     return true;
   }, []);
 
   // Rule testing
-  const testRule = useCallback(async (ruleId: string, emailData: Record<string, any>): Promise<RuleTestResult | null> => {
-    const rule = rules.find(r => r.id === ruleId);
-    if (!rule) {
-return null;
-}
-
-    const startTime = Date.now();
-    const matchedConditions: string[] = [];
-    const unmatchedConditions: string[] = [];
-    let matched = true;
-
-    // Test conditions
-    for (const condition of rule.conditions) {
-      const emailValue = emailData[condition.field];
-      let conditionMatched = false;
-
-      switch (condition.operator) {
-        case ConditionOperator.EQUALS:
-          conditionMatched = emailValue === condition.value;
-          break;
-        case ConditionOperator.CONTAINS:
-          conditionMatched = String(emailValue).toLowerCase().includes(String(condition.value).toLowerCase());
-          break;
-        case ConditionOperator.IN:
-          conditionMatched = Array.isArray(condition.value) && condition.value.includes(emailValue);
-          break;
-        default:
-          conditionMatched = emailValue === condition.value;
+  const testRule = useCallback(
+    async (ruleId: string, emailData: Record<string, unknown>): Promise<RuleTestResult | null> => {
+      const rule = rules.find((r) => r.id === ruleId);
+      if (!rule) {
+        return null;
       }
 
-      if (condition.negate) {
-        conditionMatched = !conditionMatched;
+      const startTime = Date.now();
+      const matchedConditions: string[] = [];
+      const unmatchedConditions: string[] = [];
+      let matched = true;
+
+      // Test conditions
+      for (const condition of rule.conditions) {
+        const emailValue = emailData[condition.field];
+        let conditionMatched = false;
+
+        switch (condition.operator) {
+          case ConditionOperator.EQUALS:
+            conditionMatched = emailValue === condition.value;
+            break;
+          case ConditionOperator.CONTAINS:
+            conditionMatched = String(emailValue).toLowerCase().includes(String(condition.value).toLowerCase());
+            break;
+          case ConditionOperator.IN:
+            conditionMatched = Array.isArray(condition.value) && condition.value.includes(emailValue);
+            break;
+          default:
+            conditionMatched = emailValue === condition.value;
+        }
+
+        if (condition.negate) {
+          conditionMatched = !conditionMatched;
+        }
+
+        if (conditionMatched) {
+          matchedConditions.push(`${condition.field} ${condition.operator} ${condition.value}`);
+        } else {
+          unmatchedConditions.push(`${condition.field} ${condition.operator} ${condition.value}`);
+          matched = false;
+        }
       }
 
-      if (conditionMatched) {
-        matchedConditions.push(`${condition.field} ${condition.operator} ${condition.value}`);
-      } else {
-        unmatchedConditions.push(`${condition.field} ${condition.operator} ${condition.value}`);
-        matched = false;
-      }
-    }
+      const executionTime = Date.now() - startTime;
 
-    const executionTime = Date.now() - startTime;
-
-    return {
-      ruleId: rule.id,
-      ruleName: rule.name,
-      matched,
-      matchedConditions,
-      unmatchedConditions,
-      executionTime,
-      timestamp: new Date().toISOString()
-    };
-  }, [rules]);
+      return {
+        ruleId: rule.id,
+        ruleName: rule.name,
+        matched,
+        matchedConditions,
+        unmatchedConditions,
+        executionTime,
+        timestamp: new Date().toISOString()
+      };
+    },
+    [rules]
+  );
 
   // Rule validation
   const validateRule = useCallback((rule: Partial<CreateRulePayload>): RuleValidationError[] => {
@@ -685,77 +723,86 @@ return null;
   }, []);
 
   // Rule statistics
-  const getRuleStatistics = useCallback((ruleId: string): RuleStatistics | null => {
-    const rule = rules.find(r => r.id === ruleId);
-    if (!rule) {
-return null;
-}
+  const getRuleStatistics = useCallback(
+    (ruleId: string): RuleStatistics | null => {
+      const rule = rules.find((r) => r.id === ruleId);
+      if (!rule) {
+        return null;
+      }
 
-    const logs = executionLogs.filter(l => l.ruleId === ruleId);
-    const successCount = logs.filter(l => l.status === 'success').length;
-    const failureCount = logs.filter(l => l.status === 'failure').length;
+      const logs = executionLogs.filter((l) => l.ruleId === ruleId);
 
-    const actionStats = logs.reduce((acc, log) => {
-      log.executedActions.forEach(action => {
-        const existing = acc.find(a => a.actionType === action.actionType);
-        if (existing) {
-          existing.count++;
-        } else {
-          acc.push({
-            actionType: action.actionType,
-            count: 1,
-            successRate: action.status === 'success' ? 1 : 0
+      const actionStats = logs.reduce(
+        (acc, log) => {
+          log.executedActions.forEach((action) => {
+            const existing = acc.find((a) => a.actionType === action.actionType);
+            if (existing) {
+              existing.count++;
+            } else {
+              acc.push({
+                actionType: action.actionType,
+                count: 1,
+                successRate: action.status === 'success' ? 1 : 0
+              });
+            }
           });
-        }
-      });
-      return acc;
-    }, [] as Array<{ actionType: ActionType; count: number; successRate: number }>);
+          return acc;
+        },
+        [] as Array<{ actionType: ActionType; count: number; successRate: number }>
+      );
 
-    return {
-      ruleId: rule.id,
-      ruleName: rule.name,
-      totalExecutions: rule.executionCount,
-      successfulExecutions: rule.successCount,
-      failedExecutions: rule.failureCount,
-      successRate: rule.executionCount > 0 ? (rule.successCount / rule.executionCount) * 100 : 0,
-      lastExecutedAt: rule.lastExecutedAt || '',
-      averageExecutionTime: logs.length > 0 ? logs.reduce((sum, log) => sum + log.totalDuration, 0) / logs.length : 0,
-      actionStats,
-      executionsByDay: [],
-      recentErrors: logs.filter(l => l.status === 'failure').slice(-5).map(l => ({
-        timestamp: l.executedAt,
-        error: l.executedActions.find(a => a.status === 'failure')?.error || 'Unknown error'
-      }))
-    };
-  }, [rules, executionLogs]);
+      return {
+        ruleId: rule.id,
+        ruleName: rule.name,
+        totalExecutions: rule.executionCount,
+        successfulExecutions: rule.successCount,
+        failedExecutions: rule.failureCount,
+        successRate: rule.executionCount > 0 ? (rule.successCount / rule.executionCount) * 100 : 0,
+        lastExecutedAt: rule.lastExecutedAt || '',
+        averageExecutionTime: logs.length > 0 ? logs.reduce((sum, log) => sum + log.totalDuration, 0) / logs.length : 0,
+        actionStats,
+        executionsByDay: [],
+        recentErrors: logs
+          .filter((l) => l.status === 'failure')
+          .slice(-5)
+          .map((l) => ({
+            timestamp: l.executedAt,
+            error: l.executedActions.find((a) => a.status === 'failure')?.error || 'Unknown error'
+          }))
+      };
+    },
+    [rules, executionLogs]
+  );
 
   // Filter and search
-  const getFilteredRules = useCallback((filter?: {
-    status?: RuleStatus;
-    priority?: RulePriority;
-    categoryId?: string;
-    search?: string;
-  }): AutomationRule[] => {
-    let filtered = [...rules];
+  const getFilteredRules = useCallback(
+    (filter?: {
+      status?: RuleStatus;
+      priority?: RulePriority;
+      categoryId?: string;
+      search?: string;
+    }): AutomationRule[] => {
+      let filtered = [...rules];
 
-    if (filter?.status) {
-      filtered = filtered.filter(r => r.status === filter.status);
-    }
+      if (filter?.status) {
+        filtered = filtered.filter((r) => r.status === filter.status);
+      }
 
-    if (filter?.priority) {
-      filtered = filtered.filter(r => r.priority === filter.priority);
-    }
+      if (filter?.priority) {
+        filtered = filtered.filter((r) => r.priority === filter.priority);
+      }
 
-    if (filter?.search) {
-      const searchLower = filter.search.toLowerCase();
-      filtered = filtered.filter(r =>
-        r.name.toLowerCase().includes(searchLower) ||
-        r.description?.toLowerCase().includes(searchLower)
-      );
-    }
+      if (filter?.search) {
+        const searchLower = filter.search.toLowerCase();
+        filtered = filtered.filter(
+          (r) => r.name.toLowerCase().includes(searchLower) || r.description?.toLowerCase().includes(searchLower)
+        );
+      }
 
-    return filtered;
-  }, [rules]);
+      return filtered;
+    },
+    [rules]
+  );
 
   // Category management
   const createCategory = useCallback(async (category: CreateCategoryPayload): Promise<RuleCategory> => {
@@ -767,48 +814,57 @@ return null;
       updatedAt: new Date().toISOString()
     };
 
-    setCategories(prev => [...prev, newCategory]);
+    setCategories((prev) => [...prev, newCategory]);
     return newCategory;
   }, []);
 
-  const updateCategory = useCallback(async (categoryId: string, updates: Partial<CreateCategoryPayload>): Promise<boolean> => {
-    setCategories(prev => prev.map(c =>
-      c.id === categoryId ? { ...c, ...updates, updatedAt: new Date().toISOString() } : c
-    ));
-    return true;
-  }, []);
+  const updateCategory = useCallback(
+    async (categoryId: string, updates: Partial<CreateCategoryPayload>): Promise<boolean> => {
+      setCategories((prev) =>
+        prev.map((c) => (c.id === categoryId ? { ...c, ...updates, updatedAt: new Date().toISOString() } : c))
+      );
+      return true;
+    },
+    []
+  );
 
   const deleteCategory = useCallback(async (categoryId: string): Promise<boolean> => {
-    setCategories(prev => prev.filter(c => c.id !== categoryId));
+    setCategories((prev) => prev.filter((c) => c.id !== categoryId));
     return true;
   }, []);
 
   // Utility functions
-  const getRuleById = useCallback((id: string): AutomationRule | null => {
-    return rules.find(r => r.id === id) || null;
-  }, [rules]);
+  const getRuleById = useCallback(
+    (id: string): AutomationRule | null => {
+      return rules.find((r) => r.id === id) || null;
+    },
+    [rules]
+  );
 
   const getActiveRules = useCallback((): AutomationRule[] => {
-    return rules.filter(r => r.status === RuleStatus.ACTIVE);
+    return rules.filter((r) => r.status === RuleStatus.ACTIVE);
   }, [rules]);
 
-  const getExecutionLogs = useCallback((ruleId?: string): RuleExecutionLog[] => {
-    if (ruleId) {
-      return executionLogs.filter(l => l.ruleId === ruleId);
-    }
-    return executionLogs;
-  }, [executionLogs]);
+  const getExecutionLogs = useCallback(
+    (ruleId?: string): RuleExecutionLog[] => {
+      if (ruleId) {
+        return executionLogs.filter((l) => l.ruleId === ruleId);
+      }
+      return executionLogs;
+    },
+    [executionLogs]
+  );
 
   // Refresh functions
   const refreshRules = useCallback(async () => {
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
     setRules(generateMockRules());
     setIsLoading(false);
   }, []);
 
   const refreshExecutionLogs = useCallback(async () => {
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 300));
     setExecutionLogs(generateMockExecutionLogs());
   }, []);
 

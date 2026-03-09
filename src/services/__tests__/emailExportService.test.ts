@@ -1,6 +1,13 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { EmailExportService } from '../emailExportService';
-import type { Email, ExportFormat, ExportOptions, ExportProgress, ExportResult, ExportRequest } from '../../types/emailExport';
+import type {
+  Email,
+  ExportFormat,
+  ExportOptions,
+  ExportProgress,
+  ExportResult,
+  ExportRequest
+} from '../../types/emailExport';
 
 // Mock browser APIs
 global.URL.createObjectURL = vi.fn(() => 'blob:mock-url');
@@ -12,9 +19,9 @@ const mockLink = {
   download: '',
   click: vi.fn()
 };
-vi.spyOn(document, 'createElement').mockReturnValue(mockLink as any);
-vi.spyOn(document.body, 'appendChild').mockImplementation(() => mockLink as any);
-vi.spyOn(document.body, 'removeChild').mockImplementation(() => mockLink as any);
+vi.spyOn(document, 'createElement').mockReturnValue(mockLink as unknown);
+vi.spyOn(document.body, 'appendChild').mockImplementation(() => mockLink as unknown);
+vi.spyOn(document.body, 'removeChild').mockImplementation(() => mockLink as unknown);
 
 // Mock the EmailService
 vi.mock('../../services/emailService', () => ({
@@ -62,10 +69,7 @@ describe('EmailExportService', () => {
 
   describe('exportSingleEmail', () => {
     it('should export a single email successfully as PDF', async () => {
-      const result: ExportResult = await EmailExportService.exportSingleEmail(
-        mockEmail,
-        defaultOptions
-      );
+      const result: ExportResult = await EmailExportService.exportSingleEmail(mockEmail, defaultOptions);
 
       expect(result.success).toBe(true);
       expect(result.emailCount).toBe(1);
@@ -109,11 +113,7 @@ describe('EmailExportService', () => {
         progressUpdates.push(progress);
       };
 
-      const result: ExportResult = await EmailExportService.exportMultipleEmails(
-        emails,
-        defaultOptions,
-        onProgress
-      );
+      const result: ExportResult = await EmailExportService.exportMultipleEmails(emails, defaultOptions, onProgress);
 
       expect(result.success).toBe(true);
       expect(result.emailCount).toBe(3);
@@ -224,7 +224,6 @@ describe('EmailExportService', () => {
   describe('downloadFile', () => {
     it('should trigger file download', () => {
       const blob = new Blob(['test content'], { type: 'text/plain' });
-      const url = 'data:text/plain;base64,dGVzdCBjb250ZW50';
 
       expect(() => {
         EmailExportService.downloadFile(blob, 'test.txt');

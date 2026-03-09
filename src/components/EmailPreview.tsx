@@ -43,11 +43,11 @@ export const EmailPreview: React.FC<EmailPreviewProps> = ({ email }) => {
     return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
   };
 
-  const handleAttachmentClick = (attachment: any) => {
+  const handleAttachmentClick = (attachment: unknown) => {
     setPreviewAttachment(attachment);
   };
 
-  const handleDownload = (attachment: any) => {
+  const handleDownload = (attachment: unknown) => {
     addNotification('success', `Downloading ${attachment.name}...`);
   };
 
@@ -102,21 +102,13 @@ export const EmailPreview: React.FC<EmailPreviewProps> = ({ email }) => {
                   <div className="attachment-icon">📎</div>
                   <div className="attachment-info">
                     <div className="attachment-name">{attachment.name}</div>
-                    <div className="attachment-size">
-                      {formatFileSize(attachment.size)}
-                    </div>
+                    <div className="attachment-size">{formatFileSize(attachment.size)}</div>
                   </div>
                   <div className="attachment-actions">
-                    <button
-                      className="btn btn-sm btn-secondary"
-                      onClick={() => handleAttachmentClick(attachment)}
-                    >
+                    <button className="btn btn-sm btn-secondary" onClick={() => handleAttachmentClick(attachment)}>
                       Preview
                     </button>
-                    <button
-                      className="btn btn-sm btn-primary"
-                      onClick={() => handleDownload(attachment)}
-                    >
+                    <button className="btn btn-sm btn-primary" onClick={() => handleDownload(attachment)}>
                       Download
                     </button>
                   </div>

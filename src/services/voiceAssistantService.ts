@@ -10,23 +10,20 @@ import {
   SpeechSynthesisOptions,
   VoiceAssistantConfig,
   VoiceAssistantStatistics,
-  VoiceLanguage,
   VoiceRecognitionStatus,
   SpeechSynthesisStatus,
   MarkAction,
-  VoicePhrasePattern,
   FOLDER_NAME_VARIATIONS,
   CONFIRMATION_PHRASES,
   CANCELLATION_PHRASES,
   VOICE_PHRASE_PATTERNS,
-  VOICE_FEEDBACK_MESSAGES,
   DEFAULT_VOICE_CONFIG
 } from '../types/voiceAssistant';
 
 export class VoiceAssistantService {
   private static instance: VoiceAssistantService;
   private config: VoiceAssistantConfig;
-  private recognition: any = null;
+  private recognition: unknown = null;
   private synthesis: SpeechSynthesis;
   private status: VoiceRecognitionStatus = VoiceRecognitionStatus.IDLE;
   private speakingStatus: SpeechSynthesisStatus = SpeechSynthesisStatus.IDLE;
@@ -59,7 +56,7 @@ export class VoiceAssistantService {
       successfulRecognitions: 0,
       totalSpeakingTime: 0,
       emailsRead: 0,
-      commandsByType: {} as any,
+      commandsByType: {} as unknown,
       averageConfidence: 0,
       lastReset: Date.now()
     };
@@ -67,7 +64,8 @@ export class VoiceAssistantService {
 
   private initializeRecognition(): void {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const win = window as Record<string, unknown>;
+      const SpeechRecognition = win.SpeechRecognition || win.webkitSpeechRecognition;
       this.recognition = new SpeechRecognition();
       this.recognition.continuous = this.config.continuousListening;
       this.recognition.interimResults = true;
@@ -78,12 +76,12 @@ export class VoiceAssistantService {
         this.emit('STARTED');
       };
 
-      this.recognition.onresult = (event: any) => {
+      this.recognition.onresult = (event: unknown) => {
         const result = this.processRecognitionResult(event);
         this.emit('RESULT', result);
       };
 
-      this.recognition.onerror = (event: any) => {
+      this.recognition.onerror = (event: unknown) => {
         this.status = VoiceRecognitionStatus.ERROR;
         this.emit('ERROR', event.error);
         this.statistics.recognitionAttempts++;
@@ -106,7 +104,7 @@ export class VoiceAssistantService {
     }
   }
 
-  private processRecognitionResult(event: any): VoiceRecognitionResult {
+  private processRecognitionResult(event: unknown): VoiceRecognitionResult {
     const results = event.results;
     const lastResult = results[results.length - 1];
     const transcript = lastResult[0].transcript.trim();
@@ -120,10 +118,12 @@ export class VoiceAssistantService {
     };
 
     if (lastResult.length > 1) {
-      result.alternatives = Array.from(lastResult).slice(1).map((alt: any) => ({
-        transcript: alt.transcript,
-        confidence: alt.confidence
-      }));
+      result.alternatives = Array.from(lastResult)
+        .slice(1)
+        .map((alt: unknown) => ({
+          transcript: alt.transcript,
+          confidence: alt.confidence
+        }));
     }
 
     if (isFinal) {
@@ -170,7 +170,7 @@ export class VoiceAssistantService {
 
     try {
       this.recognition.start();
-    } catch (error) {
+    } catch {
       this.status = VoiceRecognitionStatus.ERROR;
       throw new Error('Failed to start speech recognition');
     }
@@ -219,11 +219,7 @@ export class VoiceAssistantService {
     return this.buildUnknownCommand(normalizedTranscript);
   }
 
-  private buildCommand(
-    type: VoiceCommandType,
-    transcript: string,
-    match: RegExpMatchArray
-  ): VoiceCommand {
+  private buildCommand(type: VoiceCommandType, transcript: string, match: RegExpMatchArray): VoiceCommand {
     const command: VoiceCommand = {
       id: this.generateId(),
       type,
@@ -283,7 +279,7 @@ export class VoiceAssistantService {
     };
   }
 
-  private calculateConfidence(transcript: string, type: VoiceCommandType): number {
+  private calculateConfidence(transcript: string, _type: VoiceCommandType): number {
     // Base confidence from pattern matching
     let confidence = 0.8;
 
@@ -314,7 +310,7 @@ export class VoiceAssistantService {
     const nameRegex = /(?:to|for|cc|bcc)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/gi;
     const nameMatches = text.match(nameRegex);
     if (nameMatches) {
-      nameMatches.forEach(match => {
+      nameMatches.forEach((match) => {
         const name = match.replace(/^(?:to|for|cc|bcc)\s+/i, '').trim();
         if (!recipients.includes(name)) {
           recipients.push(name);
@@ -329,17 +325,17 @@ export class VoiceAssistantService {
     const lower = transcript.toLowerCase();
 
     if (lower.includes('unread')) {
-return MarkAction.UNREAD;
-}
+      return MarkAction.UNREAD;
+    }
     if (lower.includes('unstar') || lower.includes('unimportant')) {
-return MarkAction.UNSTAR;
-}
+      return MarkAction.UNSTAR;
+    }
     if (lower.includes('star')) {
-return MarkAction.STAR;
-}
+      return MarkAction.STAR;
+    }
     if (lower.includes('important')) {
-return MarkAction.IMPORTANT;
-}
+      return MarkAction.IMPORTANT;
+    }
 
     return MarkAction.READ;
   }
@@ -369,7 +365,7 @@ return MarkAction.IMPORTANT;
 
     if (options?.voice) {
       const voices = this.synthesis.getVoices();
-      const voice = voices.find(v => v.voiceURI === options.voice);
+      const voice = voices.find((v) => v.voiceURI === options.voice);
       if (voice) {
         utterance.voice = voice;
       }
@@ -417,12 +413,12 @@ return MarkAction.IMPORTANT;
 
   isConfirmation(transcript: string): boolean {
     const normalized = transcript.toLowerCase().trim();
-    return CONFIRMATION_PHRASES.some(phrase => normalized.includes(phrase));
+    return CONFIRMATION_PHRASES.some((phrase) => normalized.includes(phrase));
   }
 
   isCancellation(transcript: string): boolean {
     const normalized = transcript.toLowerCase().trim();
-    return CANCELLATION_PHRASES.some(phrase => normalized.includes(phrase));
+    return CANCELLATION_PHRASES.some((phrase) => normalized.includes(phrase));
   }
 
   provideFeedback(message: string): void {
@@ -476,10 +472,10 @@ return MarkAction.IMPORTANT;
     }
   }
 
-  private emit(event: string, data?: any): void {
+  private emit(event: string, data?: unknown): void {
     const listeners = this.eventListeners.get(event);
     if (listeners) {
-      listeners.forEach(callback => callback(data));
+      listeners.forEach((callback) => callback(data));
     }
   }
 

@@ -1,8 +1,7 @@
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   EmailRule,
   RuleCondition,
-  RuleAction,
   CreateRulePayload,
   UpdateRulePayload,
   RuleTestResult,
@@ -10,7 +9,6 @@ import {
   RuleFilter,
   RuleTemplate,
   EmailContext,
-  RuleExecutionContext,
   RuleExecution,
   RuleType,
   RuleStatus,
@@ -294,124 +292,130 @@ export const useEmailRules = () => {
       executionHistory: []
     };
 
-    setRules(prev => [...prev, newRule]);
+    setRules((prev) => [...prev, newRule]);
     return newRule;
   }, []);
 
-  const updateRule = useCallback(async (
-    ruleId: string,
-    payload: UpdateRulePayload
-  ): Promise<EmailRule | null> => {
+  const updateRule = useCallback(async (ruleId: string, payload: UpdateRulePayload): Promise<EmailRule | null> => {
     let updatedRule: EmailRule | null = null;
 
-    setRules(prev => prev.map(rule => {
-      if (rule.id === ruleId) {
-        updatedRule = {
-          ...rule,
-          ...payload,
-          conditions: payload.conditions ? payload.conditions.map((c, idx) => ({
-            ...c,
-            id: `cond-${Date.now()}-${idx}`
-          })) : rule.conditions,
-          actions: payload.actions ? payload.actions.map((a, idx) => ({
-            ...a,
-            id: `act-${Date.now()}-${idx}`
-          })) : rule.actions,
-          updatedBy: currentUser.id,
-          updatedByName: currentUser.name,
-          updatedAt: new Date().toISOString()
-        };
-        return updatedRule;
-      }
-      return rule;
-    }));
+    setRules((prev) =>
+      prev.map((rule) => {
+        if (rule.id === ruleId) {
+          updatedRule = {
+            ...rule,
+            ...payload,
+            conditions: payload.conditions
+              ? payload.conditions.map((c, idx) => ({
+                  ...c,
+                  id: `cond-${Date.now()}-${idx}`
+                }))
+              : rule.conditions,
+            actions: payload.actions
+              ? payload.actions.map((a, idx) => ({
+                  ...a,
+                  id: `act-${Date.now()}-${idx}`
+                }))
+              : rule.actions,
+            updatedBy: currentUser.id,
+            updatedByName: currentUser.name,
+            updatedAt: new Date().toISOString()
+          };
+          return updatedRule;
+        }
+        return rule;
+      })
+    );
 
     return updatedRule;
   }, []);
 
-  const deleteRule = useCallback(async (ruleId: string): Promise<boolean> => {
-    setRules(prev => prev.filter(r => r.id !== ruleId));
-    if (selectedRule?.id === ruleId) {
-      setSelectedRule(null);
-    }
-    return true;
-  }, [selectedRule]);
+  const deleteRule = useCallback(
+    async (ruleId: string): Promise<boolean> => {
+      setRules((prev) => prev.filter((r) => r.id !== ruleId));
+      if (selectedRule?.id === ruleId) {
+        setSelectedRule(null);
+      }
+      return true;
+    },
+    [selectedRule]
+  );
 
-  const getRuleById = useCallback((ruleId: string): EmailRule | null => {
-    return rules.find(r => r.id === ruleId) || null;
-  }, [rules]);
+  const getRuleById = useCallback(
+    (ruleId: string): EmailRule | null => {
+      return rules.find((r) => r.id === ruleId) || null;
+    },
+    [rules]
+  );
 
   // Rule Status Management
   const toggleRuleStatus = useCallback(async (ruleId: string): Promise<boolean> => {
     let success = false;
-    setRules(prev => prev.map(rule => {
-      if (rule.id === ruleId) {
-        success = true;
-        const newStatus = rule.status === RuleStatus.ACTIVE
-          ? RuleStatus.PAUSED
-          : RuleStatus.ACTIVE;
-        return {
-          ...rule,
-          status: newStatus,
-          updatedBy: currentUser.id,
-          updatedByName: currentUser.name,
-          updatedAt: new Date().toISOString()
-        };
-      }
-      return rule;
-    }));
+    setRules((prev) =>
+      prev.map((rule) => {
+        if (rule.id === ruleId) {
+          success = true;
+          const newStatus = rule.status === RuleStatus.ACTIVE ? RuleStatus.PAUSED : RuleStatus.ACTIVE;
+          return {
+            ...rule,
+            status: newStatus,
+            updatedBy: currentUser.id,
+            updatedByName: currentUser.name,
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return rule;
+      })
+    );
     return success;
   }, []);
 
   // Rule Testing
-  const testRule = useCallback((
-    ruleId: string,
-    email: EmailContext
-  ): RuleTestResult => {
-    const rule = rules.find(r => r.id === ruleId);
-    if (!rule) {
-      throw new Error(`Rule ${ruleId} not found`);
-    }
+  const testRule = useCallback(
+    (ruleId: string, email: EmailContext): RuleTestResult => {
+      const rule = rules.find((r) => r.id === ruleId);
+      if (!rule) {
+        throw new Error(`Rule ${ruleId} not found`);
+      }
 
-    const matchedConditions: string[] = [];
-    const warnings: string[] = [];
+      const matchedConditions: string[] = [];
+      const warnings: string[] = [];
 
-    // Evaluate conditions
-    const matches = evaluateConditions(rule.conditions, rule.conditionLogic, email);
+      // Evaluate conditions
+      const matches = evaluateConditions(rule.conditions, rule.conditionLogic, email);
 
-    if (matches) {
-      rule.conditions.forEach(condition => {
-        if (evaluateCondition(condition, email)) {
-          matchedConditions.push(condition.id);
-        }
-      });
+      if (matches) {
+        rule.conditions.forEach((condition) => {
+          if (evaluateCondition(condition, email)) {
+            matchedConditions.push(condition.id);
+          }
+        });
 
-      // Check for potential issues
-      rule.actions.forEach(action => {
-        if (action.type === RuleActionType.FORWARD && !action.parameters.to) {
-          warnings.push('Forward action missing "to" parameter');
-        }
-        if (action.type === RuleActionType.MOVE_TO_FOLDER && !action.parameters.folder) {
-          warnings.push('Move action missing "folder" parameter');
-        }
-      });
-    }
+        // Check for potential issues
+        rule.actions.forEach((action) => {
+          if (action.type === RuleActionType.FORWARD && !action.parameters.to) {
+            warnings.push('Forward action missing "to" parameter');
+          }
+          if (action.type === RuleActionType.MOVE_TO_FOLDER && !action.parameters.folder) {
+            warnings.push('Move action missing "folder" parameter');
+          }
+        });
+      }
 
-    return {
-      ruleId,
-      ruleName: rule.name,
-      matches,
-      matchedConditions,
-      actionsToExecute: matches ? rule.actions : [],
-      warnings: warnings.length > 0 ? warnings : undefined
-    };
-  }, [rules]);
+      return {
+        ruleId,
+        ruleName: rule.name,
+        matches,
+        matchedConditions,
+        actionsToExecute: matches ? rule.actions : [],
+        warnings: warnings.length > 0 ? warnings : undefined
+      };
+    },
+    [rules]
+  );
 
-  const evaluateCondition = useCallback((
-    condition: RuleCondition,
-    email: EmailContext
-  ): boolean => {
-    let value: any;
+  const evaluateCondition = useCallback((condition: RuleCondition, email: EmailContext): boolean => {
+    let value: unknown;
     const negate = condition.negate || false;
 
     // Get value from email context
@@ -473,42 +477,26 @@ export const useEmailRules = () => {
           : String(value).toLowerCase() !== String(conditionValue).toLowerCase();
         break;
       case RuleOperator.CONTAINS: {
-        const containsValue = caseSensitive
-          ? String(value)
-          : String(value).toLowerCase();
-        const containsCondition = caseSensitive
-          ? String(conditionValue)
-          : String(conditionValue).toLowerCase();
+        const containsValue = caseSensitive ? String(value) : String(value).toLowerCase();
+        const containsCondition = caseSensitive ? String(conditionValue) : String(conditionValue).toLowerCase();
         result = containsValue.includes(containsCondition);
         break;
       }
       case RuleOperator.NOT_CONTAINS: {
-        const notContainsValue = caseSensitive
-          ? String(value)
-          : String(value).toLowerCase();
-        const notContainsCondition = caseSensitive
-          ? String(conditionValue)
-          : String(conditionValue).toLowerCase();
+        const notContainsValue = caseSensitive ? String(value) : String(value).toLowerCase();
+        const notContainsCondition = caseSensitive ? String(conditionValue) : String(conditionValue).toLowerCase();
         result = !notContainsValue.includes(notContainsCondition);
         break;
       }
       case RuleOperator.STARTS_WITH: {
-        const startsValue = caseSensitive
-          ? String(value)
-          : String(value).toLowerCase();
-        const startsCondition = caseSensitive
-          ? String(conditionValue)
-          : String(conditionValue).toLowerCase();
+        const startsValue = caseSensitive ? String(value) : String(value).toLowerCase();
+        const startsCondition = caseSensitive ? String(conditionValue) : String(conditionValue).toLowerCase();
         result = startsValue.startsWith(startsCondition);
         break;
       }
       case RuleOperator.ENDS_WITH: {
-        const endsValue = caseSensitive
-          ? String(value)
-          : String(value).toLowerCase();
-        const endsCondition = caseSensitive
-          ? String(conditionValue)
-          : String(conditionValue).toLowerCase();
+        const endsValue = caseSensitive ? String(value) : String(value).toLowerCase();
+        const endsCondition = caseSensitive ? String(conditionValue) : String(conditionValue).toLowerCase();
         result = endsValue.endsWith(endsCondition);
         break;
       }
@@ -537,155 +525,160 @@ export const useEmailRules = () => {
     return negate ? !result : result;
   }, []);
 
-  const evaluateConditions = useCallback((
-    conditions: RuleCondition[],
-    logic: ConditionLogic,
-    email: EmailContext
-  ): boolean => {
-    if (conditions.length === 0) {
-return true;
-}
+  const evaluateConditions = useCallback(
+    (conditions: RuleCondition[], logic: ConditionLogic, email: EmailContext): boolean => {
+      if (conditions.length === 0) {
+        return true;
+      }
 
-    if (logic === ConditionLogic.AND) {
-      return conditions.every(condition => evaluateCondition(condition, email));
-    } else {
-      return conditions.some(condition => evaluateCondition(condition, email));
-    }
-  }, [evaluateCondition]);
+      if (logic === ConditionLogic.AND) {
+        return conditions.every((condition) => evaluateCondition(condition, email));
+      } else {
+        return conditions.some((condition) => evaluateCondition(condition, email));
+      }
+    },
+    [evaluateCondition]
+  );
 
   // Rule Execution
-  const executeRule = useCallback(async (
-    ruleId: string,
-    email: EmailContext,
-    dryRun: boolean = false
-  ): Promise<boolean> => {
-    const rule = rules.find(r => r.id === ruleId);
-    if (!rule) {
-return false;
-}
-
-    const startTime = Date.now();
-    const matches = evaluateConditions(rule.conditions, rule.conditionLogic, email);
-
-    if (!matches) {
-return false;
-}
-
-    const execution: RuleExecution = {
-      id: `exec-${Date.now()}`,
-      ruleId,
-      ruleName: rule.name,
-      emailId: email.id,
-      emailSubject: email.subject,
-      emailFrom: email.from,
-      triggeredAt: new Date().toISOString(),
-      executedAt: new Date().toISOString(),
-      duration: 0,
-      success: true,
-      actionsExecuted: []
-    };
-
-    if (!dryRun) {
-      // Execute actions (in a real implementation, this would call actual email operations)
-      const actionsExecuted: string[] = [];
-      for (const action of rule.actions) {
-        try {
-          // Simulate action execution
-          actionsExecuted.push(action.id);
-          if (action.stopProcessing) {
-break;
-}
-        } catch (error) {
-          execution.success = false;
-          execution.errorMessage = String(error);
-          break;
-        }
+  const executeRule = useCallback(
+    async (ruleId: string, email: EmailContext, dryRun: boolean = false): Promise<boolean> => {
+      const rule = rules.find((r) => r.id === ruleId);
+      if (!rule) {
+        return false;
       }
-      execution.actionsExecuted = actionsExecuted;
 
-      // Update rule execution history
-      setRules(prev => prev.map(r => {
-        if (r.id === ruleId) {
-          return {
-            ...r,
-            executionCount: r.executionCount + 1,
-            lastExecuted: new Date().toISOString(),
-            executionHistory: [execution, ...r.executionHistory].slice(0, 100)
-          };
+      const startTime = Date.now();
+      const matches = evaluateConditions(rule.conditions, rule.conditionLogic, email);
+
+      if (!matches) {
+        return false;
+      }
+
+      const execution: RuleExecution = {
+        id: `exec-${Date.now()}`,
+        ruleId,
+        ruleName: rule.name,
+        emailId: email.id,
+        emailSubject: email.subject,
+        emailFrom: email.from,
+        triggeredAt: new Date().toISOString(),
+        executedAt: new Date().toISOString(),
+        duration: 0,
+        success: true,
+        actionsExecuted: []
+      };
+
+      if (!dryRun) {
+        // Execute actions (in a real implementation, this would call actual email operations)
+        const actionsExecuted: string[] = [];
+        for (const action of rule.actions) {
+          try {
+            // Simulate action execution
+            actionsExecuted.push(action.id);
+            if (action.stopProcessing) {
+              break;
+            }
+          } catch (error) {
+            execution.success = false;
+            execution.errorMessage = String(error);
+            break;
+          }
         }
-        return r;
-      }));
-    }
+        execution.actionsExecuted = actionsExecuted;
 
-    execution.duration = Date.now() - startTime;
-    return true;
-  }, [rules, evaluateConditions]);
+        // Update rule execution history
+        setRules((prev) =>
+          prev.map((r) => {
+            if (r.id === ruleId) {
+              return {
+                ...r,
+                executionCount: r.executionCount + 1,
+                lastExecuted: new Date().toISOString(),
+                executionHistory: [execution, ...r.executionHistory].slice(0, 100)
+              };
+            }
+            return r;
+          })
+        );
+      }
+
+      execution.duration = Date.now() - startTime;
+      return true;
+    },
+    [rules, evaluateConditions]
+  );
 
   // Rule Statistics
-  const getRuleStatistics = useCallback((ruleId: string): RuleStatistics | null => {
-    const rule = rules.find(r => r.id === ruleId);
-    if (!rule) {
-return null;
-}
-
-    const successfulExecutions = rule.executionHistory.filter(e => e.success).length;
-    const failedExecutions = rule.executionHistory.filter(e => !e.success).length;
-
-    return {
-      ruleId,
-      ruleName: rule.name,
-      totalExecutions: rule.executionCount,
-      successfulExecutions,
-      failedExecutions,
-      successRate: rule.executionCount > 0
-        ? (successfulExecutions / rule.executionCount) * 100
-        : 0,
-      avgExecutionTime: rule.executionHistory.length > 0
-        ? rule.executionHistory.reduce((sum, e) => sum + e.duration, 0) / rule.executionHistory.length
-        : 0,
-      lastExecuted: rule.lastExecuted || '',
-      executionsByDay: [],
-      executionsByHour: [],
-      topTriggeredConditions: []
-    };
-  }, [rules]);
-
-  // Rule Filtering
-  const getFilteredRules = useCallback((filter: RuleFilter): EmailRule[] => {
-    return rules.filter(rule => {
-      if (filter.type && rule.type !== filter.type) {
-return false;
-}
-      if (filter.status && rule.status !== filter.status) {
-return false;
-}
-      if (filter.priority && rule.priority !== filter.priority) {
-return false;
-}
-      if (filter.createdBy && rule.createdBy !== filter.createdBy) {
-return false;
-}
-
-      if (filter.searchQuery) {
-        const query = filter.searchQuery.toLowerCase();
-        const matchName = rule.name.toLowerCase().includes(query);
-        const matchDescription = rule.description?.toLowerCase().includes(query);
-        if (!matchName && !matchDescription) {
-return false;
-}
+  const getRuleStatistics = useCallback(
+    (ruleId: string): RuleStatistics | null => {
+      const rule = rules.find((r) => r.id === ruleId);
+      if (!rule) {
+        return null;
       }
 
-      return true;
-    });
-  }, [rules]);
+      const successfulExecutions = rule.executionHistory.filter((e) => e.success).length;
+      const failedExecutions = rule.executionHistory.filter((e) => !e.success).length;
+
+      return {
+        ruleId,
+        ruleName: rule.name,
+        totalExecutions: rule.executionCount,
+        successfulExecutions,
+        failedExecutions,
+        successRate: rule.executionCount > 0 ? (successfulExecutions / rule.executionCount) * 100 : 0,
+        avgExecutionTime:
+          rule.executionHistory.length > 0
+            ? rule.executionHistory.reduce((sum, e) => sum + e.duration, 0) / rule.executionHistory.length
+            : 0,
+        lastExecuted: rule.lastExecuted || '',
+        executionsByDay: [],
+        executionsByHour: [],
+        topTriggeredConditions: []
+      };
+    },
+    [rules]
+  );
+
+  // Rule Filtering
+  const getFilteredRules = useCallback(
+    (filter: RuleFilter): EmailRule[] => {
+      return rules.filter((rule) => {
+        if (filter.type && rule.type !== filter.type) {
+          return false;
+        }
+        if (filter.status && rule.status !== filter.status) {
+          return false;
+        }
+        if (filter.priority && rule.priority !== filter.priority) {
+          return false;
+        }
+        if (filter.createdBy && rule.createdBy !== filter.createdBy) {
+          return false;
+        }
+
+        if (filter.searchQuery) {
+          const query = filter.searchQuery.toLowerCase();
+          const matchName = rule.name.toLowerCase().includes(query);
+          const matchDescription = rule.description?.toLowerCase().includes(query);
+          if (!matchName && !matchDescription) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+    },
+    [rules]
+  );
 
   // Template Operations
   const createRuleFromTemplate = useCallback(
     async (templateId: string, name: string, priority: RulePriority): Promise<EmailRule | null> => {
-      const template = templates.find(t => t.id === templateId);
+      const template = templates.find((t) => t.id === templateId);
       if (!template) {
-return null;
-}
+        return null;
+      }
 
       return createRule({
         name,

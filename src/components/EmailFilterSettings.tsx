@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { useEmailFilters } from '../hooks/useEmailFilters';
-import { useNotifications } from '../hooks/useNotifications';
-import type { EmailFilter, FilterCondition, FilterAction, FilterConditionField, FilterOperator, FilterActionType } from '../types/filters';
+
+import type {
+  EmailFilter,
+  FilterCondition,
+  FilterAction,
+  FilterConditionField,
+  FilterOperator
+} from '../types/filters';
 
 interface EmailFilterSettingsProps {
   onClose: () => void;
@@ -9,7 +15,7 @@ interface EmailFilterSettingsProps {
 
 export const EmailFilterSettings: React.FC<EmailFilterSettingsProps> = ({ onClose }) => {
   const { filters, stats, addFilter, updateFilter, deleteFilter, toggleFilter, duplicateFilter } = useEmailFilters();
-  const { addNotification } = useNotifications();
+
   const [selectedFilter, setSelectedFilter] = useState<EmailFilter | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -74,11 +80,7 @@ export const EmailFilterSettings: React.FC<EmailFilterSettingsProps> = ({ onClos
 
       <div className="filter-settings-content">
         {isEditing && selectedFilter ? (
-          <FilterEditForm
-            filter={selectedFilter}
-            onSave={handleSaveFilter}
-            onCancel={handleCancelEdit}
-          />
+          <FilterEditForm filter={selectedFilter} onSave={handleSaveFilter} onCancel={handleCancelEdit} />
         ) : (
           <>
             <div className="filter-stats">
@@ -130,9 +132,7 @@ export const EmailFilterSettings: React.FC<EmailFilterSettingsProps> = ({ onClos
 
             <div className="filter-info">
               <h3>About Email Filters</h3>
-              <p>
-                Email filters automatically process incoming emails based on conditions you define.
-              </p>
+              <p>Email filters automatically process incoming emails based on conditions you define.</p>
               <h4>How it works:</h4>
               <ol>
                 <li>Create a filter with one or more conditions</li>
@@ -141,13 +141,27 @@ export const EmailFilterSettings: React.FC<EmailFilterSettingsProps> = ({ onClos
               </ol>
               <h4>Available Conditions:</h4>
               <ul>
-                <li><strong>From:</strong> Sender email address</li>
-                <li><strong>To:</strong> Recipient email address</li>
-                <li><strong>Subject:</strong> Email subject line</li>
-                <li><strong>Body:</strong> Email content</li>
-                <li><strong>Has Attachment:</strong> Check for attachments</li>
-                <li><strong>Size:</strong> Email size in bytes</li>
-                <li><strong>Priority:</strong> Email priority level</li>
+                <li>
+                  <strong>From:</strong> Sender email address
+                </li>
+                <li>
+                  <strong>To:</strong> Recipient email address
+                </li>
+                <li>
+                  <strong>Subject:</strong> Email subject line
+                </li>
+                <li>
+                  <strong>Body:</strong> Email content
+                </li>
+                <li>
+                  <strong>Has Attachment:</strong> Check for attachments
+                </li>
+                <li>
+                  <strong>Size:</strong> Email size in bytes
+                </li>
+                <li>
+                  <strong>Priority:</strong> Email priority level
+                </li>
               </ul>
               <h4>Available Actions:</h4>
               <ul>
@@ -198,9 +212,7 @@ const FilterCard: React.FC<FilterCardProps> = ({ filter, onEdit, onDelete, onTog
                 {c.field} {c.operator} "{c.value}"
               </li>
             ))}
-            {filter.conditions.length > 3 && (
-              <li>...and {filter.conditions.length - 3} more</li>
-            )}
+            {filter.conditions.length > 3 && <li>...and {filter.conditions.length - 3} more</li>}
           </ul>
         </div>
 
@@ -213,9 +225,7 @@ const FilterCard: React.FC<FilterCardProps> = ({ filter, onEdit, onDelete, onTog
           </ul>
         </div>
 
-        <div className="filter-match-type">
-          Match: {filter.matchAll ? 'All conditions' : 'Any condition'}
-        </div>
+        <div className="filter-match-type">Match: {filter.matchAll ? 'All conditions' : 'Any condition'}</div>
       </div>
 
       <div className="filter-card-footer">
@@ -257,10 +267,12 @@ const FilterEditForm: React.FC<FilterEditFormProps> = ({ filter, onSave, onCance
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.conditions.length === 0) {
+      // eslint-disable-next-line no-alert
       alert('At least one condition is required');
       return;
     }
     if (formData.actions.length === 0) {
+      // eslint-disable-next-line no-alert
       alert('At least one action is required');
       return;
     }
@@ -269,8 +281,8 @@ const FilterEditForm: React.FC<FilterEditFormProps> = ({ filter, onSave, onCance
 
   const addCondition = () => {
     if (!newCondition.value.trim()) {
-return;
-}
+      return;
+    }
     const condition: FilterCondition = {
       id: `cond-${Date.now()}`,
       ...newCondition
@@ -285,7 +297,7 @@ return;
   const removeCondition = (id: string) => {
     setFormData({
       ...formData,
-      conditions: formData.conditions.filter(c => c.id !== id)
+      conditions: formData.conditions.filter((c) => c.id !== id)
     });
   };
 
@@ -304,7 +316,7 @@ return;
   const removeAction = (id: string) => {
     setFormData({
       ...formData,
-      actions: formData.actions.filter(a => a.id !== id)
+      actions: formData.actions.filter((a) => a.id !== id)
     });
   };
 
@@ -434,9 +446,11 @@ return;
                 value={newAction.value || ''}
                 onChange={(e) => setNewAction({ ...newAction, value: e.target.value })}
                 placeholder={
-                  newAction.type === 'move_to_folder' ? 'Folder name...' :
-                  newAction.type === 'forward' ? 'Email address...' :
-                  'Label name...'
+                  newAction.type === 'move_to_folder'
+                    ? 'Folder name...'
+                    : newAction.type === 'forward'
+                      ? 'Email address...'
+                      : 'Label name...'
                 }
               />
             )}

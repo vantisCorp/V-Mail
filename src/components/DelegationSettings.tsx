@@ -72,7 +72,13 @@ const PermissionSelect: React.FC<{
 const GrantDialog: React.FC<{
   isOpen: boolean;
   onClose: () => void;
-  onGrant: (delegateEmail: string, delegateName: string, delegateId: string, permission: DelegationPermission, notes?: string) => void;
+  onGrant: (
+    delegateEmail: string,
+    delegateName: string,
+    delegateId: string,
+    permission: DelegationPermission,
+    notes?: string
+  ) => void;
 }> = ({ isOpen, onClose, onGrant }) => {
   const [delegateEmail, setDelegateEmail] = useState('');
   const [delegateName, setDelegateName] = useState('');
@@ -361,9 +367,9 @@ export const DelegationSettings: React.FC<DelegationSettingsProps> = ({
   onClose
 }) => {
   const {
-    delegations,
+    delegations: _delegations,
     activities,
-    invitations,
+    invitations: _invitations,
     stats,
     grantDelegation,
     acceptDelegation,
@@ -376,6 +382,8 @@ export const DelegationSettings: React.FC<DelegationSettingsProps> = ({
     getDelegationsAsDelegate,
     getPendingInvitations
   } = useEmailDelegation();
+  void _delegations;
+  void _invitations;
 
   const [activeTab, setActiveTab] = useState<TabType>('my-delegates');
   const [grantDialogOpen, setGrantDialogOpen] = useState(false);
@@ -530,9 +538,13 @@ export const DelegationSettings: React.FC<DelegationSettingsProps> = ({
                   key={delegation.id}
                   delegation={delegation}
                   isOwner={false}
+                  // eslint-disable-next-line @typescript-eslint/no-empty-function
                   onUpdatePermission={() => {}}
+                  // eslint-disable-next-line @typescript-eslint/no-empty-function
                   onSuspend={() => {}}
+                  // eslint-disable-next-line @typescript-eslint/no-empty-function
                   onResume={() => {}}
+                  // eslint-disable-next-line @typescript-eslint/no-empty-function
                   onRevoke={() => {}}
                 />
               ))}

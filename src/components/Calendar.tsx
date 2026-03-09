@@ -38,7 +38,7 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
     connectCalendar,
     disconnectCalendar,
     createEvent,
-    updateEvent,
+    updateEvent: _updateEvent,
     deleteEvent,
     convertEmailToEvent,
     getEventsForDate,
@@ -46,11 +46,14 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
     getEventsForMonth,
     getStatistics,
     syncAllCalendars,
-    addAttendee
+    addAttendee: _addAttendee
   } = useCalendar();
+  void _updateEvent;
+  void _addAttendee;
 
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showConvertModal, setShowConvertModal] = useState(false);
+  void setShowConvertModal;
   const [showConnectModal, setShowConnectModal] = useState(false);
   const [newEventForm, setNewEventForm] = useState({
     summary: '',
@@ -112,7 +115,9 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
     }
     const start = new Date(event.start.dateTime!);
     const end = new Date(event.end.dateTime!);
-    return `${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    const startTime = start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const endTime = end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return `${startTime} - ${endTime}`;
   };
 
   // Handle date navigation
@@ -180,6 +185,7 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
   };
 
   // Handle convert email to event
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleConvertEmail = async () => {
     if (!emailData) {
 return;

@@ -1,6 +1,6 @@
 {
   "name": "vantis-mail-mobile",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "description": "Vantis Mail - Secure email system with military-grade encryption (Mobile Application)",
   "main": "index.js",
   "scripts": {

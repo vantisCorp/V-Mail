@@ -4,7 +4,7 @@
   <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=FF0000&center=true&vCenter=true&width=600&lines=VANTIS+MAIL;BEZPIECZNY+SYSTEM+POCZTOWY;SZYFROWANIE+MILITARNEJ+KLASY;ZERO+TRUST+ARCHITEKTURA;PHANTOM+ALIASY;+SAMONISZCZENIE+WIADOMOŚCI;+PANIC+MODE;PANTONE+186+C+%26+PANTONE+BLACK+6+C" alt="Vantis Mail Typing Animation" />
 
   <!-- Animated Badge -->
-  <a href="https://github.com/vantisCorp/V-Mail/releases/tag/v1.0.0">
+  <a href="https://github.com/vantisCorp/V-Mail/releases/latest">
     <img src="https://img.shields.io/badge/version-v1.5.0-FF0000?style=for-the-badge&logo=github&logoColor=white&labelColor=black&color=FF0000" alt="Version 1.5.0" />
   </a>
 
@@ -63,21 +63,27 @@
 
 ## 🎯 Mission / Misja / Mission / 任务 / Миссия / 사명 / Misión / Mission
 
-> **"Ochrona prywatności w erze cyfrowej poprzez zaawansowane szyfrowanie i architekturę Zero Trust"**
+> **"Ochrona prywatności w erze cyfrowej poprzez zaawansowane szyfrowanie i architekturę Zero
+> Trust"**
 
-> **"Privacy protection in the digital age through advanced encryption and Zero Trust architecture"**
+> **"Privacy protection in the digital age through advanced encryption and Zero Trust
+> architecture"**
 
-> **"Datenschutz im digitalen Zeitalter durch fortschrittliche Verschlüsselung und Zero-Trust-Architektur"**
+> **"Datenschutz im digitalen Zeitalter durch fortschrittliche Verschlüsselung und
+> Zero-Trust-Architektur"**
 
 > **"通过高级加密和零信任架构保护数字时代的隐私"**
 
-> **"Защита конфиденциальности в цифровую эпоху посредством современного шифрования и архитектуры Zero Trust"**
+> **"Защита конфиденциальности в цифровую эпоху посредством современного шифрования и архитектуры
+> Zero Trust"**
 
 > **"디지털 시대의 개인정보 보호를 위한 고급 암호화 및 제로 트러스트 아키텍처"**
 
-> **"Protección de la privacidad en la era digital mediante encriptación avanzada y arquitectura de confianza cero"**
+> **"Protección de la privacidad en la era digital mediante encriptación avanzada y arquitectura de
+> confianza cero"**
 
-> **"Protection de la vie privée à l'ère numérique grâce au chiffrement avancé et à l'architecture de confiance zéro"**
+> **"Protection de la vie privée à l'ère numérique grâce au chiffrement avancé et à l'architecture
+> de confiance zéro"**
 
 ---
 
@@ -181,26 +187,26 @@ graph TD
     A[User Interface] --> B[Frontend]
     A --> C[Mobile App]
     A --> D[Desktop App]
-    
+
     B --> E[API Gateway]
     C --> E
     D --> E
-    
+
     E --> F[Backend Services]
     E --> G[Load Balancer]
-    
+
     F --> H[PostgreSQL]
     F --> I[Redis Cache]
     F --> J[File Storage]
-    
+
     K[Security Layer] --> E
     K --> F
-    
+
     L[Monitoring] --> E
     L --> F
     M[Logging] --> E
     M --> F
-    
+
     style A fill:#FF0000
     style B fill:#FF0000
     style C fill:#FF0000
@@ -224,15 +230,15 @@ graph TD
 
 ### 🔐 Security / Bezpieczeństwo / Sicherheit / 安全性 / Безопасность / 보안 / Seguridad / Sécurité
 
-| Feature | Status | Progress |
-|---|---|---|
-| End-to-End Encryption | ✅ | 100% |
-| Phantom Aliases | ✅ | 100% |
-| Self-Destructing Emails | ✅ | 100% |
-| Panic Mode | ✅ | 100% |
-| Biometric Authentication | ✅ | 100% |
-| Two-Factor Auth | 📋 | 50% |
-| Zero Trust Architecture | ✅ | 100% |
+| Feature                  | Status | Progress |
+| ------------------------ | ------ | -------- |
+| End-to-End Encryption    | ✅     | 100%     |
+| Phantom Aliases          | ✅     | 100%     |
+| Self-Destructing Emails  | ✅     | 100%     |
+| Panic Mode               | ✅     | 100%     |
+| Biometric Authentication | ✅     | 100%     |
+| Two-Factor Auth          | 📋     | 50%      |
+| Zero Trust Architecture  | ✅     | 100%     |
 
 ### 📧 Email Features / Funkcje Email / E-Mail-Funktionen / 邮件功能 / Функции почты / 이메일 기능 / Características de Correo / Fonctionnalités de Courriel
 
@@ -253,9 +259,9 @@ graph TD
 
 <div align="center">
 
-  ```
-  ████████████████████░░░░░░░░░░░░░░░░░░  60%
-  ```
+```
+████████████████████░░░░░░░░░░░░░░░░░░  60%
+```
 
   <table>
     <tr>
@@ -367,26 +373,26 @@ graph TD
 
 ## 🧪 Testing / Testowanie / Testen / 测试 / Тестирование / 테스트 / Pruebas / Tests
 
-| Test Type | Tests | Status |
-|---|---|---|
-| Frontend Unit Tests | 52 | ✅ Passing |
-| Backend Unit Tests | 38 | ✅ Passing |
-| Integration Tests | 20 | ✅ Passing |
-| E2E Tests | 15 | ✅ Passing |
-| Security Tests | 10 | ✅ Passing |
-| **Total** | **135** | **✅ All Passing** |
+| Test Type           | Tests   | Status             |
+| ------------------- | ------- | ------------------ |
+| Frontend Unit Tests | 52      | ✅ Passing         |
+| Backend Unit Tests  | 38      | ✅ Passing         |
+| Integration Tests   | 20      | ✅ Passing         |
+| E2E Tests           | 15      | ✅ Passing         |
+| Security Tests      | 10      | ✅ Passing         |
+| **Total**           | **135** | **✅ All Passing** |
 
 ---
 
 ## 📊 Benchmarks / Benchmarki / Benchmarks / 基准测试 / Бенчмарки / 벤치마크 / Estándares de Referencia / Références
 
-| Metric | Vantis Mail | Gmail | Outlook | ProtonMail |
-|---|---|---|---|---|
-| **Page Load Time** | 0.5s | 1.2s | 1.5s | 2.0s |
-| **Time to First Byte** | 100ms | 200ms | 250ms | 300ms |
-| **First Contentful Paint** | 300ms | 500ms | 600ms | 700ms |
-| **Lighthouse Score** | 95/100 | 85/100 | 80/100 | 75/100 |
-| **Security Score** | 100/100 | 90/100 | 85/100 | 95/100 |
+| Metric                     | Vantis Mail | Gmail  | Outlook | ProtonMail |
+| -------------------------- | ----------- | ------ | ------- | ---------- |
+| **Page Load Time**         | 0.5s        | 1.2s   | 1.5s    | 2.0s       |
+| **Time to First Byte**     | 100ms       | 200ms  | 250ms   | 300ms      |
+| **First Contentful Paint** | 300ms       | 500ms  | 600ms   | 700ms      |
+| **Lighthouse Score**       | 95/100      | 85/100 | 80/100  | 75/100     |
+| **Security Score**         | 100/100     | 90/100 | 85/100  | 95/100     |
 
 ---
 
@@ -414,13 +420,13 @@ graph TD
 
 <div align="center">
 
-  [![GitHub Sponsors](https://img.shields.io/badge/Sponsor-GitHub-FF0000?style=for-the-badge&logo=github-sponsors&logoColor=white&labelColor=black)](https://github.com/sponsors/vantisCorp)
-  
-  [![Patreon](https://img.shields.io/badge/Patreon-Support-FF0000?style=for-the-badge&logo=patreon&logoColor=white&labelColor=black)](https://patreon.com/vantisCorp)
-  
-  [![PayPal](https://img.shields.io/badge/PayPal-Donate-FF0000?style=for-the-badge&logo=paypal&logoColor=white&labelColor=black)](https://paypal.me/vantisCorp)
-  
-  [![Buy Me a Coffee](https://img.shields.io/badge/Buy_Me_a_Coffee-Support-FF0000?style=for-the-badge&logo=buy-me-a-coffee&logoColor=white&labelColor=black)](https://buymeacoffee.com/vantisCorp)
+[![GitHub Sponsors](https://img.shields.io/badge/Sponsor-GitHub-FF0000?style=for-the-badge&logo=github-sponsors&logoColor=white&labelColor=black)](https://github.com/sponsors/vantisCorp)
+
+[![Patreon](https://img.shields.io/badge/Patreon-Support-FF0000?style=for-the-badge&logo=patreon&logoColor=white&labelColor=black)](https://patreon.com/vantisCorp)
+
+[![PayPal](https://img.shields.io/badge/PayPal-Donate-FF0000?style=for-the-badge&logo=paypal&logoColor=white&labelColor=black)](https://paypal.me/vantisCorp)
+
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy_Me_a_Coffee-Support-FF0000?style=for-the-badge&logo=buy-me-a-coffee&logoColor=white&labelColor=black)](https://buymeacoffee.com/vantisCorp)
 
 </div>
 
@@ -430,13 +436,13 @@ graph TD
 
 <div align="center">
 
-  [![Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/vantisCorp)
-  
-  [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/company/vantisCorp)
-  
-  [![Discord](https://img.shields.io/badge/Discord-Join-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/vantisCorp)
-  
-  [![GitHub](https://img.shields.io/badge/GitHub-Follow-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/vantisCorp)
+[![Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/vantisCorp)
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/company/vantisCorp)
+
+[![Discord](https://img.shields.io/badge/Discord-Join-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/vantisCorp)
+
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/vantisCorp)
 
 </div>
 
@@ -514,7 +520,7 @@ graph TD
 
 <div align="center">
 
-  **⭐ If you like Vantis Mail, please give it a star!**
-  **⭐ Jeśli podoba Ci się Vantis Mail, dodaj gwiazdkę!**
+**⭐ If you like Vantis Mail, please give it a star!** **⭐ Jeśli podoba Ci się Vantis Mail, dodaj
+gwiazdkę!**
 
 </div>

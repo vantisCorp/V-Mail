@@ -1,6 +1,6 @@
 {
   "name": "vantis-mail-desktop",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "description": "Vantis Mail - Secure email system with military-grade encryption (Desktop Application)",
   "type": "module",
   "scripts": {

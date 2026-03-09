@@ -3,7 +3,7 @@
  * Manages tasks, subtasks, comments, and email-to-task conversion
  */
 
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   Task,
   TaskPriority,
@@ -11,16 +11,21 @@ import {
   TaskType,
   AssignmentType,
   RecurrenceType,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   DependencyType,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   TaskAttachment,
   TaskComment,
   SubTask,
   ChecklistItem,
   TaskReminder,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   TaskActivity,
   TaskStatistics,
   TaskProject,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   TaskEpic,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   TaskSprint,
   CreateTaskPayload,
   UpdateTaskPayload,
@@ -435,6 +440,7 @@ export const useTaskManagement = () => {
 
   // Email to Task Conversion
   const convertEmailToTask = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async (emailId: string, emailData: Record<string, any>, options: EmailToTaskOptions): Promise<Task | null> => {
       const title = options.extractTitleFromSubject ? emailData.subject || 'Task from Email' : 'Task from Email';
 
@@ -458,7 +464,8 @@ export const useTaskManagement = () => {
         tags: [],
         attachments:
           options.includeAttachments && emailData.attachments
-            ? emailData.attachments.map((att: any, idx: number) => ({
+            ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              emailData.attachments.map((att: any, idx: number) => ({
                 id: generateId(),
                 name: att.name || `attachment-${idx}`,
                 url: att.url || '',

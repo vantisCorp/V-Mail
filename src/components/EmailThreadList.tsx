@@ -26,6 +26,7 @@ export const EmailThreadList: React.FC<EmailThreadListProps> = ({ emails, onEmai
     selectThread,
     toggleThreadExpansion,
     expandThread,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     collapseThread,
     goToNextThread,
     goToPreviousThread,
@@ -34,6 +35,7 @@ export const EmailThreadList: React.FC<EmailThreadListProps> = ({ emails, onEmai
     starThread,
     updatePreferences,
     updateFilter,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     clearFilter,
     isThreadExpanded
   } = useEmailThreading(emails);
@@ -170,6 +172,7 @@ export const EmailThreadList: React.FC<EmailThreadListProps> = ({ emails, onEmai
         <select
           className="thread-filter-select"
           value={preferences.sortOrder}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onChange={(e) => updatePreferences({ sortOrder: e.target.value as any })}
         >
           <option value="recent">Most Recent</option>

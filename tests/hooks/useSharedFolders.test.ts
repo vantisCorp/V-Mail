@@ -2,8 +2,11 @@ import { describe, it, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useSharedFolders } from '../../src/hooks/useSharedFolders';
 import type {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   SharedFolder,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   FolderPermission,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ShareTargetType
 } from '../../src/types/sharedFolders';
 
@@ -358,6 +361,7 @@ describe('useSharedFolders', () => {
 
     // Accept the invitation
     act(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const participant = result.current.sharedFolders[0].participants[0];
       // Manually update status for test
       result.current.sharedFolders[0].participants[0].status = 'accepted';
@@ -545,6 +549,7 @@ describe('useSharedFolders', () => {
 
   it('should keep only last 100 activities', () => {
     const { result } = renderHook(() => useSharedFolders());
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const folderId = 'folder-1';
 
     // Create 105 activities
@@ -559,7 +564,7 @@ describe('useSharedFolders', () => {
             permission: 'read'
           },
           'user-1',
-            'John Doe'
+          'John Doe'
         );
       });
     }

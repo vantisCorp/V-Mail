@@ -1,13 +1,15 @@
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useTaskManagement } from '../../src/hooks/useTaskManagement';
 import {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Task,
   TaskPriority,
   TaskStatus,
   TaskType,
   AssignmentType,
   CreateTaskPayload,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   UpdateTaskPayload,
   CreateCommentPayload,
   CreateSubTaskPayload,
@@ -118,7 +120,7 @@ describe('useTaskManagement', () => {
         });
       });
 
-      const taskInState = result.current.tasks.find(t => t.id === taskToUpdate.id);
+      const taskInState = result.current.tasks.find((t) => t.id === taskToUpdate.id);
       expect(taskInState?.title).toBe('Updated Task Title');
       expect(taskInState?.priority).toBe(TaskPriority.HIGH);
     });
@@ -139,7 +141,7 @@ describe('useTaskManagement', () => {
       });
 
       expect(result.current.tasks.length).toBe(initialTaskCount - 1);
-      expect(result.current.tasks.find(t => t.id === taskToDelete.id)).toBeUndefined();
+      expect(result.current.tasks.find((t) => t.id === taskToDelete.id)).toBeUndefined();
     });
   });
 
@@ -220,7 +222,7 @@ describe('useTaskManagement', () => {
         expect(subtask?.title).toBe('New Subtask');
       });
 
-      const updatedTask = result.current.tasks.find(t => t.id === task.id);
+      const updatedTask = result.current.tasks.find((t) => t.id === task.id);
       expect(updatedTask?.subtasks.length).toBe(initialSubtaskCount + 1);
     });
 
@@ -231,7 +233,7 @@ describe('useTaskManagement', () => {
         vi.advanceTimersByTime(600);
       });
 
-      const task = result.current.tasks.find(t => t.subtasks.length > 0);
+      const task = result.current.tasks.find((t) => t.subtasks.length > 0);
       if (!task) {
         // Create a subtask first
         await act(async () => {
@@ -243,7 +245,7 @@ describe('useTaskManagement', () => {
         });
       }
 
-      const taskWithSubtask = result.current.tasks.find(t => t.subtasks.length > 0);
+      const taskWithSubtask = result.current.tasks.find((t) => t.subtasks.length > 0);
       if (!taskWithSubtask) {
         expect(true).toBe(true); // Skip if no subtasks
         return;
@@ -258,8 +260,8 @@ describe('useTaskManagement', () => {
         expect(updated).not.toBeNull();
       });
 
-      const updatedTask = result.current.tasks.find(t => t.id === taskWithSubtask.id);
-      const updatedSubtask = updatedTask?.subtasks.find(s => s.id === subtask.id);
+      const updatedTask = result.current.tasks.find((t) => t.id === taskWithSubtask.id);
+      const updatedSubtask = updatedTask?.subtasks.find((s) => s.id === subtask.id);
       expect(updatedSubtask?.completed).toBe(true);
     });
 
@@ -270,7 +272,7 @@ describe('useTaskManagement', () => {
         vi.advanceTimersByTime(600);
       });
 
-      const task = result.current.tasks.find(t => t.subtasks.length > 0);
+      const task = result.current.tasks.find((t) => t.subtasks.length > 0);
       if (!task) {
         expect(true).toBe(true); // Skip if no subtasks
         return;
@@ -284,7 +286,7 @@ describe('useTaskManagement', () => {
         expect(deleted).toBe(true);
       });
 
-      const updatedTask = result.current.tasks.find(t => t.id === task.id);
+      const updatedTask = result.current.tasks.find((t) => t.id === task.id);
       expect(updatedTask?.subtasks.length).toBe(initialCount - 1);
     });
   });
@@ -314,7 +316,7 @@ describe('useTaskManagement', () => {
         expect(comment?.content).toBe('Test comment');
       });
 
-      const updatedTask = result.current.tasks.find(t => t.id === task.id);
+      const updatedTask = result.current.tasks.find((t) => t.id === task.id);
       expect(updatedTask?.comments.length).toBe(initialCommentCount + 1);
     });
   });
@@ -336,7 +338,7 @@ describe('useTaskManagement', () => {
         expect(item?.text).toBe('New checklist item');
       });
 
-      const updatedTask = result.current.tasks.find(t => t.id === task.id);
+      const updatedTask = result.current.tasks.find((t) => t.id === task.id);
       expect(updatedTask?.checklist.length).toBe(initialCount + 1);
     });
 
@@ -347,7 +349,7 @@ describe('useTaskManagement', () => {
         vi.advanceTimersByTime(600);
       });
 
-      const task = result.current.tasks.find(t => t.checklist.length > 0);
+      const task = result.current.tasks.find((t) => t.checklist.length > 0);
       if (!task) {
         expect(true).toBe(true); // Skip if no checklist
         return;
@@ -361,8 +363,8 @@ describe('useTaskManagement', () => {
         expect(updated).not.toBeNull();
       });
 
-      const updatedTask = result.current.tasks.find(t => t.id === task.id);
-      const updatedItem = updatedTask?.checklist.find(i => i.id === item.id);
+      const updatedTask = result.current.tasks.find((t) => t.id === task.id);
+      const updatedItem = updatedTask?.checklist.find((i) => i.id === item.id);
       expect(updatedItem?.completed).toBe(!previousState);
     });
 
@@ -373,7 +375,7 @@ describe('useTaskManagement', () => {
         vi.advanceTimersByTime(600);
       });
 
-      const task = result.current.tasks.find(t => t.checklist.length > 0);
+      const task = result.current.tasks.find((t) => t.checklist.length > 0);
       if (!task) {
         expect(true).toBe(true); // Skip if no checklist
         return;
@@ -387,7 +389,7 @@ describe('useTaskManagement', () => {
         expect(deleted).toBe(true);
       });
 
-      const updatedTask = result.current.tasks.find(t => t.id === task.id);
+      const updatedTask = result.current.tasks.find((t) => t.id === task.id);
       expect(updatedTask?.checklist.length).toBe(initialCount - 1);
     });
   });
@@ -415,7 +417,7 @@ describe('useTaskManagement', () => {
         expect(reminder?.type).toBe('email');
       });
 
-      const updatedTask = result.current.tasks.find(t => t.id === task.id);
+      const updatedTask = result.current.tasks.find((t) => t.id === task.id);
       expect(updatedTask?.reminders.length).toBe(initialCount + 1);
     });
   });
@@ -444,7 +446,7 @@ describe('useTaskManagement', () => {
       });
 
       const stats = result.current.getTaskStatistics();
-      const completedCount = result.current.tasks.filter(t => t.status === TaskStatus.COMPLETED).length;
+      const completedCount = result.current.tasks.filter((t) => t.status === TaskStatus.COMPLETED).length;
 
       expect(stats.completedTasks).toBe(completedCount);
     });
@@ -460,7 +462,7 @@ describe('useTaskManagement', () => {
 
       const filtered = result.current.getFilteredTasks({ status: TaskStatus.TODO });
 
-      expect(filtered.every(t => t.status === TaskStatus.TODO)).toBe(true);
+      expect(filtered.every((t) => t.status === TaskStatus.TODO)).toBe(true);
     });
 
     it('should filter by priority', async () => {
@@ -472,7 +474,7 @@ describe('useTaskManagement', () => {
 
       const filtered = result.current.getFilteredTasks({ priority: TaskPriority.HIGH });
 
-      expect(filtered.every(t => t.priority === TaskPriority.HIGH)).toBe(true);
+      expect(filtered.every((t) => t.priority === TaskPriority.HIGH)).toBe(true);
     });
 
     it('should filter by type', async () => {
@@ -484,7 +486,7 @@ describe('useTaskManagement', () => {
 
       const filtered = result.current.getFilteredTasks({ type: TaskType.TASK });
 
-      expect(filtered.every(t => t.type === TaskType.TASK)).toBe(true);
+      expect(filtered.every((t) => t.type === TaskType.TASK)).toBe(true);
     });
 
     it('should filter by search query', async () => {
@@ -500,7 +502,7 @@ describe('useTaskManagement', () => {
       const filtered = result.current.getFilteredTasks({ search: searchQuery });
 
       expect(filtered.length).toBeGreaterThan(0);
-      expect(filtered.some(t => t.title.includes(searchQuery))).toBe(true);
+      expect(filtered.some((t) => t.title.includes(searchQuery))).toBe(true);
     });
 
     it('should filter by project', async () => {
@@ -513,7 +515,7 @@ describe('useTaskManagement', () => {
       const project = result.current.projects[0];
       const filtered = result.current.getFilteredTasks({ projectId: project.id });
 
-      expect(filtered.every(t => t.projectId === project.id)).toBe(true);
+      expect(filtered.every((t) => t.projectId === project.id)).toBe(true);
     });
 
     it('should sort by title ascending', async () => {
@@ -526,7 +528,7 @@ describe('useTaskManagement', () => {
       const sorted = result.current.getSortedTasks(result.current.tasks, { field: 'title', order: 'asc' });
 
       for (let i = 1; i < sorted.length; i++) {
-        expect(sorted[i].title.localeCompare(sorted[i-1].title)).toBeGreaterThanOrEqual(0);
+        expect(sorted[i].title.localeCompare(sorted[i - 1].title)).toBeGreaterThanOrEqual(0);
       }
     });
 
@@ -542,7 +544,7 @@ describe('useTaskManagement', () => {
 
       for (let i = 1; i < sorted.length; i++) {
         const currentPriority = priorityOrder.indexOf(sorted[i].priority);
-        const prevPriority = priorityOrder.indexOf(sorted[i-1].priority);
+        const prevPriority = priorityOrder.indexOf(sorted[i - 1].priority);
         expect(currentPriority).toBeGreaterThanOrEqual(prevPriority);
       }
     });
@@ -583,11 +585,11 @@ describe('useTaskManagement', () => {
       });
 
       // Find a task with sourceEmailId or create one
-      const taskWithEmail = result.current.tasks.find(t => t.sourceEmailId);
+      const taskWithEmail = result.current.tasks.find((t) => t.sourceEmailId);
       if (taskWithEmail) {
         const tasks = result.current.getTasksByEmailId(taskWithEmail.sourceEmailId!);
         expect(tasks.length).toBeGreaterThan(0);
-        expect(tasks.every(t => t.sourceEmailId === taskWithEmail.sourceEmailId)).toBe(true);
+        expect(tasks.every((t) => t.sourceEmailId === taskWithEmail.sourceEmailId)).toBe(true);
       } else {
         expect(true).toBe(true); // Skip if no task with email ID
       }

@@ -17,31 +17,46 @@ Object.defineProperty(window, 'matchMedia', {
     matches: false,
     media: query,
     onchange: null,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     addListener: () => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     removeListener: () => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     addEventListener: () => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     removeEventListener: () => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     dispatchEvent: () => {}
   })
 });
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor() {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   disconnect() {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   observe() {}
   takeRecords() {
     return [];
   }
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   unobserve() {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } as any;
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor() {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   disconnect() {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   observe() {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   unobserve() {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } as any;
 
 // Mock DataTransfer
@@ -50,14 +65,19 @@ global.DataTransfer = class DataTransfer {
     this.items = [];
     this.files = [];
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   items: any[];
   files: File[];
-  setData(format: string, data: string) {}
-  getData(format: string): string {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  setData(_format: string, _data: string) {}
+  getData(_format: string): string {
     return '';
   }
-  clearData(format?: string) {}
-  setDragImage(image: any, x: number, y: number) {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  clearData(_format?: string) {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
+  setDragImage(_image: any, _x: number, _y: number) {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } as any;
 
 // Mock ClipboardEvent
@@ -68,4 +88,5 @@ global.ClipboardEvent = class ClipboardEvent extends Event {
     super(type, eventInitDict);
     this.clipboardData = eventInitDict?.clipboardData || new DataTransfer();
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } as any;

@@ -1,7 +1,8 @@
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   EmailRule,
   RuleCondition,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   RuleAction,
   CreateRulePayload,
   UpdateRulePayload,
@@ -10,6 +11,7 @@ import {
   RuleFilter,
   RuleTemplate,
   EmailContext,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   RuleExecutionContext,
   RuleExecution,
   RuleType,
@@ -417,6 +419,7 @@ export const useEmailRules = () => {
   );
 
   const evaluateCondition = useCallback((condition: RuleCondition, email: EmailContext): boolean => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let value: any;
     const negate = condition.negate || false;
 

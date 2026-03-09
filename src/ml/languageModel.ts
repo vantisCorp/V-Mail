@@ -196,7 +196,7 @@ export class LanguageModel {
 
   private generateWordCompletions(
     currentWord: string,
-    context: WritingContext
+    _context: WritingContext
   ): Array<{ text: string; confidence: number; isFullWord: boolean }> {
     const completions: Array<{ text: string; confidence: number; isFullWord: boolean }> = [];
 
@@ -403,6 +403,8 @@ export class LanguageModel {
 
   private getTemplateSuggestions(context: WritingContext): TemplateSuggestion[] {
     const templates: TemplateSuggestion[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { text, recipients } = context;
 
     // Suggest templates based on context
@@ -429,7 +431,8 @@ export class LanguageModel {
     return templates;
   }
 
-  private calculateTemplateRelevance(context: WritingContext, template: any): number {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private calculateTemplateRelevance(context: WritingContext, _template: any): number {
     let score = 0.5;
 
     // Boost score if email is empty (new email)
@@ -488,6 +491,7 @@ export class LanguageModel {
     return emails;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private calculateEmailMatch(input: string, contact: any): number {
     const lowerInput = input.toLowerCase();
     const lowerName = contact.name.toLowerCase();
@@ -584,7 +588,7 @@ export class LanguageModel {
   /**
    * Learn from user's writing patterns
    */
-  learnFromUser(text: string, acceptedSuggestion?: Suggestion): void {
+  learnFromUser(text: string, _acceptedSuggestion?: Suggestion): void {
     const words = text.split(/\s+/);
 
     // Learn individual words

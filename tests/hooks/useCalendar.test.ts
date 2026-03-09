@@ -1,14 +1,19 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { useCalendar } from '../../src/hooks/useCalendar';
 import {
   CalendarProvider,
   EventStatus,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   EventVisibility,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   RecurrenceFrequency,
   CreateEventPayload,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   UpdateEventPayload,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   CalendarEvent,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   CalendarAccount
 } from '../../src/types/calendar';
 
@@ -66,7 +71,7 @@ describe('useCalendar', () => {
       });
 
       expect(result.current.accounts.length).toBe(initialAccountCount - 1);
-      expect(result.current.accounts.find(a => a.id === accountToDisconnect.id)).toBeUndefined();
+      expect(result.current.accounts.find((a) => a.id === accountToDisconnect.id)).toBeUndefined();
     });
 
     it('should refresh account token', async () => {
@@ -84,7 +89,7 @@ describe('useCalendar', () => {
         expect(success).toBe(true);
       });
 
-      const updatedAccount = result.current.accounts.find(a => a.id === account.id);
+      const updatedAccount = result.current.accounts.find((a) => a.id === account.id);
       expect(updatedAccount?.expiresAt).not.toBe(originalExpiresAt);
     });
   });
@@ -98,7 +103,7 @@ describe('useCalendar', () => {
       });
 
       const initialEventCount = result.current.events.length;
-      const calendar = result.current.calendars.find(c => c.primary);
+      const calendar = result.current.calendars.find((c) => c.primary);
 
       const payload: CreateEventPayload = {
         calendarId: calendar?.calendarId || 'primary',
@@ -145,11 +150,11 @@ describe('useCalendar', () => {
 
       // Wait for state to update
       await waitFor(() => {
-        const eventInState = result.current.events.find(e => e.id === eventToUpdate.id);
+        const eventInState = result.current.events.find((e) => e.id === eventToUpdate.id);
         expect(eventInState?.summary).toBe('Updated Event Summary');
       });
 
-      const eventInState = result.current.events.find(e => e.id === eventToUpdate.id);
+      const eventInState = result.current.events.find((e) => e.id === eventToUpdate.id);
       expect(eventInState?.summary).not.toBe(originalSummary);
     });
 
@@ -169,7 +174,7 @@ describe('useCalendar', () => {
       });
 
       expect(result.current.events.length).toBe(initialEventCount - 1);
-      expect(result.current.events.find(e => e.id === eventToDelete.id)).toBeUndefined();
+      expect(result.current.events.find((e) => e.id === eventToDelete.id)).toBeUndefined();
     });
 
     it('should get event by id', async () => {
@@ -236,23 +241,27 @@ describe('useCalendar', () => {
       });
 
       await act(async () => {
-        const event = await result.current.convertEmailToEvent('email-id', {
-          subject: 'Quick Meeting',
-          from: 'test@example.com',
-          date: new Date().toISOString(),
-          body: 'Meeting details',
-          to: ['recipient@example.com']
-        }, {
-          extractTitleFromSubject: true,
-          extractDescriptionFromBody: false,
-          extractDateFromBody: false,
-          extractAttendeesFromBody: false,
-          extractLocationFromBody: false,
-          defaultDuration: 30,
-          defaultReminder: 5,
-          autoAddAttendees: true,
-          includeAttachments: false
-        });
+        const event = await result.current.convertEmailToEvent(
+          'email-id',
+          {
+            subject: 'Quick Meeting',
+            from: 'test@example.com',
+            date: new Date().toISOString(),
+            body: 'Meeting details',
+            to: ['recipient@example.com']
+          },
+          {
+            extractTitleFromSubject: true,
+            extractDescriptionFromBody: false,
+            extractDateFromBody: false,
+            extractAttendeesFromBody: false,
+            extractLocationFromBody: false,
+            defaultDuration: 30,
+            defaultReminder: 5,
+            autoAddAttendees: true,
+            includeAttachments: false
+          }
+        );
         expect(event).not.toBeNull();
         // Should still have sender and recipient from autoAddAttendees
         expect(event?.attendees?.length).toBeGreaterThan(0);
@@ -277,10 +286,8 @@ describe('useCalendar', () => {
       });
 
       expect(filteredEvents.length).toBeGreaterThanOrEqual(0);
-      filteredEvents.forEach(event => {
-        const eventStart = event.start.dateTime
-          ? new Date(event.start.dateTime)
-          : new Date(event.start.date!);
+      filteredEvents.forEach((event) => {
+        const eventStart = event.start.dateTime ? new Date(event.start.dateTime) : new Date(event.start.date!);
         expect(eventStart >= now && eventStart <= tomorrow).toBe(true);
       });
     });
@@ -297,7 +304,7 @@ describe('useCalendar', () => {
       });
 
       expect(filteredEvents.length).toBeGreaterThanOrEqual(0);
-      filteredEvents.forEach(event => {
+      filteredEvents.forEach((event) => {
         expect(event.status).toBe(EventStatus.CONFIRMED);
       });
     });
@@ -315,7 +322,7 @@ describe('useCalendar', () => {
       });
 
       expect(filteredEvents.length).toBeGreaterThanOrEqual(0);
-      filteredEvents.forEach(event => {
+      filteredEvents.forEach((event) => {
         const matchesSummary = event.summary.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesDescription = event.description?.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesLocation = event.location?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -376,10 +383,8 @@ describe('useCalendar', () => {
       const eventsForToday = result.current.getEventsForDate(today);
 
       expect(eventsForToday.length).toBeGreaterThanOrEqual(0);
-      eventsForToday.forEach(event => {
-        const eventStart = event.start.dateTime
-          ? new Date(event.start.dateTime)
-          : new Date(event.start.date!);
+      eventsForToday.forEach((event) => {
+        const eventStart = event.start.dateTime ? new Date(event.start.dateTime) : new Date(event.start.date!);
         const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
         const endOfDay = new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000);
         expect(eventStart >= startOfDay && eventStart < endOfDay).toBe(true);
@@ -405,10 +410,8 @@ describe('useCalendar', () => {
       const endOfWeek = new Date(startOfWeek);
       endOfWeek.setDate(startOfWeek.getDate() + 7);
 
-      eventsForWeek.forEach(event => {
-        const eventStart = event.start.dateTime
-          ? new Date(event.start.dateTime)
-          : new Date(event.start.date!);
+      eventsForWeek.forEach((event) => {
+        const eventStart = event.start.dateTime ? new Date(event.start.dateTime) : new Date(event.start.date!);
         expect(eventStart >= startOfWeek && eventStart < endOfWeek).toBe(true);
       });
     });
@@ -428,10 +431,8 @@ describe('useCalendar', () => {
       const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
       const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
-      eventsForMonth.forEach(event => {
-        const eventStart = event.start.dateTime
-          ? new Date(event.start.dateTime)
-          : new Date(event.start.date!);
+      eventsForMonth.forEach((event) => {
+        const eventStart = event.start.dateTime ? new Date(event.start.dateTime) : new Date(event.start.date!);
         expect(eventStart >= startOfMonth && eventStart <= endOfMonth).toBe(true);
       });
     });
@@ -484,17 +485,13 @@ describe('useCalendar', () => {
       const initialAttendeeCount = event.attendees?.length || 0;
 
       await act(async () => {
-        const attendee = await result.current.addAttendee(
-          event.id,
-          'new.attendee@example.com',
-          'New Attendee'
-        );
+        const attendee = await result.current.addAttendee(event.id, 'new.attendee@example.com', 'New Attendee');
         expect(attendee).not.toBeNull();
         expect(attendee?.email).toBe('new.attendee@example.com');
         expect(attendee?.responseStatus).toBe('needsAction');
       });
 
-      const updatedEvent = result.current.events.find(e => e.id === event.id);
+      const updatedEvent = result.current.events.find((e) => e.id === event.id);
       expect(updatedEvent?.attendees?.length).toBe(initialAttendeeCount + 1);
     });
 
@@ -505,7 +502,7 @@ describe('useCalendar', () => {
         expect(result.current.isLoading).toBe(false);
       });
 
-      const event = result.current.events.find(e => e.attendees && e.attendees.length > 0);
+      const event = result.current.events.find((e) => e.attendees && e.attendees.length > 0);
       if (!event) {
         return;
       }
@@ -518,7 +515,7 @@ describe('useCalendar', () => {
         expect(success).toBe(true);
       });
 
-      const updatedEvent = result.current.events.find(e => e.id === event.id);
+      const updatedEvent = result.current.events.find((e) => e.id === event.id);
       expect(updatedEvent?.attendees?.length).toBe(initialAttendeeCount - 1);
     });
 
@@ -529,7 +526,7 @@ describe('useCalendar', () => {
         expect(result.current.isLoading).toBe(false);
       });
 
-      const event = result.current.events.find(e => e.attendees && e.attendees.length > 0);
+      const event = result.current.events.find((e) => e.attendees && e.attendees.length > 0);
       if (!event) {
         return;
       }
@@ -541,16 +538,12 @@ describe('useCalendar', () => {
       const newStatus = originalStatus === 'accepted' ? 'declined' : 'accepted';
 
       await act(async () => {
-        const success = await result.current.updateAttendeeStatus(
-          event.id,
-          attendee.email,
-          newStatus
-        );
+        const success = await result.current.updateAttendeeStatus(event.id, attendee.email, newStatus);
         expect(success).toBe(true);
       });
 
-      const updatedEvent = result.current.events.find(e => e.id === event.id);
-      const updatedAttendee = updatedEvent?.attendees?.find(a => a.email === attendee.email);
+      const updatedEvent = result.current.events.find((e) => e.id === event.id);
+      const updatedAttendee = updatedEvent?.attendees?.find((a) => a.email === attendee.email);
       expect(updatedAttendee?.responseStatus).toBe(newStatus);
       expect(updatedAttendee?.responseStatus).not.toBe(originalStatus);
     });

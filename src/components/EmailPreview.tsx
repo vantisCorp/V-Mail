@@ -43,10 +43,12 @@ export const EmailPreview: React.FC<EmailPreviewProps> = ({ email }) => {
     return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleAttachmentClick = (attachment: any) => {
     setPreviewAttachment(attachment);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDownload = (attachment: any) => {
     addNotification('success', `Downloading ${attachment.name}...`);
   };

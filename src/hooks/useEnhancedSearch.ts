@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   AdvancedSearchQuery,
   SimpleSearchQuery,
@@ -390,6 +390,7 @@ export const useEnhancedSearch = () => {
 
   // Evaluate filter on email
   const evaluateFilter = (email: SearchResultItem, filter: SearchFilter): boolean => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let value: any;
 
     switch (filter.field) {
@@ -797,8 +798,11 @@ export const useEnhancedSearch = () => {
 
     // Search engine integration
     searchEngine: {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       indexEmails: (emails: any[]) => emails.forEach((e) => searchEngineService.indexEmail(e)),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       indexContacts: (contacts: any[]) => contacts.forEach((c) => searchEngineService.indexContact(c)),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       indexEvents: (events: any[]) => events.forEach((e) => searchEngineService.indexEvent(e)),
       search: (query: string, scope?: SearchScope) => searchEngineService.searchAll(query, scope),
       getStats: () => searchEngineService.getStats()

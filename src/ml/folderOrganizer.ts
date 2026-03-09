@@ -41,6 +41,7 @@ export type { OrganizationContext };
 export class FolderOrganizer {
   private config: OrganizationConfig;
   private modelVersion: string = '1.0.0';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private cache: Map<string, any>;
   private learningData: {
     userActions: UserAction[];
@@ -70,6 +71,7 @@ export class FolderOrganizer {
    * Suggest new folders based on email patterns
    */
   suggestFolders(context: OrganizationContext): Suggestion[] {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const startTime = performance.now();
     const emails = context.emails;
 
@@ -100,6 +102,7 @@ export class FolderOrganizer {
       .sort((a, b) => b.confidence - a.confidence)
       .slice(0, this.config.maxSuggestions);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const endTime = performance.now();
 
     return sortedSuggestions.map((s) => ({
@@ -153,7 +156,7 @@ export class FolderOrganizer {
   /**
    * Create a smart folder based on a suggestion
    */
-  createFolder(suggestion: Suggestion, existingFolders: SmartFolder[]): SmartFolder {
+  createFolder(suggestion: Suggestion, _existingFolders: SmartFolder[]): SmartFolder {
     const folder: SmartFolder = {
       id: `folder-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       name: suggestion.folderName,
@@ -276,7 +279,9 @@ export class FolderOrganizer {
   // Pattern Analysis Methods
   // ============================================================================
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private analyzePatterns(emails: EmailForOrganization[]): any {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const patterns: any = {
       senders: new Map<string, number>(),
       keywords: new Map<string, number>(),
@@ -316,6 +321,7 @@ export class FolderOrganizer {
   // Suggestion Generation Methods
   // ============================================================================
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private generateTopicSuggestions(patterns: any, emails: EmailForOrganization[]): Suggestion[] {
     const suggestions: Suggestion[] = [];
     const sortedTopics = Array.from(patterns.topics.entries() as [string, number][])
@@ -351,6 +357,7 @@ export class FolderOrganizer {
     return suggestions;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private generateSenderSuggestions(patterns: any, emails: EmailForOrganization[]): Suggestion[] {
     const suggestions: Suggestion[] = [];
     const sortedSenders = Array.from(patterns.senders.entries() as [string, number][])
@@ -381,6 +388,7 @@ export class FolderOrganizer {
     return suggestions;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private generateCategorySuggestions(patterns: any, emails: EmailForOrganization[]): Suggestion[] {
     const suggestions: Suggestion[] = [];
     const sortedCategories = Array.from(patterns.categories.entries() as [string, number][]).sort(

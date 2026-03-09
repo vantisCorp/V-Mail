@@ -45,6 +45,7 @@ export const PerformanceMonitor: React.FC = () => {
     let memoryInterval: NodeJS.Timeout | null = null;
     if ('memory' in performance) {
       const measureMemory = () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const memory = (performance as any).memory;
         if (memory) {
           setMetrics((prev) => ({
@@ -88,6 +89,7 @@ export const PerformanceMonitor: React.FC = () => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (!isVisible || (import.meta as any).env?.DEV) {
     return null;
   }

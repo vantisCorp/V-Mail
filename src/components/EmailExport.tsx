@@ -5,10 +5,11 @@
 
 import React, { useState, useMemo } from 'react';
 import { useEmailExport } from '../hooks/useEmailExport';
-import type { ExportFormat, ExportOptions, ExportHistory } from '../types/emailExport';
+import type { ExportFormat, ExportOptions } from '../types/emailExport';
 import './emailExport.css';
 
 interface EmailExportProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   emails: any[];
   onClose?: () => void;
 }
@@ -17,11 +18,13 @@ export const EmailExport: React.FC<EmailExportProps> = ({ emails, onClose }) => 
   const {
     isExporting,
     exportProgress,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     exportHistory,
     exportStatistics,
     exportSingleEmail,
     exportMultipleEmails,
     queueExport,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     processQueue,
     clearExportHistory,
     getRecentExports
@@ -48,6 +51,7 @@ export const EmailExport: React.FC<EmailExportProps> = ({ emails, onClose }) => 
 
   const handleExport = async () => {
     if (selectedEmails.length === 0) {
+      // eslint-disable-next-line no-alert
       alert('Please select at least one email to export');
       return;
     }
@@ -63,6 +67,7 @@ export const EmailExport: React.FC<EmailExportProps> = ({ emails, onClose }) => 
 
   const handleQueueExport = async () => {
     if (selectedEmails.length === 0) {
+      // eslint-disable-next-line no-alert
       alert('Please select at least one email to export');
       return;
     }

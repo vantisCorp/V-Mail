@@ -1,8 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import {
-  useSmartSuggestions
-} from '../../src/hooks/useSmartSuggestions';
+import { useSmartSuggestions } from '../../src/hooks/useSmartSuggestions';
 import {
   SuggestionType,
   SuggestionContext,
@@ -18,7 +16,8 @@ const mockEmailContext: SuggestionContext = {
   subject: 'Meeting Tomorrow',
   sender: 'john@example.com',
   recipients: ['jane@example.com'],
-  content: 'Hi Jane, would you be available for a meeting tomorrow at 2 PM to discuss the project? Let me know your availability.',
+  content:
+    'Hi Jane, would you be available for a meeting tomorrow at 2 PM to discuss the project? Let me know your availability.',
   attachments: [],
   threadLength: 1,
   timestamp: new Date()
@@ -40,7 +39,7 @@ const mockAttachmentContext: SuggestionContext = {
   subject: 'Invoice for Services',
   sender: 'billing@company.com',
   recipients: ['me@company.com'],
-  content: 'Please find attached the invoice for last month\'s services. Kindly review and process payment.',
+  content: "Please find attached the invoice for last month's services. Kindly review and process payment.",
   attachments: ['invoice.pdf'],
   timestamp: new Date()
 };
@@ -142,7 +141,7 @@ describe('useSmartSuggestions Hook', () => {
       const replySuggestions = result.current.getReplySuggestions('email-123');
       expect(replySuggestions.length).toBeGreaterThanOrEqual(0);
 
-      replySuggestions.forEach(suggestion => {
+      replySuggestions.forEach((suggestion) => {
         expect(suggestion.type).toBe(SuggestionType.REPLY);
         expect(suggestion.text).toBeDefined();
         expect(suggestion.confidence).toBeGreaterThanOrEqual(0);
@@ -157,7 +156,7 @@ describe('useSmartSuggestions Hook', () => {
 
       const replySuggestions = result.current.getReplySuggestions('email-123');
 
-      replySuggestions.forEach(suggestion => {
+      replySuggestions.forEach((suggestion) => {
         expect(Object.values(ReplyCategory)).toContain(suggestion.category);
       });
     });
@@ -168,9 +167,7 @@ describe('useSmartSuggestions Hook', () => {
       });
 
       const replySuggestions = result.current.getReplySuggestions('email-123');
-      const schedulingSuggestion = replySuggestions.find(
-        s => s.category === ReplyCategory.SCHEDULING
-      );
+      const schedulingSuggestion = replySuggestions.find((s) => s.category === ReplyCategory.SCHEDULING);
 
       if (schedulingSuggestion) {
         expect(schedulingSuggestion.confidence).toBeGreaterThan(0.5);
@@ -187,7 +184,7 @@ describe('useSmartSuggestions Hook', () => {
       const actionSuggestions = result.current.getQuickActionSuggestions('email-123');
       expect(actionSuggestions.length).toBeGreaterThanOrEqual(0);
 
-      actionSuggestions.forEach(suggestion => {
+      actionSuggestions.forEach((suggestion) => {
         expect(suggestion.type).toBe(SuggestionType.QUICK_ACTION);
         expect(Object.values(QuickActionType)).toContain(suggestion.action);
         expect(suggestion.reason).toBeDefined();
@@ -200,9 +197,7 @@ describe('useSmartSuggestions Hook', () => {
       });
 
       const actionSuggestions = result.current.getQuickActionSuggestions('email-promo');
-      const spamSuggestion = actionSuggestions.find(
-        s => s.action === QuickActionType.MOVE_TO_SPAM
-      );
+      const spamSuggestion = actionSuggestions.find((s) => s.action === QuickActionType.MOVE_TO_SPAM);
 
       expect(spamSuggestion).toBeDefined();
       expect(spamSuggestion?.confidence).toBeGreaterThan(0.5);
@@ -215,7 +210,7 @@ describe('useSmartSuggestions Hook', () => {
 
       const actionSuggestions = result.current.getQuickActionSuggestions('email-123');
 
-      actionSuggestions.forEach(suggestion => {
+      actionSuggestions.forEach((suggestion) => {
         expect(Object.values(SuggestionPriority)).toContain(suggestion.priority);
       });
     });
@@ -230,7 +225,7 @@ describe('useSmartSuggestions Hook', () => {
       const followUpSuggestions = result.current.getFollowUpSuggestions('email-456');
       expect(followUpSuggestions.length).toBeGreaterThanOrEqual(0);
 
-      followUpSuggestions.forEach(suggestion => {
+      followUpSuggestions.forEach((suggestion) => {
         expect(suggestion.type).toBe(SuggestionType.FOLLOW_UP);
         expect(Object.values(FollowUpAction)).toContain(suggestion.action);
         expect(suggestion.reason).toBeDefined();
@@ -243,9 +238,7 @@ describe('useSmartSuggestions Hook', () => {
       });
 
       const followUpSuggestions = result.current.getFollowUpSuggestions('email-456');
-      const weekFollowUp = followUpSuggestions.find(
-        s => s.action === FollowUpAction.REMIND_WEEK
-      );
+      const weekFollowUp = followUpSuggestions.find((s) => s.action === FollowUpAction.REMIND_WEEK);
 
       expect(weekFollowUp).toBeDefined();
       expect(weekFollowUp?.reason).toBeDefined();
@@ -281,7 +274,7 @@ describe('useSmartSuggestions Hook', () => {
 
       const attachmentSuggestions = result.current.getAttachmentSuggestions('attachment-email');
 
-      attachmentSuggestions.forEach(suggestion => {
+      attachmentSuggestions.forEach((suggestion) => {
         expect(suggestion.type).toBe(SuggestionType.ATTACHMENT);
         expect(suggestion.fileName).toBeDefined();
         expect(suggestion.fileType).toBeDefined();
@@ -312,7 +305,7 @@ describe('useSmartSuggestions Hook', () => {
 
       const recipientSuggestions = result.current.getRecipientSuggestions('team-email');
 
-      recipientSuggestions.forEach(suggestion => {
+      recipientSuggestions.forEach((suggestion) => {
         expect(suggestion.type).toBe(SuggestionType.RECIPIENT);
         expect(Object.values(RecipientType)).toContain(suggestion.recipientType);
         expect(suggestion.email).toBeDefined();
@@ -336,7 +329,7 @@ describe('useSmartSuggestions Hook', () => {
 
       const labelSuggestions = result.current.getLabelSuggestions('project-email');
 
-      labelSuggestions.forEach(suggestion => {
+      labelSuggestions.forEach((suggestion) => {
         expect(suggestion.type).toBe(SuggestionType.LABEL);
         expect(suggestion.label).toBeDefined();
         expect(suggestion.color).toBeDefined();
@@ -349,7 +342,7 @@ describe('useSmartSuggestions Hook', () => {
       });
 
       const labelSuggestions = result.current.getLabelSuggestions('email-789');
-      const financeLabel = labelSuggestions.find(s => s.label === 'Finance');
+      const financeLabel = labelSuggestions.find((s) => s.label === 'Finance');
 
       expect(financeLabel).toBeDefined();
     });
@@ -360,7 +353,7 @@ describe('useSmartSuggestions Hook', () => {
       });
 
       const labelSuggestions = result.current.getLabelSuggestions('email-123');
-      const meetingLabel = labelSuggestions.find(s => s.label === 'Meeting');
+      const meetingLabel = labelSuggestions.find((s) => s.label === 'Meeting');
 
       expect(meetingLabel).toBeDefined();
     });
@@ -376,6 +369,7 @@ describe('useSmartSuggestions Hook', () => {
       });
 
       expect(results!.length).toBe(3);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       results!.forEach((r: any, index: number) => {
         expect(r.suggestions.length).toBeGreaterThanOrEqual(0);
         expect(r.context.emailId).toBe(contexts[index].emailId);

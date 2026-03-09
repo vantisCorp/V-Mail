@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useAdvancedSearch } from '../../src/hooks/useAdvancedSearch';
 import type { Email } from '../../src/types';
@@ -143,7 +143,7 @@ describe('useAdvancedSearch', () => {
     });
 
     expect(result.current.filteredEmails).toHaveLength(2);
-    expect(result.current.filteredEmails.every(e => e.from.includes('company.com'))).toBe(true);
+    expect(result.current.filteredEmails.every((e) => e.from.includes('company.com'))).toBe(true);
   });
 
   it('should update search condition', () => {

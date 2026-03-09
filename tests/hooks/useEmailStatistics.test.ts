@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useEmailStatistics } from '../../src/hooks/useEmailStatistics';
 import type { Email } from '../../src/types';
@@ -81,7 +81,7 @@ describe('useEmailStatistics', () => {
     const folderStats = result.current.statistics.folders;
     expect(folderStats.length).toBe(4); // inbox, sent, drafts, trash
 
-    const inboxStats = folderStats.find(f => f.folderId === 'inbox');
+    const inboxStats = folderStats.find((f) => f.folderId === 'inbox');
     expect(inboxStats?.count).toBe(2);
     expect(inboxStats?.unreadCount).toBe(1);
   });
@@ -91,6 +91,7 @@ describe('useEmailStatistics', () => {
     // Create dates that are definitely in this week
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const twoDaysAgo = new Date(today.getTime() - 2 * 24 * 60 * 60 * 1000);
 
     const todayEmails: Email[] = [
@@ -146,14 +147,35 @@ describe('useEmailStatistics', () => {
       createMockEmail('1', {
         hasAttachments: true,
         attachments: [
-          { id: 'a1', name: 'doc.pdf', size: 1000, type: 'application/pdf', url: 'http://example.com/doc.pdf', uploadedAt: new Date() },
-          { id: 'a2', name: 'image.png', size: 2000, type: 'image/png', url: 'http://example.com/image.png', uploadedAt: new Date() }
+          {
+            id: 'a1',
+            name: 'doc.pdf',
+            size: 1000,
+            type: 'application/pdf',
+            url: 'http://example.com/doc.pdf',
+            uploadedAt: new Date()
+          },
+          {
+            id: 'a2',
+            name: 'image.png',
+            size: 2000,
+            type: 'image/png',
+            url: 'http://example.com/image.png',
+            uploadedAt: new Date()
+          }
         ]
       }),
       createMockEmail('2', {
         hasAttachments: true,
         attachments: [
-          { id: 'a3', name: 'doc.pdf', size: 500, type: 'application/pdf', url: 'http://example.com/doc.pdf', uploadedAt: new Date() }
+          {
+            id: 'a3',
+            name: 'doc.pdf',
+            size: 500,
+            type: 'application/pdf',
+            url: 'http://example.com/doc.pdf',
+            uploadedAt: new Date()
+          }
         ]
       })
     ];

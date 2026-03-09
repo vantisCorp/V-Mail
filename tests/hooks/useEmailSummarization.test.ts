@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { useEmailSummarization } from '../../src/hooks/useEmailSummarization';
 import { SummaryType, SummaryLength } from '../../src/types/emailSummarization';
 
@@ -89,11 +89,13 @@ Mike`,
     });
 
     it('should initialize with custom config', () => {
-      const { result } = renderHook(() => useEmailSummarization({
-        summaryType: SummaryType.EXTRACTIVE,
-        length: SummaryLength.SHORT,
-        maxKeyPoints: 3
-      }));
+      const { result } = renderHook(() =>
+        useEmailSummarization({
+          summaryType: SummaryType.EXTRACTIVE,
+          length: SummaryLength.SHORT,
+          maxKeyPoints: 3
+        })
+      );
 
       expect(result.current.config.summaryType).toBe(SummaryType.EXTRACTIVE);
       expect(result.current.config.length).toBe(SummaryLength.SHORT);
@@ -129,9 +131,11 @@ Mike`,
     });
 
     it('should generate TL;DR when enabled', async () => {
-      const { result } = renderHook(() => useEmailSummarization({
-        includeTlDr: true
-      }));
+      const { result } = renderHook(() =>
+        useEmailSummarization({
+          includeTlDr: true
+        })
+      );
 
       await act(async () => {
         await result.current.summarizeEmail(mockEmail);
@@ -142,9 +146,11 @@ Mike`,
     });
 
     it('should not generate TL;DR when disabled', async () => {
-      const { result } = renderHook(() => useEmailSummarization({
-        includeTlDr: false
-      }));
+      const { result } = renderHook(() =>
+        useEmailSummarization({
+          includeTlDr: false
+        })
+      );
 
       await act(async () => {
         await result.current.summarizeEmail(mockEmail);
@@ -155,10 +161,12 @@ Mike`,
     });
 
     it('should extract key points when enabled', async () => {
-      const { result } = renderHook(() => useEmailSummarization({
-        includeKeyPoints: true,
-        maxKeyPoints: 5
-      }));
+      const { result } = renderHook(() =>
+        useEmailSummarization({
+          includeKeyPoints: true,
+          maxKeyPoints: 5
+        })
+      );
 
       await act(async () => {
         await result.current.summarizeEmail(mockEmail);
@@ -169,9 +177,11 @@ Mike`,
     });
 
     it('should not extract key points when disabled', async () => {
-      const { result } = renderHook(() => useEmailSummarization({
-        includeKeyPoints: false
-      }));
+      const { result } = renderHook(() =>
+        useEmailSummarization({
+          includeKeyPoints: false
+        })
+      );
 
       await act(async () => {
         await result.current.summarizeEmail(mockEmail);
@@ -182,10 +192,12 @@ Mike`,
     });
 
     it('should extract action items when enabled', async () => {
-      const { result } = renderHook(() => useEmailSummarization({
-        includeActionItems: true,
-        maxActionItems: 5
-      }));
+      const { result } = renderHook(() =>
+        useEmailSummarization({
+          includeActionItems: true,
+          maxActionItems: 5
+        })
+      );
 
       await act(async () => {
         await result.current.summarizeEmail(mockEmail);
@@ -196,9 +208,11 @@ Mike`,
     });
 
     it('should not extract action items when disabled', async () => {
-      const { result } = renderHook(() => useEmailSummarization({
-        includeActionItems: false
-      }));
+      const { result } = renderHook(() =>
+        useEmailSummarization({
+          includeActionItems: false
+        })
+      );
 
       await act(async () => {
         await result.current.summarizeEmail(mockEmail);
@@ -209,9 +223,11 @@ Mike`,
     });
 
     it('should respect summary type configuration', async () => {
-      const extractiveResult = renderHook(() => useEmailSummarization({
-        summaryType: SummaryType.EXTRACTIVE
-      }));
+      const extractiveResult = renderHook(() =>
+        useEmailSummarization({
+          summaryType: SummaryType.EXTRACTIVE
+        })
+      );
 
       await act(async () => {
         await extractiveResult.result.current.summarizeEmail(mockEmail);
@@ -244,9 +260,11 @@ Mike`,
 
   describe('Caching', () => {
     it('should cache summary when enableCache is true', async () => {
-      const { result } = renderHook(() => useEmailSummarization({
-        enableCache: true
-      }));
+      const { result } = renderHook(() =>
+        useEmailSummarization({
+          enableCache: true
+        })
+      );
 
       await act(async () => {
         await result.current.summarizeEmail(mockEmail);
@@ -257,9 +275,11 @@ Mike`,
     });
 
     it('should use cached summary on subsequent calls', async () => {
-      const { result } = renderHook(() => useEmailSummarization({
-        enableCache: true
-      }));
+      const { result } = renderHook(() =>
+        useEmailSummarization({
+          enableCache: true
+        })
+      );
 
       await act(async () => {
         await result.current.summarizeEmail(mockEmail);
@@ -280,13 +300,15 @@ Mike`,
     });
 
     it('should not cache when enableCache is false', async () => {
-      const { result } = renderHook(() => useEmailSummarization({
-        performance: {
-          cacheEnabled: false,
-          cacheSize: 100,
-          maxProcessingTime: 500
-        }
-      }));
+      const { result } = renderHook(() =>
+        useEmailSummarization({
+          performance: {
+            cacheEnabled: false,
+            cacheSize: 100,
+            maxProcessingTime: 500
+          }
+        })
+      );
 
       await act(async () => {
         await result.current.summarizeEmail(mockEmail);
@@ -296,9 +318,11 @@ Mike`,
     });
 
     it('should clear cache', async () => {
-      const { result } = renderHook(() => useEmailSummarization({
-        enableCache: true
-      }));
+      const { result } = renderHook(() =>
+        useEmailSummarization({
+          enableCache: true
+        })
+      );
 
       await act(async () => {
         await result.current.summarizeEmail(mockEmail);
@@ -328,14 +352,17 @@ Mike`,
     });
 
     it('should calculate average processing time correctly', async () => {
-      const { result } = renderHook(() => useEmailSummarization({
-        enableCache: false
-      }));
+      const { result } = renderHook(() =>
+        useEmailSummarization({
+          enableCache: false
+        })
+      );
 
       await act(async () => {
         await result.current.summarizeEmail(mockEmail);
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const firstAvg = result.current.statistics.averageProcessingTime;
 
       // Use a different email to avoid cache
@@ -385,9 +412,11 @@ Mike`,
     });
 
     it('should get TL;DR from summary', async () => {
-      const { result } = renderHook(() => useEmailSummarization({
-        includeTlDr: true
-      }));
+      const { result } = renderHook(() =>
+        useEmailSummarization({
+          includeTlDr: true
+        })
+      );
 
       await act(async () => {
         await result.current.summarizeEmail(mockEmail);
@@ -415,11 +444,13 @@ Mike`,
     });
 
     it('should preserve existing config when updating partially', () => {
-      const { result } = renderHook(() => useEmailSummarization({
-        summaryType: SummaryType.EXTRACTIVE,
-        length: SummaryLength.SHORT,
-        maxKeyPoints: 3
-      }));
+      const { result } = renderHook(() =>
+        useEmailSummarization({
+          summaryType: SummaryType.EXTRACTIVE,
+          length: SummaryLength.SHORT,
+          maxKeyPoints: 3
+        })
+      );
 
       act(() => {
         result.current.updateConfig({
@@ -442,7 +473,7 @@ Mike`,
           await result.current.summarize({
             emails: []
           });
-        } catch (err) {
+        } catch {
           // Expected
         }
       });
@@ -469,9 +500,11 @@ Mike`,
 
   describe('Reset', () => {
     it('should reset all state', async () => {
-      const { result } = renderHook(() => useEmailSummarization({
-        enableCache: true
-      }));
+      const { result } = renderHook(() =>
+        useEmailSummarization({
+          enableCache: true
+        })
+      );
 
       await act(async () => {
         await result.current.summarizeEmail(mockEmail);

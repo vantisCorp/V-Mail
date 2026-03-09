@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useEmailFilters } from '../../src/hooks/useEmailFilters';
-import type { EmailFilter, FilterConditionField, FilterActionType } from '../../src/types/filters';
+import type { FilterConditionField, FilterActionType } from '../../src/types/filters';
 
 // Mock the useNotifications hook
 vi.mock('../../src/hooks/useNotifications', () => ({
@@ -53,7 +53,9 @@ describe('useEmailFilters', () => {
     act(() => {
       result.current.addFilter({
         name: 'Original Name',
-        conditions: [{ id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: 'test' }],
+        conditions: [
+          { id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: 'test' }
+        ],
         actions: [{ id: 'act-1', type: 'mark_as_read' as FilterActionType }],
         enabled: true,
         priority: 1,
@@ -79,7 +81,9 @@ describe('useEmailFilters', () => {
     act(() => {
       result.current.addFilter({
         name: 'Filter to Delete',
-        conditions: [{ id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: 'delete' }],
+        conditions: [
+          { id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: 'delete' }
+        ],
         actions: [{ id: 'act-1', type: 'delete' as FilterActionType }],
         enabled: true,
         priority: 1,
@@ -104,7 +108,9 @@ describe('useEmailFilters', () => {
     act(() => {
       result.current.addFilter({
         name: 'Toggle Test',
-        conditions: [{ id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: 'toggle' }],
+        conditions: [
+          { id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: 'toggle' }
+        ],
         actions: [{ id: 'act-1', type: 'mark_as_read' as FilterActionType }],
         enabled: true,
         priority: 1,
@@ -136,7 +142,9 @@ describe('useEmailFilters', () => {
     act(() => {
       result.current.addFilter({
         name: 'Original Filter',
-        conditions: [{ id: 'cond-1', field: 'subject' as FilterConditionField, operator: 'equals' as const, value: 'Test' }],
+        conditions: [
+          { id: 'cond-1', field: 'subject' as FilterConditionField, operator: 'equals' as const, value: 'Test' }
+        ],
         actions: [{ id: 'act-1', type: 'label' as FilterActionType, value: 'test-label' }],
         enabled: true,
         priority: 1,
@@ -164,7 +172,9 @@ describe('useEmailFilters', () => {
     act(() => {
       result.current.addFilter({
         name: 'Filter 1',
-        conditions: [{ id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: 'filter1' }],
+        conditions: [
+          { id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: 'filter1' }
+        ],
         actions: [{ id: 'act-1', type: 'mark_as_read' as FilterActionType }],
         enabled: true,
         priority: 1,
@@ -175,7 +185,9 @@ describe('useEmailFilters', () => {
     act(() => {
       result.current.addFilter({
         name: 'Filter 2',
-        conditions: [{ id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: 'filter2' }],
+        conditions: [
+          { id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: 'filter2' }
+        ],
         actions: [{ id: 'act-1', type: 'archive' as FilterActionType }],
         enabled: true,
         priority: 2,
@@ -202,7 +214,9 @@ describe('useEmailFilters', () => {
     act(() => {
       result.current.addFilter({
         name: 'Work Filter',
-        conditions: [{ id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: '@work.com' }],
+        conditions: [
+          { id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: '@work.com' }
+        ],
         actions: [{ id: 'act-1', type: 'move_to_folder' as FilterActionType, value: 'Work' }],
         enabled: true,
         priority: 1,
@@ -236,7 +250,9 @@ describe('useEmailFilters', () => {
     act(() => {
       result.current.addFilter({
         name: 'Disabled Filter',
-        conditions: [{ id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: '@work.com' }],
+        conditions: [
+          { id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: '@work.com' }
+        ],
         actions: [{ id: 'act-1', type: 'delete' as FilterActionType }],
         enabled: false,
         priority: 1,
@@ -314,7 +330,9 @@ describe('useEmailFilters', () => {
     act(() => {
       result.current.addFilter({
         name: 'Large Email Filter',
-        conditions: [{ id: 'cond-1', field: 'size_greater' as FilterConditionField, operator: 'equals' as const, value: '10' }],
+        conditions: [
+          { id: 'cond-1', field: 'size_greater' as FilterConditionField, operator: 'equals' as const, value: '10' }
+        ],
         actions: [{ id: 'act-1', type: 'label' as FilterActionType, value: 'large' }],
         enabled: true,
         priority: 1,
@@ -343,7 +361,9 @@ describe('useEmailFilters', () => {
     act(() => {
       result.current.addFilter({
         name: 'Active Filter',
-        conditions: [{ id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: '@test.com' }],
+        conditions: [
+          { id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: '@test.com' }
+        ],
         actions: [{ id: 'act-1', type: 'archive' as FilterActionType }],
         enabled: true,
         priority: 1,
@@ -362,7 +382,9 @@ describe('useEmailFilters', () => {
     act(() => {
       result.current.addFilter({
         name: 'Toggle Stats',
-        conditions: [{ id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: '@test.com' }],
+        conditions: [
+          { id: 'cond-1', field: 'from' as FilterConditionField, operator: 'contains' as const, value: '@test.com' }
+        ],
         actions: [{ id: 'act-1', type: 'archive' as FilterActionType }],
         enabled: true,
         priority: 1,

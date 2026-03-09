@@ -61,6 +61,7 @@ describe('useEmailTranslation', () => {
     };
 
     // Set up the mock constructor to return our mock service instance
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(TranslationService).mockImplementation(() => mockService as any);
   });
 
@@ -174,28 +175,35 @@ describe('useEmailTranslation', () => {
 
     it('should set isTranslating to true during translation', async () => {
       mockService.translateEmail.mockImplementation(
-        () => new Promise((resolve) => setTimeout(() => resolve({
-          translation: {
-            id: '1',
-            originalText: 'Hello',
-            translatedText: 'Hola',
-            sourceLanguage: SupportedLanguage.ENGLISH,
-            targetLanguage: SupportedLanguage.SPANISH,
-            tone: TranslationTone.NEUTRAL,
-            quality: TranslationQuality.HIGH,
-            status: TranslationStatus.COMPLETED,
-            confidence: 0.95,
-            timestamp: Date.now(),
-            source: TranslationSource.API,
-            cacheHit: false,
-            segments: [],
-            metadata: {}
-          },
-          detectedLanguage: SupportedLanguage.ENGLISH,
-          detectedTone: TranslationTone.NEUTRAL,
-          toneConfidence: 0.8,
-          languageConfidence: 0.95
-        }), 100))
+        () =>
+          new Promise((resolve) =>
+            setTimeout(
+              () =>
+                resolve({
+                  translation: {
+                    id: '1',
+                    originalText: 'Hello',
+                    translatedText: 'Hola',
+                    sourceLanguage: SupportedLanguage.ENGLISH,
+                    targetLanguage: SupportedLanguage.SPANISH,
+                    tone: TranslationTone.NEUTRAL,
+                    quality: TranslationQuality.HIGH,
+                    status: TranslationStatus.COMPLETED,
+                    confidence: 0.95,
+                    timestamp: Date.now(),
+                    source: TranslationSource.API,
+                    cacheHit: false,
+                    segments: [],
+                    metadata: {}
+                  },
+                  detectedLanguage: SupportedLanguage.ENGLISH,
+                  detectedTone: TranslationTone.NEUTRAL,
+                  toneConfidence: 0.8,
+                  languageConfidence: 0.95
+                }),
+              100
+            )
+          )
       );
 
       const { result } = renderHook(() => useEmailTranslation());

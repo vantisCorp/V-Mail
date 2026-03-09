@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useEmailDelegation } from '../../src/hooks/useEmailDelegation';
-import type { DelegationPermission } from '../../src/types/delegation';
 
 // Mock the useNotifications hook
 vi.mock('../../src/hooks/useNotifications', () => ({
@@ -205,11 +204,7 @@ describe('useEmailDelegation', () => {
     const delegationId = result.current.delegations[0].id;
 
     act(() => {
-      result.current.updateDelegation(
-        { delegationId, permission: 'manage' },
-        currentUserId,
-        'John Doe'
-      );
+      result.current.updateDelegation({ delegationId, permission: 'manage' }, currentUserId, 'John Doe');
     });
 
     expect(result.current.delegations[0].permission).toBe('manage');
@@ -546,7 +541,7 @@ describe('useEmailDelegation', () => {
       );
     });
 
-    const manageDelegation = result.current.delegations.find(d => d.delegateId === 'user-3');
+    const manageDelegation = result.current.delegations.find((d) => d.delegateId === 'user-3');
     expect(manageDelegation?.allowedActions).toContain('send_email');
     expect(manageDelegation?.allowedActions).toContain('read_emails');
     expect(manageDelegation?.allowedActions).toContain('delete_emails');

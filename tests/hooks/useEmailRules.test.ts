@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useEmailRules } from '../../src/hooks/useEmailRules';
 import {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   EmailRule,
   RuleType,
   RuleStatus,
@@ -101,7 +102,7 @@ describe('useEmailRules', () => {
         });
       });
 
-      const updatedRule = result.current.rules.find(r => r.id === ruleToUpdate.id);
+      const updatedRule = result.current.rules.find((r) => r.id === ruleToUpdate.id);
       expect(updatedRule?.name).toBe('Updated Rule Name');
       expect(updatedRule?.status).toBe(RuleStatus.PAUSED);
       expect(updatedRule?.name).not.toBe(originalName);
@@ -122,7 +123,7 @@ describe('useEmailRules', () => {
       });
 
       expect(result.current.rules.length).toBe(initialCount - 1);
-      expect(result.current.rules.find(r => r.id === ruleToDelete.id)).toBeUndefined();
+      expect(result.current.rules.find((r) => r.id === ruleToDelete.id)).toBeUndefined();
     });
 
     it('should get rule by ID', async () => {
@@ -149,14 +150,14 @@ describe('useEmailRules', () => {
         expect(result.current.isLoading).toBe(false);
       });
 
-      const activeRule = result.current.rules.find(r => r.status === RuleStatus.ACTIVE);
+      const activeRule = result.current.rules.find((r) => r.status === RuleStatus.ACTIVE);
       expect(activeRule).toBeDefined();
 
       await act(async () => {
         await result.current.toggleRuleStatus(activeRule!.id);
       });
 
-      const toggledRule = result.current.rules.find(r => r.id === activeRule!.id);
+      const toggledRule = result.current.rules.find((r) => r.id === activeRule!.id);
       expect(toggledRule?.status).toBe(RuleStatus.PAUSED);
     });
 
@@ -168,7 +169,7 @@ describe('useEmailRules', () => {
       });
 
       // First pause a rule
-      const activeRule = result.current.rules.find(r => r.status === RuleStatus.ACTIVE);
+      const activeRule = result.current.rules.find((r) => r.status === RuleStatus.ACTIVE);
       await act(async () => {
         await result.current.toggleRuleStatus(activeRule!.id);
       });
@@ -178,7 +179,7 @@ describe('useEmailRules', () => {
         await result.current.toggleRuleStatus(activeRule!.id);
       });
 
-      const toggledRule = result.current.rules.find(r => r.id === activeRule!.id);
+      const toggledRule = result.current.rules.find((r) => r.id === activeRule!.id);
       expect(toggledRule?.status).toBe(RuleStatus.ACTIVE);
     });
   });
@@ -384,7 +385,7 @@ describe('useEmailRules', () => {
         await result.current.executeRule(rule.id, testEmail);
       });
 
-      const updatedRule = result.current.rules.find(r => r.id === rule.id);
+      const updatedRule = result.current.rules.find((r) => r.id === rule.id);
       expect(updatedRule?.executionCount).toBeGreaterThan(0);
       expect(updatedRule?.lastExecuted).toBeDefined();
     });
@@ -421,7 +422,7 @@ describe('useEmailRules', () => {
         await result.current.executeRule(rule.id, testEmail, true);
       });
 
-      const updatedRule = result.current.rules.find(r => r.id === rule.id);
+      const updatedRule = result.current.rules.find((r) => r.id === rule.id);
       expect(updatedRule?.executionCount).toBe(initialCount); // Should not increment in dry run
     });
   });
@@ -468,7 +469,7 @@ describe('useEmailRules', () => {
         type: RuleType.AUTO_REPLY
       });
 
-      autoReplyRules.forEach(rule => {
+      autoReplyRules.forEach((rule) => {
         expect(rule.type).toBe(RuleType.AUTO_REPLY);
       });
     });
@@ -484,7 +485,7 @@ describe('useEmailRules', () => {
         status: RuleStatus.ACTIVE
       });
 
-      activeRules.forEach(rule => {
+      activeRules.forEach((rule) => {
         expect(rule.status).toBe(RuleStatus.ACTIVE);
       });
     });
@@ -500,7 +501,7 @@ describe('useEmailRules', () => {
         searchQuery: 'support'
       });
 
-      searchResults.forEach(rule => {
+      searchResults.forEach((rule) => {
         const matchName = rule.name.toLowerCase().includes('support');
         const matchDesc = rule.description?.toLowerCase().includes('support');
         expect(matchName || matchDesc).toBe(true);
@@ -518,7 +519,7 @@ describe('useEmailRules', () => {
         priority: RulePriority.HIGH
       });
 
-      highPriorityRules.forEach(rule => {
+      highPriorityRules.forEach((rule) => {
         expect(rule.priority).toBe(RulePriority.HIGH);
       });
     });
@@ -536,15 +537,11 @@ describe('useEmailRules', () => {
       const initialCount = result.current.rules.length;
 
       await act(async () => {
-        await result.current.createRuleFromTemplate(
-          template.id,
-          'Rule from Template',
-          RulePriority.MEDIUM
-        );
+        await result.current.createRuleFromTemplate(template.id, 'Rule from Template', RulePriority.MEDIUM);
       });
 
       expect(result.current.rules.length).toBe(initialCount + 1);
-      const newRule = result.current.rules.find(r => r.name === 'Rule from Template');
+      const newRule = result.current.rules.find((r) => r.name === 'Rule from Template');
       expect(newRule).toBeDefined();
       expect(newRule?.type).toBe(template.type);
     });

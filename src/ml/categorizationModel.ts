@@ -9,8 +9,10 @@ import {
   EmailFeatures,
   CategoryConfidence,
   CategorizationResult,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   CustomCategory,
   EmailCategory,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   SYSTEM_CATEGORIES
 } from '../types/aiCategorization';
 
@@ -62,6 +64,7 @@ export class CategorizationModel {
   /**
    * Extract features from an email
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extractFeatures(email: any): EmailFeatures {
     const subject = email.subject || '';
     const body = email.body || '';
@@ -76,6 +79,7 @@ export class CategorizationModel {
       bodyPreview: body.substring(0, 500),
       bodyWords: this.tokenize(body),
       hasAttachments: (email.attachments || []).length > 0,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       attachmentTypes: (email.attachments || []).map((a: any) => a.type),
       hasLinks: this.countLinks(body) > 0,
       linkCount: this.countLinks(body),
@@ -171,7 +175,7 @@ export class CategorizationModel {
   /**
    * Detect language (simplified)
    */
-  private detectLanguage(text: string): string {
+  private detectLanguage(_text: string): string {
     // Simplified language detection
     // In production, use proper language detection library
     return 'en';
@@ -478,6 +482,7 @@ export class CategorizationModel {
   /**
    * Categorize an email
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   categorize(email: any): CategorizationResult {
     const startTime = performance.now();
 
@@ -507,6 +512,7 @@ export class CategorizationModel {
   /**
    * Batch categorize emails
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   batchCategorize(emails: any[]): Map<string, CategorizationResult> {
     const results = new Map<string, CategorizationResult>();
 
@@ -521,6 +527,7 @@ export class CategorizationModel {
   /**
    * Train model with examples
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async trainWithExamples(examples: any[]): Promise<void> {
     // In a real implementation, this would:
     // 1. Extract features from examples
@@ -528,6 +535,7 @@ export class CategorizationModel {
     // 3. Re-train the model
     // For now, this is a placeholder
 
+    // eslint-disable-next-line no-console
     console.log(`Training with ${examples.length} examples`);
     await new Promise((resolve) => setTimeout(resolve, 100)); // Simulate training
   }

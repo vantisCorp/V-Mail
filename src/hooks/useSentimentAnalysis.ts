@@ -292,11 +292,13 @@ export function useSentimentAnalysis(initialConfig?: Partial<SentimentConfig>): 
       [Sentiment.NEGATIVE]: 0
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const emotionDistribution: Record<Emotion, number> = {} as any;
     Object.values(Emotion).forEach((e) => {
       emotionDistribution[e] = 0;
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const toneDistribution: Record<Tone, number> = {} as any;
     Object.values(Tone).forEach((t) => {
       toneDistribution[t] = 0;

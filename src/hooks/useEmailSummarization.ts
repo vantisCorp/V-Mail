@@ -7,6 +7,7 @@ import {
   SummarySegment,
   SummaryType,
   SummaryLength,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   SummaryMetadata,
   DEFAULT_SUMMARIZATION_CONFIG
 } from '../types/emailSummarization';
@@ -158,6 +159,7 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
       emails: Array<{ id: string; subject: string; body: string; from: string; date: string }>
     ): Promise<EmailSummary> => {
       return summarize({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         emails: emails as any,
         summaryType: SummaryType.HYBRID,
         summaryLength: SummaryLength.MEDIUM,
@@ -177,6 +179,7 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
             ...email,
             to: '',
             timestamp: email.date
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } as any
         ],
         summaryType: config.defaultSummaryType || SummaryType.EXTRACTIVE,

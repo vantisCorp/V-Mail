@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { useAICategorization } from '../../src/hooks/useAICategorization';
 import { EmailCategory } from '../../src/types/aiCategorization';
 
@@ -55,7 +55,7 @@ describe('useAICategorization', () => {
         from: 'promo@marketing.com',
         to: ['user@example.com'],
         subject: '50% OFF - Limited Time Offer!',
-        body: 'Don\'t miss our amazing sale! 50% off everything. Buy now before it expires. Unsubscribe: link',
+        body: "Don't miss our amazing sale! 50% off everything. Buy now before it expires. Unsubscribe: link",
         timestamp: new Date().toISOString(),
         priority: 'low',
         attachments: []
@@ -166,7 +166,7 @@ describe('useAICategorization', () => {
           from: 'friend@gmail.com',
           to: ['user@example.com'],
           subject: 'Dinner?',
-          body: 'Let\'s eat',
+          body: "Let's eat",
           timestamp: new Date().toISOString()
         }
       ];
@@ -196,6 +196,7 @@ describe('useAICategorization', () => {
           timestamp: new Date().toISOString()
         },
         // Invalid email
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         null as any
       ];
 
@@ -257,7 +258,7 @@ describe('useAICategorization', () => {
         });
       });
 
-      const updated = result.current.customCategories.find(c => c.id === categoryId);
+      const updated = result.current.customCategories.find((c) => c.id === categoryId);
       expect(updated?.name).toBe('Extended Family');
       expect(updated?.description).toBe('Emails from extended family members');
     });
@@ -379,7 +380,7 @@ describe('useAICategorization', () => {
         });
       });
 
-      const updated = result.current.categorizationRules.find(r => r.id === ruleId);
+      const updated = result.current.categorizationRules.find((r) => r.id === ruleId);
       expect(updated?.enabled).toBe(false);
       expect(updated?.name).toBe('Disabled Rule');
     });
@@ -429,9 +430,11 @@ describe('useAICategorization', () => {
     });
 
     it('should not trigger auto-training when disabled', () => {
-      const { result } = renderHook(() => useAICategorization({
-        enableAutoTraining: false
-      }));
+      const { result } = renderHook(() =>
+        useAICategorization({
+          enableAutoTraining: false
+        })
+      );
 
       act(() => {
         result.current.addTrainingExample({
@@ -465,7 +468,7 @@ describe('useAICategorization', () => {
           from: 'friend@gmail.com',
           to: ['user@example.com'],
           subject: 'Personal email',
-          body: 'Let\'s meet',
+          body: "Let's meet",
           timestamp: new Date().toISOString()
         }
       ];
@@ -504,9 +507,11 @@ describe('useAICategorization', () => {
     });
 
     it('should throw error when categorization disabled', async () => {
-      const { result } = renderHook(() => useAICategorization({
-        enabled: false
-      }));
+      const { result } = renderHook(() =>
+        useAICategorization({
+          enabled: false
+        })
+      );
 
       const email = {
         id: 'email-1',

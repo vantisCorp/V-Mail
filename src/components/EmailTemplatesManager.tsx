@@ -18,6 +18,10 @@ const EmailTemplatesManager: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<'templates' | 'categories' | 'analytics' | 'usage'>('templates');
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [showPreview, setShowPreview] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [selectedType, setSelectedType] = useState<TemplateType | ''>('');

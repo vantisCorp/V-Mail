@@ -45,7 +45,7 @@ export const PerformanceMonitor: React.FC = () => {
     let memoryInterval: NodeJS.Timeout | null = null;
     if ('memory' in performance) {
       const measureMemory = () => {
-        const memory = (performance as unknown).memory;
+        const memory = (performance as any).memory;
         if (memory) {
           setMetrics((prev) => ({
             ...prev,
@@ -88,7 +88,7 @@ export const PerformanceMonitor: React.FC = () => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  if (!isVisible || (import.meta as unknown).env?.DEV) {
+  if (!isVisible || (import.meta as any).env?.DEV) {
     return null;
   }
 

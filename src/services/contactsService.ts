@@ -9,6 +9,9 @@ import {
   ContactSortOptions,
   ContactStatistics,
   EmailToContactOptions,
+  ContactImportOptions,
+  ContactExportOptions,
+  ContactExportResult,
   ContactSearchResult,
   ContactMergeSuggestion,
   ContactSyncStatus,
@@ -603,7 +606,7 @@ export class ContactsService {
   /**
    * Create contact from email
    */
-  public async createContactFromEmail(email: unknown, options: EmailToContactOptions): Promise<Contact> {
+  public async createContactFromEmail(email: any, options: EmailToContactOptions): Promise<Contact> {
     const extractedData = this.extractContactDataFromEmail(email, options);
 
     // Check if contact already exists
@@ -675,7 +678,7 @@ export class ContactsService {
   /**
    * Extract contact data from email
    */
-  private extractContactDataFromEmail(email: unknown, options: EmailToContactOptions): Partial<CreateContactPayload> {
+  private extractContactDataFromEmail(email: any, options: EmailToContactOptions): Partial<CreateContactPayload> {
     const result: Partial<CreateContactPayload> = {
       emails: [],
       phones: []
@@ -700,7 +703,7 @@ export class ContactsService {
 
     // Extract from recipients
     if (options.extractFromRecipients && email.to) {
-      email.to.forEach((recipient: unknown) => {
+      email.to.forEach((recipient: any) => {
         if (recipient.email) {
           result.emails!.push({
             id: this.generateFieldId(),
@@ -713,7 +716,7 @@ export class ContactsService {
 
     // Extract from CC
     if (options.extractFromCc && email.cc) {
-      email.cc.forEach((recipient: unknown) => {
+      email.cc.forEach((recipient: any) => {
         if (recipient.email) {
           result.emails!.push({
             id: this.generateFieldId(),
@@ -832,7 +835,7 @@ export class ContactsService {
     });
 
     // Find duplicates
-    byEmail.forEach((duplicateContacts, _email) => {
+    byEmail.forEach((duplicateContacts, email) => {
       if (duplicateContacts.length > 1) {
         const primaryContact = duplicateContacts.reduce((a, b) => (a.updatedAt > b.updatedAt ? a : b));
         const others = duplicateContacts.filter((c) => c.id !== primaryContact.id);
@@ -858,7 +861,7 @@ export class ContactsService {
     });
 
     // Find name duplicates with lower score
-    byName.forEach((duplicateContacts, _name) => {
+    byName.forEach((duplicateContacts, name) => {
       if (duplicateContacts.length > 1 && duplicateContacts.length === 2) {
         // Only suggest if not already suggested by email
         const hasEmailMatch = suggestions.some((s) =>

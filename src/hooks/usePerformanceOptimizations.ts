@@ -23,9 +23,18 @@ import {
   CacheStatistics,
   CacheConfiguration,
   LazyLoadConfig,
+  CodeSplitConfig,
   VirtualScrollConfig,
+  MemoizationStrategy,
+  ComponentOptimization,
+  ImageOptimization,
   PerformanceReport,
+  OptimizationAction,
   PerformanceMonitoringConfig,
+  NetworkOptimization,
+  DatabaseOptimization,
+  RenderingOptimization,
+  PerformanceConfiguration,
   PerformanceAlert
 } from '../types/performance';
 
@@ -281,7 +290,7 @@ class CacheManager {
     }
   }
 
-  private calculateSize(value: unknown): number {
+  private calculateSize(value: any): number {
     return JSON.stringify(value).length * 2; // Rough estimate in bytes
   }
 
@@ -346,7 +355,7 @@ export const usePerformanceOptimizations = () => {
    * Record a performance metric
    */
   const recordMetric = useCallback(
-    (type: MetricType, value: number, metadata?: Record<string, unknown>, component?: string, route?: string) => {
+    (type: MetricType, value: number, metadata?: Record<string, any>, component?: string, route?: string) => {
       if (!isEnabled || !monitoringConfig.enabled) {
         return;
       }
@@ -503,7 +512,7 @@ export const usePerformanceOptimizations = () => {
    * Memoize a function result
    */
   const memoize = useCallback(
-    <T extends (...args: unknown[]) => unknown>(fn: T, key: string, ttl?: number): T => {
+    <T extends (...args: any[]) => any>(fn: T, key: string, ttl?: number): T => {
       return ((...args: Parameters<T>) => {
         const cacheKey = `${key}-${JSON.stringify(args)}`;
 
@@ -652,7 +661,7 @@ function generateRecommendations(metrics: PerformanceMetric[]): Array<{
   impact: string;
   effort: string;
 }> {
-  const recommendations: unknown[] = [];
+  const recommendations: any[] = [];
 
   const avgRenderTime = calculateAverage(metrics, MetricType.RENDER_TIME);
   const avgApiTime = calculateAverage(metrics, MetricType.API_CALL);

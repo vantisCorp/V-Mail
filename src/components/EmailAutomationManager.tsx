@@ -3,9 +3,9 @@
  * Manages automation rules, conditions, actions, and execution
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useEmailAutomation } from '../hooks/useEmailAutomation';
-import { RuleStatus, RulePriority, ActionType, TriggerType } from '../types/emailAutomation';
+import { RuleStatus, RulePriority, ActionType, TriggerType, ConditionOperator } from '../types/emailAutomation';
 import '../styles/email-automation.css';
 
 interface EmailAutomationManagerProps {
@@ -18,13 +18,22 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
     rules,
     executionLogs,
     categories,
+    createRule,
+    updateRule,
     deleteRule,
     duplicateRule,
     activateRule,
     pauseRule,
+    disableRule,
+    testRule,
+    validateRule,
     getRuleStatistics,
     getFilteredRules,
-    refreshRules
+    createCategory,
+    getRuleById,
+    getExecutionLogs,
+    refreshRules,
+    refreshExecutionLogs
   } = useEmailAutomation();
 
   const [activeTab, setActiveTab] = useState<'rules' | 'categories' | 'logs' | 'analytics'>('rules');
@@ -33,6 +42,7 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
   const [filterPriority, setFilterPriority] = useState<RulePriority | undefined>(undefined);
   const [searchTerm, setSearchTerm] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showTestModal, setShowTestModal] = useState(false);
 
   const filteredRules = getFilteredRules({
     status: filterStatus,
@@ -45,12 +55,16 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
     onRuleSelect?.(ruleId);
   };
 
+  const handleCreateRule = async (ruleData: any) => {
+    await createRule(ruleData);
+    setShowCreateModal(false);
+  };
+
   const handleDuplicateRule = async (ruleId: string) => {
     await duplicateRule(ruleId);
   };
 
   const handleDeleteRule = async (ruleId: string) => {
-    // eslint-disable-next-line no-alert
     if (window.confirm('Are you sure you want to delete this rule?')) {
       await deleteRule(ruleId);
       if (selectedRule === ruleId) {
@@ -157,7 +171,8 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
     return icons[triggerType] || '⚙️';
   };
 
-  const RuleCard = ({ rule }: { rule: unknown }) => {
+  const RuleCard = ({ rule }: { rule: any }) => {
+    const statistics = getRuleStatistics(rule.id);
     const isSelected = selectedRule === rule.id;
 
     return (
@@ -201,7 +216,7 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
           <div className="detail-section">
             <span className="detail-label">Conditions:</span>
             <div className="conditions-list">
-              {rule.conditions.slice(0, 2).map((condition: unknown, index: number) => (
+              {rule.conditions.slice(0, 2).map((condition: any, index: number) => (
                 <span key={index} className="condition-tag">
                   {condition.field} {condition.operator}{' '}
                   {typeof condition.value === 'string' ? condition.value.substring(0, 20) : condition.value}
@@ -214,7 +229,7 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
           <div className="detail-section">
             <span className="detail-label">Actions:</span>
             <div className="actions-list">
-              {rule.actions.slice(0, 3).map((action: unknown, index: number) => (
+              {rule.actions.slice(0, 3).map((action: any, index: number) => (
                 <span key={index} className="action-tag" title={action.type}>
                   {getActionIcon(action.type)}
                 </span>
@@ -268,7 +283,7 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
     );
   };
 
-  const CategoryCard = ({ category }: { category: unknown }) => {
+  const CategoryCard = ({ category }: { category: any }) => {
     const categoryRules = rules.filter((r) => r.categoryId === category.id);
 
     return (
@@ -287,7 +302,9 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
     );
   };
 
-  const LogEntry = ({ log }: { log: unknown }) => {
+  const LogEntry = ({ log }: { log: any }) => {
+    const rule = getRuleById(log.ruleId);
+
     return (
       <div className="log-entry">
         <div className="log-header">
@@ -304,7 +321,7 @@ const EmailAutomationManager: React.FC<EmailAutomationManagerProps> = ({ onRuleS
     );
   };
 
-  const AnalyticsCard = ({ rule }: { rule: unknown }) => {
+  const AnalyticsCard = ({ rule }: { rule: any }) => {
     const statistics = getRuleStatistics(rule.id);
 
     return (

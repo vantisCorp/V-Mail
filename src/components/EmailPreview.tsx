@@ -43,11 +43,11 @@ export const EmailPreview: React.FC<EmailPreviewProps> = ({ email }) => {
     return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
   };
 
-  const handleAttachmentClick = (attachment: unknown) => {
+  const handleAttachmentClick = (attachment: any) => {
     setPreviewAttachment(attachment);
   };
 
-  const handleDownload = (attachment: unknown) => {
+  const handleDownload = (attachment: any) => {
     addNotification('success', `Downloading ${attachment.name}...`);
   };
 

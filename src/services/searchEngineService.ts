@@ -21,6 +21,7 @@ import {
   SearchFieldType,
   SearchOperator,
   SearchFilter,
+  SearchResultItem,
   SearchSuggestion,
   SuggestionType
 } from '../types/enhancedSearch';
@@ -74,7 +75,6 @@ interface IndexedEvent {
   endDate: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type IndexedDocument = IndexedEmail | IndexedContact | IndexedEvent;
 
 // Search result with metadata
@@ -86,6 +86,20 @@ export interface SearchResult {
 }
 
 // Natural language query patterns
+const NL_PATTERNS = {
+  from: /(?:from|sender):\s*["']?([^"'\s]+(?:\s+[^"'\s]+)*)["']?/gi,
+  to: /(?:to|recipient):\s*["']?([^"'\s]+(?:\s+[^"'\s]+)*)["']?/gi,
+  subject: /(?:subject|title):\s*["']?([^"']+)["']?/gi,
+  has: /has:\s*(attachment|attachments|label|star|flag)/gi,
+  is: /is:\s*(read|unread|starred|important|draft|sent)/gi,
+  before: /before:\s*(\d{4}-\d{2}-\d{2}|\d{1,2}\/\d{1,2}\/\d{2,4})/gi,
+  after: /after:\s*(\d{4}-\d{2}-\d{2}|\d{1,2}\/\d{1,2}\/\d{2,4})/gi,
+  date: /date:\s*(\d{4}-\d{2}-\d{2}|\d{1,2}\/\d{1,2}\/\d{2,4})/gi,
+  larger: /larger:\s*(\d+)(kb|mb|gb)?/gi,
+  smaller: /smaller:\s*(\d+)(kb|mb|gb)?/gi,
+  label: /label:\s*["']?([^"'\s]+)["']?/gi,
+  folder: /in:\s*["']?([^"'\s]+)["']?/gi
+};
 
 /**
  * Search Engine Service Class
@@ -111,7 +125,7 @@ export class SearchEngineService {
    */
   private initializeIndices(): void {
     // Email index
-    this.emailIndex = lunr(function (this: unknown) {
+    this.emailIndex = lunr(function (this: any) {
       this.ref('id');
       this.field('subject', { boost: 10 });
       this.field('from', { boost: 8 });
@@ -128,7 +142,7 @@ export class SearchEngineService {
     });
 
     // Contact index
-    this.contactIndex = lunr(function (this: unknown) {
+    this.contactIndex = lunr(function (this: any) {
       this.ref('id');
       this.field('displayName', { boost: 10 });
       this.field('firstName', { boost: 8 });
@@ -144,7 +158,7 @@ export class SearchEngineService {
     });
 
     // Event index
-    this.eventIndex = lunr(function (this: unknown) {
+    this.eventIndex = lunr(function (this: any) {
       this.ref('id');
       this.field('title', { boost: 10 });
       this.field('description', { boost: 5 });
@@ -219,7 +233,7 @@ export class SearchEngineService {
   private rebuildEmailIndex(): void {
     const documents = Array.from(this.emails.values());
 
-    this.emailIndex = lunr(function (this: unknown) {
+    this.emailIndex = lunr(function (this: any) {
       this.ref('id');
       this.field('subject', { boost: 10 });
       this.field('from', { boost: 8 });
@@ -247,14 +261,12 @@ export class SearchEngineService {
       displayName: contact.displayName || '',
       firstName: contact.firstName || '',
       lastName: contact.lastName || '',
-      emails: (contact.emails || []).map((e: unknown) => e.email).join(' '),
-      phones: (contact.phones || []).map((p: unknown) => p.number || p.phone || '').join(' '),
+      emails: (contact.emails || []).map((e: any) => e.email).join(' '),
+      phones: (contact.phones || []).map((p: any) => p.number || p.phone || '').join(' '),
       company: contact.organization?.name || '',
       jobTitle: contact.organization?.title || '',
       notes:
-        typeof contact.notes === 'string'
-          ? contact.notes
-          : (contact.notes || []).map((n: unknown) => n.content).join(' '),
+        typeof contact.notes === 'string' ? contact.notes : (contact.notes || []).map((n: any) => n.content).join(' '),
       tags: (contact.tags || []).join(' ')
     };
 
@@ -273,14 +285,14 @@ export class SearchEngineService {
         displayName: contact.displayName || '',
         firstName: contact.firstName || '',
         lastName: contact.lastName || '',
-        emails: (contact.emails || []).map((e: unknown) => e.email).join(' '),
-        phones: (contact.phones || []).map((p: unknown) => p.number || p.phone || '').join(' '),
+        emails: (contact.emails || []).map((e: any) => e.email).join(' '),
+        phones: (contact.phones || []).map((p: any) => p.number || p.phone || '').join(' '),
         company: contact.organization?.name || '',
         jobTitle: contact.organization?.title || '',
         notes:
           typeof contact.notes === 'string'
             ? contact.notes
-            : (contact.notes || []).map((n: unknown) => n.content).join(' '),
+            : (contact.notes || []).map((n: any) => n.content).join(' '),
         tags: (contact.tags || []).join(' ')
       };
       this.contacts.set(indexed.id, indexed);
@@ -295,7 +307,7 @@ export class SearchEngineService {
   private rebuildContactIndex(): void {
     const documents = Array.from(this.contacts.values());
 
-    this.contactIndex = lunr(function (this: unknown) {
+    this.contactIndex = lunr(function (this: any) {
       this.ref('id');
       this.field('displayName', { boost: 10 });
       this.field('firstName', { boost: 8 });
@@ -324,7 +336,7 @@ export class SearchEngineService {
       description: event.description || '',
       location: event.location || '',
       attendees: (event.attendees || [])
-        .map((a: unknown) => (typeof a === 'string' ? a : a.email || a.name || ''))
+        .map((a: any) => (typeof a === 'string' ? a : a.email || a.name || ''))
         .join(' '),
       organizer: event.organizer?.email || event.organizer?.displayName || '',
       status: event.status || 'confirmed',
@@ -348,7 +360,7 @@ export class SearchEngineService {
         description: event.description || '',
         location: event.location || '',
         attendees: (event.attendees || [])
-          .map((a: unknown) => (typeof a === 'string' ? a : a.email || a.name || ''))
+          .map((a: any) => (typeof a === 'string' ? a : a.email || a.name || ''))
           .join(' '),
         organizer: event.organizer?.email || event.organizer?.displayName || '',
         status: event.status || 'confirmed',
@@ -367,7 +379,7 @@ export class SearchEngineService {
   private rebuildEventIndex(): void {
     const documents = Array.from(this.events.values());
 
-    this.eventIndex = lunr(function (this: unknown) {
+    this.eventIndex = lunr(function (this: any) {
       this.ref('id');
       this.field('title', { boost: 10 });
       this.field('description', { boost: 5 });
@@ -488,11 +500,11 @@ export class SearchEngineService {
   public parseNaturalLanguageQuery(query: string): {
     text: string;
     filters: SearchFilter[];
-    operators: Record<string, unknown>;
+    operators: Record<string, any>;
   } {
     let cleanQuery = query;
     const filters: SearchFilter[] = [];
-    const operators: Record<string, unknown> = {};
+    const operators: Record<string, any> = {};
 
     // Extract 'from' filter - matches: from:value or from:"value with spaces"
     const fromMatch = query.match(/from:["']?([^"'\s]+)["']?/i);

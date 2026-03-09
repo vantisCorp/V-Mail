@@ -5,7 +5,7 @@
 /**
  * Memoize function results to avoid expensive recalculations
  */
-export function memoize<T extends (...args: unknown[]) => unknown>(
+export function memoize<T extends (...args: any[]) => any>(
   fn: T,
   keyGenerator?: (...args: Parameters<T>) => string
 ): T {
@@ -27,10 +27,7 @@ export function memoize<T extends (...args: unknown[]) => unknown>(
 /**
  * Debounce function to limit execution rate
  */
-export function debounce<T extends (...args: unknown[]) => unknown>(
-  fn: T,
-  delay: number
-): (...args: Parameters<T>) => void {
+export function debounce<T extends (...args: any[]) => any>(fn: T, delay: number): (...args: Parameters<T>) => void {
   let timeoutId: NodeJS.Timeout | null = null;
 
   return (...args: Parameters<T>) => {
@@ -47,10 +44,7 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
 /**
  * Throttle function to limit execution rate
  */
-export function throttle<T extends (...args: unknown[]) => unknown>(
-  fn: T,
-  limit: number
-): (...args: Parameters<T>) => void {
+export function throttle<T extends (...args: any[]) => any>(fn: T, limit: number): (...args: Parameters<T>) => void {
   let inThrottle: boolean = false;
   let lastResult: ReturnType<T>;
 
@@ -71,7 +65,7 @@ export function throttle<T extends (...args: unknown[]) => unknown>(
 /**
  * Request animation frame throttle for smooth animations
  */
-export function rafThrottle<T extends (...args: unknown[]) => unknown>(fn: T): (...args: Parameters<T>) => void {
+export function rafThrottle<T extends (...args: any[]) => any>(fn: T): (...args: Parameters<T>) => void {
   let rafId: number | null = null;
 
   return (...args: Parameters<T>) => {
@@ -137,13 +131,12 @@ export function preloadResources(resources: Array<{ href: string; as: string }>)
 /**
  * Measure performance of a function
  */
-export function measurePerformance<T extends (...args: unknown[]) => unknown>(fn: T, label: string): T {
+export function measurePerformance<T extends (...args: any[]) => any>(fn: T, label: string): T {
   return ((...args: Parameters<T>) => {
     const start = performance.now();
     const result = fn(...args);
     const end = performance.now();
 
-    // eslint-disable-next-line no-console
     console.log(`${label} took ${(end - start).toFixed(2)}ms`);
     return result;
   }) as T;
@@ -212,7 +205,7 @@ export function optimizeImageUrl(
  * Check if user is on slow connection
  */
 export function isSlowConnection(): boolean {
-  const connection = (navigator as unknown).connection;
+  const connection = (navigator as any).connection;
   if (!connection) {
     return false;
   }
@@ -224,7 +217,7 @@ export function isSlowConnection(): boolean {
  * Get device memory (if available)
  */
 export function getDeviceMemory(): number {
-  return (navigator as unknown).deviceMemory || 4; // Default to 4GB
+  return (navigator as any).deviceMemory || 4; // Default to 4GB
 }
 
 /**

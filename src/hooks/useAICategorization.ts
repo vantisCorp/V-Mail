@@ -4,8 +4,9 @@
  * Provides automatic email categorization functionality using machine learning.
  */
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import {
+  EmailCategory,
   CategorizationResult,
   CustomCategory,
   CategorizationModelConfig,
@@ -47,7 +48,7 @@ export const useAICategorization = (config: Partial<CategorizationModelConfig> =
    * Categorize a single email
    */
   const categorizeEmail = useCallback(
-    async (email: unknown): Promise<CategorizationResult> => {
+    async (email: any): Promise<CategorizationResult> => {
       if (!isEnabled) {
         throw new Error('Categorization is disabled');
       }
@@ -79,7 +80,7 @@ export const useAICategorization = (config: Partial<CategorizationModelConfig> =
    * Batch categorize emails
    */
   const batchCategorize = useCallback(
-    async (emails: unknown[]): Promise<BatchCategorizationResult> => {
+    async (emails: any[]): Promise<BatchCategorizationResult> => {
       if (!isEnabled) {
         throw new Error('Categorization is disabled');
       }
@@ -125,7 +126,7 @@ export const useAICategorization = (config: Partial<CategorizationModelConfig> =
    * Apply user-defined rules
    */
   const applyRules = useCallback(
-    (email: unknown): CategorizationResult | null => {
+    (email: any): CategorizationResult | null => {
       for (const rule of categorizationRules) {
         if (!rule.enabled) {
           continue;
@@ -163,7 +164,7 @@ export const useAICategorization = (config: Partial<CategorizationModelConfig> =
   /**
    * Match a single condition
    */
-  const matchCondition = useCallback((email: unknown, condition: unknown): boolean => {
+  const matchCondition = useCallback((email: any, condition: any): boolean => {
     let fieldValue = '';
 
     switch (condition.field) {
@@ -360,6 +361,7 @@ export const useAICategorization = (config: Partial<CategorizationModelConfig> =
     async (emailId: string, correctCategory: string): Promise<void> => {
       // Find the email (would need access to email store)
       // For now, just add training example
+      const email = { id: emailId }; // Placeholder
 
       addTrainingExample({
         emailId,

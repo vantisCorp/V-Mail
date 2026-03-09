@@ -6,6 +6,7 @@ import {
   SpeechSynthesisOptions,
   VoiceAssistantConfig,
   VoiceAssistantStatistics,
+  VoiceLanguage,
   VoiceRecognitionStatus,
   SpeechSynthesisStatus,
   DEFAULT_VOICE_CONFIG
@@ -56,7 +57,7 @@ export function useVoiceAssistant(initialConfig?: Partial<VoiceAssistantConfig>)
     successfulRecognitions: 0,
     totalSpeakingTime: 0,
     emailsRead: 0,
-    commandsByType: {} as unknown,
+    commandsByType: {} as any,
     averageConfidence: 0,
     lastReset: Date.now()
   });
@@ -82,7 +83,7 @@ export function useVoiceAssistant(initialConfig?: Partial<VoiceAssistantConfig>)
       setRecognitionStatus(result.isFinal ? VoiceRecognitionStatus.SUCCESS : VoiceRecognitionStatus.LISTENING);
     });
 
-    serviceRef.current.on('ERROR', (err: unknown) => {
+    serviceRef.current.on('ERROR', (err: any) => {
       setError(err instanceof Error ? err.message : String(err));
       setRecognitionStatus(VoiceRecognitionStatus.ERROR);
     });
@@ -110,30 +111,14 @@ export function useVoiceAssistant(initialConfig?: Partial<VoiceAssistantConfig>)
     return () => {
       // Cleanup listeners
       if (serviceRef.current) {
-        serviceRef.current.off('STARTED', () => {
-          /* noop */
-        });
-        serviceRef.current.off('STOPPED', () => {
-          /* noop */
-        });
-        serviceRef.current.off('RESULT', () => {
-          /* noop */
-        });
-        serviceRef.current.off('ERROR', () => {
-          /* noop */
-        });
-        serviceRef.current.off('TIMEOUT', () => {
-          /* noop */
-        });
-        serviceRef.current.off('SPEAKING_STARTED', () => {
-          /* noop */
-        });
-        serviceRef.current.off('SPEAKING_STOPPED', () => {
-          /* noop */
-        });
-        serviceRef.current.off('COMMAND_EXECUTED', () => {
-          /* noop */
-        });
+        serviceRef.current.off('STARTED', () => {});
+        serviceRef.current.off('STOPPED', () => {});
+        serviceRef.current.off('RESULT', () => {});
+        serviceRef.current.off('ERROR', () => {});
+        serviceRef.current.off('TIMEOUT', () => {});
+        serviceRef.current.off('SPEAKING_STARTED', () => {});
+        serviceRef.current.off('SPEAKING_STOPPED', () => {});
+        serviceRef.current.off('COMMAND_EXECUTED', () => {});
       }
     };
   }, []);

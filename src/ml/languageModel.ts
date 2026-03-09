@@ -196,7 +196,7 @@ export class LanguageModel {
 
   private generateWordCompletions(
     currentWord: string,
-    _context: WritingContext
+    context: WritingContext
   ): Array<{ text: string; confidence: number; isFullWord: boolean }> {
     const completions: Array<{ text: string; confidence: number; isFullWord: boolean }> = [];
 
@@ -403,6 +403,7 @@ export class LanguageModel {
 
   private getTemplateSuggestions(context: WritingContext): TemplateSuggestion[] {
     const templates: TemplateSuggestion[] = [];
+    const { text, recipients } = context;
 
     // Suggest templates based on context
     Object.values(EMAIL_TEMPLATES).forEach((template) => {
@@ -428,7 +429,7 @@ export class LanguageModel {
     return templates;
   }
 
-  private calculateTemplateRelevance(context: WritingContext, _template: unknown): number {
+  private calculateTemplateRelevance(context: WritingContext, template: any): number {
     let score = 0.5;
 
     // Boost score if email is empty (new email)
@@ -487,7 +488,7 @@ export class LanguageModel {
     return emails;
   }
 
-  private calculateEmailMatch(input: string, contact: unknown): number {
+  private calculateEmailMatch(input: string, contact: any): number {
     const lowerInput = input.toLowerCase();
     const lowerName = contact.name.toLowerCase();
     const lowerEmail = contact.email.toLowerCase();
@@ -583,7 +584,7 @@ export class LanguageModel {
   /**
    * Learn from user's writing patterns
    */
-  learnFromUser(text: string, _acceptedSuggestion?: Suggestion): void {
+  learnFromUser(text: string, acceptedSuggestion?: Suggestion): void {
     const words = text.split(/\s+/);
 
     // Learn individual words

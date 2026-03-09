@@ -41,6 +41,10 @@ const RBACSettings: React.FC = () => {
     'overview' | 'roles' | 'users' | 'policies' | 'audit' | 'requests' | 'settings'
   >('overview');
   const [selectedUser, setSelectedUser] = useState<UserRoleAssignment | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [showAssignDialog, setShowAssignDialog] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [showCreateRoleDialog, setShowCreateRoleDialog] = useState(false);
 
   // Sub-components
   const RoleBadge: React.FC<{ role: Role }> = ({ role }) => {

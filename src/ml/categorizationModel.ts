@@ -5,7 +5,14 @@
  * Uses TensorFlow.js for client-side inference.
  */
 
-import { EmailFeatures, CategoryConfidence, CategorizationResult, EmailCategory } from '../types/aiCategorization';
+import {
+  EmailFeatures,
+  CategoryConfidence,
+  CategorizationResult,
+  CustomCategory,
+  EmailCategory,
+  SYSTEM_CATEGORIES
+} from '../types/aiCategorization';
 
 /**
  * Categorization Model
@@ -55,7 +62,7 @@ export class CategorizationModel {
   /**
    * Extract features from an email
    */
-  extractFeatures(email: unknown): EmailFeatures {
+  extractFeatures(email: any): EmailFeatures {
     const subject = email.subject || '';
     const body = email.body || '';
     const sender = email.from || '';
@@ -69,7 +76,7 @@ export class CategorizationModel {
       bodyPreview: body.substring(0, 500),
       bodyWords: this.tokenize(body),
       hasAttachments: (email.attachments || []).length > 0,
-      attachmentTypes: (email.attachments || []).map((a: unknown) => a.type),
+      attachmentTypes: (email.attachments || []).map((a: any) => a.type),
       hasLinks: this.countLinks(body) > 0,
       linkCount: this.countLinks(body),
       isReply: subject.toLowerCase().startsWith('re:'),
@@ -164,7 +171,7 @@ export class CategorizationModel {
   /**
    * Detect language (simplified)
    */
-  private detectLanguage(_text: string): string {
+  private detectLanguage(text: string): string {
     // Simplified language detection
     // In production, use proper language detection library
     return 'en';
@@ -471,7 +478,7 @@ export class CategorizationModel {
   /**
    * Categorize an email
    */
-  categorize(email: unknown): CategorizationResult {
+  categorize(email: any): CategorizationResult {
     const startTime = performance.now();
 
     // Extract features
@@ -500,7 +507,7 @@ export class CategorizationModel {
   /**
    * Batch categorize emails
    */
-  batchCategorize(emails: unknown[]): Map<string, CategorizationResult> {
+  batchCategorize(emails: any[]): Map<string, CategorizationResult> {
     const results = new Map<string, CategorizationResult>();
 
     emails.forEach((email) => {
@@ -514,14 +521,13 @@ export class CategorizationModel {
   /**
    * Train model with examples
    */
-  async trainWithExamples(examples: unknown[]): Promise<void> {
+  async trainWithExamples(examples: any[]): Promise<void> {
     // In a real implementation, this would:
     // 1. Extract features from examples
     // 2. Update feature weights based on feedback
     // 3. Re-train the model
     // For now, this is a placeholder
 
-    // eslint-disable-next-line no-console
     console.log(`Training with ${examples.length} examples`);
     await new Promise((resolve) => setTimeout(resolve, 100)); // Simulate training
   }

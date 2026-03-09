@@ -16,8 +16,8 @@ export interface UseAnomalyDetectionReturn {
   error: string | null;
   config: AnomalyDetectionConfig;
   statistics: AnomalyDetectionStatistics;
-  detectAnomalies: (email: unknown) => Promise<AnomalyDetectionResult>;
-  analyzeMultiple: (emails: unknown[]) => Promise<AnomalyDetectionResult[]>;
+  detectAnomalies: (email: any) => Promise<AnomalyDetectionResult>;
+  analyzeMultiple: (emails: any[]) => Promise<AnomalyDetectionResult[]>;
   getRiskLevel: (riskScore: number) => RiskLevel;
   updateConfig: (config: Partial<AnomalyDetectionConfig>) => void;
   resetStatistics: () => void;
@@ -47,7 +47,7 @@ export function useAnomalyDetection(initialConfig?: Partial<AnomalyDetectionConf
 
   const serviceRef = useRef<AnomalyDetectionService>(AnomalyDetectionService.getInstance(config));
 
-  const detectAnomalies = useCallback(async (email: unknown): Promise<AnomalyDetectionResult> => {
+  const detectAnomalies = useCallback(async (email: any): Promise<AnomalyDetectionResult> => {
     setIsAnalyzing(true);
     setError(null);
 
@@ -78,7 +78,7 @@ export function useAnomalyDetection(initialConfig?: Partial<AnomalyDetectionConf
     }
   }, []);
 
-  const analyzeMultiple = useCallback(async (emails: unknown[]): Promise<AnomalyDetectionResult[]> => {
+  const analyzeMultiple = useCallback(async (emails: any[]): Promise<AnomalyDetectionResult[]> => {
     setIsAnalyzing(true);
     setError(null);
 

@@ -3,11 +3,12 @@
  * Manages automation rules, conditions, actions, and execution
  */
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import {
   AutomationRule,
   RuleCondition,
   RuleAction,
+  ConditionGroup,
   TriggerType,
   ActionType,
   ConditionOperator,
@@ -622,7 +623,7 @@ export const useEmailAutomation = () => {
 
   // Rule testing
   const testRule = useCallback(
-    async (ruleId: string, emailData: Record<string, unknown>): Promise<RuleTestResult | null> => {
+    async (ruleId: string, emailData: Record<string, any>): Promise<RuleTestResult | null> => {
       const rule = rules.find((r) => r.id === ruleId);
       if (!rule) {
         return null;
@@ -731,6 +732,8 @@ export const useEmailAutomation = () => {
       }
 
       const logs = executionLogs.filter((l) => l.ruleId === ruleId);
+      const successCount = logs.filter((l) => l.status === 'success').length;
+      const failureCount = logs.filter((l) => l.status === 'failure').length;
 
       const actionStats = logs.reduce(
         (acc, log) => {

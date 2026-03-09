@@ -1,7 +1,8 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import {
   EmailRule,
   RuleCondition,
+  RuleAction,
   CreateRulePayload,
   UpdateRulePayload,
   RuleTestResult,
@@ -9,6 +10,7 @@ import {
   RuleFilter,
   RuleTemplate,
   EmailContext,
+  RuleExecutionContext,
   RuleExecution,
   RuleType,
   RuleStatus,
@@ -415,7 +417,7 @@ export const useEmailRules = () => {
   );
 
   const evaluateCondition = useCallback((condition: RuleCondition, email: EmailContext): boolean => {
-    let value: unknown;
+    let value: any;
     const negate = condition.negate || false;
 
     // Get value from email context

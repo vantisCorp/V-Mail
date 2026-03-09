@@ -311,7 +311,7 @@ const FolderCard: React.FC<{
 export const SharedFoldersSettings: React.FC<SharedFoldersSettingsProps> = ({
   currentUserId,
   currentUserName,
-  _currentUserEmail,
+  currentUserEmail: _currentUserEmail, // eslint-disable-line @typescript-eslint/no-unused-vars
   onClose
 }) => {
   const {

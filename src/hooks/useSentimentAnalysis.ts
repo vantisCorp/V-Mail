@@ -292,12 +292,12 @@ export function useSentimentAnalysis(initialConfig?: Partial<SentimentConfig>): 
       [Sentiment.NEGATIVE]: 0
     };
 
-    const emotionDistribution: Record<Emotion, number> = {} as unknown;
+    const emotionDistribution: Record<Emotion, number> = {} as any;
     Object.values(Emotion).forEach((e) => {
       emotionDistribution[e] = 0;
     });
 
-    const toneDistribution: Record<Tone, number> = {} as unknown;
+    const toneDistribution: Record<Tone, number> = {} as any;
     Object.values(Tone).forEach((t) => {
       toneDistribution[t] = 0;
     });

@@ -7,6 +7,7 @@ import {
   SummarySegment,
   SummaryType,
   SummaryLength,
+  SummaryMetadata,
   DEFAULT_SUMMARIZATION_CONFIG
 } from '../types/emailSummarization';
 
@@ -157,7 +158,7 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
       emails: Array<{ id: string; subject: string; body: string; from: string; date: string }>
     ): Promise<EmailSummary> => {
       return summarize({
-        emails: emails as unknown,
+        emails: emails as any,
         summaryType: SummaryType.HYBRID,
         summaryLength: SummaryLength.MEDIUM,
         includeActionItems: true,
@@ -176,7 +177,7 @@ export const useEmailSummarization = (initialConfig?: Partial<SummarizationConfi
             ...email,
             to: '',
             timestamp: email.date
-          } as unknown
+          } as any
         ],
         summaryType: config.defaultSummaryType || SummaryType.EXTRACTIVE,
         summaryLength: config.defaultSummaryLength || SummaryLength.MEDIUM,

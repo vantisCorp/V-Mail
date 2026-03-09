@@ -47,7 +47,8 @@ const Calendar: React.FC<CalendarProps> = ({ onEventSelect, emailData }) => {
   void _addAttendee;
 
   const [showCreateModal, setShowCreateModal] = useState(false);
-  void setShowConvertModal;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [showConvertModal, setShowConvertModal] = useState(false);
   const [showConnectModal, setShowConnectModal] = useState(false);
   const [newEventForm, setNewEventForm] = useState({
     summary: '',

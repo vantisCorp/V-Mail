@@ -17,7 +17,8 @@ import type {
   TeamMemberStatus,
   TeamMemberFilter,
   TeamActivityFilter,
-  InviteMemberPayload
+  InviteMemberPayload,
+  UpdateMemberPayload
 } from '../types/teamAccounts';
 import '../styles/team-accounts.css';
 
@@ -58,7 +59,7 @@ const MemberCard: React.FC<{
   onSuspend: () => void;
   onReactivate: () => void;
   onChangeRole: (role: TeamMemberRole) => void;
-}> = ({ member, onEdit, onRemove, onSuspend, onReactivate, _onChangeRole }) => {
+}> = ({ member, onEdit, onRemove, onSuspend, onReactivate, onChangeRole }) => {
   const [showActions, setShowActions] = useState(false);
 
   const formatDate = (date: Date) => {
@@ -325,13 +326,17 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
     sortBy: 'timestamp',
     sortOrder: 'desc'
   });
+  const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
 
   const {
     teamAccount,
+    members,
+    activities,
     isLoading,
     error,
     inviteMember,
     removeMember,
+    updateMember,
     changeMemberRole,
     suspendMember,
     reactivateMember,
@@ -358,7 +363,6 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
 
   const handleRemoveMember = useCallback(
     async (memberId: string) => {
-      // eslint-disable-next-line no-alert
       if (confirm('Are you sure you want to remove this member?')) {
         await removeMember(memberId);
       }
@@ -368,7 +372,6 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
 
   const handleSuspendMember = useCallback(
     async (memberId: string) => {
-      // eslint-disable-next-line no-alert
       if (confirm('Are you sure you want to suspend this member?')) {
         await suspendMember(memberId);
       }
@@ -385,7 +388,6 @@ export const TeamAccountsManagement: React.FC<{ teamId?: string }> = ({ teamId }
 
   const handleChangeRole = useCallback(
     async (memberId: string, role: TeamMemberRole) => {
-      // eslint-disable-next-line no-alert
       if (confirm(`Are you sure you want to change this member's role to ${role}?`)) {
         await changeMemberRole(memberId, role);
       }

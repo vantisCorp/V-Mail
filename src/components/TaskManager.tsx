@@ -3,14 +3,14 @@
  * Manages tasks, subtasks, comments, and email-to-task conversion
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTaskManagement } from '../hooks/useTaskManagement';
-import { TaskPriority, TaskStatus, TaskType } from '../types/taskManagement';
+import { TaskPriority, TaskStatus, TaskType, AssignmentType, RecurrenceType } from '../types/taskManagement';
 import '../styles/task-management.css';
 
 interface TaskManagerProps {
   onTaskSelect?: (taskId: string) => void;
-  emailData?: Record<string, unknown>;
+  emailData?: Record<string, any>;
 }
 
 const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) => {
@@ -20,22 +20,28 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
     projects,
     selectedTask,
     setSelectedTask,
+    createTask,
     updateTask,
     deleteTask,
+    convertEmailToTask,
+    createSubTask,
     updateSubTask,
+    addComment,
+    createChecklistItem,
     toggleChecklistItem,
     deleteChecklistItem,
     getTaskStatistics,
     getFilteredTasks,
     getSortedTasks,
-    getTaskById
+    getTaskById,
+    getTasksByEmailId
   } = useTaskManagement();
 
   const [activeTab, setActiveTab] = useState<'tasks' | 'projects' | 'statistics'>('tasks');
   const [filterStatus, setFilterStatus] = useState<TaskStatus | undefined>(undefined);
   const [filterPriority, setFilterPriority] = useState<TaskPriority | undefined>(undefined);
   const [filterType, setFilterType] = useState<TaskType | undefined>(undefined);
-  const [filterProject] = useState<string | undefined>(undefined);
+  const [filterProject, setFilterProject] = useState<string | undefined>(undefined);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<'dueDate' | 'priority' | 'createdAt' | 'title' | 'progress'>('dueDate');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
@@ -57,13 +63,24 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
     onTaskSelect?.(taskId);
   };
 
+  const handleCreateTask = async (taskData: any) => {
+    await createTask(taskData);
+    setShowCreateModal(false);
+  };
+
   const handleDeleteTask = async (taskId: string) => {
-    // eslint-disable-next-line no-alert
     if (window.confirm('Are you sure you want to delete this task?')) {
       await deleteTask(taskId);
       if (selectedTask?.id === taskId) {
         setSelectedTask(null);
       }
+    }
+  };
+
+  const handleConvertEmailToTask = async (options: any) => {
+    if (emailData) {
+      await convertEmailToTask('current-email', emailData, options);
+      setShowConvertModal(false);
     }
   };
 
@@ -131,7 +148,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
     return icons[type] || '📋';
   };
 
-  const TaskCard = ({ task }: { task: unknown }) => {
+  const TaskCard = ({ task }: { task: any }) => {
     const isSelected = selectedTask?.id === task.id;
     const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && task.status !== TaskStatus.COMPLETED;
 
@@ -199,7 +216,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
         {task.subtasks && task.subtasks.length > 0 && (
           <div className="task-subtasks">
             <span className="subtasks-count">
-              {task.subtasks.filter((st: unknown) => st.completed).length}/{task.subtasks.length} subtasks
+              {task.subtasks.filter((st: any) => st.completed).length}/{task.subtasks.length} subtasks
             </span>
           </div>
         )}
@@ -207,7 +224,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
         {task.checklist && task.checklist.length > 0 && (
           <div className="task-checklist">
             <span className="checklist-count">
-              {task.checklist.filter((item: unknown) => item.completed).length}/{task.checklist.length} checklist items
+              {task.checklist.filter((item: any) => item.completed).length}/{task.checklist.length} checklist items
             </span>
           </div>
         )}
@@ -238,7 +255,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
     );
   };
 
-  const TaskDetail = ({ task }: { task: unknown }) => {
+  const TaskDetail = ({ task }: { task: any }) => {
     return (
       <div className="task-detail">
         <div className="task-detail-header">
@@ -280,7 +297,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
           <div className="task-detail-section">
             <h3>Subtasks</h3>
             <div className="subtasks-list">
-              {task.subtasks.map((subtask: unknown) => (
+              {task.subtasks.map((subtask: any) => (
                 <div key={subtask.id} className="subtask-item">
                   <input
                     type="checkbox"
@@ -298,7 +315,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
           <div className="task-detail-section">
             <h3>Checklist</h3>
             <div className="checklist-list">
-              {task.checklist.map((item: unknown) => (
+              {task.checklist.map((item: any) => (
                 <div key={item.id} className="checklist-item">
                   <input
                     type="checkbox"
@@ -319,7 +336,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
           <div className="task-detail-section">
             <h3>Comments</h3>
             <div className="comments-list">
-              {task.comments.map((comment: unknown) => (
+              {task.comments.map((comment: any) => (
                 <div key={comment.id} className="comment-item">
                   <div className="comment-header">
                     <span className="comment-author">{comment.authorName}</span>
@@ -349,7 +366,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
     );
   };
 
-  const ProjectCard = ({ project }: { project: unknown }) => {
+  const ProjectCard = ({ project }: { project: any }) => {
     const projectTasks = tasks.filter((t) => t.projectId === project.id);
 
     return (
@@ -464,7 +481,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ onTaskSelect, emailData }) =>
           <option value={TaskType.MEETING}>Meeting</option>
           <option value={TaskType.FOLLOW_UP}>Follow Up</option>
         </select>
-        <select className="filter-select" value={sortBy} onChange={(e) => setSortBy(e.target.value as unknown)}>
+        <select className="filter-select" value={sortBy} onChange={(e) => setSortBy(e.target.value as any)}>
           <option value="dueDate">Sort by Due Date</option>
           <option value="priority">Sort by Priority</option>
           <option value="createdAt">Sort by Created</option>

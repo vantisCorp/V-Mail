@@ -417,7 +417,7 @@ export class SuggestionEngine {
     return explanations[category];
   }
 
-  private generatePersonalizedReplies(_context: SuggestionContext): ReplySuggestion[] {
+  private generatePersonalizedReplies(context: SuggestionContext): ReplySuggestion[] {
     const suggestions: ReplySuggestion[] = [];
 
     if (!this.userBehavior) {
@@ -443,7 +443,7 @@ export class SuggestionEngine {
     return suggestions;
   }
 
-  private generateBehaviorBasedActions(_context: SuggestionContext): QuickActionSuggestion[] {
+  private generateBehaviorBasedActions(context: SuggestionContext): QuickActionSuggestion[] {
     const suggestions: QuickActionSuggestion[] = [];
 
     if (!this.userBehavior) {
@@ -514,8 +514,8 @@ export class SuggestionEngine {
   }
 
   private calculateMetadata(suggestions: Suggestion[]) {
-    const byType: Record<SuggestionType, number> = {} as unknown;
-    const byPriority: Record<SuggestionPriority, number> = {} as unknown;
+    const byType: Record<SuggestionType, number> = {} as any;
+    const byPriority: Record<SuggestionPriority, number> = {} as any;
     let totalConfidence = 0;
 
     suggestions.forEach((suggestion) => {
@@ -556,7 +556,7 @@ export class SuggestionEngine {
   private updateUserBehavior(feedback: TrainingExample): void {
     if (!this.userBehavior) {
       this.userBehavior = {
-        commonActions: {} as unknown,
+        commonActions: {} as any,
         frequentRecipients: [],
         commonLabels: [],
         responseTimes: [],

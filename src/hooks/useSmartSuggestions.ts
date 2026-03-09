@@ -59,7 +59,7 @@ const initialStatistics: SuggestionStatistics = {
   acceptanceRate: 0,
   avgConfidence: 0,
   avgResponseTime: 0,
-  byType: {} as unknown,
+  byType: {} as any,
   byCategory: {},
   topSuggestions: [],
   recentFeedback: []

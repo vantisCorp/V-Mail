@@ -330,7 +330,7 @@ export class CalendarService {
         if (payload.attendees) {
           event.attendees = payload.attendees.map((attendee) => ({
             ...attendee,
-            responseStatus: (attendee.responseStatus as unknown) || 'needsAction',
+            responseStatus: (attendee.responseStatus as any) || 'needsAction',
             optional: false,
             isSelf: false
           }));
@@ -399,7 +399,7 @@ export class CalendarService {
   /**
    * Create event from email
    */
-  public async createEventFromEmail(email: unknown, options: EmailToEventOptions): Promise<CalendarEvent> {
+  public async createEventFromEmail(email: any, options: EmailToEventOptions): Promise<CalendarEvent> {
     const calendar = this.getPrimaryCalendar();
     if (!calendar) {
       throw new Error('No primary calendar found');
@@ -438,7 +438,7 @@ export class CalendarService {
 
       // Add recipients as attendees
       if (email.to) {
-        email.to.forEach((recipient: unknown) => {
+        email.to.forEach((recipient: any) => {
           if (recipient.email) {
             attendees.push({
               email: recipient.email,
@@ -480,7 +480,7 @@ export class CalendarService {
    * Extract dates from email
    */
   private async extractDatesFromEmail(
-    email: unknown,
+    email: any,
     options: EmailToEventOptions
   ): Promise<{ start: { dateTime: string }; end: { dateTime: string } }> {
     // Try to extract date from subject or body
@@ -499,7 +499,7 @@ export class CalendarService {
             end: { dateTime: endOfMeeting.toISOString() }
           };
         }
-      } catch {
+      } catch (error) {
         // Use default if extraction fails
       }
     }

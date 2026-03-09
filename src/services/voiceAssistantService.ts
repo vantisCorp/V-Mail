@@ -10,20 +10,23 @@ import {
   SpeechSynthesisOptions,
   VoiceAssistantConfig,
   VoiceAssistantStatistics,
+  VoiceLanguage,
   VoiceRecognitionStatus,
   SpeechSynthesisStatus,
   MarkAction,
+  VoicePhrasePattern,
   FOLDER_NAME_VARIATIONS,
   CONFIRMATION_PHRASES,
   CANCELLATION_PHRASES,
   VOICE_PHRASE_PATTERNS,
+  VOICE_FEEDBACK_MESSAGES,
   DEFAULT_VOICE_CONFIG
 } from '../types/voiceAssistant';
 
 export class VoiceAssistantService {
   private static instance: VoiceAssistantService;
   private config: VoiceAssistantConfig;
-  private recognition: unknown = null;
+  private recognition: any = null;
   private synthesis: SpeechSynthesis;
   private status: VoiceRecognitionStatus = VoiceRecognitionStatus.IDLE;
   private speakingStatus: SpeechSynthesisStatus = SpeechSynthesisStatus.IDLE;
@@ -56,7 +59,7 @@ export class VoiceAssistantService {
       successfulRecognitions: 0,
       totalSpeakingTime: 0,
       emailsRead: 0,
-      commandsByType: {} as unknown,
+      commandsByType: {} as any,
       averageConfidence: 0,
       lastReset: Date.now()
     };
@@ -64,8 +67,7 @@ export class VoiceAssistantService {
 
   private initializeRecognition(): void {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const win = window as Record<string, unknown>;
-      const SpeechRecognition = win.SpeechRecognition || win.webkitSpeechRecognition;
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       this.recognition = new SpeechRecognition();
       this.recognition.continuous = this.config.continuousListening;
       this.recognition.interimResults = true;
@@ -76,12 +78,12 @@ export class VoiceAssistantService {
         this.emit('STARTED');
       };
 
-      this.recognition.onresult = (event: unknown) => {
+      this.recognition.onresult = (event: any) => {
         const result = this.processRecognitionResult(event);
         this.emit('RESULT', result);
       };
 
-      this.recognition.onerror = (event: unknown) => {
+      this.recognition.onerror = (event: any) => {
         this.status = VoiceRecognitionStatus.ERROR;
         this.emit('ERROR', event.error);
         this.statistics.recognitionAttempts++;
@@ -104,7 +106,7 @@ export class VoiceAssistantService {
     }
   }
 
-  private processRecognitionResult(event: unknown): VoiceRecognitionResult {
+  private processRecognitionResult(event: any): VoiceRecognitionResult {
     const results = event.results;
     const lastResult = results[results.length - 1];
     const transcript = lastResult[0].transcript.trim();
@@ -120,7 +122,7 @@ export class VoiceAssistantService {
     if (lastResult.length > 1) {
       result.alternatives = Array.from(lastResult)
         .slice(1)
-        .map((alt: unknown) => ({
+        .map((alt: any) => ({
           transcript: alt.transcript,
           confidence: alt.confidence
         }));
@@ -170,7 +172,7 @@ export class VoiceAssistantService {
 
     try {
       this.recognition.start();
-    } catch {
+    } catch (error) {
       this.status = VoiceRecognitionStatus.ERROR;
       throw new Error('Failed to start speech recognition');
     }
@@ -279,7 +281,7 @@ export class VoiceAssistantService {
     };
   }
 
-  private calculateConfidence(transcript: string, _type: VoiceCommandType): number {
+  private calculateConfidence(transcript: string, type: VoiceCommandType): number {
     // Base confidence from pattern matching
     let confidence = 0.8;
 
@@ -472,7 +474,7 @@ export class VoiceAssistantService {
     }
   }
 
-  private emit(event: string, data?: unknown): void {
+  private emit(event: string, data?: any): void {
     const listeners = this.eventListeners.get(event);
     if (listeners) {
       listeners.forEach((callback) => callback(data));

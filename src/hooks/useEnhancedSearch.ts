@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import {
   AdvancedSearchQuery,
   SimpleSearchQuery,
@@ -390,7 +390,7 @@ export const useEnhancedSearch = () => {
 
   // Evaluate filter on email
   const evaluateFilter = (email: SearchResultItem, filter: SearchFilter): boolean => {
-    let value: unknown;
+    let value: any;
 
     switch (filter.field) {
       case SearchFieldType.FROM:
@@ -797,9 +797,9 @@ export const useEnhancedSearch = () => {
 
     // Search engine integration
     searchEngine: {
-      indexEmails: (emails: unknown[]) => emails.forEach((e) => searchEngineService.indexEmail(e)),
-      indexContacts: (contacts: unknown[]) => contacts.forEach((c) => searchEngineService.indexContact(c)),
-      indexEvents: (events: unknown[]) => events.forEach((e) => searchEngineService.indexEvent(e)),
+      indexEmails: (emails: any[]) => emails.forEach((e) => searchEngineService.indexEmail(e)),
+      indexContacts: (contacts: any[]) => contacts.forEach((c) => searchEngineService.indexContact(c)),
+      indexEvents: (events: any[]) => events.forEach((e) => searchEngineService.indexEvent(e)),
       search: (query: string, scope?: SearchScope) => searchEngineService.searchAll(query, scope),
       getStats: () => searchEngineService.getStats()
     }

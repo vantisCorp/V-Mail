@@ -9,7 +9,7 @@ export type CachePolicy = 'cache-first' | 'network-first' | 'stale-while-revalid
 
 export type CachePriority = 'low' | 'normal' | 'high' | 'critical';
 
-export interface CacheEntry<T = unknown> {
+export interface CacheEntry<T = any> {
   key: string;
   value: T;
   timestamp: number;
@@ -18,7 +18,7 @@ export interface CacheEntry<T = unknown> {
   hits: number;
   lastAccessed: number;
   tags: string[];
-  metadata?: Record<string, unknown>;
+  metadata?: Record<string, any>;
 }
 
 export interface CacheOptions {
@@ -58,7 +58,7 @@ export interface CacheEvent {
   key: string;
   timestamp: number;
   size?: number;
-  metadata?: Record<string, unknown>;
+  metadata?: Record<string, any>;
 }
 
 export interface CacheStats {

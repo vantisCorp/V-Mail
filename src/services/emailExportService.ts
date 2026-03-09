@@ -4,6 +4,7 @@
  */
 
 import type {
+  ExportFormat,
   ExportOptions,
   ExportProgress,
   ExportResult,
@@ -21,7 +22,7 @@ class EmailExportService {
   /**
    * Export a single email
    */
-  static async exportSingleEmail(email: unknown, options: ExportOptions): Promise<ExportResult> {
+  static async exportSingleEmail(email: any, options: ExportOptions): Promise<ExportResult> {
     const startTime = Date.now();
 
     try {
@@ -80,7 +81,7 @@ class EmailExportService {
    * Export multiple emails
    */
   static async exportMultipleEmails(
-    emails: unknown[],
+    emails: any[],
     options: ExportOptions,
     onProgress?: (progress: ExportProgress) => void
   ): Promise<ExportResult> {
@@ -157,7 +158,7 @@ class EmailExportService {
   /**
    * Export email to PDF format
    */
-  private static async exportToPDF(email: unknown, includeHeaders: boolean): Promise<Blob> {
+  private static async exportToPDF(email: any, includeHeaders: boolean): Promise<Blob> {
     // Create HTML content for PDF
     const html = `
       <!DOCTYPE html>
@@ -178,7 +179,7 @@ class EmailExportService {
             ? `
         <div class="header">
           <div class="header-row"><span class="label">From:</span> ${email.from?.email}</div>
-          <div class="header-row"><span class="label">To:</span> ${email.to?.map((t: unknown) => t.email).join(', ')}</div>
+          <div class="header-row"><span class="label">To:</span> ${email.to?.map((t: any) => t.email).join(', ')}</div>
           <div class="header-row"><span class="label">Subject:</span> ${email.subject}</div>
           <div class="header-row"><span class="label">Date:</span> ${new Date(email.date).toLocaleString()}</div>
         </div>
@@ -200,10 +201,10 @@ class EmailExportService {
   /**
    * Export email to EML format
    */
-  private static async exportToEML(email: unknown): Promise<Blob> {
+  private static async exportToEML(email: any): Promise<Blob> {
     const emlContent = [
       `From: ${email.from?.email}`,
-      `To: ${email.to?.map((t: unknown) => t.email).join(', ')}`,
+      `To: ${email.to?.map((t: any) => t.email).join(', ')}`,
       `Subject: ${email.subject}`,
       `Date: ${new Date(email.date).toUTCString()}`,
       'Content-Type: text/html; charset=utf-8',
@@ -217,7 +218,7 @@ class EmailExportService {
   /**
    * Export email to MSG format
    */
-  private static async exportToMSG(email: unknown): Promise<Blob> {
+  private static async exportToMSG(email: any): Promise<Blob> {
     // MSG is a complex binary format
     // For simplicity, export as EML with .msg extension
     const emlContent = await this.exportToEML(email);
@@ -227,7 +228,7 @@ class EmailExportService {
   /**
    * Export email to JSON format
    */
-  private static async exportToJSON(email: unknown, includeMetadata: boolean): Promise<Blob> {
+  private static async exportToJSON(email: any, includeMetadata: boolean): Promise<Blob> {
     const data = {
       id: email.id,
       subject: email.subject,
@@ -282,7 +283,7 @@ class EmailExportService {
         request.result = result;
         request.status = result.success ? 'completed' : 'failed';
         request.completedAt = Date.now();
-      } catch {
+      } catch (error) {
         request.status = 'failed';
         request.completedAt = Date.now();
       }

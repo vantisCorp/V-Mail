@@ -16,7 +16,7 @@ interface TwoFactorAuthVerifyProps {
 }
 
 export const TwoFactorAuthVerify: React.FC<TwoFactorAuthVerifyProps> = ({
-  _username,
+  username,
   onSuccess,
   onCancel,
   onUseBackupCode
@@ -61,7 +61,7 @@ export const TwoFactorAuthVerify: React.FC<TwoFactorAuthVerifyProps> = ({
       } else {
         setError('Invalid verification code');
       }
-    } catch {
+    } catch (err) {
       setError('Verification failed. Please try again.');
     } finally {
       setLoading(false);

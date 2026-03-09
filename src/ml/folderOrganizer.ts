@@ -41,7 +41,7 @@ export type { OrganizationContext };
 export class FolderOrganizer {
   private config: OrganizationConfig;
   private modelVersion: string = '1.0.0';
-  private cache: Map<string, unknown>;
+  private cache: Map<string, any>;
   private learningData: {
     userActions: UserAction[];
     folderPatterns: Map<string, number>;
@@ -70,6 +70,7 @@ export class FolderOrganizer {
    * Suggest new folders based on email patterns
    */
   suggestFolders(context: OrganizationContext): Suggestion[] {
+    const startTime = performance.now();
     const emails = context.emails;
 
     if (emails.length === 0) {
@@ -98,6 +99,8 @@ export class FolderOrganizer {
     const sortedSuggestions = suggestions
       .sort((a, b) => b.confidence - a.confidence)
       .slice(0, this.config.maxSuggestions);
+
+    const endTime = performance.now();
 
     return sortedSuggestions.map((s) => ({
       ...s,
@@ -150,7 +153,7 @@ export class FolderOrganizer {
   /**
    * Create a smart folder based on a suggestion
    */
-  createFolder(suggestion: Suggestion, _existingFolders: SmartFolder[]): SmartFolder {
+  createFolder(suggestion: Suggestion, existingFolders: SmartFolder[]): SmartFolder {
     const folder: SmartFolder = {
       id: `folder-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       name: suggestion.folderName,
@@ -273,8 +276,8 @@ export class FolderOrganizer {
   // Pattern Analysis Methods
   // ============================================================================
 
-  private analyzePatterns(emails: EmailForOrganization[]): unknown {
-    const patterns: unknown = {
+  private analyzePatterns(emails: EmailForOrganization[]): any {
+    const patterns: any = {
       senders: new Map<string, number>(),
       keywords: new Map<string, number>(),
       topics: new Map<string, number>(),
@@ -313,7 +316,7 @@ export class FolderOrganizer {
   // Suggestion Generation Methods
   // ============================================================================
 
-  private generateTopicSuggestions(patterns: unknown, emails: EmailForOrganization[]): Suggestion[] {
+  private generateTopicSuggestions(patterns: any, emails: EmailForOrganization[]): Suggestion[] {
     const suggestions: Suggestion[] = [];
     const sortedTopics = Array.from(patterns.topics.entries() as [string, number][])
       .sort(([, a], [, b]) => b - a)
@@ -348,7 +351,7 @@ export class FolderOrganizer {
     return suggestions;
   }
 
-  private generateSenderSuggestions(patterns: unknown, emails: EmailForOrganization[]): Suggestion[] {
+  private generateSenderSuggestions(patterns: any, emails: EmailForOrganization[]): Suggestion[] {
     const suggestions: Suggestion[] = [];
     const sortedSenders = Array.from(patterns.senders.entries() as [string, number][])
       .sort(([, a], [, b]) => b - a)
@@ -378,7 +381,7 @@ export class FolderOrganizer {
     return suggestions;
   }
 
-  private generateCategorySuggestions(patterns: unknown, emails: EmailForOrganization[]): Suggestion[] {
+  private generateCategorySuggestions(patterns: any, emails: EmailForOrganization[]): Suggestion[] {
     const suggestions: Suggestion[] = [];
     const sortedCategories = Array.from(patterns.categories.entries() as [string, number][]).sort(
       ([, a], [, b]) => b - a

@@ -5,11 +5,11 @@
 
 import React, { useState, useMemo } from 'react';
 import { useEmailExport } from '../hooks/useEmailExport';
-import type { ExportFormat, ExportOptions } from '../types/emailExport';
+import type { ExportFormat, ExportOptions, ExportHistory } from '../types/emailExport';
 import './emailExport.css';
 
 interface EmailExportProps {
-  emails: unknown[];
+  emails: any[];
   onClose?: () => void;
 }
 
@@ -17,10 +17,12 @@ export const EmailExport: React.FC<EmailExportProps> = ({ emails, onClose }) => 
   const {
     isExporting,
     exportProgress,
+    exportHistory,
     exportStatistics,
     exportSingleEmail,
     exportMultipleEmails,
     queueExport,
+    processQueue,
     clearExportHistory,
     getRecentExports
   } = useEmailExport();
@@ -46,7 +48,6 @@ export const EmailExport: React.FC<EmailExportProps> = ({ emails, onClose }) => 
 
   const handleExport = async () => {
     if (selectedEmails.length === 0) {
-      // eslint-disable-next-line no-alert
       alert('Please select at least one email to export');
       return;
     }
@@ -62,7 +63,6 @@ export const EmailExport: React.FC<EmailExportProps> = ({ emails, onClose }) => 
 
   const handleQueueExport = async () => {
     if (selectedEmails.length === 0) {
-      // eslint-disable-next-line no-alert
       alert('Please select at least one email to export');
       return;
     }

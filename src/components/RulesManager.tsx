@@ -8,6 +8,7 @@ import {
   ConditionLogic,
   RuleCondition,
   RuleAction,
+  RuleFilter,
   RuleTemplate
 } from '../types/emailRules';
 
@@ -55,7 +56,6 @@ export const RulesManager: React.FC = () => {
 
   const handleDeleteRule = useCallback(
     async (ruleId: string) => {
-      // eslint-disable-next-line no-alert
       if (window.confirm('Are you sure you want to delete this rule?')) {
         await deleteRule(ruleId);
       }
@@ -355,7 +355,7 @@ export const RulesManager: React.FC = () => {
 interface RuleBuilderModalProps {
   rule: EmailRule | null;
   onClose: () => void;
-  onSave: (data: unknown) => Promise<void>;
+  onSave: (data: any) => Promise<void>;
 }
 
 const RuleBuilderModal: React.FC<RuleBuilderModalProps> = ({ rule, onClose, onSave }) => {
@@ -373,8 +373,8 @@ const RuleBuilderModal: React.FC<RuleBuilderModalProps> = ({ rule, onClose, onSa
       ...conditions,
       {
         id: `cond-${Date.now()}`,
-        field: 'from' as unknown,
-        operator: 'contains' as unknown,
+        field: 'from' as any,
+        operator: 'contains' as any,
         value: '',
         caseSensitive: false
       }
@@ -390,7 +390,7 @@ const RuleBuilderModal: React.FC<RuleBuilderModalProps> = ({ rule, onClose, onSa
       ...actions,
       {
         id: `act-${Date.now()}`,
-        type: 'add_label' as unknown,
+        type: 'add_label' as any,
         parameters: {},
         stopProcessing: false
       }
@@ -493,7 +493,7 @@ const RuleBuilderModal: React.FC<RuleBuilderModalProps> = ({ rule, onClose, onSa
                   value={condition.field}
                   onChange={(e) => {
                     const newConditions = [...conditions];
-                    newConditions[idx] = { ...condition, field: e.target.value as unknown };
+                    newConditions[idx] = { ...condition, field: e.target.value as any };
                     setConditions(newConditions);
                   }}
                 >
@@ -509,7 +509,7 @@ const RuleBuilderModal: React.FC<RuleBuilderModalProps> = ({ rule, onClose, onSa
                   value={condition.operator}
                   onChange={(e) => {
                     const newConditions = [...conditions];
-                    newConditions[idx] = { ...condition, operator: e.target.value as unknown };
+                    newConditions[idx] = { ...condition, operator: e.target.value as any };
                     setConditions(newConditions);
                   }}
                 >
@@ -551,7 +551,7 @@ const RuleBuilderModal: React.FC<RuleBuilderModalProps> = ({ rule, onClose, onSa
                   value={action.type}
                   onChange={(e) => {
                     const newActions = [...actions];
-                    newActions[idx] = { ...action, type: e.target.value as unknown, parameters: {} };
+                    newActions[idx] = { ...action, type: e.target.value as any, parameters: {} };
                     setActions(newActions);
                   }}
                 >
@@ -703,7 +703,7 @@ const TemplatePickerModal: React.FC<TemplatePickerModalProps> = ({ templates, on
 interface RuleTesterModalProps {
   rule: EmailRule;
   onClose: () => void;
-  onTest: (ruleId: string, email: unknown) => unknown;
+  onTest: (ruleId: string, email: any) => any;
 }
 
 const RuleTesterModal: React.FC<RuleTesterModalProps> = ({ rule, onClose, onTest }) => {
@@ -714,7 +714,7 @@ const RuleTesterModal: React.FC<RuleTesterModalProps> = ({ rule, onClose, onTest
     body: 'Test body content',
     hasAttachments: false
   });
-  const [testResult, setTestResult] = useState<unknown>(null);
+  const [testResult, setTestResult] = useState<any>(null);
 
   const handleTest = () => {
     const result = onTest(rule.id, {
@@ -806,7 +806,7 @@ const RuleTesterModal: React.FC<RuleTesterModalProps> = ({ rule, onClose, onTest
                     <strong>Actions to Execute:</strong>
                   </p>
                   <ul>
-                    {testResult.actionsToExecute.map((action: unknown) => (
+                    {testResult.actionsToExecute.map((action: any) => (
                       <li key={action.id}>{action.type}</li>
                     ))}
                   </ul>

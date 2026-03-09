@@ -3,7 +3,7 @@
  * Manages tasks, subtasks, comments, and email-to-task conversion
  */
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import {
   Task,
   TaskPriority,
@@ -11,12 +11,17 @@ import {
   TaskType,
   AssignmentType,
   RecurrenceType,
+  DependencyType,
+  TaskAttachment,
   TaskComment,
   SubTask,
   ChecklistItem,
   TaskReminder,
+  TaskActivity,
   TaskStatistics,
   TaskProject,
+  TaskEpic,
+  TaskSprint,
   CreateTaskPayload,
   UpdateTaskPayload,
   CreateCommentPayload,
@@ -430,7 +435,7 @@ export const useTaskManagement = () => {
 
   // Email to Task Conversion
   const convertEmailToTask = useCallback(
-    async (emailId: string, emailData: Record<string, unknown>, options: EmailToTaskOptions): Promise<Task | null> => {
+    async (emailId: string, emailData: Record<string, any>, options: EmailToTaskOptions): Promise<Task | null> => {
       const title = options.extractTitleFromSubject ? emailData.subject || 'Task from Email' : 'Task from Email';
 
       const description = options.extractDescriptionFromBody ? emailData.body || '' : '';
@@ -453,7 +458,7 @@ export const useTaskManagement = () => {
         tags: [],
         attachments:
           options.includeAttachments && emailData.attachments
-            ? emailData.attachments.map((att: unknown, idx: number) => ({
+            ? emailData.attachments.map((att: any, idx: number) => ({
                 id: generateId(),
                 name: att.name || `attachment-${idx}`,
                 url: att.url || '',

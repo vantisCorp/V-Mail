@@ -6,9 +6,11 @@
 import type {
   CacheStrategy,
   CachePolicy,
+  CachePriority,
   CacheEntry,
   CacheOptions,
   CacheConfig,
+  CacheMetrics,
   CacheEvent,
   CacheStats,
   CacheAdapter,
@@ -200,6 +202,7 @@ class CacheService {
    * Get value from cache
    */
   async get<T>(key: string, policy?: CachePolicy): Promise<T | null> {
+    const startTime = Date.now();
     const effectivePolicy = policy || this.config.defaultPolicy;
 
     // For network-only policy, skip cache
@@ -341,6 +344,7 @@ class CacheService {
       return;
     }
 
+    let evicted = 0;
     for (const entry of entries) {
       if ((await this.size()) <= targetSize) {
         break;
@@ -354,6 +358,7 @@ class CacheService {
         timestamp: Date.now(),
         size: entry.size
       });
+      evicted++;
     }
   }
 
@@ -375,7 +380,7 @@ class CacheService {
   /**
    * Record cache miss
    */
-  private recordMiss(_key: string): void {
+  private recordMiss(key: string): void {
     this.metrics.misses++;
     this.updateMetrics();
   }
@@ -508,7 +513,6 @@ class CacheService {
     // This would typically trigger a network request
     // Implementation depends on specific use case
     // For now, just log the refresh
-    // eslint-disable-next-line no-console
     console.log(`Background refresh triggered for key: ${key}`);
   }
 
@@ -561,7 +565,7 @@ class CacheService {
   /**
    * Prewarm cache
    */
-  async prewarm(config: CachePrewarmConfig, dataFetcher: (key: string) => Promise<unknown>): Promise<void> {
+  async prewarm(config: CachePrewarmConfig, dataFetcher: (key: string) => Promise<any>): Promise<void> {
     if (!config.enabled) {
       return;
     }

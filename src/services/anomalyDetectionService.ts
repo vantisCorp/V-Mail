@@ -7,21 +7,30 @@ import {
   AnomalyDetectionResult,
   AnomalyType,
   AnomalySeverity,
+  RiskLevel,
   DetectionStatus,
   AnomalyIndicator,
   RecommendedAction,
   ActionType,
   AnomalyDetectionConfig,
   AnomalyDetectionStatistics,
+  PhishingIndicator,
   PhishingIndicatorType,
+  SpamIndicator,
   SpamIndicatorType,
   SenderReputation,
+  SenderCategory,
+  TrustLevel,
+  SenderHistoricalData,
   SenderFlag,
+  BehavioralAnalysis,
+  BehavioralPattern,
   PatternType,
   BehavioralBaseline,
   LinkAnalysis,
   LinkCategory,
   AttachmentAnalysis,
+  AttachmentIndicator,
   DEFAULT_ANOMALY_CONFIG,
   PHISHING_INDICATOR_WEIGHTS,
   SPAM_INDICATOR_WEIGHTS,
@@ -58,18 +67,19 @@ export class AnomalyDetectionService {
       spamDetected: 0,
       falsePositives: 0,
       avgAnalysisTime: 0,
-      detectionsByType: {} as unknown,
-      detectionsBySeverity: {} as unknown,
+      detectionsByType: {} as any,
+      detectionsBySeverity: {} as any,
       accuracy: 0,
       lastReset: Date.now()
     };
   }
 
-  async detectAnomalies(email: unknown): Promise<AnomalyDetectionResult> {
+  async detectAnomalies(email: any): Promise<AnomalyDetectionResult> {
     const startTime = Date.now();
     this.statistics.totalAnalyzed++;
 
     // Check cache
+    const cacheKey = `${email.id}-${Date.now()}`;
     if (this.cache.has(email.id)) {
       return this.cache.get(email.id)!;
     }
@@ -179,7 +189,7 @@ export class AnomalyDetectionService {
   }
 
   private async detectPhishing(
-    email: unknown
+    email: any
   ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     const indicators: AnomalyIndicator[] = [];
     let totalScore = 0;
@@ -238,7 +248,7 @@ export class AnomalyDetectionService {
   }
 
   private async detectSpam(
-    email: unknown
+    email: any
   ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     const indicators: AnomalyIndicator[] = [];
     let totalScore = 0;
@@ -287,7 +297,7 @@ export class AnomalyDetectionService {
   }
 
   private async analyzeSenderReputation(
-    email: unknown
+    email: any
   ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     if (!email.sender || !email.sender.email) {
       return null;
@@ -332,7 +342,7 @@ export class AnomalyDetectionService {
   }
 
   private async analyzeBehavior(
-    email: unknown
+    email: any
   ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     if (!email.sender || !email.sender.email) {
       return null;
@@ -368,7 +378,7 @@ export class AnomalyDetectionService {
   }
 
   private async scanLinks(
-    email: unknown
+    email: any
   ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     const body = email.body || '';
     const urlRegex = /https?:\/\/[^\s<>"{}|\\^`[\]]+/g;
@@ -404,7 +414,7 @@ export class AnomalyDetectionService {
   }
 
   private async scanAttachments(
-    email: unknown
+    email: any
   ): Promise<{ riskScore: number; confidence: number; indicators: AnomalyIndicator[] } | null> {
     if (!email.attachments || email.attachments.length === 0) {
       return null;
@@ -470,7 +480,7 @@ export class AnomalyDetectionService {
         result.categories.push(LinkCategory.SHORTENER);
         result.riskScore += 0.2;
       }
-    } catch {
+    } catch (error) {
       // Invalid URL
       result.riskScore = 0.1;
     }
@@ -478,7 +488,7 @@ export class AnomalyDetectionService {
     return result;
   }
 
-  private analyzeAttachment(attachment: unknown): AttachmentAnalysis {
+  private analyzeAttachment(attachment: any): AttachmentAnalysis {
     const result: AttachmentAnalysis = {
       filename: attachment.filename || 'unknown',
       mimeType: attachment.mimeType || 'application/octet-stream',
@@ -517,7 +527,7 @@ export class AnomalyDetectionService {
     return result;
   }
 
-  private checkDomainMismatch(email: unknown): AnomalyIndicator | null {
+  private checkDomainMismatch(email: any): AnomalyIndicator | null {
     if (!email.sender || !email.sender.name || !email.sender.email) {
       return null;
     }
@@ -539,7 +549,7 @@ export class AnomalyDetectionService {
     return null;
   }
 
-  private checkUrgencyLanguage(email: unknown): AnomalyIndicator | null {
+  private checkUrgencyLanguage(email: any): AnomalyIndicator | null {
     const subject = (email.subject || '').toLowerCase();
     const body = (email.body || '').toLowerCase();
     const combined = subject + ' ' + body;
@@ -558,7 +568,7 @@ export class AnomalyDetectionService {
     return null;
   }
 
-  private checkCredentialRequests(email: unknown): AnomalyIndicator | null {
+  private checkCredentialRequests(email: any): AnomalyIndicator | null {
     const body = (email.body || '').toLowerCase();
     const credentialWords = ['password', 'username', 'credential', 'social security', 'credit card', 'bank account'];
 
@@ -576,7 +586,7 @@ export class AnomalyDetectionService {
     return null;
   }
 
-  private checkSuspiciousUrls(email: unknown): AnomalyIndicator[] {
+  private checkSuspiciousUrls(email: any): AnomalyIndicator[] {
     const body = email.body || '';
     const urlRegex = /https?:\/\/[^\s<>"{}|\\^`[\]]+/g;
     const urls = body.match(urlRegex);
@@ -601,7 +611,7 @@ export class AnomalyDetectionService {
     return indicators;
   }
 
-  private checkGenericGreeting(email: unknown): AnomalyIndicator | null {
+  private checkGenericGreeting(email: any): AnomalyIndicator | null {
     const body = (email.body || '').toLowerCase();
     const genericGreetings = ['dear customer', 'dear user', 'dear sir', 'dear madam', 'dear valued customer'];
 
@@ -619,7 +629,7 @@ export class AnomalyDetectionService {
     return null;
   }
 
-  private checkPromotionalLanguage(email: unknown): AnomalyIndicator | null {
+  private checkPromotionalLanguage(email: any): AnomalyIndicator | null {
     const subject = (email.subject || '').toLowerCase();
     const body = (email.body || '').toLowerCase();
     const combined = subject + ' ' + body;
@@ -645,7 +655,7 @@ export class AnomalyDetectionService {
     return null;
   }
 
-  private checkExcessiveCaps(email: unknown): AnomalyIndicator | null {
+  private checkExcessiveCaps(email: any): AnomalyIndicator | null {
     const subject = email.subject || '';
     const body = email.body || '';
     const combined = subject + body;
@@ -665,7 +675,7 @@ export class AnomalyDetectionService {
     return null;
   }
 
-  private checkExcessivePunctuation(email: unknown): AnomalyIndicator | null {
+  private checkExcessivePunctuation(email: any): AnomalyIndicator | null {
     const subject = email.subject || '';
     const body = email.body || '';
     const combined = subject + body;
@@ -684,7 +694,7 @@ export class AnomalyDetectionService {
     return null;
   }
 
-  private checkPriceMentions(email: unknown): AnomalyIndicator | null {
+  private checkPriceMentions(email: any): AnomalyIndicator | null {
     const subject = email.subject || '';
     const body = email.body || '';
     const combined = subject + body;

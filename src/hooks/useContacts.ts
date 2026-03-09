@@ -10,6 +10,9 @@ import {
   ContactSortOptions,
   ContactStatistics,
   EmailToContactOptions,
+  ContactImportOptions,
+  ContactExportOptions,
+  ContactExportResult,
   ContactSearchResult,
   ContactMergeSuggestion,
   ContactSyncStatus,
@@ -41,13 +44,13 @@ interface UseContactsReturn {
   updateContact: (payload: UpdateContactPayload) => Promise<Contact>;
   deleteContact: (contactId: string) => Promise<void>;
   searchContacts: (query: string) => ContactSearchResult[];
-  createContactFromEmail: (email: unknown, options: EmailToContactOptions) => Promise<Contact>;
+  createContactFromEmail: (email: any, options: EmailToContactOptions) => Promise<Contact>;
   getFilteredContacts: (filters?: ContactFilterOptions, sort?: ContactSortOptions) => Contact[];
   findDuplicateContacts: () => Promise<ContactMergeSuggestion[]>;
   mergeContacts: (primaryId: string, duplicateIds: string[]) => Promise<Contact>;
   getGroup: (groupId: string) => ContactGroup | undefined;
   createGroup: (name: string, description?: string, color?: string) => Promise<ContactGroup>;
-  updateGroup: (groupId: string, updates: unknown) => Promise<ContactGroup>;
+  updateGroup: (groupId: string, updates: any) => Promise<ContactGroup>;
   deleteGroup: (groupId: string) => Promise<void>;
   addContactToGroup: (contactId: string, groupId: string) => Promise<void>;
   removeContactFromGroup: (contactId: string, groupId: string) => Promise<void>;
@@ -81,7 +84,7 @@ export function useContacts(): UseContactsReturn {
     duplicateCheckEnabled: true,
     emailTrackingEnabled: true
   });
-  const [syncStatus] = useState<Map<string, ContactSyncStatus>>(new Map());
+  const [syncStatus, setSyncStatus] = useState<Map<string, ContactSyncStatus>>(new Map());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -228,39 +231,36 @@ export function useContacts(): UseContactsReturn {
   /**
    * Create contact from email
    */
-  const createContactFromEmail = useCallback(
-    async (email: unknown, options: EmailToContactOptions): Promise<Contact> => {
-      setLoading(true);
-      setError(null);
+  const createContactFromEmail = useCallback(async (email: any, options: EmailToContactOptions): Promise<Contact> => {
+    setLoading(true);
+    setError(null);
 
-      try {
-        const contact = await contactsService.createContactFromEmail(email, options);
+    try {
+      const contact = await contactsService.createContactFromEmail(email, options);
 
-        // Update contacts list
-        setContacts((prev) => {
-          const existingIndex = prev.findIndex((c) => c.id === contact.id);
-          if (existingIndex !== -1) {
-            const updated = [...prev];
-            updated[existingIndex] = contact;
-            return updated;
-          }
-          return [...prev, contact];
-        });
+      // Update contacts list
+      setContacts((prev) => {
+        const existingIndex = prev.findIndex((c) => c.id === contact.id);
+        if (existingIndex !== -1) {
+          const updated = [...prev];
+          updated[existingIndex] = contact;
+          return updated;
+        }
+        return [...prev, contact];
+      });
 
-        // Refresh statistics
-        const stats = await contactsService.getStatistics();
-        setStatistics(stats);
+      // Refresh statistics
+      const stats = await contactsService.getStatistics();
+      setStatistics(stats);
 
-        return contact;
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to create contact from email');
-        throw err;
-      } finally {
-        setLoading(false);
-      }
-    },
-    []
-  );
+      return contact;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create contact from email');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   /**
    * Get filtered contacts
@@ -349,7 +349,7 @@ export function useContacts(): UseContactsReturn {
   /**
    * Update a group
    */
-  const updateGroup = useCallback(async (groupId: string, updates: unknown): Promise<ContactGroup> => {
+  const updateGroup = useCallback(async (groupId: string, updates: any): Promise<ContactGroup> => {
     setLoading(true);
     setError(null);
 

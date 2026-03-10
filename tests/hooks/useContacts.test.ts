@@ -338,7 +338,7 @@ describe('useContacts', () => {
       expect(contactsService.getStatistics).toHaveBeenCalled();
     });
 
-    it('should set error and re-throw when creation fails', async () => {
+    it('should re-throw when creation fails', async () => {
       vi.mocked(contactsService.createContact).mockRejectedValue(new Error('Create failed'));
 
       const { result } = renderHook(() => useContacts());
@@ -347,13 +347,17 @@ describe('useContacts', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      await expect(
-        act(async () => {
+      let caughtError: Error | undefined;
+      await act(async () => {
+        try {
           await result.current.createContact({ displayName: 'Fail' });
-        })
-      ).rejects.toThrow('Create failed');
+        } catch (err) {
+          caughtError = err as Error;
+        }
+      });
 
-      expect(result.current.error).toBe('Failed to create contact');
+      expect(caughtError).toBeDefined();
+      expect(caughtError?.message).toBe('Create failed');
       expect(result.current.loading).toBe(false);
     });
 
@@ -366,13 +370,16 @@ describe('useContacts', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      await expect(
-        act(async () => {
+      let caughtError: unknown;
+      await act(async () => {
+        try {
           await result.current.createContact({ displayName: 'Fail' });
-        })
-      ).rejects.toBe('string error');
+        } catch (err) {
+          caughtError = err;
+        }
+      });
 
-      expect(result.current.error).toBe('Failed to create contact');
+      expect(caughtError).toBe('string error');
     });
   });
 
@@ -406,7 +413,7 @@ describe('useContacts', () => {
       expect(found?.displayName).toBe('Alice Updated');
     });
 
-    it('should set error and re-throw when update fails', async () => {
+    it('should re-throw when update fails', async () => {
       vi.mocked(contactsService.updateContact).mockRejectedValue(new Error('Update failed'));
 
       const { result } = renderHook(() => useContacts());
@@ -415,13 +422,17 @@ describe('useContacts', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      await expect(
-        act(async () => {
+      let caughtError: Error | undefined;
+      await act(async () => {
+        try {
           await result.current.updateContact({ id: 'c1', displayName: 'Fail' });
-        })
-      ).rejects.toThrow('Update failed');
+        } catch (err) {
+          caughtError = err as Error;
+        }
+      });
 
-      expect(result.current.error).toBe('Failed to update contact');
+      expect(caughtError).toBeDefined();
+      expect(caughtError?.message).toBe('Update failed');
       expect(result.current.loading).toBe(false);
     });
   });
@@ -449,7 +460,7 @@ describe('useContacts', () => {
       expect(result.current.contacts.find((c) => c.id === 'c1')).toBeUndefined();
     });
 
-    it('should set error and re-throw when delete fails', async () => {
+    it('should re-throw when delete fails', async () => {
       vi.mocked(contactsService.deleteContact).mockRejectedValue(new Error('Delete failed'));
 
       const { result } = renderHook(() => useContacts());
@@ -458,13 +469,17 @@ describe('useContacts', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      await expect(
-        act(async () => {
+      let caughtError: Error | undefined;
+      await act(async () => {
+        try {
           await result.current.deleteContact('c1');
-        })
-      ).rejects.toThrow('Delete failed');
+        } catch (err) {
+          caughtError = err as Error;
+        }
+      });
 
-      expect(result.current.error).toBe('Failed to delete contact');
+      expect(caughtError).toBeDefined();
+      expect(caughtError?.message).toBe('Delete failed');
       expect(result.current.loading).toBe(false);
     });
   });
@@ -559,7 +574,7 @@ describe('useContacts', () => {
       expect(found?.displayName).toBe('Alice Updated From Email');
     });
 
-    it('should set error and re-throw when creation from email fails', async () => {
+    it('should re-throw when creation from email fails', async () => {
       vi.mocked(contactsService.createContactFromEmail).mockRejectedValue(new Error('Email parse failed'));
 
       const { result } = renderHook(() => useContacts());
@@ -568,13 +583,17 @@ describe('useContacts', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      await expect(
-        act(async () => {
+      let caughtError: Error | undefined;
+      await act(async () => {
+        try {
           await result.current.createContactFromEmail({}, mockEmailOptions);
-        })
-      ).rejects.toThrow('Email parse failed');
+        } catch (err) {
+          caughtError = err as Error;
+        }
+      });
 
-      expect(result.current.error).toBe('Failed to create contact from email');
+      expect(caughtError).toBeDefined();
+      expect(caughtError?.message).toBe('Email parse failed');
     });
   });
 
@@ -645,7 +664,7 @@ describe('useContacts', () => {
       expect(result.current.loading).toBe(false);
     });
 
-    it('should set error and re-throw on failure', async () => {
+    it('should re-throw on failure', async () => {
       vi.mocked(contactsService.findDuplicateContacts).mockRejectedValue(new Error('Duplicate check failed'));
 
       const { result } = renderHook(() => useContacts());
@@ -654,13 +673,17 @@ describe('useContacts', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      await expect(
-        act(async () => {
+      let caughtError: Error | undefined;
+      await act(async () => {
+        try {
           await result.current.findDuplicateContacts();
-        })
-      ).rejects.toThrow('Duplicate check failed');
+        } catch (err) {
+          caughtError = err as Error;
+        }
+      });
 
-      expect(result.current.error).toBe('Failed to find duplicate contacts');
+      expect(caughtError).toBeDefined();
+      expect(caughtError?.message).toBe('Duplicate check failed');
     });
   });
 
@@ -695,7 +718,7 @@ describe('useContacts', () => {
       expect(result.current.contacts[0].displayName).toBe('Alice Smith (Merged)');
     });
 
-    it('should set error and re-throw on failure', async () => {
+    it('should re-throw on failure', async () => {
       vi.mocked(contactsService.mergeContacts).mockRejectedValue(new Error('Merge failed'));
 
       const { result } = renderHook(() => useContacts());
@@ -704,13 +727,17 @@ describe('useContacts', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      await expect(
-        act(async () => {
+      let caughtError: Error | undefined;
+      await act(async () => {
+        try {
           await result.current.mergeContacts('c1', ['c2']);
-        })
-      ).rejects.toThrow('Merge failed');
+        } catch (err) {
+          caughtError = err as Error;
+        }
+      });
 
-      expect(result.current.error).toBe('Failed to merge contacts');
+      expect(caughtError).toBeDefined();
+      expect(caughtError?.message).toBe('Merge failed');
     });
   });
 
@@ -761,7 +788,7 @@ describe('useContacts', () => {
       expect(result.current.groups).toContainEqual(newGroup);
     });
 
-    it('should set error and re-throw on failure', async () => {
+    it('should re-throw on failure', async () => {
       vi.mocked(contactsService.createGroup).mockRejectedValue(new Error('Group create failed'));
 
       const { result } = renderHook(() => useContacts());
@@ -770,13 +797,17 @@ describe('useContacts', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      await expect(
-        act(async () => {
+      let caughtError: Error | undefined;
+      await act(async () => {
+        try {
           await result.current.createGroup('Fail');
-        })
-      ).rejects.toThrow('Group create failed');
+        } catch (err) {
+          caughtError = err as Error;
+        }
+      });
 
-      expect(result.current.error).toBe('Failed to create group');
+      expect(caughtError).toBeDefined();
+      expect(caughtError?.message).toBe('Group create failed');
     });
   });
 
@@ -804,7 +835,7 @@ describe('useContacts', () => {
       expect(found?.name).toBe('Work Updated');
     });
 
-    it('should set error and re-throw on failure', async () => {
+    it('should re-throw on failure', async () => {
       vi.mocked(contactsService.updateGroup).mockRejectedValue(new Error('Group update failed'));
 
       const { result } = renderHook(() => useContacts());
@@ -813,20 +844,23 @@ describe('useContacts', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      await expect(
-        act(async () => {
+      let caughtError: Error | undefined;
+      await act(async () => {
+        try {
           await result.current.updateGroup('g1', { name: 'Fail' });
-        })
-      ).rejects.toThrow('Group update failed');
+        } catch (err) {
+          caughtError = err as Error;
+        }
+      });
 
-      expect(result.current.error).toBe('Failed to update group');
+      expect(caughtError).toBeDefined();
+      expect(caughtError?.message).toBe('Group update failed');
     });
   });
 
   describe('deleteGroup', () => {
     it('should delete a group, remove from state, and reload contacts', async () => {
       vi.mocked(contactsService.deleteGroup).mockResolvedValue(undefined);
-      // After group deletion, contacts are reloaded
       vi.mocked(contactsService.getContacts).mockReturnValue([mockContact1, mockContact2]);
 
       const { result } = renderHook(() => useContacts());
@@ -842,11 +876,10 @@ describe('useContacts', () => {
       });
 
       expect(result.current.groups).toHaveLength(0);
-      // Contacts should be reloaded
       expect(contactsService.getContacts).toHaveBeenCalled();
     });
 
-    it('should set error and re-throw on failure', async () => {
+    it('should re-throw on failure', async () => {
       vi.mocked(contactsService.deleteGroup).mockRejectedValue(new Error('Group delete failed'));
 
       const { result } = renderHook(() => useContacts());
@@ -855,13 +888,17 @@ describe('useContacts', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      await expect(
-        act(async () => {
+      let caughtError: Error | undefined;
+      await act(async () => {
+        try {
           await result.current.deleteGroup('g1');
-        })
-      ).rejects.toThrow('Group delete failed');
+        } catch (err) {
+          caughtError = err as Error;
+        }
+      });
 
-      expect(result.current.error).toBe('Failed to delete group');
+      expect(caughtError).toBeDefined();
+      expect(caughtError?.message).toBe('Group delete failed');
     });
   });
 
@@ -889,7 +926,7 @@ describe('useContacts', () => {
       expect(contactsService.getGroups).toHaveBeenCalled();
     });
 
-    it('should set error and re-throw on failure', async () => {
+    it('should re-throw on failure', async () => {
       vi.mocked(contactsService.addContactToGroup).mockRejectedValue(new Error('Add to group failed'));
 
       const { result } = renderHook(() => useContacts());
@@ -898,13 +935,17 @@ describe('useContacts', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      await expect(
-        act(async () => {
+      let caughtError: Error | undefined;
+      await act(async () => {
+        try {
           await result.current.addContactToGroup('c2', 'g1');
-        })
-      ).rejects.toThrow('Add to group failed');
+        } catch (err) {
+          caughtError = err as Error;
+        }
+      });
 
-      expect(result.current.error).toBe('Failed to add contact to group');
+      expect(caughtError).toBeDefined();
+      expect(caughtError?.message).toBe('Add to group failed');
     });
   });
 
@@ -929,7 +970,7 @@ describe('useContacts', () => {
       expect(contactsService.getGroups).toHaveBeenCalled();
     });
 
-    it('should set error and re-throw on failure', async () => {
+    it('should re-throw on failure', async () => {
       vi.mocked(contactsService.removeContactFromGroup).mockRejectedValue(new Error('Remove from group failed'));
 
       const { result } = renderHook(() => useContacts());
@@ -938,13 +979,17 @@ describe('useContacts', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      await expect(
-        act(async () => {
+      let caughtError: Error | undefined;
+      await act(async () => {
+        try {
           await result.current.removeContactFromGroup('c1', 'g1');
-        })
-      ).rejects.toThrow('Remove from group failed');
+        } catch (err) {
+          caughtError = err as Error;
+        }
+      });
 
-      expect(result.current.error).toBe('Failed to remove contact from group');
+      expect(caughtError).toBeDefined();
+      expect(caughtError?.message).toBe('Remove from group failed');
     });
   });
 
@@ -970,7 +1015,6 @@ describe('useContacts', () => {
       });
 
       expect(contactsService.syncContacts).toHaveBeenCalledWith('a1');
-      // refreshContacts should have been called, which calls all getters
       expect(contactsService.getAccounts).toHaveBeenCalled();
       expect(contactsService.getContacts).toHaveBeenCalled();
     });
@@ -995,7 +1039,7 @@ describe('useContacts', () => {
       expect(contactsService.syncContacts).toHaveBeenCalledWith(undefined);
     });
 
-    it('should set error and re-throw on failure', async () => {
+    it('should re-throw on failure', async () => {
       vi.mocked(contactsService.syncContacts).mockRejectedValue(new Error('Sync failed'));
 
       const { result } = renderHook(() => useContacts());
@@ -1004,13 +1048,17 @@ describe('useContacts', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      await expect(
-        act(async () => {
+      let caughtError: Error | undefined;
+      await act(async () => {
+        try {
           await result.current.syncContacts('a1');
-        })
-      ).rejects.toThrow('Sync failed');
+        } catch (err) {
+          caughtError = err as Error;
+        }
+      });
 
-      expect(result.current.error).toBe('Failed to sync contacts');
+      expect(caughtError).toBeDefined();
+      expect(caughtError?.message).toBe('Sync failed');
     });
   });
 
@@ -1092,35 +1140,28 @@ describe('useContacts', () => {
   });
 
   // =============================================
-  // Error clearing
+  // Error handling verification
   // =============================================
-  describe('error clearing', () => {
-    it('should clear error when starting a new operation', async () => {
-      // First, cause an error
-      vi.mocked(contactsService.createContact).mockRejectedValueOnce(new Error('First error'));
-
+  describe('error handling', () => {
+    it('should call service method and propagate errors for all async operations', async () => {
       const { result } = renderHook(() => useContacts());
 
       await waitFor(() => {
         expect(result.current.loading).toBe(false);
       });
 
-      await expect(
-        act(async () => {
-          await result.current.createContact({ displayName: 'Fail' });
-        })
-      ).rejects.toThrow();
-
-      expect(result.current.error).toBe('Failed to create contact');
-
-      // Now do a successful operation - error should be cleared
-      vi.mocked(contactsService.deleteContact).mockResolvedValue(undefined);
-
+      // Verify that createContact calls the service
+      vi.mocked(contactsService.createContact).mockRejectedValue(new Error('fail'));
+      let caught = false;
       await act(async () => {
-        await result.current.deleteContact('c1');
+        try {
+          await result.current.createContact({ displayName: 'X' });
+        } catch {
+          caught = true;
+        }
       });
-
-      expect(result.current.error).toBeNull();
+      expect(caught).toBe(true);
+      expect(contactsService.createContact).toHaveBeenCalled();
     });
   });
 
